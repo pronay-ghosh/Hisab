@@ -81,6 +81,9 @@
       <!-- Wallet Cards -->
       <div class="wallet-grid" id="wallet-grid"></div>
 
+      <!-- Wallet Type Manager (Admin Only — injected by JS) -->
+      <div id="wallet-type-manager-placeholder"></div>
+
       <!-- Wallet Transactions -->
       <div class="card" style="margin-top:24px;">
         <div class="card-header">
@@ -198,8 +201,45 @@
 
 <script src="js/app.js"></script>
 <script>
-const WALLET_ICONS = { cash:'💵', bank:'🏦', debit:'💳', credit_card:'💳', loan_to:'🤝', loan_from:'🤝', others:'📦' };
+// ── WALLET TYPES (Admin এডিট করতে পারবে) ──────────────────────
+const DEFAULT_WALLET_TYPES = [
+  { id: 'cash',        icon: '💵', name_en: 'Cash',              name_bn: 'নগদ' },
+  { id: 'bank',        icon: '🏦', name_en: 'Bank Account',      name_bn: 'ব্যাংক অ্যাকাউন্ট' },
+  { id: 'debit',       icon: '💳', name_en: 'Debit Card',        name_bn: 'ডেবিট কার্ড' },
+  { id: 'credit_card', icon: '💳', name_en: 'Credit Card',       name_bn: 'ক্রেডিট কার্ড' },
+  { id: 'loan_to',     icon: '🤝', name_en: 'Loan to Others',    name_bn: 'ধার দেওয়া' },
+  { id: 'loan_from',   icon: '🤝', name_en: 'Loan from Others',  name_bn: 'ধার নেওয়া' },
+  { id: 'others',      icon: '📦', name_en: 'Others',            name_bn: 'অন্যান্য' },
+];
+
+function getWalletTypes() {
+  const saved = localStorage.getItem('hisab_wallet_types');
+  return saved ? JSON.parse(saved) : DEFAULT_WALLET_TYPES;
+}
+
+function saveWalletTypes(types) {
+  localStorage.setItem('hisab_wallet_types', JSON.stringify(types));
+}
+
+function getWalletIcons() {
+  return Object.fromEntries(getWalletTypes().map(t => [t.id, t.icon]));
+}
+
+const WALLET_ICONS = new Proxy({}, { get(_, key) { return getWalletIcons()[key] || '💰'; } });
 const WALLET_COLORS = { cash:'#EBF4FD', bank:'#E1F5EE', debit:'#FAEEDA', credit_card:'#FCEBEB', loan_to:'#EAF3DE', loan_from:'#EBF4FD', others:'#F3F4F6' };
+
+// Wallet Type select populate করো
+function populateWalletTypeSelects() {
+  const types = getWalletTypes();
+  const selects = ['new-wallet-type', 'edit-wallet-type'];
+  selects.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = types.map(t =>
+      `<option value="${t.id}">${t.icon} ${t.name_en}</option>`
+    ).join('');
+  });
+}
 
 function initWallets() {
   if (!requireLogin()) return;
@@ -208,9 +248,20 @@ function initWallets() {
   document.getElementById('sidebar-name').textContent = user.name;
   document.getElementById('sidebar-handle').textContent = '@' + user.username;
   document.getElementById('tr-date').value = today();
+  populateWalletTypeSelects();
   renderWallets();
   renderWalletTxns();
   populateWalletSelects();
+  // Admin হলে Wallet Type Manager দেখাও
+  if (isAdmin()) {
+    const placeholder = document.getElementById('wallet-type-manager-placeholder');
+    const managerEl = document.getElementById('wallet-type-manager');
+    if (placeholder && managerEl) {
+      placeholder.appendChild(managerEl);
+      managerEl.style.display = 'block';
+      renderWalletTypeList();
+    }
+  }
 }
 
 function renderWallets() {
@@ -305,12 +356,89 @@ function adminDeleteWallet(walletId) {
   populateWalletSelects();
   showToast('🗑️', 'Wallet Deleted!', `"${name}" wallet deleted.`);
 }
-  }).join('') + `
-    <div class="wallet-card wallet-card-add" style="border:2px dashed var(--border);background:var(--bg-secondary);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px;" onclick="openModal('add-wallet-modal')">
-      <div class="wallet-add-icon" style="font-size:36px;margin-bottom:8px;color:var(--text-muted);">+</div>
-      <div style="font-size:14px;font-weight:600;color:var(--text-muted);">Add Wallet</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">–10 credits</div>
-    </div>`;
+
+// ── WALLET TYPE MANAGER FUNCTIONS ────────────────────────────────
+function renderWalletTypeList() {
+  const types = getWalletTypes();
+  const el = document.getElementById('wallet-type-list');
+  if (!el) return;
+  if (!types.length) { el.innerHTML = '<p style="color:var(--text-muted);padding:12px;">No wallet types.</p>'; return; }
+  el.innerHTML = types.map((t, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:22px;">${t.icon}</span>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-primary);">${t.name_en}</div>
+          <div style="font-size:12px;color:var(--text-muted);">${t.name_bn}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm" style="color:var(--blue-400);border-color:var(--blue-400);" onclick="openEditWalletType('${t.id}')">✏️ Edit</button>
+        <button class="btn btn-outline btn-sm" style="color:var(--red-400);border-color:var(--red-400);" onclick="deleteWalletType('${t.id}')" ${DEFAULT_WALLET_TYPES.find(d=>d.id===t.id) ? 'title="Default type — delete with caution"' : ''}>🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function addWalletType() {
+  const icon = document.getElementById('new-type-icon').value.trim() || '💰';
+  const en   = document.getElementById('new-type-en').value.trim();
+  const bn   = document.getElementById('new-type-bn').value.trim();
+  if (!en) { showToast('⚠️', 'Missing Name', 'Please enter wallet type name.'); return; }
+  const types = getWalletTypes();
+  const id = en.toLowerCase().replace(/\s+/g, '_') + '_' + Date.now();
+  types.push({ id, icon, name_en: en, name_bn: bn || en });
+  saveWalletTypes(types);
+  document.getElementById('new-type-icon').value = '';
+  document.getElementById('new-type-en').value = '';
+  document.getElementById('new-type-bn').value = '';
+  closeModal('add-wallet-type-modal');
+  renderWalletTypeList();
+  populateWalletTypeSelects();
+  showToast('✅', 'Type Added!', `"${en}" wallet type added.`);
+}
+
+function openEditWalletType(typeId) {
+  const types = getWalletTypes();
+  const t = types.find(t => t.id === typeId);
+  if (!t) return;
+  document.getElementById('edit-type-id').value  = typeId;
+  document.getElementById('edit-type-icon').value = t.icon;
+  document.getElementById('edit-type-en').value   = t.name_en;
+  document.getElementById('edit-type-bn').value   = t.name_bn;
+  openModal('edit-wallet-type-modal');
+}
+
+function saveWalletType() {
+  const id   = document.getElementById('edit-type-id').value;
+  const icon = document.getElementById('edit-type-icon').value.trim() || '💰';
+  const en   = document.getElementById('edit-type-en').value.trim();
+  const bn   = document.getElementById('edit-type-bn').value.trim();
+  if (!en) { showToast('⚠️', 'Missing Name', 'Please enter wallet type name.'); return; }
+  const types = getWalletTypes();
+  const idx = types.findIndex(t => t.id === id);
+  if (idx < 0) return;
+  types[idx] = { ...types[idx], icon, name_en: en, name_bn: bn || en };
+  saveWalletTypes(types);
+  closeModal('edit-wallet-type-modal');
+  renderWalletTypeList();
+  populateWalletTypeSelects();
+  renderWallets();
+  showToast('✅', 'Type Updated!', `"${en}" wallet type updated.`);
+}
+
+function deleteWalletType(typeId) {
+  const types = getWalletTypes();
+  const t = types.find(t => t.id === typeId);
+  if (!t) return;
+  const inUse = State.wallets.some(w => w.id.startsWith(typeId));
+  if (inUse) { showToast('⚠️', 'In Use!', `"${t.name_en}" type এর wallet আছে। আগে সেই wallet delete করুন।`); return; }
+  if (!confirm(`"${t.name_en}" wallet type delete করবেন?`)) return;
+  const newTypes = types.filter(t => t.id !== typeId);
+  saveWalletTypes(newTypes);
+  renderWalletTypeList();
+  populateWalletTypeSelects();
+  showToast('🗑️', 'Type Deleted!', `"${t.name_en}" wallet type deleted.`);
+}
 }
 
 function renderWalletTxns(filter = '') {
@@ -525,6 +653,70 @@ function doTransfer() {
 
 initWallets();
 </script>
+<!-- ══ WALLET TYPE MANAGER (Admin Only) ══ -->
+<div id="wallet-type-manager" style="display:none;margin:24px 0;">
+  <div class="card">
+    <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="card-title">⚙️ Wallet Type Manager <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(Admin Only)</span></div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('add-wallet-type-modal')">+ Add Type</button>
+    </div>
+    <div id="wallet-type-list"></div>
+  </div>
+</div>
+
+<!-- ══ ADD WALLET TYPE MODAL ══ -->
+<div class="modal-backdrop" id="add-wallet-type-modal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">➕ Add Wallet Type</div>
+      <button class="modal-close" onclick="closeModal('add-wallet-type-modal')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Icon (Emoji)</label>
+      <input type="text" class="form-input" id="new-type-icon" placeholder="💰" maxlength="4" style="font-size:20px;" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Name (English)</label>
+      <input type="text" class="form-input" id="new-type-en" placeholder="e.g. Mobile Banking" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Name (বাংলা)</label>
+      <input type="text" class="form-input" id="new-type-bn" placeholder="যেমন: মোবাইল ব্যাংকিং" />
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="addWalletType()">✅ Add Type</button>
+      <button class="btn btn-outline" onclick="closeModal('add-wallet-type-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EDIT WALLET TYPE MODAL ══ -->
+<div class="modal-backdrop" id="edit-wallet-type-modal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Wallet Type</div>
+      <button class="modal-close" onclick="closeModal('edit-wallet-type-modal')">×</button>
+    </div>
+    <input type="hidden" id="edit-type-id" />
+    <div class="form-group">
+      <label class="form-label">Icon (Emoji)</label>
+      <input type="text" class="form-input" id="edit-type-icon" placeholder="💰" maxlength="4" style="font-size:20px;" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Name (English)</label>
+      <input type="text" class="form-input" id="edit-type-en" placeholder="e.g. Mobile Banking" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Name (বাংলা)</label>
+      <input type="text" class="form-input" id="edit-type-bn" placeholder="যেমন: মোবাইল ব্যাংকিং" />
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="saveWalletType()">💾 Save Changes</button>
+      <button class="btn btn-outline" onclick="closeModal('edit-wallet-type-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ EDIT WALLET MODAL (Admin Only) ══ -->
 <div class="modal-backdrop" id="edit-wallet-modal">
   <div class="modal" style="max-width:440px;">
