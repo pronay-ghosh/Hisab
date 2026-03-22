@@ -923,6 +923,35 @@ window.addEventListener('offline', updateOnlineStatus);
 
 // ── INIT ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // ── Cache Version Check (Force Refresh) ──
+  (async () => {
+    try {
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const firebaseConfig = {
+        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+        authDomain: "hisab-4-u.firebaseapp.com",
+        projectId: "hisab-4-u",
+        storageBucket: "hisab-4-u.firebasestorage.app",
+        messagingSenderId: "957694095044",
+        appId: "1:957694095044:web:1649995ac9734d4d062391"
+      };
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const snap = await getDoc(doc(db, 'app_config', 'cache'));
+      if (snap.exists()) {
+        const serverVersion = snap.data().version;
+        const localVersion = localStorage.getItem('hisab_cache_version');
+        if (localVersion && localVersion !== serverVersion) {
+          localStorage.setItem('hisab_cache_version', serverVersion);
+          window.location.reload(true);
+        } else if (!localVersion) {
+          localStorage.setItem('hisab_cache_version', serverVersion);
+        }
+      }
+    } catch(e) { /* silent fail */ }
+  })();
+
   applyTheme(State.theme);
   setLanguage(State.lang);
   updateOnlineStatus();
