@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
+/* ── PAGE LOAD FLASH FIX ──────────────────────────────
+   Disables all transitions on page load so theme/hover
+   styles don't flash or "lightning" before JS runs.
+   Class removed by app.js after DOMContentLoaded.
+──────────────────────────────────────────────────────── */
+.no-transition,
+.no-transition *,
+.no-transition *::before,
+.no-transition *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
 :root {
   --blue-900: #042C53;
   --blue-800: #0C447C;
