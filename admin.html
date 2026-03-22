@@ -142,6 +142,7 @@
                   <th>Phone</th>
                   <th>Credits</th>
                   <th>Role</th>
+                  <th>Status</th>
                   <th>Joined</th>
                   <th>Actions</th>
                 </tr>
@@ -624,17 +625,34 @@ function showAdminPanel(name) {
 function renderUsersTable() {
   const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const tbody = document.getElementById('users-tbody');
-  if (!users.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px;">No users registered yet.</td></tr>'; return; }
-  tbody.innerHTML = users.map(u => `<tr>
-    <td style="font-weight:600;color:var(--text-primary);">${u.name}</td>
-    <td style="color:var(--blue-700);">@${u.username}</td>
-    <td>${u.email}</td>
-    <td>${u.phone || '—'}</td>
-    <td>${u.credits || 100}</td>
-    <td><span class="txn-type-badge ${u.role === 'admin' ? 'badge-expense' : u.role === 'editor' ? 'badge-transfer' : 'badge-income'}">${u.role || 'user'}</span></td>
-    <td style="color:var(--text-muted);">${u.created || '—'}</td>
-    <td><button class="btn btn-outline btn-sm" onclick="editUser(${u.id})">Edit</button></td>
-  </tr>`).join('');
+  if (!users.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--text-muted);padding:20px;">No users registered yet.</td></tr>'; return; }
+  tbody.innerHTML = users.map(u => {
+    const isBanned  = u.banned === true;
+    const isDeleted = u.deleted === true;
+    const statusBadge = isDeleted
+      ? '<span class="txn-type-badge badge-expense">Deleted</span>'
+      : isBanned
+        ? '<span class="txn-type-badge" style="background:rgba(249,115,22,0.15);color:#f97316;">Banned</span>'
+        : '<span class="txn-type-badge badge-income">Active</span>';
+    const rowStyle = isDeleted ? 'opacity:0.45;' : isBanned ? 'opacity:0.7;' : '';
+    return `<tr style="${rowStyle}">
+      <td style="font-weight:600;color:var(--text-primary);">${u.name}</td>
+      <td style="color:var(--blue-700);">@${u.username}</td>
+      <td>${u.email}</td>
+      <td>${u.phone || '—'}</td>
+      <td>${u.credits || 100}</td>
+      <td><span class="txn-type-badge ${u.role === 'admin' ? 'badge-expense' : u.role === 'editor' ? 'badge-transfer' : 'badge-income'}">${u.role || 'user'}</span></td>
+      <td>${statusBadge}</td>
+      <td style="color:var(--text-muted);">${u.created || '—'}</td>
+      <td style="display:flex;gap:5px;flex-wrap:wrap;min-width:200px;">
+        ${!isDeleted ? `<button class="btn btn-outline btn-sm" onclick="editUser(${u.id})" title="Edit">✏️ Edit</button>` : ''}
+        ${!isDeleted && !isBanned ? `<button class="btn btn-sm" style="background:rgba(249,115,22,0.15);color:#f97316;border:1px solid #f97316;" onclick="banUser(${u.id})" title="Ban">🚫 Ban</button>` : ''}
+        ${!isDeleted && isBanned  ? `<button class="btn btn-sm" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid #10b981;" onclick="unbanUser(${u.id})" title="Unban">✅ Unban</button>` : ''}
+        ${!isDeleted ? `<button class="btn btn-sm" style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid #ef4444;" onclick="deleteUser(${u.id})" title="Delete">🗑️ Delete</button>` : ''}
+        ${isDeleted  ? `<button class="btn btn-sm" style="background:rgba(99,102,241,0.15);color:#6366f1;border:1px solid #6366f1;" onclick="restoreUser(${u.id})" title="Restore">♻️ Restore</button>` : ''}
+      </td>
+    </tr>`;
+  }).join('');
 }
 
 function filterUsers() {
@@ -678,7 +696,7 @@ function editUser(id) {
   openModal('edit-user-modal');
 }
 
-function saveUserEdit() {
+async function saveUserEdit() {
   const id = parseInt(document.getElementById('eu-id').value);
   const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const idx = users.findIndex(u => u.id === id);
@@ -688,18 +706,95 @@ function saveUserEdit() {
   users[idx].email    = document.getElementById('eu-email').value;
   users[idx].phone    = cpGetValue('eu-phone-picker') || document.getElementById('eu-phone-picker-phone')?.value || '';
   users[idx].role     = document.getElementById('eu-role').value;
+  users[idx].updatedAt = new Date().toISOString();
+  users[idx].updatedBy = 'admin';
   const newPass = document.getElementById('eu-pass').value;
   if (newPass) {
-    // Enforce strong password rules
     const errors = validatePasswordRules(newPass);
     if (errors.length) { showToast('⚠️', 'Weak Password', errors[0]); return; }
     users[idx].passwordHistory = [...(users[idx].passwordHistory || []), users[idx].password];
     users[idx].password = btoa(newPass);
   }
+  // ── localStorage update ──
   localStorage.setItem('hisab_users', JSON.stringify(users));
+
+  // ── Firestore sync ──
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app = getApps().length ? getApps()[0] : initializeApp({
+      apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",authDomain:"hisab-4-u.firebaseapp.com",
+      projectId:"hisab-4-u",storageBucket:"hisab-4-u.firebasestorage.app",
+      messagingSenderId:"957694095044",appId:"1:957694095044:web:1649995ac9734d4d062391"
+    });
+    const db = getFirestore(app);
+    await setDoc(doc(db, 'users', String(users[idx].username)), users[idx], { merge: true });
+    showToast('✅', 'User Updated!', 'User information saved to cloud.');
+  } catch(e) {
+    console.warn('Firestore sync failed:', e);
+    showToast('✅', 'User Updated!', 'Saved locally. Cloud sync failed.');
+  }
+
   closeModal('edit-user-modal');
   renderUsersTable();
-  showToast('✅', 'User Updated!', 'User information has been saved.');
+}
+
+// ── BAN USER ──────────────────────────────
+async function banUser(id) {
+  if (!confirm('এই user কে ban করবেন? Ban করলে login করতে পারবে না।')) return;
+  await _updateUserStatus(id, { banned: true, bannedAt: new Date().toISOString(), bannedBy: 'admin' });
+  showToast('🚫', 'User Banned!', 'User আর login করতে পারবে না।');
+  renderUsersTable();
+}
+
+// ── UNBAN USER ────────────────────────────
+async function unbanUser(id) {
+  if (!confirm('এই user এর ban তুলে নেবেন?')) return;
+  await _updateUserStatus(id, { banned: false, bannedAt: null, bannedBy: null });
+  showToast('✅', 'User Unbanned!', 'User আবার login করতে পারবে।');
+  renderUsersTable();
+}
+
+// ── SOFT DELETE USER ──────────────────────
+async function deleteUser(id) {
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const u = users.find(x => x.id === id);
+  if (!u) return;
+  if (u.role === 'admin') { showToast('❌', 'Error', 'Admin account delete করা যাবে না।'); return; }
+  if (!confirm(`"${u.name}" (@${u.username}) কে delete করবেন?\n\nAccount টি soft-delete হবে — Restore করা যাবে।`)) return;
+  await _updateUserStatus(id, { deleted: true, deletedAt: new Date().toISOString(), deletedBy: 'admin', banned: false });
+  showToast('🗑️', 'User Deleted!', 'Account soft-delete হয়েছে। Restore করা সম্ভব।');
+  renderUsersTable();
+}
+
+// ── RESTORE DELETED USER ──────────────────
+async function restoreUser(id) {
+  if (!confirm('এই user কে restore করবেন?')) return;
+  await _updateUserStatus(id, { deleted: false, deletedAt: null, deletedBy: null, banned: false });
+  showToast('♻️', 'User Restored!', 'Account পুনরায় সক্রিয় হয়েছে।');
+  renderUsersTable();
+}
+
+// ── SHARED STATUS UPDATER ─────────────────
+async function _updateUserStatus(id, patch) {
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const idx = users.findIndex(u => u.id === id);
+  if (idx < 0) return;
+  Object.assign(users[idx], patch);
+  localStorage.setItem('hisab_users', JSON.stringify(users));
+
+  // Firestore sync
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app = getApps().length ? getApps()[0] : initializeApp({
+      apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",authDomain:"hisab-4-u.firebaseapp.com",
+      projectId:"hisab-4-u",storageBucket:"hisab-4-u.firebasestorage.app",
+      messagingSenderId:"957694095044",appId:"1:957694095044:web:1649995ac9734d4d062391"
+    });
+    const db = getFirestore(app);
+    await updateDoc(doc(db, 'users', String(users[idx].username)), patch);
+  } catch(e) { console.warn('Firestore status sync failed:', e); }
 }
 
 function sendNotice() {
