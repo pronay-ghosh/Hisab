@@ -1,0 +1,105 @@
+name: Daily Backup to GitHub
+
+on:
+  schedule:
+    - cron: '0 18 * * *'  # প্রতিদিন রাত ১২টা (Bangladesh = UTC+6, তাই UTC 18:00)
+  workflow_dispatch:       # Manual trigger ও করা যাবে
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BACKUP_GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Firebase Admin
+        run: npm install firebase-admin
+
+      - name: Run Backup
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          BACKUP_DATE: ${{ github.run_id }}
+        run: |
+          cat > backup.js << 'EOF'
+          const admin = require('firebase-admin');
+          const fs = require('fs');
+          const path = require('path');
+
+          // Firebase init
+          const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+          admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+          const db = admin.firestore();
+
+          async function runBackup() {
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0]; // 2026-03-22
+            const timeStr = today.toISOString().replace(/[:.]/g,'-').slice(0,19);
+
+            const categories = ['users', 'transactions', 'wallets', 'budgets', 'income_cats', 'expense_cats'];
+            const backupDir = `backups/${dateStr}`;
+
+            // Backup folder তৈরি করো
+            if (!fs.existsSync(backupDir)) {
+              fs.mkdirSync(backupDir, { recursive: true });
+            }
+
+            let totalItems = 0;
+            const summary = { date: dateStr, time: timeStr, categories: {} };
+
+            for (const category of categories) {
+              try {
+                // Firestore থেকে data নাও
+                const snapshot = await db.collection(category).get();
+                const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // File name format: Hisab_users_2026-03-22.json
+                const fileName = `Hisab_${category}_${dateStr}.json`;
+                const filePath = path.join(backupDir, fileName);
+
+                // JSON file লেখো
+                fs.writeFileSync(filePath, JSON.stringify({
+                  category,
+                  date: dateStr,
+                  time: timeStr,
+                  count: data.length,
+                  data
+                }, null, 2));
+
+                summary.categories[category] = data.length;
+                totalItems += data.length;
+                console.log(`✅ ${category}: ${data.length} items → ${fileName}`);
+
+              } catch(e) {
+                console.error(`❌ ${category} backup failed:`, e.message);
+                summary.categories[category] = 'error';
+              }
+            }
+
+            // Summary file লেখো
+            summary.totalItems = totalItems;
+            fs.writeFileSync(
+              path.join(backupDir, `Hisab_summary_${dateStr}.json`),
+              JSON.stringify(summary, null, 2)
+            );
+
+            console.log(`\n📊 Backup Summary: ${totalItems} total items backed up on ${dateStr}`);
+          }
+
+          runBackup().catch(console.error);
+          EOF
+          node backup.js
+
+      - name: Commit and Push Backup
+        run: |
+          git config --global user.name "Hisab Backup Bot"
+          git config --global user.email "hisab4u@gmail.com"
+          git add backups/
+          git diff --staged --quiet || git commit -m "🔒 Auto Backup: $(date +'%Y-%m-%d') — Daily Backup"
+          git push
