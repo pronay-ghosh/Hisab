@@ -367,11 +367,75 @@
             </div>
             <button class="btn btn-primary" onclick="changePassword()">Change Password</button>
             <div class="divider"></div>
-            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">Forgot Password?</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">Forgot Password?</div>
             <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Send a password reset OTP to your email or phone.</p>
-            <div style="display:flex;gap:10px;">
-              <button class="btn btn-outline btn-sm" onclick="showToast('📧','OTP Sent!','Check your registered email for OTP.')">📧 Send to Email</button>
-              <button class="btn btn-outline btn-sm" onclick="showToast('📱','OTP Sent!','Check your registered phone for OTP.')">📱 Send to Phone</button>
+
+            <!-- Step 1: Send OTP buttons -->
+            <div id="sec-otp-step1">
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn btn-outline btn-sm" id="sec-email-btn" onclick="secSendOTP('email')">📧 Send to Email</button>
+                <button class="btn btn-outline btn-sm" id="sec-phone-btn" onclick="secSendOTP('phone')">📱 Send to Phone</button>
+              </div>
+              <div id="sec-otp-error" class="dual-warning" style="margin-top:10px;"></div>
+            </div>
+
+            <!-- Step 2: OTP input (hidden until sent) -->
+            <div id="sec-otp-step2" style="display:none;margin-top:16px;">
+              <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px;" id="sec-otp-sent-label"></div>
+              <div style="display:flex;gap:6px;margin-bottom:10px;">
+                <input class="otp-input form-input" style="width:42px;height:48px;text-align:center;font-size:20px;font-weight:700;padding:0;" maxlength="1" oninput="secOtpMove(this,0)" onkeydown="secOtpBack(event,this,0)" />
+                <input class="otp-input form-input" style="width:42px;height:48px;text-align:center;font-size:20px;font-weight:700;padding:0;" maxlength="1" oninput="secOtpMove(this,1)" onkeydown="secOtpBack(event,this,1)" />
+                <input class="otp-input form-input" style="width:42px;height:48px;text-align:center;font-size:20px;font-weight:700;padding:0;" maxlength="1" oninput="secOtpMove(this,2)" onkeydown="secOtpBack(event,this,2)" />
+                <input class="otp-input form-input" style="width:42px;height:48px;text-align:center;font-size:20px;font-weight:700;padding:0;" maxlength="1" oninput="secOtpMove(this,3)" onkeydown="secOtpBack(event,this,3)" />
+                <input class="otp-input form-input" style="width:42px;height:48px;text-align:center;font-size:20px;font-weight:700;padding:0;" maxlength="1" oninput="secOtpMove(this,4)" onkeydown="secOtpBack(event,this,4)" />
+                <input class="otp-input form-input" style="width:42px;height:48px;text-align:center;font-size:20px;font-weight:700;padding:0;" maxlength="1" oninput="secOtpMove(this,5)" onkeydown="secOtpBack(event,this,5)" />
+                <button class="btn btn-primary btn-sm" onclick="secVerifyOTP()" style="margin-left:6px;white-space:nowrap;">✅ Verify OTP</button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div id="sec-otp-timer" style="font-size:12px;color:var(--text-muted);"></div>
+                <div style="display:flex;gap:12px;">
+                  <a href="#" onclick="secResendOTP()" style="font-size:12px;color:var(--blue-700);">🔄 Resend</a>
+                  <a href="#" onclick="secResetOTPStep()" style="font-size:12px;color:var(--text-muted);">← Back</a>
+                </div>
+              </div>
+              <div id="sec-otp-verify-error" class="dual-warning" style="margin-top:8px;"></div>
+              <!-- Shown after expire -->
+              <div id="sec-otp-expired-contact" style="display:none;margin-top:12px;padding:12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:10px;text-align:center;">
+                <p style="font-size:12px;color:#ef4444;font-weight:600;margin-bottom:8px;">⏰ OTP expired!</p>
+                <a href="index.html#contact" class="btn btn-outline btn-sm" style="text-decoration:none;border-color:#ef4444;color:#ef4444;">🛡️ Contact Administrator</a>
+              </div>
+            </div>
+
+            <!-- Step 3: New password fields (after OTP verified) -->
+            <div id="sec-otp-step3" style="display:none;margin-top:16px;">
+              <div style="font-size:13px;font-weight:600;color:#10b981;margin-bottom:12px;">✅ OTP Verified! Set your new password.</div>
+              <div class="form-group">
+                <label class="form-label">New Password</label>
+                <div class="password-wrap">
+                  <input type="password" class="form-input" id="sec-new-pass" placeholder="Min 8 characters"
+                    oninput="renderPasswordStrength(this.value,'sec-strength-fill','sec-strength-label'); secCheckConfirm()" />
+                  <button class="password-toggle" type="button" onclick="togglePassInline('sec-new-pass',this)">👁</button>
+                </div>
+                <div style="margin-top:8px;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                    <div style="flex:1;height:5px;border-radius:3px;background:var(--border);overflow:hidden;">
+                      <div id="sec-strength-fill" style="height:100%;width:0;border-radius:3px;"></div>
+                    </div>
+                    <div id="sec-strength-label" style="font-size:11px;font-weight:700;width:60px;text-align:right;"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm New Password</label>
+                <div class="password-wrap">
+                  <input type="password" class="form-input" id="sec-confirm-pass" placeholder="Repeat password"
+                    oninput="secCheckConfirm()" />
+                  <button class="password-toggle" type="button" onclick="togglePassInline('sec-confirm-pass',this)">👁</button>
+                </div>
+                <div class="form-error" id="sec-confirm-error">Passwords do not match.</div>
+              </div>
+              <div id="sec-step3-error" class="dual-warning" style="margin-bottom:10px;"></div>
+              <button class="btn btn-primary btn-full" onclick="secResetPassword()">🔐 Reset Password</button>
             </div>
           </div>
 
@@ -986,6 +1050,190 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackupPanel();
   renderBackupHistory();
 });
+
+// ══════════════════════════════════════
+// SECURITY PANEL — OTP RESET LOGIC
+// ══════════════════════════════════════
+let _secOTP      = null;
+let _secExpiry   = null;
+let _secMethod   = null;
+let _secTimer    = null;
+
+function secSendOTP(method) {
+  const user   = State.user;
+  const errEl  = document.getElementById('sec-otp-error');
+  errEl.classList.remove('show');
+
+  if (!user) return;
+
+  // Check user has the contact info
+  if (method === 'email' && !user.email) {
+    errEl.textContent = '⚠️ No email address found in your profile.';
+    errEl.classList.add('show'); return;
+  }
+  if (method === 'phone' && !user.phone) {
+    errEl.textContent = '⚠️ No phone number found in your profile.';
+    errEl.classList.add('show'); return;
+  }
+
+  _secMethod = method;
+  _secOTP    = String(Math.floor(100000 + Math.random() * 900000));
+  _secExpiry = Date.now() + 30 * 1000; // 30 seconds
+
+  // Show OTP via toast (no real email/SMS server)
+  showToast('📨', 'OTP Sent!', `Your OTP: ${_secOTP} (valid 30s)`);
+
+  // Show step 2
+  document.getElementById('sec-otp-step1').style.display = 'none';
+  document.getElementById('sec-otp-step2').style.display = 'block';
+  document.getElementById('sec-otp-step3').style.display = 'none';
+
+  const label = method === 'email'
+    ? `6-digit OTP sent to ${user.email}`
+    : `6-digit OTP sent to ${user.phone}`;
+  document.getElementById('sec-otp-sent-label').textContent = label;
+
+  // Clear OTP boxes
+  document.querySelectorAll('#sec-otp-step2 .otp-input').forEach(i => { i.value=''; i.disabled=false; i.style.opacity='1'; });
+  document.querySelectorAll('#sec-otp-step2 .otp-input')[0].focus();
+  document.getElementById('sec-otp-verify-error').classList.remove('show');
+  document.getElementById('sec-otp-expired-contact').style.display = 'none';
+
+  secStartTimer(30);
+}
+
+function secResendOTP() {
+  if (!_secMethod) return;
+  secSendOTP(_secMethod);
+}
+
+function secResetOTPStep() {
+  clearInterval(_secTimer);
+  document.getElementById('sec-otp-step1').style.display = 'block';
+  document.getElementById('sec-otp-step2').style.display = 'none';
+  document.getElementById('sec-otp-step3').style.display = 'none';
+  document.getElementById('sec-otp-error').classList.remove('show');
+  _secOTP = null;
+}
+
+function secStartTimer(seconds) {
+  clearInterval(_secTimer);
+  const timerEl    = document.getElementById('sec-otp-timer');
+  const contactDiv = document.getElementById('sec-otp-expired-contact');
+  if (contactDiv) contactDiv.style.display = 'none';
+  let remaining = seconds;
+
+  const update = () => {
+    if (remaining > 0) {
+      const col = remaining <= 10 ? '#ef4444' : 'var(--blue-700)';
+      if (timerEl) timerEl.innerHTML = `<span style="color:${col};font-weight:700;">${remaining}s</span> remaining`;
+    } else {
+      clearInterval(_secTimer);
+      _secOTP = null;
+      if (timerEl) timerEl.innerHTML = '<span style="color:#ef4444;font-weight:700;">⏰ OTP expired!</span>';
+      document.querySelectorAll('#sec-otp-step2 .otp-input').forEach(i => { i.disabled=true; i.style.opacity='0.4'; });
+      if (contactDiv) contactDiv.style.display = 'block';
+    }
+    remaining--;
+  };
+  update();
+  _secTimer = setInterval(update, 1000);
+}
+
+function secOtpMove(input, idx) {
+  input.value = input.value.replace(/[^0-9]/g, '');
+  if (input.value.length === 1 && idx < 5) {
+    document.querySelectorAll('#sec-otp-step2 .otp-input')[idx + 1].focus();
+  }
+}
+function secOtpBack(e, input, idx) {
+  if (e.key === 'Backspace' && !input.value && idx > 0) {
+    document.querySelectorAll('#sec-otp-step2 .otp-input')[idx - 1].focus();
+  }
+}
+
+function secVerifyOTP() {
+  const entered = Array.from(document.querySelectorAll('#sec-otp-step2 .otp-input')).map(i => i.value).join('');
+  const errEl   = document.getElementById('sec-otp-verify-error');
+  errEl.classList.remove('show');
+
+  if (entered.length < 6) {
+    errEl.textContent = '⚠️ Please enter the 6-digit OTP.'; errEl.classList.add('show'); return;
+  }
+  if (!_secOTP) {
+    errEl.textContent = '⚠️ OTP expired. Please resend.'; errEl.classList.add('show'); return;
+  }
+  if (Date.now() > _secExpiry) {
+    _secOTP = null;
+    errEl.textContent = '⚠️ OTP expired. Please resend.'; errEl.classList.add('show'); return;
+  }
+  if (entered !== _secOTP) {
+    errEl.textContent = '⚠️ Incorrect OTP. Please try again.'; errEl.classList.add('show'); return;
+  }
+
+  // OTP correct — show step 3
+  clearInterval(_secTimer);
+  _secOTP = null;
+  document.getElementById('sec-otp-step2').style.display = 'none';
+  document.getElementById('sec-otp-step3').style.display = 'block';
+  document.getElementById('sec-new-pass').value     = '';
+  document.getElementById('sec-confirm-pass').value = '';
+  document.getElementById('sec-step3-error').classList.remove('show');
+  document.getElementById('sec-confirm-error').classList.remove('show');
+  document.getElementById('sec-new-pass').focus();
+}
+
+function secCheckConfirm() {
+  const np = document.getElementById('sec-new-pass').value;
+  const cp = document.getElementById('sec-confirm-pass').value;
+  const er = document.getElementById('sec-confirm-error');
+  if (er) { cp && np !== cp ? er.classList.add('show') : er.classList.remove('show'); }
+}
+
+async function secResetPassword() {
+  const newPass = document.getElementById('sec-new-pass').value;
+  const confirm = document.getElementById('sec-confirm-pass').value;
+  const errEl   = document.getElementById('sec-step3-error');
+  errEl.classList.remove('show');
+
+  if (!newPass || !confirm) { errEl.textContent = '⚠️ Please fill in both fields.'; errEl.classList.add('show'); return; }
+  if (newPass !== confirm)  { errEl.textContent = '⚠️ Passwords do not match.';     errEl.classList.add('show'); return; }
+  const errors = validatePasswordRules(newPass);
+  if (errors.length) { errEl.textContent = '⚠️ ' + errors[0]; errEl.classList.add('show'); return; }
+
+  // Update localStorage
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const idx   = users.findIndex(u => u.id === State.user.id);
+  if (idx >= 0) {
+    users[idx].passwordHistory = [...(users[idx].passwordHistory || []), users[idx].password];
+    users[idx].password = btoa(newPass);
+    State.user.password = btoa(newPass);
+    localStorage.setItem('hisab_users', JSON.stringify(users));
+    saveState('user', State.user);
+  }
+
+  // Firestore sync
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app = getApps().length ? getApps()[0] : initializeApp({
+      apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",authDomain:"hisab-4-u.firebaseapp.com",
+      projectId:"hisab-4-u",storageBucket:"hisab-4-u.firebasestorage.app",
+      messagingSenderId:"957694095044",appId:"1:957694095044:web:1649995ac9734d4d062391"
+    });
+    const db = getFirestore(app);
+    await updateDoc(doc(db, 'users', String(State.user.username)), {
+      password: btoa(newPass),
+      updatedAt: new Date().toISOString()
+    });
+  } catch(e) { console.warn('Firestore sync failed:', e); }
+
+  // Reset UI
+  secResetOTPStep();
+  document.getElementById('sec-otp-step3').style.display = 'none';
+  showToast('✅', 'Password Reset!', 'Your password has been updated successfully.');
+}
+
 </script>
 </body>
 </html>
