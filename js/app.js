@@ -1064,3 +1064,57 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// ── MOBILE HAMBURGER MENU ──────────────────────────────────────────
+function initMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+
+  // Overlay তৈরি করো
+  let overlay = document.getElementById('sidebar-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'sidebar-overlay';
+    overlay.className = 'sidebar-overlay';
+    overlay.onclick = closeMobileMenu;
+    document.body.appendChild(overlay);
+  }
+
+  // Hamburger button ঠিক করো
+  const toggle = document.getElementById('sidebar-toggle');
+  if (toggle) {
+    toggle.style.display = '';
+    toggle.className = 'hamburger-btn';
+    toggle.innerHTML = '<span></span><span></span><span></span>';
+    toggle.onclick = toggleMobileMenu;
+  }
+}
+
+function toggleMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const toggle = document.getElementById('sidebar-toggle');
+  if (!sidebar) return;
+  const isOpen = sidebar.classList.toggle('open');
+  if (overlay) overlay.classList.toggle('show', isOpen);
+  if (toggle) toggle.classList.toggle('open', isOpen);
+}
+
+function closeMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const toggle = document.getElementById('sidebar-toggle');
+  if (sidebar) sidebar.classList.remove('open');
+  if (overlay) overlay.classList.remove('show');
+  if (toggle) toggle.classList.remove('open');
+}
+
+// Sidebar link click এ mobile menu close করো
+document.addEventListener('DOMContentLoaded', () => {
+  initMobileMenu();
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 768) closeMobileMenu();
+    });
+  });
+});
