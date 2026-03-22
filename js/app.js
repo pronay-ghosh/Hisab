@@ -214,18 +214,25 @@ const LANG = {
 };
 
 // ── STATE ─────────────────────────────────
+// User-specific storage keys — keeps each user's data isolated
+function _userKey(base) {
+  const u = JSON.parse(localStorage.getItem('hisab_user') || 'null');
+  if (!u || !u.username) return base;
+  return base + '_' + u.username;
+}
+
 const State = {
   lang: localStorage.getItem('hisab_lang') || 'en',
   theme: localStorage.getItem('hisab_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
   user: JSON.parse(localStorage.getItem('hisab_user') || 'null'),
-  credits: parseInt(localStorage.getItem('hisab_credits') || '150'),
-  transactions: JSON.parse(localStorage.getItem('hisab_txns') || '[]'),
-  wallets: JSON.parse(localStorage.getItem('hisab_wallets') || JSON.stringify([
+  credits: parseInt(localStorage.getItem(_userKey('hisab_credits')) || '150'),
+  transactions: JSON.parse(localStorage.getItem(_userKey('hisab_txns')) || '[]'),
+  wallets: JSON.parse(localStorage.getItem(_userKey('hisab_wallets')) || JSON.stringify([
     { id: 'cash',  name_en: 'Cash',         name_bn: 'নগদ',                  icon: '💵', balance: 0 },
     { id: 'bank',  name_en: 'Bank Account', name_bn: 'ব্যাংক অ্যাকাউন্ট',  icon: '🏦', balance: 0 },
     { id: 'debit', name_en: 'Debit Card',   name_bn: 'ডেবিট কার্ড',         icon: '💳', balance: 0 },
   ])),
-  income_cats: JSON.parse(localStorage.getItem('hisab_income_cats') || JSON.stringify([
+  income_cats: JSON.parse(localStorage.getItem(_userKey('hisab_income_cats')) || JSON.stringify([
     { id: 'salary', en: 'Salary', bn: 'বেতন' },
     { id: 'business', en: 'Business', bn: 'ব্যবসা' },
     { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
@@ -233,7 +240,7 @@ const State = {
     { id: 'savings', en: 'Savings', bn: 'সঞ্চয়' },
     { id: 'others', en: 'Others', bn: 'অন্যান্য' },
   ])),
-  expense_cats: JSON.parse(localStorage.getItem('hisab_expense_cats') || JSON.stringify([
+  expense_cats: JSON.parse(localStorage.getItem(_userKey('hisab_expense_cats')) || JSON.stringify([
     { id: 'rent', en: 'House Rent', bn: 'বাড়িভাড়া' },
     { id: 'conv', en: 'Conveyance', bn: 'যাতায়াত' },
     { id: 'food', en: 'Fooding', bn: 'খাবার' },
@@ -242,15 +249,22 @@ const State = {
     { id: 'entertainment', en: 'Entertainment', bn: 'বিনোদন' },
     { id: 'others', en: 'Others', bn: 'অন্যান্য' },
   ])),
-  budgets: JSON.parse(localStorage.getItem('hisab_budgets') || '{}'),
-  notifications: JSON.parse(localStorage.getItem('hisab_notifications') || '[]'),
+  budgets: JSON.parse(localStorage.getItem(_userKey('hisab_budgets')) || '{}'),
+  notifications: JSON.parse(localStorage.getItem(_userKey('hisab_notifications')) || '[]'),
 };
 
 // ── HELPERS ───────────────────────────────
 const t = (key) => LANG[State.lang][key] || LANG['en'][key] || key;
 const fmt = (n) => '৳ ' + Number(n).toLocaleString('en-BD');
 const today = () => new Date().toISOString().split('T')[0];
-const saveState = (key, val) => localStorage.setItem('hisab_' + key, JSON.stringify(val));
+// User-specific saveState for txns, wallets, credits — other keys remain global
+const _userSpecificKeys = ['txns', 'wallets', 'credits', 'budgets', 'income_cats', 'expense_cats', 'notifications'];
+const saveState = (key, val) => {
+  const storageKey = _userSpecificKeys.includes(key)
+    ? _userKey('hisab_' + key)
+    : 'hisab_' + key;
+  localStorage.setItem(storageKey, JSON.stringify(val));
+};
 
 // ── COUNTRY DATA (shared across all pages) ─
 const COUNTRIES = [
@@ -677,6 +691,10 @@ function saveTransaction(txn) {
 
   txn.id = Date.now();
   txn.date = txn.date || today();
+  // ── Tag every transaction with the logged-in user ──
+  if (State.user && !txn.username) {
+    txn.username = State.user.username;
+  }
   State.transactions.unshift(txn);
   saveState('txns', State.transactions);
   // Log activity
@@ -818,6 +836,7 @@ function loginUser(username, password) {
   State.user = user;
   saveState('user', user);
   localStorage.setItem('hisab_last_login', Date.now());
+  localStorage.setItem('hisab_last_login_' + user.username, Date.now());
   // Update lastSeen on user record
   const allUsers = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const uIdx = allUsers.findIndex(u => u.username === user.username);
@@ -929,7 +948,7 @@ function registerUser(data) {
   State.user = user;
   saveState('user', user);
   State.credits = 100;
-  saveState('credits', 100);
+  saveState('credits', 100); // saves to user-specific key via saveState
   logActivity(user.username, 'register', 'Account created — 100 credits granted');
 
   // ── Firestore এ save করো ──
