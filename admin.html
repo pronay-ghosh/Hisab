@@ -410,9 +410,45 @@
           <div style="background:var(--green-50);border:1px solid #C0DD97;border-radius:var(--radius-md);padding:14px;margin:16px 0;font-size:13px;color:var(--green-600);">
             ✅ Last backup: Today at 2:00 AM — 100% complete. All user data backed up successfully.
           </div>
-          <button class="btn btn-primary" onclick="triggerBackup()">Run Backup Now</button>
+          <button class="btn btn-primary" onclick="triggerBackup()">💾 Run Backup Now</button>
         </div>
-      </div>
+
+        <!-- Force Refresh Card -->
+        <div class="card" style="margin-top:20px;">
+          <div class="card-header"><div class="card-title">🔄 Force Refresh</div></div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Force All Users to Refresh</div>
+              <div class="settings-row-desc">সব user এর browser এ নতুন version load হবে — পুরনো cache মুছে যাবে</div>
+            </div>
+          </div>
+          <div style="background:rgba(30,136,229,0.08);border:1px solid rgba(30,136,229,0.2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text-muted);margin:12px 0;">
+            ℹ️ এই বাটন চাপলে পরের বার সব user সাইটে আসলে automatically নতুন version load হবে।
+          </div>
+          <div id="force-refresh-status" style="font-size:13px;color:var(--text-muted);margin-bottom:12px;"></div>
+          <button class="btn btn-primary" style="background:linear-gradient(135deg,#f59e0b,#ef4444);" onclick="forceRefreshAllUsers()">🔄 Force Refresh All Users</button>
+        </div>
+
+        <!-- Auto Clear Cache Card -->
+        <div class="card" style="margin-top:20px;">
+          <div class="card-header"><div class="card-title">🧹 Auto Clear Cache</div></div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Auto Clear সক্রিয়</div>
+              <div class="settings-row-desc">প্রতিদিন নির্দিষ্ট সময়ে সব user এর cache automatically clear হবে</div>
+            </div>
+            <button class="toggle" id="auto-clear-toggle" onclick="toggleAutoClear()" style="background:var(--green-500);"></button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Clear সময়</div>
+              <div class="settings-row-desc">প্রতিদিন এই সময়ে cache clear হবে</div>
+            </div>
+            <input type="time" class="form-input" id="auto-clear-time" value="00:00" style="width:120px;" onchange="saveAutoClearTime()" />
+          </div>
+          <div id="auto-clear-status" style="font-size:13px;color:var(--text-muted);margin:12px 0;"></div>
+          <button class="btn btn-outline" style="border-color:#ef4444;color:#ef4444;" onclick="manualClearCache()">🗑️ এখনই Cache Clear করুন</button>
+        </div>
 
     </div>
   </div>
@@ -780,6 +816,160 @@ async function sendGiftCredits() {
 
 function notifyInactive() {
   showToast('📬','Notifications Sent!','Inactive users have been notified via email and SMS.');
+}
+
+// ── AUTO CLEAR CACHE ──────────────────────────────────────────────
+function toggleAutoClear() {
+  const toggle = document.getElementById('auto-clear-toggle');
+  const isOn = toggle.classList.toggle('on');
+  localStorage.setItem('hisab_auto_clear_enabled', isOn ? '1' : '0');
+  showToast(isOn ? '✅' : '⏸️', isOn ? 'Auto Clear চালু!' : 'Auto Clear বন্ধ!', isOn ? 'প্রতিদিন নির্দিষ্ট সময়ে cache clear হবে।' : 'Auto Clear নিষ্ক্রিয় করা হয়েছে।');
+  updateAutoClearStatus();
+}
+
+function saveAutoClearTime() {
+  const time = document.getElementById('auto-clear-time').value;
+  localStorage.setItem('hisab_auto_clear_time', time);
+  showToast('⏰', 'সময় সেভ হয়েছে!', `প্রতিদিন ${time} এ cache clear হবে।`);
+  updateAutoClearStatus();
+}
+
+function updateAutoClearStatus() {
+  const enabled = localStorage.getItem('hisab_auto_clear_enabled') === '1';
+  const time = localStorage.getItem('hisab_auto_clear_time') || '00:00';
+  const lastClear = localStorage.getItem('hisab_last_cache_clear');
+  const toggle = document.getElementById('auto-clear-toggle');
+  const statusEl = document.getElementById('auto-clear-status');
+  const timeInput = document.getElementById('auto-clear-time');
+  if (toggle) { toggle.className = 'toggle' + (enabled ? ' on' : ''); }
+  if (timeInput) { timeInput.value = time; }
+  if (statusEl) {
+    statusEl.innerHTML = lastClear
+      ? `✅ সর্বশেষ cache clear: <strong>${new Date(parseInt(lastClear)).toLocaleString('bn-BD')}</strong>`
+      : '⚠️ এখনও cache clear হয়নি।';
+  }
+}
+
+async function manualClearCache() {
+  if (!confirm('এখনই সব user এর cache clear করবেন?')) return;
+  const btn = document.querySelector('[onclick="manualClearCache()"]');
+  if (btn) { btn.textContent = '⏳ Clearing...'; btn.disabled = true; }
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const firebaseConfig = {
+      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+      authDomain: "hisab-4-u.firebaseapp.com",
+      projectId: "hisab-4-u",
+      storageBucket: "hisab-4-u.firebasestorage.app",
+      messagingSenderId: "957694095044",
+      appId: "1:957694095044:web:1649995ac9734d4d062391"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const newVersion = Date.now().toString();
+    await setDoc(doc(db, 'app_config', 'cache'), {
+      version: newVersion,
+      clearedAt: serverTimestamp(),
+      clearedBy: 'admin_manual'
+    });
+    localStorage.setItem('hisab_last_cache_clear', newVersion);
+    updateAutoClearStatus();
+    showToast('🗑️', 'Cache Clear সম্পন্ন!', 'সব user এর browser এ পরের বার নতুন version load হবে।');
+  } catch(e) {
+    console.error(e);
+    showToast('❌', 'Error!', 'Cache clear করতে সমস্যা হয়েছে।');
+  } finally {
+    if (btn) { btn.textContent = '🗑️ এখনই Cache Clear করুন'; btn.disabled = false; }
+  }
+}
+
+// Auto clear check — page load এ
+(function checkAutoClear() {
+  const enabled = localStorage.getItem('hisab_auto_clear_enabled') === '1';
+  if (!enabled) return;
+  const clearTime = localStorage.getItem('hisab_auto_clear_time') || '00:00';
+  const [h, m] = clearTime.split(':').map(Number);
+  const now = new Date();
+  const lastClear = parseInt(localStorage.getItem('hisab_last_cache_clear') || '0');
+  const lastClearDate = new Date(lastClear);
+  const todayClearTime = new Date();
+  todayClearTime.setHours(h, m, 0, 0);
+  // আজকের clear সময় পার হয়েছে কিনা এবং আজকে clear হয়নি
+  if (now >= todayClearTime && lastClearDate.toDateString() !== now.toDateString()) {
+    localStorage.setItem('hisab_last_cache_clear', Date.now().toString());
+    // Firestore এ নতুন version push করো
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js').then(({ initializeApp, getApps }) => {
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').then(({ getFirestore, doc, setDoc, serverTimestamp }) => {
+        const firebaseConfig = {
+          apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+          authDomain: "hisab-4-u.firebaseapp.com",
+          projectId: "hisab-4-u",
+          storageBucket: "hisab-4-u.firebasestorage.app",
+          messagingSenderId: "957694095044",
+          appId: "1:957694095044:web:1649995ac9734d4d062391"
+        };
+        const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        setDoc(doc(db, 'app_config', 'cache'), {
+          version: Date.now().toString(),
+          clearedAt: serverTimestamp(),
+          clearedBy: 'auto_scheduled'
+        });
+      });
+    });
+  }
+})();
+
+// Backup panel load হলে status আপডেট করো
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(updateAutoClearStatus, 500);
+});
+
+async function forceRefreshAllUsers() {
+  const btn = document.querySelector('[onclick="forceRefreshAllUsers()"]');
+  if (btn) { btn.textContent = '⏳ Processing...'; btn.disabled = true; }
+
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+      authDomain: "hisab-4-u.firebaseapp.com",
+      projectId: "hisab-4-u",
+      storageBucket: "hisab-4-u.firebasestorage.app",
+      messagingSenderId: "957694095044",
+      appId: "1:957694095044:web:1649995ac9734d4d062391"
+    };
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const newVersion = Date.now().toString();
+
+    // Firestore এ নতুন version save করো
+    await setDoc(doc(db, 'app_config', 'cache'), {
+      version: newVersion,
+      updatedAt: serverTimestamp(),
+      updatedBy: 'admin'
+    });
+
+    // Status দেখাও
+    const statusEl = document.getElementById('force-refresh-status');
+    if (statusEl) {
+      statusEl.innerHTML = `✅ <strong>সফল!</strong> নতুন version: <code>${newVersion}</code> — সব user পরের বার সাইটে আসলে refresh হবে।`;
+      statusEl.style.color = 'var(--green-600)';
+    }
+
+    showToast('🔄', 'Force Refresh সম্পন্ন!', 'সব user এর browser এ নতুন version load হবে।');
+
+  } catch(e) {
+    console.error(e);
+    showToast('❌', 'Error!', 'Force Refresh করতে সমস্যা হয়েছে।');
+  } finally {
+    if (btn) { btn.textContent = '🔄 Force Refresh All Users'; btn.disabled = false; }
+  }
 }
 
 async function triggerBackup() {
