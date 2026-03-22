@@ -1118,3 +1118,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+// ── AUTO SESSION CHECK ────────────────────
+// Protected pages এ automatically session check করো
+(function autoSessionCheck() {
+  const protectedPages = [
+    'dashboard', 'budget', 'expense', 'income',
+    'reports', 'settings', 'wallets', 'credits', 'admin'
+  ];
+  const path = window.location.pathname.split('/').pop().replace('.html', '');
+  if (protectedPages.includes(path)) {
+    // DOM ready হওয়ার পরে check করো
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => requireLogin());
+    } else {
+      requireLogin();
+    }
+  }
+})();
