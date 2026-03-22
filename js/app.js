@@ -818,7 +818,86 @@ function loginUser(username, password) {
   const uIdx = allUsers.findIndex(u => u.username === user.username);
   if (uIdx >= 0) { allUsers[uIdx].lastSeen = new Date().toISOString(); localStorage.setItem('hisab_users', JSON.stringify(allUsers)); }
   logActivity(user.username, 'login', 'Logged in');
+
+  // ── Background: Firestore এ lastSeen update করো ──
+  (async () => {
+    try {
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const firebaseConfig = {
+        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+        authDomain: "hisab-4-u.firebaseapp.com",
+        projectId: "hisab-4-u",
+        storageBucket: "hisab-4-u.firebasestorage.app",
+        messagingSenderId: "957694095044",
+        appId: "1:957694095044:web:1649995ac9734d4d062391"
+      };
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      await updateDoc(doc(db, 'users', String(user.username)), {
+        lastSeen: new Date().toISOString()
+      });
+    } catch(e) { /* silent */ }
+  })();
+
   return { success: true, user };
+}
+
+// ── FIRESTORE USER RESTORE ─────────────────
+// localStorage হারিয়ে গেলে Firestore থেকে user restore করো
+async function restoreUserFromFirestore(username, password) {
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const firebaseConfig = {
+      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+      authDomain: "hisab-4-u.firebaseapp.com",
+      projectId: "hisab-4-u",
+      storageBucket: "hisab-4-u.firebasestorage.app",
+      messagingSenderId: "957694095044",
+      appId: "1:957694095044:web:1649995ac9734d4d062391"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // username বা email দিয়ে খোঁজো
+    const usersRef = collection(db, 'users');
+    let foundUser = null;
+
+    const q1 = query(usersRef, where('username', '==', username));
+    const snap1 = await getDocs(q1);
+    if (!snap1.empty) foundUser = snap1.docs[0].data();
+
+    if (!foundUser) {
+      const q2 = query(usersRef, where('email', '==', username));
+      const snap2 = await getDocs(q2);
+      if (!snap2.empty) foundUser = snap2.docs[0].data();
+    }
+
+    if (!foundUser) return { error: 'User not found' };
+
+    // Password verify করো
+    if (foundUser.password !== btoa(password)) return { error: 'Wrong password' };
+
+    // localStorage এ restore করো
+    const existingUsers = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+    const alreadyExists = existingUsers.findIndex(u => u.username === foundUser.username);
+    if (alreadyExists >= 0) {
+      existingUsers[alreadyExists] = foundUser; // update
+    } else {
+      existingUsers.push(foundUser); // নতুন করে add
+    }
+    localStorage.setItem('hisab_users', JSON.stringify(existingUsers));
+
+    // Login করো
+    State.user = foundUser;
+    saveState('user', foundUser);
+    localStorage.setItem('hisab_last_login', Date.now());
+    logActivity(foundUser.username, 'login', 'Logged in (restored from cloud)');
+    return { success: true, user: foundUser, restored: true };
+  } catch(e) {
+    return { error: 'Network error. Please try again.' };
+  }
 }
 
 function registerUser(data) {
@@ -861,7 +940,6 @@ function registerUser(data) {
       const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const firestoreUser = { ...user };
-      delete firestoreUser.password;
       await setDoc(doc(db, 'users', String(user.username)), firestoreUser);
     } catch(e) { console.warn('Firestore save failed:', e); }
   })();
