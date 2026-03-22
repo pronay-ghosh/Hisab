@@ -844,6 +844,28 @@ function registerUser(data) {
   State.credits = 100;
   saveState('credits', 100);
   logActivity(user.username, 'register', 'Account created — 100 credits granted');
+
+  // ── Firestore এ save করো ──
+  (async () => {
+    try {
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const firebaseConfig = {
+        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+        authDomain: "hisab-4-u.firebaseapp.com",
+        projectId: "hisab-4-u",
+        storageBucket: "hisab-4-u.firebasestorage.app",
+        messagingSenderId: "957694095044",
+        appId: "1:957694095044:web:1649995ac9734d4d062391"
+      };
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const firestoreUser = { ...user };
+      delete firestoreUser.password;
+      await setDoc(doc(db, 'users', String(user.username)), firestoreUser);
+    } catch(e) { console.warn('Firestore save failed:', e); }
+  })();
+
   return { success: true, user };
 }
 
@@ -923,6 +945,69 @@ window.addEventListener('offline', updateOnlineStatus);
 
 // ── INIT ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // ── Auto Daily Migration: localStorage → Firestore ──
+  (async () => {
+    try {
+      const lastMigration = localStorage.getItem('hisab_last_migration');
+      const today = new Date().toDateString();
+      if (lastMigration === today) return; // আজকে already migrate হয়েছে
+
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, setDoc, collection, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+        authDomain: "hisab-4-u.firebaseapp.com",
+        projectId: "hisab-4-u",
+        storageBucket: "hisab-4-u.firebasestorage.app",
+        messagingSenderId: "957694095044",
+        appId: "1:957694095044:web:1649995ac9734d4d062391"
+      };
+
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // Users migrate করো
+      const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+      if (users.length > 0) {
+        const batch = writeBatch(db);
+        users.forEach(u => {
+          if (u.email || u.username) {
+            const id = (u.email || u.username).replace(/[^a-zA-Z0-9]/g, '_');
+            batch.set(doc(db, 'users', id), {
+              ...u,
+              migratedAt: new Date().toISOString(),
+              source: 'localStorage'
+            }, { merge: true });
+          }
+        });
+        await batch.commit();
+      }
+
+      // Transactions migrate করো
+      const transactions = JSON.parse(localStorage.getItem('hisab_transactions') || '[]');
+      if (transactions.length > 0) {
+        const batch2 = writeBatch(db);
+        transactions.forEach(t => {
+          if (t.id) {
+            batch2.set(doc(db, 'transactions', String(t.id)), {
+              ...t,
+              migratedAt: new Date().toISOString()
+            }, { merge: true });
+          }
+        });
+        await batch2.commit();
+      }
+
+      // Migration date সেভ করো
+      localStorage.setItem('hisab_last_migration', today);
+      console.log('✅ Auto migration complete:', today);
+
+    } catch(e) {
+      console.log('Migration skipped:', e.message);
+    }
+  })();
+
   // ── Cache Version Check (Force Refresh) ──
   (async () => {
     try {
