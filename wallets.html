@@ -120,7 +120,7 @@
     <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Adding a custom wallet costs <strong>10 credits</strong>.</p>
     <div class="form-group">
       <label class="form-label">Wallet Type</label>
-      <select class="form-input" id="new-wallet-type">
+      <select class="form-input" id="new-wallet-type" onchange="onWalletTypeChange(this)">
         <option value="cash">💵 Cash</option>
         <option value="bank">🏦 Bank Account</option>
         <option value="debit">💳 Debit Card</option>
@@ -128,7 +128,29 @@
         <option value="loan_to">🤝 Loan to Others</option>
         <option value="loan_from">🤝 Loan from Others</option>
         <option value="others">📦 Others</option>
+        <option value="__custom__" style="color:var(--blue-400);font-weight:600;">➕ Add New Type...</option>
       </select>
+    </div>
+
+    <!-- Custom Type Input (hidden by default) -->
+    <div class="form-group" id="custom-type-group" style="display:none;background:rgba(30,136,229,0.06);border:1px solid rgba(30,136,229,0.2);border-radius:12px;padding:14px;">
+      <div style="font-size:13px;font-weight:600;color:var(--blue-400);margin-bottom:10px;">➕ নতুন Wallet Type তৈরি করুন</div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;">
+        <div style="flex:0 0 70px;">
+          <label class="form-label" style="font-size:11px;">Icon</label>
+          <input type="text" class="form-input" id="custom-type-icon" placeholder="💰" maxlength="4" style="font-size:20px;text-align:center;" value="💰" />
+        </div>
+        <div style="flex:1;">
+          <label class="form-label" style="font-size:11px;">Name (English)</label>
+          <input type="text" class="form-input" id="custom-type-en" placeholder="e.g. Mobile Banking" />
+        </div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label class="form-label" style="font-size:11px;">Name (বাংলা)</label>
+        <input type="text" class="form-input" id="custom-type-bn" placeholder="যেমন: মোবাইল ব্যাংকিং" />
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveCustomWalletType()">✅ Type যোগ করুন</button>
+      <button class="btn btn-outline btn-sm" onclick="cancelCustomType()" style="margin-left:8px;">বাদ দিন</button>
     </div>
     <div class="form-group">
       <label class="form-label">Wallet Name (English)</label>
@@ -238,9 +260,11 @@ function populateWalletTypeSelects() {
   selects.forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
+    const currentVal = el.value;
     el.innerHTML = types.map(t =>
       `<option value="${t.id}">${t.icon} ${t.name_en}</option>`
-    ).join('');
+    ).join('') + `<option value="__custom__" style="color:var(--blue-400);font-weight:600;">➕ Add New Type...</option>`;
+    if (currentVal && el.querySelector(`option[value="${currentVal}"]`)) el.value = currentVal;
   });
 }
 
@@ -485,14 +509,56 @@ function filterWalletTxns() {
   renderWalletTxns(document.getElementById('wallet-filter').value);
 }
 
+function onWalletTypeChange(sel) {
+  const customGroup = document.getElementById('custom-type-group');
+  if (sel.value === '__custom__') {
+    customGroup.style.display = 'block';
+    sel.value = 'cash';
+  } else {
+    customGroup.style.display = 'none';
+  }
+}
+
+function saveCustomWalletType() {
+  const icon = document.getElementById('custom-type-icon').value.trim() || '💰';
+  const en   = document.getElementById('custom-type-en').value.trim();
+  const bn   = document.getElementById('custom-type-bn').value.trim();
+  if (!en) { showToast('⚠️', 'Missing Name', 'Type এর নাম দিন।'); return; }
+  const types = getWalletTypes();
+  const id = en.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + Date.now();
+  types.push({ id, icon, name_en: en, name_bn: bn || en });
+  saveWalletTypes(types);
+  populateWalletTypeSelects();
+  const sel = document.getElementById('new-wallet-type');
+  sel.value = id;
+  document.getElementById('custom-type-group').style.display = 'none';
+  document.getElementById('custom-type-icon').value = '💰';
+  document.getElementById('custom-type-en').value = '';
+  document.getElementById('custom-type-bn').value = '';
+  if (isAdmin()) renderWalletTypeList();
+  showToast('✅', 'Type যোগ হয়েছে!', `"${en}" wallet type যোগ করা হয়েছে।`);
+}
+
+function cancelCustomType() {
+  document.getElementById('custom-type-group').style.display = 'none';
+  document.getElementById('custom-type-icon').value = '💰';
+  document.getElementById('custom-type-en').value = '';
+  document.getElementById('custom-type-bn').value = '';
+  document.getElementById('new-wallet-type').value = 'cash';
+}
+
 function addWallet() {
   const type = document.getElementById('new-wallet-type').value;
+  if (!type || type === '__custom__') { showToast('⚠️', 'Type বেছে নিন', 'একটি wallet type বেছে নিন।'); return; }
   const en = document.getElementById('new-wallet-en').value.trim();
   const bn = document.getElementById('new-wallet-bn').value.trim();
   const bal = parseFloat(document.getElementById('new-wallet-balance').value) || 0;
   if (!en) { showToast('⚠️','Missing Name','Please enter wallet name.'); return; }
   if (!useCredits(10, 'Add new wallet')) return;
-  const newWallet = { id: type + '_' + Date.now(), name_en: en, name_bn: bn || en, icon: WALLET_ICONS[type] || '💰', balance: bal };
+  const types = getWalletTypes();
+  const typeObj = types.find(t => t.id === type);
+  const icon = typeObj ? typeObj.icon : '💰';
+  const newWallet = { id: type + '_' + Date.now(), name_en: en, name_bn: bn || en, icon, balance: bal };
   State.wallets.push(newWallet);
   saveState('wallets', State.wallets);
   closeModal('add-wallet-modal');
