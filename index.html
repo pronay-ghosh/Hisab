@@ -544,8 +544,22 @@
     <button class="ltheme-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
     <a href="login.html" class="lbtn-login">Log In</a>
     <a href="register.html" class="lbtn-cta">Get Started →</a>
+    <!-- Mobile Hamburger -->
+    <button class="lmenu-btn" id="lmenu-btn" onclick="toggleLandingMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- Mobile Nav Drawer -->
+<div class="lmobile-nav" id="lmobile-nav">
+  <a href="#features" onclick="toggleLandingMenu()">Features</a>
+  <a href="#how-it-works" onclick="toggleLandingMenu()">How It Works</a>
+  <a href="#pricing" onclick="toggleLandingMenu()">Pricing</a>
+  <a href="#contact" onclick="toggleLandingMenu()">Contact</a>
+  <a href="login.html" class="lbtn-login" style="text-align:center;">Log In</a>
+  <a href="register.html" class="lbtn-cta" style="text-align:center;">Get Started →</a>
+</div>
 
 <!-- HERO -->
 <section class="lhero" id="home">
@@ -1112,6 +1126,26 @@
 
 <script src="js/app.js"></script>
 <script>
+  // ── MOBILE MENU ──
+  function toggleLandingMenu() {
+    const btn = document.getElementById('lmenu-btn');
+    const nav = document.getElementById('lmobile-nav');
+    const isOpen = nav.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  // Close on outside click
+  document.addEventListener('click', e => {
+    const nav = document.getElementById('lmobile-nav');
+    const btn = document.getElementById('lmenu-btn');
+    if (nav && nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) {
+      nav.classList.remove('open');
+      btn.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
   // Sticky nav
   window.addEventListener('scroll', () => {
     document.getElementById('lnav').classList.toggle('scrolled', window.scrollY > 10);
