@@ -682,18 +682,99 @@ function previewNotice() {
   showToast('📢', title, msg, 6000);
 }
 
-function sendGiftCredits() {
+// ── FIRESTORE GIFT CREDITS & BACKUP ──────────────────────────────
+async function sendGiftCredits() {
   const amount = parseInt(document.getElementById('gift-amount').value);
   const reason = document.getElementById('gift-reason').value || 'Admin Gift';
   const target = document.getElementById('gift-target').value;
   if (!amount || amount < 1) { showToast('⚠️','Missing Amount','Please enter a valid amount.'); return; }
-  if (target === 'all') {
-    const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
-    users.forEach(u => u.credits = (u.credits || 0) + amount);
-    localStorage.setItem('hisab_users', JSON.stringify(users));
-    showToast('🎁','Credits Gifted!', `+${amount} credits sent to all ${users.length} users. Reason: ${reason}`);
-  } else {
-    showToast('🎁','Credits Gifted!', `+${amount} credits sent to user. Reason: ${reason}`);
+
+  const btn = document.querySelector('#rewards .btn-success');
+  btn.textContent = '⏳ পাঠানো হচ্ছে...'; btn.disabled = true;
+
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, doc, updateDoc, increment, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+      authDomain: "hisab-4-u.firebaseapp.com",
+      projectId: "hisab-4-u",
+      storageBucket: "hisab-4-u.firebasestorage.app",
+      messagingSenderId: "957694095044",
+      appId: "1:957694095044:web:1649995ac9734d4d062391"
+    };
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    if (target === 'all') {
+      // সব user দের credits দাও
+      const usersSnap = await getDocs(collection(db, 'users'));
+      let count = 0;
+      const promises = [];
+      usersSnap.forEach(userDoc => {
+        promises.push(updateDoc(doc(db, 'users', userDoc.id), {
+          credits: increment(amount)
+        }));
+        count++;
+      });
+      await Promise.all(promises);
+
+      // Gift log সেভ করো
+      await addDoc(collection(db, 'gift_logs'), {
+        type: 'all',
+        amount,
+        reason,
+        userCount: count,
+        timestamp: serverTimestamp()
+      });
+
+      // localStorage ও আপডেট করো
+      const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+      users.forEach(u => u.credits = (u.credits || 0) + amount);
+      localStorage.setItem('hisab_users', JSON.stringify(users));
+
+      showToast('🎁', 'Credits Gifted!', `+${amount} credits সফলভাবে ${count} জন user কে দেওয়া হয়েছে। কারণ: ${reason}`);
+
+    } else {
+      // নির্দিষ্ট user কে credits দাও
+      const username = document.getElementById('gift-username')?.value?.trim();
+      if (!username) { showToast('⚠️', 'User নির্বাচন করুন', 'একজন user বেছে নিন।'); btn.textContent = '🎁 Send Gift Credits'; btn.disabled = false; return; }
+
+      const usersSnap = await getDocs(collection(db, 'users'));
+      let found = false;
+      for (const userDoc of usersSnap.docs) {
+        const data = userDoc.data();
+        if (data.username === username || data.email === username) {
+          await updateDoc(doc(db, 'users', userDoc.id), { credits: increment(amount) });
+
+          await addDoc(collection(db, 'gift_logs'), {
+            type: 'specific',
+            amount,
+            reason,
+            userId: userDoc.id,
+            username,
+            timestamp: serverTimestamp()
+          });
+
+          // localStorage ও আপডেট করো
+          const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+          const idx = users.findIndex(u => u.username === username || u.email === username);
+          if (idx >= 0) { users[idx].credits = (users[idx].credits || 0) + amount; localStorage.setItem('hisab_users', JSON.stringify(users)); }
+
+          showToast('🎁', 'Credits Gifted!', `+${amount} credits সফলভাবে ${username} কে দেওয়া হয়েছে। কারণ: ${reason}`);
+          found = true;
+          break;
+        }
+      }
+      if (!found) showToast('⚠️', 'User পাওয়া যায়নি', `"${username}" নামে কোনো user নেই।`);
+    }
+  } catch(e) {
+    console.error(e);
+    showToast('❌', 'Error!', 'Credits দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+  } finally {
+    btn.textContent = '🎁 Send Gift Credits'; btn.disabled = false;
   }
 }
 
@@ -701,9 +782,59 @@ function notifyInactive() {
   showToast('📬','Notifications Sent!','Inactive users have been notified via email and SMS.');
 }
 
-function triggerBackup() {
-  showToast('💾','Backup Running...','All user data is being backed up. This may take a moment.');
-  setTimeout(() => showToast('✅','Backup Complete!','All data backed up to Google Drive successfully.'), 3000);
+async function triggerBackup() {
+  const btn = document.querySelector('[onclick="triggerBackup()"]');
+  if (btn) { btn.textContent = '⏳ Backup চলছে...'; btn.disabled = true; }
+
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+      authDomain: "hisab-4-u.firebaseapp.com",
+      projectId: "hisab-4-u",
+      storageBucket: "hisab-4-u.firebasestorage.app",
+      messagingSenderId: "957694095044",
+      appId: "1:957694095044:web:1649995ac9734d4d062391"
+    };
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // localStorage থেকে সব data নাও
+    const backupData = {
+      timestamp: serverTimestamp(),
+      date: new Date().toISOString(),
+      users: JSON.parse(localStorage.getItem('hisab_users') || '[]'),
+      transactions: JSON.parse(localStorage.getItem('hisab_transactions') || '[]'),
+      wallets: JSON.parse(localStorage.getItem('hisab_wallets') || '[]'),
+      budgets: JSON.parse(localStorage.getItem('hisab_budgets') || '[]'),
+      income_cats: JSON.parse(localStorage.getItem('hisab_income_cats') || '[]'),
+      expense_cats: JSON.parse(localStorage.getItem('hisab_expense_cats') || '[]'),
+    };
+
+    // Firestore এ backup সেভ করো
+    const backupId = `backup_${new Date().toISOString().replace(/[:.]/g,'-')}`;
+    await setDoc(doc(db, 'backups', backupId), backupData);
+
+    // JSON ফাইল হিসেবে download করো
+    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `hisab-backup-${new Date().toLocaleDateString('en-GB').replace(/\//g,'-')}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast('✅', 'Backup সম্পন্ন!', 'সব data Firestore এ সেভ হয়েছে এবং JSON ফাইল download হয়েছে।');
+
+  } catch(e) {
+    console.error(e);
+    showToast('❌', 'Backup Error!', 'Backup করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+  } finally {
+    if (btn) { btn.textContent = '💾 Backup Now'; btn.disabled = false; }
+  }
 }
 
 // ── ADMIN CATEGORIES ──────────────────────
