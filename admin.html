@@ -689,8 +689,8 @@ async function sendGiftCredits() {
   const target = document.getElementById('gift-target').value;
   if (!amount || amount < 1) { showToast('⚠️','Missing Amount','Please enter a valid amount.'); return; }
 
-  const btn = document.querySelector('#rewards .btn-success');
-  btn.textContent = '⏳ পাঠানো হচ্ছে...'; btn.disabled = true;
+  const btn = document.querySelector('[onclick="sendGiftCredits()"]');
+  if (btn) { btn.textContent = '⏳ পাঠানো হচ্ছে...'; btn.disabled = true; }
 
   try {
     const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
