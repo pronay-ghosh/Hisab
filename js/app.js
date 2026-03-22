@@ -782,7 +782,14 @@ function useCredits(amount, reason) {
   showToast('💳', 'Credits Used', `-${amount} credits for: ${reason}`);
   updateCreditDisplay();
   // ── Credit log ──
-  _writeCreditLog({ type:'transaction', amount: -amount, label: reason, note: reason });
+  // Detect type from reason string for better icon
+  const _txnType = reason.toLowerCase().includes('ai') ? 'ai'
+    : reason.toLowerCase().includes('report') ? 'report'
+    : reason.toLowerCase().includes('budget') ? 'budget'
+    : reason.toLowerCase().includes('category') ? 'budget'
+    : reason.toLowerCase().includes('wallet') ? 'budget'
+    : 'transaction';
+  _writeCreditLog({ type: _txnType, amount: -amount, label: reason, note: reason });
   return true;
 }
 
@@ -802,7 +809,12 @@ function addCredits(amount, reason) {
   showToast('🎉', 'Credits Earned!', `+${amount} credits: ${reason}`);
   updateCreditDisplay();
   // ── Credit log ──
-  _writeCreditLog({ type:'other_add', amount: +amount, label: reason, note: reason });
+  const _addType = reason.toLowerCase().includes('gift') ? 'gift'
+    : reason.toLowerCase().includes('ad') ? 'ad'
+    : reason.toLowerCase().includes('bonus') ? 'signup'
+    : reason.toLowerCase().includes('refund') ? 'refund'
+    : 'other_add';
+  _writeCreditLog({ type: _addType, amount: +amount, label: reason, note: reason });
 }
 
 function updateCreditDisplay() {
