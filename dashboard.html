@@ -2,43 +2,13 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/mobile.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- ══ SEO META TAGS ══ -->
-  <meta name="description" content="Your financial overview — income, expenses, savings and wallet balances at a glance." />
-  <meta name="keywords" content="hisab dashboard, financial overview" />
-  <meta name="author" content="Hisab — হিসাব" />
-  <meta name="google-site-verification" content="google12177dbe018e4229" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://amarhisab.web.app/dashboard" />
-
-  <!-- ══ OPEN GRAPH (Facebook/WhatsApp) ══ -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Dashboard — Hisab হিসাব" />
-  <meta property="og:description" content="Your financial overview — income, expenses, savings and wallet balances at a glance." />
-  <meta property="og:url" content="https://amarhisab.web.app/dashboard" />
-  <meta property="og:image" content="https://amarhisab.web.app/apple-touch-icon.png" />
-  <meta property="og:site_name" content="Hisab হিসাব" />
-  <meta property="og:locale" content="bn_BD" />
-
-  <!-- ══ TWITTER CARD ══ -->
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Dashboard — Hisab হিসাব" />
-  <meta name="twitter:description" content="Your financial overview — income, expenses, savings and wallet balances at a glance." />
-  <meta name="twitter:image" content="https://amarhisab.web.app/apple-touch-icon.png" />
-
-  <!-- ══ GOOGLE ANALYTICS ══ -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-PLACEHOLDER');
-  </script>
+  <title>Dashboard — Hisab হিসাব</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="app-layout">
@@ -96,7 +66,7 @@
   <div class="main-content">
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:12px;">
-        <button class="hamburger-btn" id="sidebar-toggle" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
+        <button class="topbar-icon-btn" id="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')" style="display:none;">☰</button>
         <div>
           <div class="topbar-title" data-t="dash_welcome" id="topbar-welcome">Welcome back</div>
           <div style="font-size:12px;color:var(--text-muted);margin-top:2px;" id="topbar-fullname"></div>
