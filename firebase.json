@@ -5,8 +5,7 @@
     "ignore": [
       "firebase.json",
       ".github",
-      "README.md",
-      "*.json"
+      "README.md"
     ],
     "rewrites": []
   }
