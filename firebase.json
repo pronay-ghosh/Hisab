@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "hisab-4-u",
     "public": ".",
     "ignore": [
       "firebase.json",
