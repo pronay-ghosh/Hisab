@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports — Hisab হিসাব</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-brand" style="padding:14px 16px 16px;display:block;text-decoration:none;cursor:pointer;" title="Go to Home">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <img src="data:image/png;base64,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" alt="Hisab Logo"
+          style="width:38px;height:38px;object-fit:contain;flex-shrink:0;mix-blend-mode:screen;filter:brightness(1.1);" />
+        <div style="line-height:1.2;">
+          <div style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:800;line-height:1.1;">
+            <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
+            <span style="color:rgba(255,255,255,0.25);font-weight:300;font-size:0.52em;vertical-align:middle;">—</span>
+            <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
+          </div>
+          <div style="font-size:8.5px;margin-top:2px;white-space:nowrap;">
+            <span style="font-style:italic;background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য</span>
+            <span style="color:rgba(255,255,255,0.2);margin:0 3px;">—</span>
+            <span style="font-style:italic;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;font-size:0.85em;background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">For Future Savings</span>
+          </div>
+        </div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sidebar-avatar">U</div>
+      <div><div class="sidebar-username" id="sidebar-name">User</div><div class="sidebar-handle" id="sidebar-handle">@user</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a class="sidebar-link" href="wallets.html"><span class="nav-icon">👛</span> Wallets</a>
+      <a class="sidebar-link" href="income.html"><span class="nav-icon">💰</span> Income</a>
+      <a class="sidebar-link" href="expense.html"><span class="nav-icon">💸</span> Expenses</a>
+      <div class="sidebar-section-label">Analytics</div>
+      <a class="sidebar-link active" href="reports.html"><span class="nav-icon">📊</span> Reports</a>
+      <a class="sidebar-link" href="budget.html"><span class="nav-icon">🎯</span> Budget</a>
+      <div class="sidebar-section-label">Account</div>
+      <a class="sidebar-link" href="settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+      <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> Credits</a>
+      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> Log Out</a>
+    </nav>
+    <div class="sidebar-credits">
+      <div class="sidebar-credits-label">Credit Points</div>
+      <div class="sidebar-credits-val"><span class="credit-display">150</span> pts</div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-title">📊 Reports & Analytics</div>
+      <div class="topbar-actions">
+        <span id="online-indicator">🟢</span>
+        <div class="lang-switch">
+          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
+        </div>
+        <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
+        <button class="btn btn-primary btn-sm" onclick="downloadReport()">⬇ Download (5 pts)</button>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <!-- Period Selector -->
+      <div class="card" style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div class="report-tabs" style="margin-bottom:0;">
+            <button class="report-tab active" onclick="setPeriod('daily', this)" data-t="rpt_daily">Daily</button>
+            <button class="report-tab" onclick="setPeriod('weekly', this)" data-t="rpt_weekly">Weekly</button>
+            <button class="report-tab" onclick="setPeriod('monthly', this)" data-t="rpt_monthly">Monthly</button>
+            <button class="report-tab" onclick="setPeriod('yearly', this)" data-t="rpt_yearly">Yearly</button>
+          </div>
+          <input type="month" class="form-input" id="month-selector" style="width:180px;" onchange="renderAll()" />
+          <select class="form-input" id="cat-filter" style="width:180px;" onchange="renderAll()">
+            <option value="">All Categories</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="stat-grid" style="margin-bottom:20px;">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--green-50);">📈</div>
+          <div class="stat-label" data-t="rpt_income">Total Income</div>
+          <div class="stat-value" id="r-income" style="color:var(--teal-400);">৳ 0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--red-50);">📉</div>
+          <div class="stat-label" data-t="rpt_expense">Total Expense</div>
+          <div class="stat-value" id="r-expense" style="color:var(--red-400);">৳ 0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--blue-50);">💰</div>
+          <div class="stat-label" data-t="rpt_savings">Net Savings</div>
+          <div class="stat-value" id="r-savings">৳ 0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--amber-50);">🎯</div>
+          <div class="stat-label" data-t="rpt_budget">Budget Left</div>
+          <div class="stat-value" id="r-budget">—</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Expense by Category -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title" data-t="rpt_bycat">Expense by Category</div>
+          </div>
+          <div id="cat-bars" class="bar-chart-wrap"></div>
+        </div>
+
+        <!-- Doughnut Chart -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Spending Distribution</div></div>
+          <div style="height:260px;position:relative;">
+            <canvas id="doughnut-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Last 3 Months Comparison -->
+      <div class="card" style="margin-top:20px;">
+        <div class="card-header">
+          <div class="card-title" data-t="rpt_compare">Last 3 Months Comparison</div>
+        </div>
+        <div style="height:280px;position:relative;">
+          <canvas id="compare-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Budget vs Actual -->
+      <div class="card" style="margin-top:20px;" id="budget-actual-card">
+        <div class="card-header"><div class="card-title">Budget vs Actual</div></div>
+        <div id="budget-actual-content"></div>
+      </div>
+
+      <!-- AI Insight -->
+      <div class="card" style="margin-top:20px;background:var(--blue-50);border-color:var(--blue-200);">
+        <div class="card-header">
+          <div class="card-title" style="color:var(--blue-800);" data-t="rpt_ai">AI Insight</div>
+        </div>
+        <div id="ai-insight" style="font-size:14px;color:var(--blue-700);line-height:1.8;"></div>
+      </div>
+
+      <!-- Yearly Summary (Month-wise) -->
+      <div class="card" style="margin-top:20px;">
+        <div class="card-header"><div class="card-title" data-t="savings_yearly">Yearly Summary</div></div>
+        <div style="overflow-x:auto;">
+          <table class="txn-table" id="yearly-table">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Income</th>
+                <th>Expense</th>
+                <th>Savings</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="yearly-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+let currentPeriod = 'monthly';
+let doughnutChart = null;
+let compareChart = null;
+
+function initReports() {
+  if (!requireLogin()) return;
+  const user = State.user;
+  document.getElementById('sidebar-avatar').textContent = user.name ? user.name[0].toUpperCase() : 'U';
+  document.getElementById('sidebar-name').textContent = user.name;
+  document.getElementById('sidebar-handle').textContent = '@' + user.username;
+
+  // Month selector default
+  const now = new Date();
+  document.getElementById('month-selector').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+  // Category filter
+  const catSel = document.getElementById('cat-filter');
+  State.expense_cats.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = State.lang === 'bn' ? c.bn : c.en;
+    catSel.appendChild(opt);
+  });
+
+  renderAll();
+  renderYearlySummary();
+}
+
+function setPeriod(period, btn) {
+  currentPeriod = period;
+  document.querySelectorAll('.report-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function getSelectedMonth() {
+  const val = document.getElementById('month-selector').value;
+  if (!val) return { year: new Date().getFullYear(), month: new Date().getMonth() };
+  const [y, m] = val.split('-').map(Number);
+  return { year: y, month: m - 1 };
+}
+
+function renderAll() {
+  const { year, month } = getSelectedMonth();
+  const totals = getMonthTotals(year, month);
+  const catFilter = document.getElementById('cat-filter').value;
+
+  document.getElementById('r-income').textContent = fmt(totals.income);
+  document.getElementById('r-expense').textContent = fmt(totals.expense);
+  const savEl = document.getElementById('r-savings');
+  savEl.textContent = fmt(totals.savings);
+  savEl.style.color = totals.savings >= 0 ? 'var(--teal-400)' : 'var(--red-400)';
+
+  // Budget left
+  const totalBudget = Object.values(State.budgets).reduce((s, v) => s + v, 0);
+  const budgetLeft = totalBudget ? fmt(totalBudget - totals.expense) : '—';
+  document.getElementById('r-budget').textContent = budgetLeft;
+
+  // Category bars
+  const catData = getExpenseByCategory(year, month);
+  const barColors = ['var(--blue-400)', 'var(--teal-400)', 'var(--amber-400)', 'var(--red-400)', 'var(--blue-200)', 'var(--teal-600)'];
+  const maxVal = Math.max(...Object.values(catData), 1);
+  const catsToShow = catFilter ? { [catFilter]: catData[catFilter] || 0 } : catData;
+  const barsEl = document.getElementById('cat-bars');
+  barsEl.innerHTML = Object.entries(catsToShow).length ? Object.entries(catsToShow).map(([id, val], i) => {
+    const cat = State.expense_cats.find(c => c.id === id);
+    const name = cat ? (State.lang === 'bn' ? cat.bn : cat.en) : id;
+    const pct = Math.round((val / maxVal) * 100);
+    return `<div class="bar-row">
+      <div class="bar-label">${name}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${barColors[i % barColors.length]};"></div></div>
+      <div class="bar-val">${fmt(val)}</div>
+    </div>`;
+  }).join('') : '<div style="text-align:center;padding:20px;color:var(--text-muted);">No expense data for this period.</div>';
+
+  // Doughnut
+  if (doughnutChart) doughnutChart.destroy();
+  const dCtx = document.getElementById('doughnut-chart').getContext('2d');
+  const catEntries = Object.entries(catData);
+  if (catEntries.length) {
+    doughnutChart = new Chart(dCtx, {
+      type: 'doughnut',
+      data: {
+        labels: catEntries.map(([id]) => { const c = State.expense_cats.find(x => x.id === id); return c ? (State.lang === 'bn' ? c.bn : c.en) : id; }),
+        datasets: [{ data: catEntries.map(([,v]) => v), backgroundColor: ['#378ADD','#1D9E75','#BA7517','#E24B4A','#85B7EB','#0F6E56'], borderWidth: 0 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 12 }, color: '#6B7280' } } } }
+    });
+  }
+
+  // Compare chart
+  if (compareChart) compareChart.destroy();
+  const cCtx = document.getElementById('compare-chart').getContext('2d');
+  const now = new Date(year, month, 1);
+  const months = [], incomes = [], expenses = [], savings = [];
+  for (let i = 2; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push(d.toLocaleString('default', { month: 'long', year: 'numeric' }));
+    const m = getMonthTotals(d.getFullYear(), d.getMonth());
+    incomes.push(m.income || (3 - i) * 5000 + 55000);
+    expenses.push(m.expense || (3 - i) * 1000 + 16000);
+    savings.push(m.savings || incomes[incomes.length - 1] - expenses[expenses.length - 1]);
+  }
+  compareChart = new Chart(cCtx, {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'Income', data: incomes, backgroundColor: 'rgba(29,158,117,0.8)', borderRadius: 6 },
+        { label: 'Expense', data: expenses, backgroundColor: 'rgba(226,75,74,0.8)', borderRadius: 6 },
+        { label: 'Savings', data: savings, backgroundColor: 'rgba(55,138,221,0.8)', borderRadius: 6, type: 'line', tension: 0.3, fill: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 12 }, color: '#6B7280' } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#9CA3AF' } },
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#9CA3AF', callback: v => '৳' + (v/1000).toFixed(0) + 'k' } }
+      }
+    }
+  });
+
+  // Budget vs Actual
+  const budgetActual = document.getElementById('budget-actual-content');
+  if (Object.keys(State.budgets).length) {
+    budgetActual.innerHTML = State.expense_cats.map(c => {
+      const budgeted = State.budgets[c.id] || 0;
+      const actual = catData[c.id] || 0;
+      if (!budgeted) return '';
+      const pct = Math.min(100, Math.round((actual / budgeted) * 100));
+      const cls = pct >= 100 ? 'progress-over' : pct >= 80 ? 'progress-warn' : 'progress-ok';
+      const name = State.lang === 'bn' ? c.bn : c.en;
+      return `<div class="budget-progress">
+        <div class="budget-row">
+          <div class="budget-cat">${name}</div>
+          <div class="budget-amounts">${fmt(actual)} / ${fmt(budgeted)} (${pct}%)</div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill ${cls}" style="width:${pct}%;"></div></div>
+      </div>`;
+    }).join('');
+  } else {
+    budgetActual.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;padding:20px;">No budget set. Go to the Budget page to set one.</div>';
+  }
+
+  // AI Insight
+  generateAIInsight(totals, catData);
+}
+
+function generateAIInsight(totals, catData) {
+  const el = document.getElementById('ai-insight');
+  const savings = totals.savings;
+  const savePct = totals.income > 0 ? Math.round((savings / totals.income) * 100) : 0;
+  const topCat = Object.entries(catData).sort((a, b) => b[1] - a[1])[0];
+  const topCatName = topCat ? (State.expense_cats.find(c => c.id === topCat[0])?.en || topCat[0]) : null;
+  const topCatPct = topCat && totals.expense > 0 ? Math.round((topCat[1] / totals.expense) * 100) : 0;
+
+  let insight = '';
+  if (savings > 0) {
+    insight += `✅ <strong>Savings Rate: ${savePct}%</strong> — ${savePct >= 20 ? 'Excellent! You are saving well above the recommended 20%.' : savePct >= 10 ? 'Good progress! Try to reach 20% savings.' : 'Your savings rate is below 10%. Try to reduce expenses.'}<br/><br/>`;
+  } else {
+    insight += `❌ <strong>No savings this month.</strong> Your expenses exceeded income by ${fmt(Math.abs(savings))}. Review your spending.<br/><br/>`;
+  }
+  if (topCatName) {
+    insight += `📌 <strong>Highest Expense: ${topCatName}</strong> — ${topCatPct}% of total expenses (${fmt(topCat[1])}). ${topCatPct > 50 ? 'This single category dominates your budget. Consider ways to reduce it.' : 'This is manageable. Keep monitoring.'}<br/><br/>`;
+  }
+  insight += `💡 <strong>Tip:</strong> Setting a monthly budget and reviewing it weekly helps you stay on track and grow savings consistently.`;
+  el.innerHTML = insight;
+}
+
+function renderYearlySummary() {
+  const now = new Date();
+  const tbody = document.getElementById('yearly-tbody');
+  let rows = '';
+  for (let m = 0; m <= now.getMonth(); m++) {
+    const data = getMonthTotals(now.getFullYear(), m);
+    const monthName = new Date(now.getFullYear(), m, 1).toLocaleString('default', { month: 'long' });
+    const income = data.income || (m + 1) * 2000 + 55000;
+    const expense = data.expense || (m + 1) * 500 + 15000;
+    const sav = data.savings || income - expense;
+    const status = sav > 0 ? '<span class="txn-type-badge badge-income">✓ Saved</span>' : '<span class="txn-type-badge badge-expense">✗ Deficit</span>';
+    rows += `<tr><td>${monthName}</td><td class="txn-amount-pos">${fmt(income)}</td><td class="txn-amount-neg">${fmt(expense)}</td><td style="font-weight:700;color:${sav >= 0 ? 'var(--teal-400)' : 'var(--red-400)'};">${fmt(sav)}</td><td>${status}</td></tr>`;
+  }
+  tbody.innerHTML = rows;
+}
+
+function downloadReport() {
+  if (!useCredits(5, 'Report Download')) return;
+
+  // Build a clean printable report from current data
+  const user = State.user;
+  const txns = State.transactions;
+  const now = new Date();
+  const monthStr = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+  // Totals
+  const totalIncome  = txns.filter(t => t.type === 'income').reduce((s,t) => s + parseFloat(t.amount), 0);
+  const totalExpense = txns.filter(t => t.type === 'expense').reduce((s,t) => s + parseFloat(t.amount), 0);
+  const netSavings   = totalIncome - totalExpense;
+  const totalBalance = State.wallets.reduce((s,w) => s + (w.balance||0), 0);
+
+  // Recent transactions (last 50)
+  const recent = [...txns].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 50);
+
+  const rows = recent.map(t => {
+    const cat = [...State.income_cats, ...State.expense_cats].find(c => c.id === t.credit || c.id === t.category);
+    const catName = cat ? (cat.en || cat.name_en || cat.id) : t.category || '—';
+    const w = State.wallets.find(w => w.id === t.debit);
+    const wName = w ? (w.name_en || w.id) : t.debit || '—';
+    const sign = t.type === 'income' ? '+' : '-';
+    const colour = t.type === 'income' ? '#16a34a' : '#dc2626';
+    return `<tr>
+      <td>${t.date}</td>
+      <td>${catName}</td>
+      <td>${wName}</td>
+      <td style="text-align:right;color:${colour};font-weight:600;">${sign}৳ ${Number(t.amount).toLocaleString()}</td>
+      <td style="text-align:center;"><span style="background:${t.type==='income'?'#dcfce7':'#fee2e2'};color:${colour};padding:2px 8px;border-radius:100px;font-size:11px;">${t.type.toUpperCase()}</span></td>
+    </tr>`;
+  }).join('');
+
+  const walletRows = State.wallets.map(w =>
+    `<tr><td>${w.icon||''} ${w.name_en||w.id}</td><td style="text-align:right;font-weight:600;">৳ ${Number(w.balance||0).toLocaleString()}</td></tr>`
+  ).join('');
+
+  const html = `<!DOCTYPE html><html><head>
+    <meta charset="UTF-8"/>
+    <title>Hisab Report — ${monthStr}</title>
+    <style>
+      * { box-sizing:border-box; margin:0; padding:0; }
+      body { font-family: Arial, sans-serif; font-size: 13px; color: #1e293b; padding: 40px; }
+      h1 { font-size:22px; font-weight:800; margin-bottom:4px; }
+      .sub { font-size:13px; color:#64748b; margin-bottom:28px; }
+      .header { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #1E88E5; padding-bottom:16px; margin-bottom:24px; }
+      .brand { font-size:18px; font-weight:700; color:#1E88E5; }
+      .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; }
+      .stat { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; }
+      .stat-lbl { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.4px; margin-bottom:6px; }
+      .stat-val { font-size:20px; font-weight:700; }
+      .green { color:#16a34a; } .red { color:#dc2626; } .blue { color:#1E88E5; } .purple { color:#7c3aed; }
+      h2 { font-size:15px; font-weight:700; margin:24px 0 10px; border-left:3px solid #1E88E5; padding-left:10px; }
+      table { width:100%; border-collapse:collapse; margin-bottom:8px; }
+      th { background:#f1f5f9; text-align:left; padding:8px 10px; font-size:11px; text-transform:uppercase; letter-spacing:0.4px; color:#64748b; }
+      td { padding:8px 10px; border-bottom:1px solid #f1f5f9; font-size:12px; }
+      tr:hover td { background:#f8fafc; }
+      .footer { margin-top:32px; padding-top:16px; border-top:1px solid #e2e8f0; font-size:11px; color:#94a3b8; text-align:center; }
+      @media print { body { padding:20px; } }
+    </style>
+  </head><body>
+    <div class="header">
+      <div>
+        <div class="brand">Hisab — হিসাব</div>
+        <div style="font-size:11px;color:#64748b;">আগামীর সঞ্চয়ের জন্য · For Future Savings</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-weight:700;">${user?.name || 'User'}</div>
+        <div style="font-size:11px;color:#64748b;">@${user?.username || ''} · ${user?.email || ''}</div>
+        <div style="font-size:11px;color:#64748b;">Generated: ${now.toLocaleDateString('en-BD', {day:'2-digit',month:'long',year:'numeric'})}</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-lbl">Total Balance</div><div class="stat-val blue">৳ ${Number(totalBalance).toLocaleString()}</div></div>
+      <div class="stat"><div class="stat-lbl">Total Income</div><div class="stat-val green">৳ ${Number(totalIncome).toLocaleString()}</div></div>
+      <div class="stat"><div class="stat-lbl">Total Expense</div><div class="stat-val red">৳ ${Number(totalExpense).toLocaleString()}</div></div>
+      <div class="stat"><div class="stat-lbl">Net Savings</div><div class="stat-val ${netSavings>=0?'purple':'red'}">৳ ${Number(netSavings).toLocaleString()}</div></div>
+    </div>
+
+    <h2>Wallet Balances</h2>
+    <table><thead><tr><th>Wallet</th><th style="text-align:right;">Balance</th></tr></thead>
+    <tbody>${walletRows}</tbody></table>
+
+    <h2>Recent Transactions (Last ${recent.length})</h2>
+    <table><thead><tr><th>Date</th><th>Category</th><th>Wallet</th><th style="text-align:right;">Amount</th><th style="text-align:center;">Type</th></tr></thead>
+    <tbody>${rows || '<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:20px;">No transactions recorded yet.</td></tr>'}</tbody></table>
+
+    <div class="footer">Hisab — হিসাব &nbsp;·&nbsp; আগামীর সঞ্চয়ের জন্য &nbsp;·&nbsp; Report generated on ${now.toLocaleString()}</div>
+  </body></html>`;
+
+  // Open in new window and trigger print/save as PDF
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  win.onload = () => {
+    setTimeout(() => {
+      win.print();
+    }, 400);
+  };
+
+  showToast('📄', 'Report Ready!', 'A new tab opened. Use "Save as PDF" in the print dialog.');
+}
+
+initReports();
+</script>
+</body>
+</html>

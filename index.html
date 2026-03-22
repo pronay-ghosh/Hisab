@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hisab — হিসাব | For Future Savings</title>
+  <meta name="description" content="Hisab is a professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Hind Siliguri', sans-serif; background: #F0F4F8; overflow-x: hidden; }
+    [data-theme="dark"] body { background: #0A1929; }
+
+    /* ── NAV ── */
+    .lnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 68px;
+      background: rgba(2,32,58,0.94); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.08); transition: box-shadow .2s;
+    }
+    .lnav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+    /* ── NAV LOGO hover ── */
+    .lnav-logo { display:flex; align-items:center; gap:10px; cursor:pointer; transition:.2s; text-decoration:none; }
+    .lnav-logo:hover .lnav-mark { transform:rotate(-6deg) scale(1.1); box-shadow:0 6px 20px rgba(30,136,229,0.5); }
+    .lnav-logo:hover .lnav-text strong { background:linear-gradient(90deg,#1E88E5,#00E5CC); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* ── NAV LINKS ── */
+    .lnav-links a { font-size:14px; color:rgba(255,255,255,0.65); font-weight:500; text-decoration:none; transition:all .2s; position:relative; padding-bottom:2px; }
+    .lnav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:linear-gradient(90deg,#1E88E5,#00E5CC); border-radius:2px; transition:width .25s; }
+    .lnav-links a:hover { color:#fff; }
+    .lnav-links a:hover::after { width:100%; }
+
+    /* ── EYEBROW BADGE ── */
+    .leyebrow { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:100px; padding:6px 16px; margin-bottom:26px; font-size:13px; color:rgba(255,255,255,0.72); backdrop-filter:blur(8px); transition:all .25s; cursor:default; }
+    .leyebrow:hover { background:rgba(30,136,229,0.2); border-color:rgba(30,136,229,0.4); color:#fff; transform:translateY(-2px); }
+
+    /* ── TRUST ITEMS ── */
+    .ltrust-item { display:flex; align-items:center; gap:7px; font-size:13px; color:rgba(255,255,255,0.58); transition:all .2s; cursor:default; padding:4px 8px; border-radius:8px; }
+    .ltrust-item:hover { color:#fff; background:rgba(255,255,255,0.1); transform:translateY(-2px); }
+
+    /* ── STATS BAND ── */
+    .lstat-box { text-align:center; padding:10px 16px; border-radius:14px; transition:all .25s; cursor:default; }
+    .lstat-box:hover { background:rgba(255,255,255,0.1); transform:translateY(-4px); }
+    .lstat-box:hover .lstat-num { background:linear-gradient(135deg,#fff,#6EE7B7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+      width:40px; height:40px; background: linear-gradient(135deg,#1E88E5,#00897B);
+      border-radius:10px; display:flex; align-items:center; justify-content:center;
+      font-size:20px; font-weight:700; color:white; font-family:'Playfair Display',serif;
+      box-shadow:0 4px 12px rgba(30,136,229,0.4);
+    }
+    .lnav-text strong { font-size:19px; font-weight:700; color:#fff; display:block; line-height:1.2; }
+    .lnav-text span   { font-size:11px; color:rgba(255,255,255,0.45); }
+    .lnav-links { display:flex; gap:30px; }
+    .lnav-links a { font-size:14px; color:rgba(255,255,255,0.65); font-weight:500; text-decoration:none; transition:.15s; }
+    .lnav-links a:hover { color:#fff; }
+    .lnav-right { display:flex; align-items:center; gap:10px; }
+    .lpill { display:inline-flex; width:fit-content; background:rgba(255,255,255,0.08); border-radius:20px; padding:2px; }
+    .lpill button { padding:5px 10px; border-radius:18px; border:none; font-size:12px; font-weight:700; background:transparent; color:rgba(255,255,255,0.5); cursor:pointer; transition:.15s; font-family:'Hind Siliguri',sans-serif; white-space:nowrap; }
+    .lpill button.active { background:rgba(255,255,255,0.2); color:#fff; }
+    .ltheme-btn { width:34px; height:34px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.07); color:#fff; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .lbtn-login { padding:8px 18px; border-radius:8px; border:1.5px solid rgba(255,255,255,0.22); background:transparent; color:#fff; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; font-family:'Hind Siliguri',sans-serif; transition:.15s; }
+    .lbtn-login:hover { background:rgba(255,255,255,0.1); }
+    .lbtn-cta { padding:8px 20px; border-radius:8px; border:none; background:linear-gradient(135deg,#1E88E5,#00897B); color:#fff; font-size:13px; font-weight:700; cursor:pointer; text-decoration:none; font-family:'Hind Siliguri',sans-serif; box-shadow:0 3px 12px rgba(30,136,229,0.35); transition:.15s; }
+    .lbtn-cta:hover { transform:translateY(-1px); box-shadow:0 5px 18px rgba(30,136,229,0.45); }
+
+    /* ── HERO ── */
+    .lhero { min-height:100vh; display:flex; align-items:center; background:linear-gradient(160deg,#02203A 0%,#0C3D6E 55%,#0a3060 100%); padding:100px 5% 60px; position:relative; overflow:hidden; }
+    .orb { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.22; animation:orbF 9s ease-in-out infinite; }
+    .orb1 { width:520px; height:520px; background:#1E88E5; top:-120px; right:-100px; }
+    .orb2 { width:380px; height:380px; background:#00897B; bottom:-100px; left:8%; animation-delay:3.5s; }
+    .orb3 { width:280px; height:280px; background:#F9A825; top:45%; right:22%; animation-delay:6s; }
+    @keyframes orbF { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-28px) scale(1.06)} }
+    .lgrid { position:absolute; inset:0; opacity:0.04; background-image:linear-gradient(rgba(255,255,255,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.8) 1px,transparent 1px); background-size:60px 60px; }
+    .lhero-inner { position:relative; z-index:1; display:flex; align-items:center; gap:56px; width:100%; max-width:1200px; margin:0 auto; }
+    .lhero-left { flex:1; max-width:580px; }
+    .leyebrow { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:100px; padding:6px 16px; margin-bottom:26px; font-size:13px; color:rgba(255,255,255,0.72); backdrop-filter:blur(8px); }
+    .ldot { width:7px; height:7px; background:#00E5CC; border-radius:50%; animation:ldot 2s infinite; }
+    @keyframes ldot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.45;transform:scale(1.35)} }
+    .lh1 { font-family:'Playfair Display',serif; font-size:clamp(48px,7vw,80px); font-weight:800; color:#fff; line-height:1.05; margin-bottom:8px; }
+    .lh1 .acc    { background:linear-gradient(135deg,#1E88E5,#00E5CC); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .lh1 .acc-bn { background:linear-gradient(135deg,#A855F7,#EC4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    /* Tagline — split styled */
+    .ltag { font-size:clamp(14px,2vw,19px); color:rgba(255,255,255,0.55); font-weight:400; margin-bottom:22px; line-height:1.6; letter-spacing:0.2px; }
+    .ltag .bn-part { font-style:italic; font-size:0.95em; background:linear-gradient(90deg,#A855F7,#EC4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .ltag .sep     { color:rgba(255,255,255,0.25); margin:0 6px; }
+    .ltag .en-part { font-style:italic; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; font-size:0.78em; background:linear-gradient(90deg,#93C5FD,#6EE7B7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .ldesc { font-size:17px; color:rgba(255,255,255,0.7); line-height:1.9; margin-bottom:34px; max-width:480px; }
+    .ldesc-line { display:flex; align-items:center; gap:10px; }
+    .ldesc-line + .ldesc-line { margin-top:10px; }
+    .ldesc-icon { font-size:18px; flex-shrink:0; }
+    .ldesc-text { font-size:16px; color:rgba(255,255,255,0.72); }
+    .lctas { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:36px; }
+    /* Button 1 — teal gradient, hover shifts to gold */
+    .lbtn-p { display:inline-flex; align-items:center; gap:10px; padding:15px 30px; border-radius:12px; border:none; background:linear-gradient(135deg,#1E88E5,#00897B); color:#fff; font-size:16px; font-weight:700; cursor:pointer; text-decoration:none; font-family:'Hind Siliguri',sans-serif; box-shadow:0 6px 24px rgba(30,136,229,0.4); transition:all .3s; position:relative; overflow:hidden; isolation:isolate; }
+    .lbtn-p::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,#F59E0B,#EF4444); opacity:0; transition:opacity .3s; z-index:0; }
+    .lbtn-p:hover::before { opacity:1; }
+    .lbtn-p:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(245,158,11,0.45); color:#fff; }
+    .lbtn-p > *, .lbtn-p > span, .lbtn-p { position:relative; z-index:1; }
+    /* Button 2 — ghost, hover fills with purple */
+    .lbtn-s { display:inline-flex; align-items:center; gap:10px; padding:15px 30px; border-radius:12px; border:1.5px solid rgba(255,255,255,0.22); background:rgba(255,255,255,0.07); color:#fff; font-size:16px; font-weight:600; cursor:pointer; text-decoration:none; font-family:'Hind Siliguri',sans-serif; transition:all .3s; backdrop-filter:blur(8px); position:relative; overflow:hidden; isolation:isolate; }
+    .lbtn-s::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,#7C3AED,#EC4899); opacity:0; transition:opacity .3s; z-index:0; }
+    .lbtn-s:hover::before { opacity:1; }
+    .lbtn-s:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(124,58,237,0.4); border-color:transparent; color:#fff; }
+    .lbtn-s > *, .lbtn-s > span, .lbtn-s { position:relative; z-index:1; }
+    .ltrust { display:flex; gap:22px; flex-wrap:wrap; }
+    .ltrust-item { display:flex; align-items:center; gap:7px; font-size:13px; color:rgba(255,255,255,0.58); }
+
+    /* MOCKUP */
+    .lhero-right { flex-shrink:0; width:400px; position:relative; }
+    /* Dashboard card */
+    .ldash-card { background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.08); position:relative; }
+    [data-theme="dark"] .ldash-card { background:#0D2137; }
+    .ldash-top { background:linear-gradient(135deg,#072F5F,#1565C0); padding:18px 20px 16px; }
+    .ldash-top-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .ldash-top-title { font-size:11px; color:rgba(255,255,255,0.55); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+    .ldash-top-badge { background:rgba(0,229,204,0.18); color:#00E5CC; font-size:10px; font-weight:700; padding:3px 9px; border-radius:100px; }
+    .ldash-bal { font-size:34px; font-weight:800; color:#fff; font-family:"Playfair Display",serif; margin-bottom:16px; letter-spacing:-0.5px; }
+    .ldash-mini-stats { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .ldash-mini { background:rgba(255,255,255,0.1); border-radius:10px; padding:10px 12px; backdrop-filter:blur(4px); }
+    .ldash-mini-lbl { font-size:10px; color:rgba(255,255,255,0.55); margin-bottom:3px; }
+    .ldash-mini-val { font-size:15px; font-weight:700; }
+    .ldash-mini-chg { font-size:10px; margin-top:2px; opacity:0.75; }
+    /* Savings ring section */
+    .ldash-ring-row { display:flex; align-items:center; gap:14px; padding:14px 20px; background:rgba(0,229,204,0.06); border-bottom:1px solid rgba(30,136,229,0.1); }
+    [data-theme="dark"] .ldash-ring-row { background:rgba(0,137,123,0.08); border-color:rgba(30,136,229,0.15); }
+    .ldash-ring-svg { flex-shrink:0; }
+    .ldash-ring-info-lbl { font-size:11px; color:#607080; font-weight:600; }
+    [data-theme="dark"] .ldash-ring-info-lbl { color:#7A96B0; }
+    .ldash-ring-info-val { font-size:22px; font-weight:700; color:#00897B; font-family:"Playfair Display",serif; }
+    .ldash-ring-info-sub { font-size:11px; color:#607080; margin-top:2px; }
+    [data-theme="dark"] .ldash-ring-info-sub { color:#7A96B0; }
+    /* Mini bar chart */
+    .ldash-chart { padding:14px 20px; border-bottom:1px solid #E8EFF5; }
+    [data-theme="dark"] .ldash-chart { border-color:#1A3A55; }
+    .ldash-chart-title { font-size:11px; font-weight:700; color:#607080; text-transform:uppercase; letter-spacing:0.4px; margin-bottom:10px; }
+    .ldash-bars { display:flex; align-items:flex-end; gap:5px; height:52px; }
+    .ldash-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+    .ldash-bar { width:100%; border-radius:4px 4px 0 0; transition:height 0.6s ease; }
+    .ldash-bar-lbl { font-size:9px; color:#9CA3AF; }
+    /* Expense breakdown */
+    .ldash-breakdown { padding:14px 20px; }
+    .ldash-breakdown-title { font-size:11px; font-weight:700; color:#607080; text-transform:uppercase; letter-spacing:0.4px; margin-bottom:10px; }
+    .ldash-brow { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+    .ldash-brow-ico { font-size:14px; width:24px; text-align:center; }
+    .ldash-brow-name { font-size:12px; color:#374151; width:80px; }
+    [data-theme="dark"] .ldash-brow-name { color:#B0C4D8; }
+    .ldash-brow-bar { flex:1; height:6px; background:#E8EFF5; border-radius:3px; overflow:hidden; }
+    [data-theme="dark"] .ldash-brow-bar { background:#1A3A55; }
+    .ldash-brow-fill { height:100%; border-radius:3px; }
+    .ldash-brow-val { font-size:11px; font-weight:700; color:#374151; width:44px; text-align:right; }
+    [data-theme="dark"] .ldash-brow-val { color:#B0C4D8; }
+    /* Floating badges */
+
+    @keyframes flt { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+    /* ── STATS BAND ── */
+    .lstats { background:linear-gradient(135deg,#0C3D6E,#1565C0); padding:40px 5%; }
+    .lstats-inner { max-width:1000px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+    .lstat-box { text-align:center; }
+    .lstat-num { font-family:'Playfair Display',serif; font-size:clamp(28px,4vw,44px); font-weight:700; color:#fff; }
+    .lstat-unit { font-size:0.5em; font-family:'Hind Siliguri',sans-serif; opacity:0.65; }
+    .lstat-lbl { font-size:13px; color:rgba(255,255,255,0.55); margin-top:4px; }
+
+    /* ── SECTION COMMON ── */
+    .lsec { padding:90px 5%; }
+    .lsec-inner { max-width:1100px; margin:0 auto; }
+    .lchip { display:inline-flex; align-items:center; gap:6px; background:rgba(30,136,229,0.1); border:1px solid rgba(30,136,229,0.22); color:#1565C0; border-radius:100px; padding:5px 14px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:16px; }
+    [data-theme="dark"] .lchip { background:rgba(30,136,229,0.15); border-color:rgba(30,136,229,0.3); color:#64B5F6; }
+    .lchip-inv { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); color:rgba(255,255,255,0.65); }
+    .lsec-h { font-family:'Playfair Display',serif; font-size:clamp(26px,3.8vw,42px); font-weight:700; line-height:1.2; margin-bottom:13px; color:#02203A; }
+    [data-theme="dark"] .lsec-h { color:#E8F0F8; }
+    .lsec-p { font-size:16px; color:#607080; line-height:1.8; max-width:560px; }
+    [data-theme="dark"] .lsec-p { color:#7A96B0; }
+
+    /* ── FEATURES ── */
+    .lfeat-bg { background:#F0F4F8; }
+    [data-theme="dark"] .lfeat-bg { background:#0A1929; }
+    .lfeat-head { text-align:center; margin-bottom:56px; }
+    .lfeat-head .lsec-p { margin:0 auto; }
+    .lfeat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+    .lfeat-card { background:#fff; border:1px solid #DDE6EE; border-radius:20px; padding:26px; position:relative; overflow:hidden; transition:transform .2s,box-shadow .2s; }
+    [data-theme="dark"] .lfeat-card { background:#0D2137; border-color:#1A3A55; }
+    .lfeat-card:hover { transform:translateY(-5px); box-shadow:0 16px 40px rgba(2,32,58,0.12); }
+    [data-theme="dark"] .lfeat-card:hover { box-shadow:0 16px 40px rgba(0,0,0,0.4); }
+    .lfeat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#1E88E5,#00897B); }
+    .lfeat-ico { width:50px; height:50px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:16px; }
+    .lfeat-card h3 { font-size:16px; font-weight:700; margin-bottom:9px; color:#02203A; }
+    [data-theme="dark"] .lfeat-card h3 { color:#E8F0F8; }
+    .lfeat-card p { font-size:14px; color:#607080; line-height:1.7; }
+    [data-theme="dark"] .lfeat-card p { color:#7A96B0; }
+    .lfeat-tag { position:absolute; top:14px; right:14px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; padding:3px 9px; border-radius:100px; background:rgba(30,136,229,0.1); color:#1E88E5; }
+
+    /* ── HOW IT WORKS ── */
+    .lhiw-bg { background:linear-gradient(135deg,#02203A,#0C3D6E); }
+    .lhiw-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:52px; position:relative; }
+    .lhiw-steps::before { content:''; position:absolute; top:35px; left:12.5%; right:12.5%; height:2px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),rgba(255,255,255,0.12),transparent); }
+    .lhiw-step { text-align:center; padding:0 18px; }
+    .lhiw-num { width:70px; height:70px; border-radius:50%; margin:0 auto 18px; display:flex; align-items:center; justify-content:center; font-size:26px; background:rgba(255,255,255,0.07); border:2px solid rgba(255,255,255,0.13); position:relative; z-index:1; transition:.2s; }
+    .lhiw-num.lit { background:linear-gradient(135deg,#1E88E5,#00897B); border-color:transparent; box-shadow:0 6px 24px rgba(30,136,229,0.4); }
+    .lhiw-step h3 { font-size:16px; font-weight:700; color:#fff; margin-bottom:8px; }
+    .lhiw-step p { font-size:13px; color:rgba(255,255,255,0.52); line-height:1.7; }
+
+    /* ── SHOWCASE ── */
+    .lshow-bg { background:#fff; }
+    [data-theme="dark"] .lshow-bg { background:#0D2137; }
+    .lshow-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+    .lscreens { position:relative; height:520px; }
+    .lscreen { position:absolute; background:#F0F4F8; border-radius:18px; box-shadow:0 20px 60px rgba(2,32,58,0.14); border:1px solid #DDE6EE; overflow:hidden; transition:transform .3s,box-shadow .3s; }
+    [data-theme="dark"] .lscreen { background:#0A1929; border-color:#1A3A55; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
+    .lscreen:hover { transform:translateY(-4px) scale(1.01); box-shadow:0 28px 70px rgba(2,32,58,0.2); }
+    .lscreen-main  { width:270px; height:410px; left:0;   top:50px; z-index:2; }
+    .lscreen-side  { width:240px; height:320px; right:10px; top:0;   z-index:1; }
+    .lscreen-third { width:240px; height:260px; right:10px; bottom:0; z-index:3; box-shadow:0 24px 64px rgba(2,32,58,0.22); }
+    .lscreen-hd { background:linear-gradient(135deg,#0C3D6E,#1E88E5); padding:14px 16px; }
+    .lscreen-hd-t { font-size:13px; font-weight:700; color:#fff; }
+    .lscreen-hd-s { font-size:11px; color:rgba(255,255,255,0.55); margin-top:2px; }
+    .lscreen-bd { padding:15px; }
+    .lscreen-srow { display:flex; gap:9px; margin-bottom:13px; }
+    .lscreen-s { flex:1; background:#E8EFF5; border-radius:9px; padding:9px; text-align:center; }
+    [data-theme="dark"] .lscreen-s { background:#112036; }
+    .lscreen-sv { font-size:14px; font-weight:700; color:#02203A; }
+    [data-theme="dark"] .lscreen-sv { color:#E0EAF4; }
+    .lscreen-sl { font-size:10px; color:#607080; margin-top:2px; }
+    .lscreen-row { display:flex; align-items:center; gap:9px; padding:8px 0; border-bottom:1px solid #E5EEF5; }
+    [data-theme="dark"] .lscreen-row { border-color:#1A3A55; }
+    .lscreen-row:last-child { border:none; }
+    .lscreen-d { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+    .lscreen-rn { font-size:12px; font-weight:600; color:#02203A; }
+    [data-theme="dark"] .lscreen-rn { color:#E0EAF4; }
+    .lscreen-rd { font-size:10px; color:#9CA3AF; }
+    .lscreen-ra { font-size:12px; font-weight:700; margin-left:auto; }
+    .lpbar-lbl { display:flex; justify-content:space-between; font-size:11px; color:#607080; margin-bottom:3px; }
+    .lpbar { height:5px; background:#DDE6EE; border-radius:3px; overflow:hidden; margin-bottom:7px; }
+    [data-theme="dark"] .lpbar { background:#1A3A55; }
+    .lpbar-fill { height:100%; border-radius:3px; }
+    .lshow-feats { display:flex; flex-direction:column; gap:18px; margin-top:30px; }
+    .lshow-feat { display:flex; align-items:flex-start; gap:13px; }
+    .lshow-feat-ico { width:40px; height:40px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:18px; }
+    .lshow-feat-t { font-size:15px; font-weight:700; color:#02203A; margin-bottom:3px; }
+    [data-theme="dark"] .lshow-feat-t { color:#E8F0F8; }
+    .lshow-feat-d { font-size:13px; color:#607080; line-height:1.6; }
+    [data-theme="dark"] .lshow-feat-d { color:#7A96B0; }
+
+    /* ── STORIES ── */
+    .lstory-bg { background:linear-gradient(160deg,#02203A,#0a3060); }
+    .lstory-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:50px; }
+    .lstory-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:26px; backdrop-filter:blur(8px); transition:transform .2s; }
+    .lstory-card:hover { transform:translateY(-4px); }
+    .lstory-q { font-size:36px; color:rgba(255,255,255,0.18); font-family:'Playfair Display',serif; line-height:0.7; margin-bottom:13px; }
+    .lstory-txt { font-size:14px; color:rgba(255,255,255,0.72); line-height:1.8; margin-bottom:18px; }
+    .lstory-user { display:flex; align-items:center; gap:11px; }
+    .lstory-av { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:#fff; background:linear-gradient(135deg,#1E88E5,#00897B); }
+    .lstory-name { font-size:14px; font-weight:700; color:#fff; }
+    .lstory-role { font-size:12px; color:rgba(255,255,255,0.42); }
+    .lstory-badge { margin-top:14px; padding:9px 13px; border-radius:10px; background:rgba(0,229,204,0.1); border:1px solid rgba(0,229,204,0.2); font-size:13px; color:#00E5CC; font-weight:700; display:inline-flex; align-items:center; gap:6px; }
+
+    /* ── PRICING ── */
+    .lprice-bg { background:#F0F4F8; }
+    [data-theme="dark"] .lprice-bg { background:#0A1929; }
+    .lprice-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:46px; }
+    /* All 4 cards identical at rest — colourful only on hover */
+    .lprice-card {
+      border:1.5px solid #DDE6EE; border-radius:20px; padding:26px 20px;
+      text-align:center; position:relative; background:#fff;
+      transition:transform .25s, box-shadow .25s, background .25s, border-color .25s;
+      overflow:hidden;
+    }
+    [data-theme="dark"] .lprice-card { background:#0D2137; border-color:#1A3A55; }
+    /* Top accent bar — colour per card, hidden at rest */
+    .lprice-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:4px;
+      opacity:0; transition:opacity .25s;
+    }
+    .lprice-card:hover::before { opacity:1; }
+    /* Card 1 — teal/green */
+    .lprice-card.c1::before { background:linear-gradient(90deg,#00897B,#43A047); }
+    .lprice-card.c1:hover { border-color:#00897B; box-shadow:0 16px 44px rgba(0,137,123,0.2); transform:translateY(-6px); background:#F0FBF9; }
+    [data-theme="dark"] .lprice-card.c1:hover { background:#062E28; border-color:#00897B; }
+    .lprice-card.c1:hover .lprice-pts  { color:#00695C; }
+    .lprice-card.c1:hover .lprice-price{ color:#00897B; }
+    .lprice-card.c1:hover .lprice-btn  { border-color:#00897B; color:#00897B; }
+    .lprice-card.c1:hover .lprice-btn:hover { background:rgba(0,137,123,0.08); }
+    /* Card 2 — amber/orange */
+    .lprice-card.c2::before { background:linear-gradient(90deg,#F59E0B,#EF6C00); }
+    .lprice-card.c2:hover { border-color:#F59E0B; box-shadow:0 16px 44px rgba(245,158,11,0.2); transform:translateY(-6px); background:#FFFBF0; }
+    [data-theme="dark"] .lprice-card.c2:hover { background:#2A1A00; border-color:#F59E0B; }
+    .lprice-card.c2:hover .lprice-pts  { color:#B45309; }
+    .lprice-card.c2:hover .lprice-price{ color:#F59E0B; }
+    .lprice-card.c2:hover .lprice-btn  { border-color:#F59E0B; color:#B45309; }
+    .lprice-card.c2:hover .lprice-btn:hover { background:rgba(245,158,11,0.08); }
+    /* Card 3 — royal blue */
+    .lprice-card.c3::before { background:linear-gradient(90deg,#1E88E5,#7C3AED); }
+    .lprice-card.c3:hover { border-color:#1E88E5; box-shadow:0 16px 44px rgba(30,136,229,0.22); transform:translateY(-6px); background:#EFF6FF; }
+    [data-theme="dark"] .lprice-card.c3:hover { background:#071A3A; border-color:#1E88E5; }
+    .lprice-card.c3:hover .lprice-pts  { color:#1565C0; }
+    .lprice-card.c3:hover .lprice-price{ color:#1E88E5; }
+    .lprice-card.c3:hover .lprice-btn  { border-color:#1E88E5; color:#1565C0; }
+    .lprice-card.c3:hover .lprice-btn:hover { background:rgba(30,136,229,0.08); }
+    /* Card 4 — pink/rose */
+    .lprice-card.c4::before { background:linear-gradient(90deg,#EC4899,#F43F5E); }
+    .lprice-card.c4:hover { border-color:#EC4899; box-shadow:0 16px 44px rgba(236,72,153,0.2); transform:translateY(-6px); background:#FFF0F6; }
+    [data-theme="dark"] .lprice-card.c4:hover { background:#2A0018; border-color:#EC4899; }
+    .lprice-card.c4:hover .lprice-pts  { color:#BE185D; }
+    .lprice-card.c4:hover .lprice-price{ color:#EC4899; }
+    .lprice-card.c4:hover .lprice-btn  { border-color:#EC4899; color:#BE185D; }
+    .lprice-card.c4:hover .lprice-btn:hover { background:rgba(236,72,153,0.08); }
+    /* Badge (⭐ Best Value) — still visible but as a subtle tag, not dominant */
+    .lprice-badge {
+      position:absolute; top:14px; right:14px;
+      background:rgba(249,168,37,0.12); color:#B45309;
+      font-size:10px; font-weight:800; padding:3px 9px;
+      border-radius:100px; text-transform:uppercase; letter-spacing:0.4px;
+      border:1px solid rgba(249,168,37,0.3);
+    }
+    .lprice-card.c3:hover .lprice-badge { background:rgba(249,168,37,0.18); }
+    .lprice-ico { font-size:34px; margin-bottom:11px; }
+    .lprice-pts { font-family:'Playfair Display',serif; font-size:38px; font-weight:700; color:#0C3D6E; line-height:1; transition:color .25s; }
+    [data-theme="dark"] .lprice-pts { color:#B0C4D8; }
+    .lprice-pts-lbl { font-size:13px; color:#607080; margin:4px 0 5px; }
+    .lprice-name { font-size:15px; font-weight:700; color:#02203A; margin-bottom:5px; }
+    [data-theme="dark"] .lprice-name { color:#E8F0F8; }
+    .lprice-desc { font-size:13px; color:#607080; line-height:1.6; }
+    [data-theme="dark"] .lprice-desc { color:#7A96B0; }
+    .lprice-price { font-size:20px; font-weight:700; color:#607080; margin-top:13px; transition:color .25s; }
+    .lprice-btn {
+      display:block; margin-top:16px; padding:10px; border-radius:10px;
+      border:1.5px solid #DDE6EE; background:transparent; color:#607080;
+      font-size:14px; font-weight:700; cursor:pointer; text-decoration:none;
+      font-family:'Hind Siliguri',sans-serif; transition:all .2s;
+    }
+    [data-theme="dark"] .lprice-btn { border-color:#1A3A55; color:#7A96B0; }
+    .lcredits-tbl { max-width:800px; margin:46px auto 0; background:#fff; border-radius:18px; overflow:hidden; border:1px solid #DDE6EE; }
+    [data-theme="dark"] .lcredits-tbl { background:#0D2137; border-color:#1A3A55; }
+    .lcredits-tbl-hd { background:linear-gradient(135deg,#0C3D6E,#1565C0); padding:17px 22px; }
+    .lcredits-tbl-hd h3 { font-size:15px; font-weight:700; color:#fff; }
+    .lcredits-row { display:flex; align-items:center; justify-content:space-between; padding:13px 22px; border-bottom:1px solid #DDE6EE; transition:background .2s, padding-left .2s, border-left .2s; border-left:3px solid transparent; position:relative; }
+    [data-theme="dark"] .lcredits-row { border-color:#1A3A55; }
+    .lcredits-row:last-child { border-bottom:none; }
+    /* Free rows — hover teal */
+    .lcredits-row.rf:hover { background:rgba(0,137,123,0.06); border-left-color:#00897B; padding-left:26px; }
+    [data-theme="dark"] .lcredits-row.rf:hover { background:rgba(0,137,123,0.1); }
+    .lcredits-row.rf:hover .lcredits-act { color:#00695C; font-weight:600; }
+    [data-theme="dark"] .lcredits-row.rf:hover .lcredits-act { color:#4DB6AC; }
+    .lcredits-row.rf:hover .cpfree { background:#C8E6C9; color:#1B5E20; transform:scale(1.05); }
+    /* Cost rows — hover amber */
+    .lcredits-row.rc:hover { background:rgba(245,158,11,0.06); border-left-color:#F59E0B; padding-left:26px; }
+    [data-theme="dark"] .lcredits-row.rc:hover { background:rgba(245,158,11,0.1); }
+    .lcredits-row.rc:hover .lcredits-act { color:#92400E; font-weight:600; }
+    [data-theme="dark"] .lcredits-row.rc:hover .lcredits-act { color:#FCD34D; }
+    .lcredits-row.rc:hover .cpcost { background:#FDE68A; color:#92400E; transform:scale(1.05); }
+    .lcredits-act { font-size:14px; color:#02203A; font-weight:500; transition:color .2s; }
+    [data-theme="dark"] .lcredits-act { color:#E8F0F8; }
+    .lcredits-pill { font-size:13px; font-weight:800; padding:4px 13px; border-radius:100px; transition:background .2s, color .2s, transform .2s; }
+    .cpfree { background:#E8F5E9; color:#2E7D32; }
+    .cpcost { background:#FFF3E0; color:#E65100; }
+    [data-theme="dark"] .cpfree { background:rgba(46,125,50,0.18); }
+    [data-theme="dark"] .cpcost { background:rgba(230,81,0,0.18); }
+
+    /* ── CONTACT ── */
+    .lcont-bg { background:#fff; }
+    [data-theme="dark"] .lcont-bg { background:#0D2137; }
+    .lcont-inner { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
+    .lcont-info-item { display:flex; align-items:flex-start; gap:13px; margin-bottom:22px; padding:12px; border-radius:14px; border:1px solid transparent; transition:all .25s; cursor:default; }
+    .lcont-info-item:hover { background:rgba(30,136,229,0.06); border-color:rgba(30,136,229,0.18); transform:translateX(4px); }
+    .lcont-info-item:hover .lcont-info-ico { background:rgba(30,136,229,0.2); transform:scale(1.1) rotate(-5deg); }
+    .lcont-info-item:hover .lcont-info-val { color:#1E88E5; }
+    .lcont-info-ico { width:44px; height:44px; background:rgba(30,136,229,0.1); border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0; transition:all .25s; }
+    .lcont-info-lbl { font-size:13px; color:#607080; margin-bottom:3px; }
+    .lcont-info-val { font-size:15px; font-weight:600; color:#02203A; transition:color .2s; }
+    [data-theme="dark"] .lcont-info-val { color:#E8F0F8; }
+    .lcont-form { background:#F0F4F8; border:1px solid #DDE6EE; border-radius:20px; padding:30px; transition:box-shadow .25s; }
+    .lcont-form:hover { box-shadow:0 12px 40px rgba(30,136,229,0.12); }
+    [data-theme="dark"] .lcont-form { background:#0A1929; border-color:#1A3A55; }
+    .lfinput { width:100%; padding:12px 14px; background:#fff; border:1.5px solid #DDE6EE; border-radius:10px; font-size:14px; color:#02203A; outline:none; font-family:'Hind Siliguri',sans-serif; transition:.15s; margin-bottom:14px; }
+    [data-theme="dark"] .lfinput { background:#112036; border-color:#1A3A55; color:#E0EAF4; }
+    .lfinput:focus { border-color:#1E88E5; box-shadow:0 0 0 3px rgba(30,136,229,0.11); }
+    .lflabel { display:block; font-size:13px; font-weight:700; color:#02203A; margin-bottom:6px; }
+    [data-theme="dark"] .lflabel { color:#E8F0F8; }
+
+    /* ── FOOTER ── */
+    .lftr { background:#02203A; padding:56px 7% 28px; }
+    .lftr-top { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:48px; margin-bottom:44px; align-items:start; }
+    .lftr-name { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:#fff; margin-bottom:8px; transition:all .2s; cursor:default; display:inline-block; }
+    .lftr-name:hover { background:linear-gradient(135deg,#1E88E5,#00E5CC); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .lftr-sub { font-size:14px; color:rgba(255,255,255,0.4); line-height:1.75; margin-bottom:18px; }
+    .lftr-socials { display:flex; gap:9px; }
+    .lftr-soc { width:35px; height:35px; background:rgba(255,255,255,0.07); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; text-decoration:none; transition:all .25s; }
+    .lftr-soc:nth-child(1):hover { background:#1877F2; transform:translateY(-3px) scale(1.1); }
+    .lftr-soc:nth-child(2):hover { background:#FF0000; transform:translateY(-3px) scale(1.1); }
+    .lftr-soc:nth-child(3):hover { background:#25D366; transform:translateY(-3px) scale(1.1); }
+    .lftr-col-t { font-size:12px; font-weight:700; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.7px; margin-bottom:15px; }
+    .lftr-lnk { display:block; font-size:14px; color:rgba(255,255,255,0.52); text-decoration:none; margin-bottom:13px; transition:all .2s; padding:3px 0 3px 0; border-left:2px solid transparent; padding-left:0; }
+    .lftr-lnk:hover { color:#fff; padding-left:8px; border-left-color:#1E88E5; }
+    .lftr-bot { border-top:1px solid rgba(255,255,255,0.07); padding-top:22px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+    .lftr-copy { font-size:13px; color:rgba(255,255,255,0.32); transition:color .2s; }
+    .lftr-copy:hover { color:rgba(255,255,255,0.6); }
+
+    /* ── AD ── */
+    .lad { background:#fff; border-top:1px solid #DDE6EE; padding:13px; text-align:center; }
+    [data-theme="dark"] .lad { background:#0D2137; border-color:#1A3A55; }
+    .lad-inner { max-width:728px; height:90px; margin:0 auto; background:#F0F4F8; border:1px dashed #BDD0E0; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#607080; font-size:13px; }
+    [data-theme="dark"] .lad-inner { background:#0A1929; border-color:#1A3A55; }
+
+    /* ── ANIMATIONS ── */
+    .fup { opacity:0; transform:translateY(28px); transition:opacity .6s ease,transform .6s ease; }
+    .fup.vis { opacity:1; transform:translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px){
+      .lhero-right{display:none;}
+      .lfeat-grid{grid-template-columns:repeat(2,1fr);}
+      .lhiw-steps{grid-template-columns:repeat(2,1fr);gap:32px;}
+      .lhiw-steps::before{display:none;}
+      .lshow-inner{grid-template-columns:1fr;}
+      .lscreens{display:none;}
+      .lprice-grid{grid-template-columns:repeat(2,1fr);}
+      .lstory-grid{grid-template-columns:repeat(2,1fr);}
+      .lcont-inner{grid-template-columns:1fr;}
+      .lftr-top{grid-template-columns:1fr 1fr;}
+      .lstats-inner{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:640px){
+      .lnav-links{display:none;}
+      .lfeat-grid{grid-template-columns:1fr;}
+      .lprice-grid{grid-template-columns:1fr;}
+      .lstory-grid{grid-template-columns:1fr;}
+      .lftr-top{grid-template-columns:1fr;}
+      .lstats-inner{grid-template-columns:1fr 1fr;}
+      .lctas{flex-direction:column;}
+    }
+    /* ── EXTRA HOVER EFFECTS ── */
+
+    /* Feature cards — each gets a unique accent colour on hover */
+    .lfeat-card:nth-child(1):hover { border-color:#1E88E5; background:#EFF6FF; }
+    .lfeat-card:nth-child(2):hover { border-color:#00897B; background:#F0FBF9; }
+    .lfeat-card:nth-child(3):hover { border-color:#F59E0B; background:#FFFBF0; }
+    .lfeat-card:nth-child(4):hover { border-color:#A855F7; background:#FAF5FF; }
+    .lfeat-card:nth-child(5):hover { border-color:#10B981; background:#F0FDF4; }
+    .lfeat-card:nth-child(6):hover { border-color:#EC4899; background:#FFF0F6; }
+    .lfeat-card:nth-child(7):hover { border-color:#3B82F6; background:#EFF6FF; }
+    .lfeat-card:nth-child(8):hover { border-color:#F59E0B; background:#FFFBF0; }
+    .lfeat-card:nth-child(9):hover { border-color:#06B6D4; background:#ECFEFF; }
+    [data-theme="dark"] .lfeat-card:hover { background:#071A3A !important; }
+    .lfeat-card:hover h3 { background:linear-gradient(90deg,#1E88E5,#00E5CC); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .lfeat-card:hover .lfeat-ico { transform:scale(1.15) rotate(-5deg); transition:transform .25s; }
+
+    /* How It Works steps */
+    .lhiw-step { text-align:center; padding:0 18px; cursor:default; }
+    .lhiw-step:hover .lhiw-num { transform:scale(1.12) translateY(-4px); box-shadow:0 10px 28px rgba(30,136,229,0.5); }
+    .lhiw-step:hover h3 { background:linear-gradient(90deg,#6EE7B7,#93C5FD); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .lhiw-num { transition:transform .25s, box-shadow .25s; }
+
+    /* Showcase feature list items */
+    .lshow-feat { display:flex; align-items:flex-start; gap:13px; padding:10px; border-radius:12px; border:1px solid transparent; transition:all .25s; cursor:default; }
+    .lshow-feat:hover { background:rgba(30,136,229,0.06); border-color:rgba(30,136,229,0.15); transform:translateX(5px); }
+    .lshow-feat:hover .lshow-feat-ico { transform:scale(1.12) rotate(-6deg); }
+    .lshow-feat:hover .lshow-feat-t { background:linear-gradient(90deg,#1E88E5,#00897B); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .lshow-feat-ico { transition:transform .25s; }
+
+    /* ── STORY CAROUSEL ── */
+    .lstory-carousel-wrap { position:relative; margin-top:50px; overflow:hidden; }
+    .lstory-carousel-wrap::before,.lstory-carousel-wrap::after { content:''; position:absolute; top:0; bottom:0; width:80px; z-index:2; pointer-events:none; }
+    .lstory-carousel-wrap::before { left:0; background:linear-gradient(90deg,rgba(2,15,35,0.85),transparent); }
+    .lstory-carousel-wrap::after  { right:0; background:linear-gradient(-90deg,rgba(2,15,35,0.85),transparent); }
+    .lstory-track { display:flex; gap:22px; animation:storyScroll 32s linear infinite; width:max-content; }
+    .lstory-track:hover { animation-play-state:paused; }
+    @keyframes storyScroll {
+      0%   { transform:translateX(0); }
+      100% { transform:translateX(-50%); }
+    }
+    .lstory-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:26px; backdrop-filter:blur(8px); transition:all .25s; cursor:default; width:340px; flex-shrink:0; }
+
+    /* Carousel nav buttons */
+    .lstory-nav { display:flex; justify-content:center; gap:12px; margin-top:28px; }
+    .lstory-nav-btn { width:40px; height:40px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.07); color:#fff; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; backdrop-filter:blur(6px); }
+    .lstory-nav-btn:hover { background:rgba(30,136,229,0.3); border-color:rgba(30,136,229,0.5); transform:scale(1.1); }
+    .lstory-card:hover { background:rgba(255,255,255,0.11); border-color:rgba(255,255,255,0.22); transform:translateY(-6px); box-shadow:0 20px 48px rgba(0,0,0,0.3); }
+    .lstory-card:nth-child(1):hover { border-color:rgba(0,229,204,0.35); }
+    .lstory-card:nth-child(2):hover { border-color:rgba(168,85,247,0.35); }
+    .lstory-card:nth-child(3):hover { border-color:rgba(249,168,37,0.35); }
+    .lstory-card:hover .lstory-badge { transform:scale(1.04); }
+    .lstory-badge { transition:transform .2s; }
+    .lstory-card:hover .lstory-av { transform:scale(1.08); box-shadow:0 4px 14px rgba(30,136,229,0.4); }
+    .lstory-av { transition:all .25s; }
+
+    /* Stats band numbers pulse on hover */
+    .lstat-num { font-family:'Playfair Display',serif; font-size:clamp(28px,4vw,44px); font-weight:700; color:#fff; transition:all .25s; }
+    .lstat-lbl { font-size:13px; color:rgba(255,255,255,0.55); margin-top:4px; transition:color .25s; }
+    .lstat-box:hover .lstat-lbl { color:rgba(255,255,255,0.85); }
+
+    /* Nav CTA hover pulse */
+    .lbtn-cta:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 8px 24px rgba(30,136,229,0.55); }
+
+    /* Theme button */
+    .ltheme-btn:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.35); transform:rotate(20deg); }
+    .ltheme-btn { transition:all .25s; }
+
+    /* Lang pill buttons */
+    .lpill button:not(.active):hover { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.8); }
+
+    /* Ad slot */
+    .lad-inner { transition:all .25s; }
+    .lad-inner:hover { border-color:#1E88E5; background:rgba(30,136,229,0.05); color:#1E88E5; }
+
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="lnav" id="lnav">
+  <div class="lnav-logo">
+    <img src="" id="nav-logo-img" alt="Hisab" style="height:38px;width:38px;object-fit:contain;border-radius:8px;mix-blend-mode:screen;" />
+    <div style="line-height:1.2;">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:800;line-height:1.1;">
+        <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
+        <span style="color:rgba(255,255,255,0.28);font-weight:300;font-size:0.55em;vertical-align:middle;">—</span>
+        <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
+      </div>
+      <div style="font-size:10px;margin-top:1px;">
+        <span style="font-style:italic;background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য</span>
+        <span style="color:rgba(255,255,255,0.22);margin:0 3px;">—</span>
+        <span style="font-style:italic;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;font-size:0.85em;background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">For Future Savings</span>
+      </div>
+    </div>
+  </div>
+  <div class="lnav-links">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+    <a href="#" onclick="event.preventDefault();document.getElementById('apps-modal').classList.add('open');" style="color:#00E5CC;font-weight:700;">📱 Apps</a>
+  </div>
+  <div class="lnav-right">
+    <div class="lpill">
+      <button class="active" onclick="setLanguage('en')" data-lang="en">EN</button>
+      <button onclick="setLanguage('bn')" data-lang="bn">বাং</button>
+    </div>
+    <button class="ltheme-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
+    <a href="login.html" class="lbtn-login">Log In</a>
+    <a href="register.html" class="lbtn-cta">Get Started →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="lhero" id="home">
+  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+  <div class="lgrid"></div>
+  <div class="lhero-inner">
+    <div class="lhero-left fup">
+      <!-- Logo centred at top -->
+      <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:20px;">
+        <img src="data:image/png;base64,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" alt="Hisab Logo"
+          style="width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 6px 24px rgba(30,136,229,0.45)) brightness(1.1);animation:orbF 6s ease-in-out infinite;mix-blend-mode:screen;" />
+      </div>
+      <!-- Eyebrow badge centred below logo -->
+      <div style="display:flex;justify-content:center;margin-bottom:20px;">
+        <div class="leyebrow"><span class="ldot"></span> Professional Double-Entry Accounting <span class="ldot"></span></div>
+      </div>
+      <h1 class="lh1"><span class="acc">Hisab</span> <span style="color:rgba(255,255,255,0.3);font-weight:300;font-size:0.55em;vertical-align:middle;">—</span> <span class="acc-bn">হিসাব</span></h1>
+      <p class="ltag" style="text-align:center;max-width:none;width:fit-content;">
+        <span class="bn-part">আগামীর সঞ্চয়ের জন্য</span>
+        <span class="sep">—</span>
+        <span class="en-part">For Future Savings</span>
+      </p>
+      <div class="ldesc">
+        <div class="ldesc-line">
+          <span class="ldesc-icon">📒</span>
+          <span class="ldesc-text">Track every taka with professional accounting principles.</span>
+        </div>
+        <div class="ldesc-line">
+          <span class="ldesc-icon">🤖</span>
+          <span class="ldesc-text">Get AI-powered budget insights.</span>
+        </div>
+      </div>
+            <div class="lctas">
+        <a href="register.html" class="lbtn-p"><span>🚀 Start Free Today</span></a>
+        <a href="#how-it-works" class="lbtn-s"><span>▶ See How It Works</span></a>
+      </div>
+      <div class="ltrust">
+        <div class="ltrust-item">✅ Free to start</div>
+        <div class="ltrust-item">💳 No card required</div>
+        <div class="ltrust-item">🌐 Bengali & English</div>
+        <div class="ltrust-item">📲 Works offline</div>
+      </div>
+    </div>
+    <div class="lhero-right fup" style="transition-delay:.2s;">
+      <!-- Floating badges -->
+
+
+      <div class="ldash-card">
+
+        <!-- TOP: Balance + mini stats -->
+        <div class="ldash-top">
+          <div class="ldash-top-row">
+            <div class="ldash-top-title">March 2026 Overview</div>
+            <div class="ldash-top-badge">● Live</div>
+          </div>
+          <div class="ldash-bal">৳ 47,350</div>
+          <div class="ldash-mini-stats">
+            <div class="ldash-mini">
+              <div class="ldash-mini-lbl">Total Income</div>
+              <div class="ldash-mini-val" style="color:#6EE7C0;">৳ 65,000</div>
+              <div class="ldash-mini-chg" style="color:#6EE7C0;">↑ Salary + Business</div>
+            </div>
+            <div class="ldash-mini">
+              <div class="ldash-mini-lbl">Total Expense</div>
+              <div class="ldash-mini-val" style="color:#FCA5A5;">৳ 17,650</div>
+              <div class="ldash-mini-chg" style="color:#FCA5A5;">↓ 8% vs Feb</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SAVINGS RING -->
+        <div class="ldash-ring-row">
+          <!-- SVG donut ring -->
+          <svg class="ldash-ring-svg" width="72" height="72" viewBox="0 0 72 72">
+            <circle cx="36" cy="36" r="28" fill="none" stroke="#E8EFF5" stroke-width="8"/>
+            <!-- 73% savings rate: circumference = 2*pi*28 ≈ 175.9, 73% = 128.4 -->
+            <circle cx="36" cy="36" r="28" fill="none" stroke="url(#ringGrad)" stroke-width="8"
+              stroke-linecap="round" stroke-dasharray="128.4 175.9"
+              stroke-dashoffset="44" transform="rotate(-90 36 36)"
+              style="transition:stroke-dasharray 1.2s ease;">
+            </circle>
+            <defs>
+              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1E88E5"/>
+                <stop offset="100%" stop-color="#00E5CC"/>
+              </linearGradient>
+            </defs>
+            <text x="36" y="33" text-anchor="middle" font-size="13" font-weight="800" fill="#00897B" font-family="Hind Siliguri,sans-serif">73%</text>
+            <text x="36" y="46" text-anchor="middle" font-size="8" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">saved</text>
+          </svg>
+          <div>
+            <div class="ldash-ring-info-lbl">Net Savings — March</div>
+            <div class="ldash-ring-info-val">৳ 47,350</div>
+            <div class="ldash-ring-info-sub">73% of income saved · Goal: ৳ 45,000 ✓</div>
+          </div>
+        </div>
+
+        <!-- MINI BAR CHART: last 4 months savings -->
+        <div class="ldash-chart">
+          <div class="ldash-chart-title">Monthly Savings Trend</div>
+          <div class="ldash-bars">
+            <div class="ldash-bar-wrap">
+              <div class="ldash-bar" style="height:28px;background:linear-gradient(180deg,#93C5FD,#3B82F6);"></div>
+              <div class="ldash-bar-lbl">Dec</div>
+            </div>
+            <div class="ldash-bar-wrap">
+              <div class="ldash-bar" style="height:36px;background:linear-gradient(180deg,#93C5FD,#3B82F6);"></div>
+              <div class="ldash-bar-lbl">Jan</div>
+            </div>
+            <div class="ldash-bar-wrap">
+              <div class="ldash-bar" style="height:32px;background:linear-gradient(180deg,#93C5FD,#3B82F6);"></div>
+              <div class="ldash-bar-lbl">Feb</div>
+            </div>
+            <div class="ldash-bar-wrap">
+              <div class="ldash-bar" style="height:48px;background:linear-gradient(180deg,#00E5CC,#00897B);"></div>
+              <div class="ldash-bar-lbl">Mar ★</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPENSE BREAKDOWN -->
+        <div class="ldash-breakdown">
+          <div class="ldash-breakdown-title">Expense Breakdown</div>
+          <div class="ldash-brow">
+            <div class="ldash-brow-ico">🏠</div>
+            <div class="ldash-brow-name">House Rent</div>
+            <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:100%;background:#3B82F6;"></div></div>
+            <div class="ldash-brow-val">৳8,000</div>
+          </div>
+          <div class="ldash-brow">
+            <div class="ldash-brow-ico">🍽️</div>
+            <div class="ldash-brow-name">Fooding</div>
+            <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:62%;background:#8B5CF6;"></div></div>
+            <div class="ldash-brow-val">৳4,950</div>
+          </div>
+          <div class="ldash-brow">
+            <div class="ldash-brow-ico">🚌</div>
+            <div class="ldash-brow-name">Conveyance</div>
+            <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:38%;background:#F59E0B;"></div></div>
+            <div class="ldash-brow-val">৳2,400</div>
+          </div>
+          <div class="ldash-brow">
+            <div class="ldash-brow-ico">💊</div>
+            <div class="ldash-brow-name">Medicine</div>
+            <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:22%;background:#10B981;"></div></div>
+            <div class="ldash-brow-val">৳1,500</div>
+          </div>
+          <div class="ldash-brow">
+            <div class="ldash-brow-ico">🎬</div>
+            <div class="ldash-brow-name">Entertain.</div>
+            <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:10%;background:#EF4444;"></div></div>
+            <div class="ldash-brow-val">৳800</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="lstats">
+  <div class="lstats-inner">
+    <div class="lstat-box fup"><div class="lstat-num">100<span class="lstat-unit">%</span></div><div class="lstat-lbl">Free to Start</div></div>
+    <div class="lstat-box fup" style="transition-delay:.1s"><div class="lstat-num">7<span class="lstat-unit">+</span></div><div class="lstat-lbl">Wallet Types</div></div>
+    <div class="lstat-box fup" style="transition-delay:.2s"><div class="lstat-num">2<span class="lstat-unit"> lang</span></div><div class="lstat-lbl">Bengali & English</div></div>
+    <div class="lstat-box fup" style="transition-delay:.3s"><div class="lstat-num">24/7</div><div class="lstat-lbl">Offline Access</div></div>
+  </div>
+</div>
+
+<!-- AD -->
+<div class="lad"><div class="lad-inner">📢 Advertisement (728×90 Leaderboard)</div></div>
+
+<!-- FEATURES -->
+<section class="lsec lfeat-bg" id="features">
+  <div class="lsec-inner">
+    <div class="lfeat-head fup">
+      <div class="lchip">✦ Features</div>
+      <h2 class="lsec-h">Everything you need to manage money</h2>
+      <p class="lsec-p">Built on proper double-entry accounting. Designed for the everyday Bangladeshi who wants to save more and stress less.</p>
+    </div>
+    <div class="lfeat-grid">
+      <div class="lfeat-card fup"><div class="lfeat-ico" style="background:#EBF4FD;">📊</div><h3>Double-Entry Accounting</h3><p>Every transaction records both where money comes from and where it goes — proper accounting, not just a note-keeping app.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.05s"><div class="lfeat-tag">AI</div><div class="lfeat-ico" style="background:#E1F5EE;">🤖</div><h3>Smart Budget AI</h3><p>AI analyses your last 3 months and suggests an optimal budget at the start of each month. Accept in one tap or customise it.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.1s"><div class="lfeat-ico" style="background:#FFF3E0;">👛</div><h3>Multi-Wallet Management</h3><p>Cash, bank, debit card, credit card, loans to/from others — all in one place with live balance tracking and overdraft protection.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.15s"><div class="lfeat-ico" style="background:#F3E5F5;">📈</div><h3>Rich Reports & Charts</h3><p>Daily, weekly, monthly and yearly reports. Bar charts, doughnut charts, trend lines and head-wise filtering with PDF export.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.2s"><div class="lfeat-ico" style="background:#E8F5E9;">🌐</div><h3>Bengali & English</h3><p>Full bilingual support. Switch any time. Bengali is the default. Every label, button and message translates instantly.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.25s"><div class="lfeat-ico" style="background:#FCE4EC;">🔄</div><h3>Offline Sync</h3><p>Works fully offline. Auto-syncs across all devices when online. Daily auto-backup to your own Google Drive — free.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.3s"><div class="lfeat-ico" style="background:#E3F2FD;">🎯</div><h3>Budget vs Actual</h3><p>Colour-coded progress bars show exactly how close each category is to its budget limit — with AI-generated suggestions.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.35s"><div class="lfeat-ico" style="background:#F1F8E9;">🏆</div><h3>Savings Milestones</h3><p>Monthly savings celebrated with a congratulations popup. Yearly summary shows every month's savings at a glance.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.4s"><div class="lfeat-ico" style="background:#FFF8E1;">🔒</div><h3>Asset Protection</h3><p>Wallets can never go negative. Overdraft and same-wallet transfer are blocked automatically — proper accounting enforced.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="lsec lhiw-bg" id="how-it-works">
+  <div class="lsec-inner">
+    <div style="text-align:center;" class="fup">
+      <div class="lchip lchip-inv">✦ How It Works</div>
+      <h2 class="lsec-h" style="color:#fff;">Simple. Powerful. Accurate.</h2>
+      <p class="lsec-p" style="margin:0 auto;color:rgba(255,255,255,0.52);">Get from zero to full financial clarity in four easy steps.</p>
+    </div>
+    <div class="lhiw-steps">
+      <div class="lhiw-step fup"><div class="lhiw-num lit">📝</div><h3>Register Free</h3><p>Create your account in seconds. Username is auto-generated. Get 100 free credits on sign-up immediately.</p></div>
+      <div class="lhiw-step fup" style="transition-delay:.1s"><div class="lhiw-num lit">💰</div><h3>Add Transactions</h3><p>Record income and expenses with double-entry accounting. Every entry updates your wallet balance instantly.</p></div>
+      <div class="lhiw-step fup" style="transition-delay:.2s"><div class="lhiw-num lit">📊</div><h3>Track & Analyse</h3><p>View detailed reports and charts. Compare budget vs actual. Get AI insights on where to focus and control spending.</p></div>
+      <div class="lhiw-step fup" style="transition-delay:.3s"><div class="lhiw-num lit">🏆</div><h3>Grow Savings</h3><p>Follow monthly AI budget suggestions. Celebrate milestones. Watch your net worth grow month by month.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- APP SHOWCASE -->
+<section class="lsec lshow-bg" id="showcase">
+  <div class="lsec-inner">
+    <div class="lshow-inner">
+      <div class="lscreens fup">
+        <div class="lscreen lscreen-main">
+          <div class="lscreen-hd"><div class="lscreen-hd-t">Dashboard</div><div class="lscreen-hd-s">March 2026</div></div>
+          <div class="lscreen-bd">
+            <div class="lscreen-srow">
+              <div class="lscreen-s"><div class="lscreen-sv" style="color:#2E7D32;">৳65k</div><div class="lscreen-sl">Income</div></div>
+              <div class="lscreen-s"><div class="lscreen-sv" style="color:#C62828;">৳17.6k</div><div class="lscreen-sl">Expense</div></div>
+              <div class="lscreen-s"><div class="lscreen-sv" style="color:#1565C0;">৳47k</div><div class="lscreen-sl">Saved</div></div>
+            </div>
+            <div class="lscreen-row"><div class="lscreen-d" style="background:#E8F5E9;">💼</div><div><div class="lscreen-rn">Salary</div><div class="lscreen-rd">21 Mar</div></div><div class="lscreen-ra" style="color:#2E7D32;">+৳65,000</div></div>
+            <div class="lscreen-row"><div class="lscreen-d" style="background:#FFEBEE;">🏠</div><div><div class="lscreen-rn">House Rent</div><div class="lscreen-rd">20 Mar</div></div><div class="lscreen-ra" style="color:#C62828;">-৳8,000</div></div>
+            <div class="lscreen-row"><div class="lscreen-d" style="background:#FFF3E0;">🍽️</div><div><div class="lscreen-rn">Fooding</div><div class="lscreen-rd">19 Mar</div></div><div class="lscreen-ra" style="color:#C62828;">-৳1,850</div></div>
+            <div class="lscreen-row"><div class="lscreen-d" style="background:#E3F2FD;">🚌</div><div><div class="lscreen-rn">Conveyance</div><div class="lscreen-rd">18 Mar</div></div><div class="lscreen-ra" style="color:#C62828;">-৳2,400</div></div>
+          </div>
+        </div>
+        <div class="lscreen lscreen-side">
+          <div class="lscreen-hd" style="background:linear-gradient(135deg,#00695C,#00897B);"><div class="lscreen-hd-t">Budget Progress</div><div class="lscreen-hd-s">March 2026</div></div>
+          <div class="lscreen-bd">
+            <div class="lpbar-lbl"><span>House Rent</span><span style="color:#C62828;">100%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:100%;background:#E53935;"></div></div>
+            <div class="lpbar-lbl"><span>Fooding</span><span style="color:#E65100;">74%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:74%;background:#FB8C00;"></div></div>
+            <div class="lpbar-lbl"><span>Conveyance</span><span style="color:#2E7D32;">48%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:48%;background:#43A047;"></div></div>
+            <div class="lpbar-lbl"><span>Medicine</span><span style="color:#2E7D32;">22%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:22%;background:#43A047;"></div></div>
+            <div class="lpbar-lbl"><span>Entertainment</span><span style="color:#2E7D32;">15%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:15%;background:#43A047;"></div></div>
+          </div>
+        </div>
+
+        <!-- SCREEN 3: Yearly Savings Summary with SVG line chart -->
+        <div class="lscreen lscreen-third">
+          <div class="lscreen-hd" style="background:linear-gradient(135deg,#4A148C,#7B1FA2);">
+            <div class="lscreen-hd-t">📈 Yearly Savings</div>
+            <div class="lscreen-hd-s">Jan – Mar 2026</div>
+          </div>
+          <div class="lscreen-bd" style="padding:12px 14px;">
+            <!-- SVG line chart -->
+            <svg viewBox="0 0 210 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-bottom:8px;">
+              <defs>
+                <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#A78BFA" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Grid lines -->
+              <line x1="0" y1="20" x2="210" y2="20" stroke="#DDE6EE" stroke-width="0.8" stroke-dasharray="3,3"/>
+              <line x1="0" y1="40" x2="210" y2="40" stroke="#DDE6EE" stroke-width="0.8" stroke-dasharray="3,3"/>
+              <line x1="0" y1="60" x2="210" y2="60" stroke="#DDE6EE" stroke-width="0.8" stroke-dasharray="3,3"/>
+              <!-- Area fill -->
+              <path d="M10,62 C30,58 50,50 70,44 C90,38 110,35 130,28 C150,21 170,16 200,12 L200,75 L10,75 Z"
+                fill="url(#lineGrad)"/>
+              <!-- Line -->
+              <path d="M10,62 C30,58 50,50 70,44 C90,38 110,35 130,28 C150,21 170,16 200,12"
+                fill="none" stroke="#7C3AED" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Dots -->
+              <circle cx="10"  cy="62" r="3" fill="#7C3AED"/>
+              <circle cx="45"  cy="52" r="3" fill="#7C3AED"/>
+              <circle cx="80"  cy="43" r="3" fill="#7C3AED"/>
+              <circle cx="115" cy="32" r="3" fill="#7C3AED"/>
+              <circle cx="150" cy="20" r="3" fill="#7C3AED"/>
+              <circle cx="200" cy="12" r="4.5" fill="#7C3AED" stroke="#fff" stroke-width="2"/>
+              <!-- Month labels -->
+              <text x="8"   y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Oct</text>
+              <text x="43"  y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Nov</text>
+              <text x="78"  y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Dec</text>
+              <text x="110" y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Jan</text>
+              <text x="146" y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Feb</text>
+              <text x="191" y="78" font-size="7" fill="#7C3AED" font-weight="700" font-family="Hind Siliguri,sans-serif">Mar</text>
+              <!-- Current value tooltip -->
+              <rect x="162" y="2" width="46" height="14" rx="4" fill="#7C3AED"/>
+              <text x="185" y="12" text-anchor="middle" font-size="7.5" font-weight="700" fill="#fff" font-family="Hind Siliguri,sans-serif">৳47,350</text>
+            </svg>
+            <!-- Month summary rows -->
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
+                <span style="color:#607080;">Jan 2026</span>
+                <div style="flex:1;height:4px;background:#EDE9FE;border-radius:2px;margin:0 8px;overflow:hidden;"><div style="width:58%;height:100%;background:#8B5CF6;border-radius:2px;"></div></div>
+                <span style="font-weight:700;color:#7C3AED;">৳ 37,800</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
+                <span style="color:#607080;">Feb 2026</span>
+                <div style="flex:1;height:4px;background:#EDE9FE;border-radius:2px;margin:0 8px;overflow:hidden;"><div style="width:68%;height:100%;background:#8B5CF6;border-radius:2px;"></div></div>
+                <span style="font-weight:700;color:#7C3AED;">৳ 42,100</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
+                <span style="color:#607080;font-weight:700;">Mar 2026 ★</span>
+                <div style="flex:1;height:4px;background:#EDE9FE;border-radius:2px;margin:0 8px;overflow:hidden;"><div style="width:100%;height:100%;background:linear-gradient(90deg,#7C3AED,#00E5CC);border-radius:2px;"></div></div>
+                <span style="font-weight:700;color:#00897B;">৳ 47,350</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fup" style="transition-delay:.15s;">
+        <div class="lchip">✦ App Preview</div>
+        <h2 class="lsec-h">A complete financial picture, always</h2>
+        <p class="lsec-p">From transaction entry to savings celebration — Hisab keeps your finances organised, accurate and insightful.</p>
+        <div class="lshow-feats">
+          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#E3F2FD;">📊</div><div><div class="lshow-feat-t">Live Balance Updates</div><div class="lshow-feat-d">Every transaction instantly updates your wallet. Assets can never go negative — enforced automatically.</div></div></div>
+          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#E8F5E9;">🎯</div><div><div class="lshow-feat-t">Budget vs Actual Tracking</div><div class="lshow-feat-d">Colour-coded progress bars show exactly how close each category is to its budget limit in real time.</div></div></div>
+          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#FFF3E0;">🤖</div><div><div class="lshow-feat-t">AI Monthly Suggestions</div><div class="lshow-feat-d">On the 1st of every month, AI reviews your history and proposes a smart budget — accept in one tap.</div></div></div>
+          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#FCE4EC;">🎉</div><div><div class="lshow-feat-t">Savings Celebration</div><div class="lshow-feat-d">Congratulations popup every month showing exactly how much you saved — with a full yearly summary.</div></div></div>
+        </div>
+        <a href="#" onclick="event.preventDefault();document.getElementById('apps-modal').classList.add('open');" class="lbtn-p" style="margin-top:26px;display:inline-flex;"><span>Start Tracking Free →</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORIES -->
+<section class="lsec lstory-bg">
+  <div class="lsec-inner">
+    <div style="text-align:center;" class="fup">
+      <div class="lchip lchip-inv">✦ Success Stories</div>
+      <h2 class="lsec-h" style="color:#fff;">People are saving more with Hisab</h2>
+      <p class="lsec-p" style="margin:0 auto;color:rgba(255,255,255,0.52);">Real results from real users who started tracking their money.</p>
+    </div>
+    <div class="lstory-carousel-wrap">
+      <div class="lstory-track" id="story-track">
+
+        <!-- Card 1 -->
+        <div class="lstory-card">
+          <div class="lstory-q">"</div>
+          <p class="lstory-txt">I never knew where my salary was going. After one month using Hisab I cut ৳6,000 in unnecessary food spending. Now I save 30% every month without effort.</p>
+          <div class="lstory-user"><div class="lstory-av">R</div><div><div class="lstory-name">Rahim Uddin</div><div class="lstory-role">Software Engineer, Dhaka</div></div></div>
+          <div class="lstory-badge" style="background:rgba(0,229,204,0.1);border-color:rgba(0,229,204,0.2);color:#00E5CC;">💰 Saving ৳ 19,500/month</div>
+        </div>
+        <!-- Card 2 -->
+        <div class="lstory-card">
+          <div class="lstory-q">"</div>
+          <p class="lstory-txt">The AI budget suggestion on the 1st of every month feels like having a personal accountant. My business expenses are now completely under control.</p>
+          <div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#A855F7,#EC4899);">F</div><div><div class="lstory-name">Fatema Begum</div><div class="lstory-role">Business Owner, Chittagong</div></div></div>
+          <div class="lstory-badge" style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.2);color:#C084FC;">💰 Saving ৳ 32,000/month</div>
+        </div>
+        <!-- Card 3 -->
+        <div class="lstory-card">
+          <div class="lstory-q">"</div>
+          <p class="lstory-txt">The Bengali interface made it so easy for my parents to use independently. The double-entry system gives me confidence that every taka is accounted for correctly.</p>
+          <div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">K</div><div><div class="lstory-name">Karim Hossain</div><div class="lstory-role">Teacher, Sylhet</div></div></div>
+          <div class="lstory-badge" style="background:rgba(249,168,37,0.1);border-color:rgba(249,168,37,0.2);color:#FCD34D;">💰 Saving ৳ 8,200/month</div>
+        </div>
+        <!-- Card 4 (NEW) -->
+        <div class="lstory-card">
+          <div class="lstory-q">"</div>
+          <p class="lstory-txt">I used to forget to track expenses for days. Hisab's daily reminder at 9 PM keeps me consistent. The Google Drive backup means I never lose my data even when I change phones.</p>
+          <div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#10B981,#06B6D4);">N</div><div><div class="lstory-name">Nasrin Akter</div><div class="lstory-role">Government Officer, Rajshahi</div></div></div>
+          <div class="lstory-badge" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.2);color:#6EE7B7;">💰 Saving ৳ 12,400/month</div>
+        </div>
+        <!-- Card 5 (NEW) -->
+        <div class="lstory-card">
+          <div class="lstory-q">"</div>
+          <p class="lstory-txt">Managing loan repayments across different people was a nightmare. Hisab's multi-wallet system tracks every loan separately. I cleared all my debts in 6 months by following the budget suggestions.</p>
+          <div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);">S</div><div><div class="lstory-name">Sohel Rana</div><div class="lstory-role">Freelance Developer, Khulna</div></div></div>
+          <div class="lstory-badge" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.2);color:#93C5FD;">💰 Saving ৳ 24,800/month</div>
+        </div>
+        <!-- Card 6 (NEW) -->
+        <div class="lstory-card">
+          <div class="lstory-q">"</div>
+          <p class="lstory-txt">As a housewife I always struggled to explain where household money goes. Now I show my husband the monthly report and charts. He was so impressed he started using it too!</p>
+          <div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#EC4899,#F59E0B);">M</div><div><div class="lstory-name">Maksuda Khanam</div><div class="lstory-role">Housewife, Comilla</div></div></div>
+          <div class="lstory-badge" style="background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.2);color:#F9A8D4;">💰 Saving ৳ 6,500/month</div>
+        </div>
+        <!-- Card 7 (NEW) -->
+        <div class="lstory-card">
+          <div class="lstory-q">"</div>
+          <p class="lstory-txt">I run a small grocery shop. Tracking business income and personal expenses separately was confusing. Hisab's different wallet types solved this perfectly. My profit tracking is now crystal clear.</p>
+          <div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#00897B,#1E88E5);">A</div><div><div class="lstory-name">Abdul Mannan</div><div class="lstory-role">Shop Owner, Bogura</div></div></div>
+          <div class="lstory-badge" style="background:rgba(0,137,123,0.1);border-color:rgba(0,137,123,0.2);color:#4DB6AC;">💰 Saving ৳ 15,200/month</div>
+        </div>
+        <!-- Card 8 (NEW) -->
+        <div class="lstory-card">
+          <div class="lstory-q">"</div>
+          <p class="lstory-txt">The savings congratulations popup on the 1st of each month genuinely motivates me. Last month I saved ৳28,000 and that popup made my whole day. Small details like this make Hisab special.</p>
+          <div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">T</div><div><div class="lstory-name">Tasneem Islam</div><div class="lstory-role">University Student, Mymensingh</div></div></div>
+          <div class="lstory-badge" style="background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.2);color:#C084FC;">💰 Saving ৳ 28,000/month</div>
+        </div>
+
+        <!-- Duplicate set for seamless loop -->
+        <div class="lstory-card"><div class="lstory-q">"</div><p class="lstory-txt">I never knew where my salary was going. After one month using Hisab I cut ৳6,000 in unnecessary food spending. Now I save 30% every month without effort.</p><div class="lstory-user"><div class="lstory-av">R</div><div><div class="lstory-name">Rahim Uddin</div><div class="lstory-role">Software Engineer, Dhaka</div></div></div><div class="lstory-badge" style="background:rgba(0,229,204,0.1);border-color:rgba(0,229,204,0.2);color:#00E5CC;">💰 Saving ৳ 19,500/month</div></div>
+        <div class="lstory-card"><div class="lstory-q">"</div><p class="lstory-txt">The AI budget suggestion on the 1st of every month feels like having a personal accountant. My business expenses are now completely under control.</p><div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#A855F7,#EC4899);">F</div><div><div class="lstory-name">Fatema Begum</div><div class="lstory-role">Business Owner, Chittagong</div></div></div><div class="lstory-badge" style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.2);color:#C084FC;">💰 Saving ৳ 32,000/month</div></div>
+        <div class="lstory-card"><div class="lstory-q">"</div><p class="lstory-txt">The Bengali interface made it so easy for my parents to use independently. The double-entry system gives me confidence that every taka is accounted for correctly.</p><div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">K</div><div><div class="lstory-name">Karim Hossain</div><div class="lstory-role">Teacher, Sylhet</div></div></div><div class="lstory-badge" style="background:rgba(249,168,37,0.1);border-color:rgba(249,168,37,0.2);color:#FCD34D;">💰 Saving ৳ 8,200/month</div></div>
+        <div class="lstory-card"><div class="lstory-q">"</div><p class="lstory-txt">I used to forget to track expenses for days. Hisab's daily reminder at 9 PM keeps me consistent. The Google Drive backup means I never lose my data even when I change phones.</p><div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#10B981,#06B6D4);">N</div><div><div class="lstory-name">Nasrin Akter</div><div class="lstory-role">Government Officer, Rajshahi</div></div></div><div class="lstory-badge" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.2);color:#6EE7B7;">💰 Saving ৳ 12,400/month</div></div>
+        <div class="lstory-card"><div class="lstory-q">"</div><p class="lstory-txt">Managing loan repayments across different people was a nightmare. Hisab's multi-wallet system tracks every loan separately. I cleared all my debts in 6 months by following the budget suggestions.</p><div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);">S</div><div><div class="lstory-name">Sohel Rana</div><div class="lstory-role">Freelance Developer, Khulna</div></div></div><div class="lstory-badge" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.2);color:#93C5FD;">💰 Saving ৳ 24,800/month</div></div>
+        <div class="lstory-card"><div class="lstory-q">"</div><p class="lstory-txt">As a housewife I always struggled to explain where household money goes. Now I show my husband the monthly report and charts. He was so impressed he started using it too!</p><div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#EC4899,#F59E0B);">M</div><div><div class="lstory-name">Maksuda Khanam</div><div class="lstory-role">Housewife, Comilla</div></div></div><div class="lstory-badge" style="background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.2);color:#F9A8D4;">💰 Saving ৳ 6,500/month</div></div>
+        <div class="lstory-card"><div class="lstory-q">"</div><p class="lstory-txt">I run a small grocery shop. Tracking business income and personal expenses separately was confusing. Hisab's different wallet types solved this perfectly. My profit tracking is now crystal clear.</p><div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#00897B,#1E88E5);">A</div><div><div class="lstory-name">Abdul Mannan</div><div class="lstory-role">Shop Owner, Bogura</div></div></div><div class="lstory-badge" style="background:rgba(0,137,123,0.1);border-color:rgba(0,137,123,0.2);color:#4DB6AC;">💰 Saving ৳ 15,200/month</div></div>
+        <div class="lstory-card"><div class="lstory-q">"</div><p class="lstory-txt">The savings congratulations popup on the 1st of each month genuinely motivates me. Last month I saved ৳28,000 and that popup made my whole day. Small details like this make Hisab special.</p><div class="lstory-user"><div class="lstory-av" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">T</div><div><div class="lstory-name">Tasneem Islam</div><div class="lstory-role">University Student, Mymensingh</div></div></div><div class="lstory-badge" style="background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.2);color:#C084FC;">💰 Saving ৳ 28,000/month</div></div>
+
+      </div>
+    </div>
+    <!-- Nav dots -->
+    <div class="lstory-nav">
+      <button class="lstory-nav-btn" onclick="shiftStories(-1)">←</button>
+      <button class="lstory-nav-btn" onclick="shiftStories(1)">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="lsec lprice-bg" id="pricing">
+  <div class="lsec-inner">
+    <div style="text-align:center;" class="fup">
+      <div class="lchip">✦ Pricing</div>
+      <h2 class="lsec-h">Free to use. Earn or buy credits.</h2>
+      <p class="lsec-p" style="margin:0 auto;">All core features are free forever. Credits unlock premium extras — earn them free by watching ads, or buy a pack.</p>
+    </div>
+    <div class="lprice-grid">
+      <div class="lprice-card c1 fup">
+        <div class="lprice-ico">🎁</div>
+        <div class="lprice-pts">100</div>
+        <div class="lprice-pts-lbl">Credits</div>
+        <div class="lprice-name">Sign-up Bonus</div>
+        <div class="lprice-desc">Every new user gets 100 free credits just for registering.</div>
+        <div class="lprice-price">FREE</div>
+        <a href="register.html" class="lprice-btn">Create Account</a>
+      </div>
+      <div class="lprice-card c2 fup" style="transition-delay:.1s">
+        <div class="lprice-ico">📺</div>
+        <div class="lprice-pts">+5</div>
+        <div class="lprice-pts-lbl">Per ad</div>
+        <div class="lprice-name">Watch &amp; Earn</div>
+        <div class="lprice-desc">Watch a 30-second video ad anytime to earn 5 credits instantly.</div>
+        <div class="lprice-price">FREE</div>
+        <a href="register.html" class="lprice-btn">Start Earning</a>
+      </div>
+      <div class="lprice-card c3 fup" style="transition-delay:.2s">
+        <div class="lprice-badge">⭐ Best Value</div>
+        <div class="lprice-ico">💎</div>
+        <div class="lprice-pts">500</div>
+        <div class="lprice-pts-lbl">Credits pack</div>
+        <div class="lprice-name">Credit Pack</div>
+        <div class="lprice-desc">Best value. Never worry about running out of credits.</div>
+        <div class="lprice-price">৳ 99</div>
+        <a href="register.html" class="lprice-btn">Buy Now</a>
+      </div>
+      <div class="lprice-card c4 fup" style="transition-delay:.3s">
+        <div class="lprice-ico">🎊</div>
+        <div class="lprice-pts">Bonus</div>
+        <div class="lprice-pts-lbl">Gifts</div>
+        <div class="lprice-name">Occasion Gifts</div>
+        <div class="lprice-desc">Free credit gifts on Eid, Puja, New Year and special occasions.</div>
+        <div class="lprice-price">SURPRISE</div>
+        <a href="register.html" class="lprice-btn">Register Now</a>
+      </div>
+    </div>
+    <div class="lcredits-tbl fup">
+      <div class="lcredits-tbl-hd"><h3>What are credits used for?</h3></div>
+      <div class="lcredits-row rf"><div class="lcredits-act">All standard features (transactions, reports, charts, sync)</div><div class="lcredits-pill cpfree">FREE ✓</div></div>
+      <div class="lcredits-row rf"><div class="lcredits-act">Admin-added categories and wallet types</div><div class="lcredits-pill cpfree">FREE ✓</div></div>
+      <div class="lcredits-row rf"><div class="lcredits-act">Google Drive auto-backup</div><div class="lcredits-pill cpfree">FREE ✓</div></div>
+      <div class="lcredits-row rc"><div class="lcredits-act">Add a custom income / expense category</div><div class="lcredits-pill cpcost">–10 credits</div></div>
+      <div class="lcredits-row rc"><div class="lcredits-act">Add a custom wallet type</div><div class="lcredits-pill cpcost">–10 credits</div></div>
+      <div class="lcredits-row rc"><div class="lcredits-act">Download PDF report</div><div class="lcredits-pill cpcost">–5 credits</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="lsec lcont-bg" id="contact">
+  <div class="lsec-inner">
+    <div class="lcont-inner">
+      <div class="fup">
+        <div class="lchip">✦ Contact</div>
+        <h2 class="lsec-h">Get in touch with the developer</h2>
+        <p class="lsec-p" style="margin-bottom:34px;">Have a question, suggestion, or bug report? We'd love to hear from you — usually reply within 48 hours.</p>
+        <div class="lcont-info-item"><div class="lcont-info-ico">📧</div><div><div class="lcont-info-lbl">Email</div><div class="lcont-info-val">admin@hisab.app</div></div></div>
+        <div class="lcont-info-item"><div class="lcont-info-ico">📱</div><div><div class="lcont-info-lbl">WhatsApp</div><div class="lcont-info-val">+880 1X-XXXX-XXXX</div></div></div>
+        <div class="lcont-info-item"><div class="lcont-info-ico">🕐</div><div><div class="lcont-info-lbl">Response Time</div><div class="lcont-info-val">Within 48 hours</div></div></div>
+        <div class="lcont-info-item"><div class="lcont-info-ico">🌐</div><div><div class="lcont-info-lbl">Support Languages</div><div class="lcont-info-val">Bengali & English</div></div></div>
+      </div>
+      <div class="lcont-form fup" style="transition-delay:.15s;">
+        <label class="lflabel">Your Name</label>
+        <input type="text" class="lfinput" placeholder="Enter your name" />
+        <label class="lflabel">Email Address</label>
+        <input type="email" class="lfinput" placeholder="your@email.com" />
+        <label class="lflabel">Subject</label>
+        <select class="lfinput"><option>General Question</option><option>Bug Report</option><option>Feature Request</option><option>Account Issue</option><option>Other</option></select>
+        <label class="lflabel">Message</label>
+        <textarea class="lfinput" rows="4" placeholder="Write your message..." style="resize:vertical;"></textarea>
+        <button class="lbtn-p" style="width:100%;justify-content:center;margin-top:4px;" onclick="showToast('✅','Message Sent!','We will get back to you within 48 hours.')"><span>Send Message →</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="lftr">
+  <div class="lftr-top">
+    <div>
+      <!-- Footer brand -->
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+        <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAH0AfQDASIAAhEBAxEB/8QAHAABAAMBAQEBAQAAAAAAAAAAAAUGBwQDAQII/8QAQRABAAEDAQMIBwUGBQUBAAAAAAECAwQRBQYhBxIxQVFxc8ETIjI1NmGxNHSBkdEUUnKh4fAjM0JigxUkQ4LCY//EABsBAQACAwEBAAAAAAAAAAAAAAADBAECBgUH/8QAMREBAAIBAgMGBQMFAQEAAAAAAAECAwQREiExBjIzNEHBBRNRcYE1YXIigpHR8bHw/9oADAMBAAIRAxEAPwD+MgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATu6G7WbvFm+jsxNvGomPTXp6KY7I7ZEmLFfLeKUjeZfN0N28zeHOi1aibeNRMemvTHCmOyO2Xlvhg4+zd48vBxaZps2aopp1nWeiG67G2ZibJwLeFh2oot26dPnV2zOnTPaxPlE+M9peJH0hiJ3e38R+FRodJS1u/M8/8TyV8Bl4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPtFNVdUU00zVVM6RERrMy0LcbcC5kzRn7ct1W7HtUY88Kq/4uuI+XWLOl0mXVZODFG8/wDn3Qu5G5+Xt+7GRe51jApq0quaca/lH6tm2bg4uzsO3iYdmm1ZtxpFMR/ev4vexat2bVNmzRTRbojSmmOiH6aTO7v/AIZ8Kx6GvLnaes/6+kDBuUP4z2l4vlDeWDcofxntLxfKGYed2o8vT7+0oABs4gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB+7Vu5duU27VFVddXCKaY1mQfh3bF2Tn7YzIxcDHqu1z0zp6tMdsz1PLaOBmbOyIx82xVYuzTFfMq6dJ6GiciHsbS76PMld0GljU6muG3LdPbm7kYOxIpysrm5WdwnnTHq2/4f1n+S2g0fR9LpMWlx8GKNoABZGDcofxntLxfKG8sG5Q/jLaXi+UMw5ntR5en39pQADZxAAACX2DsW7n1xduxNGPE8Z66u5mImZ2hiZiI3lECwb4YlvGqxvQ2aaKObNOsR06acFfLV4Z2krPFG4AwyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD7ETM6RGsv1ctXbcRNy3XRr0c6mY1B+BJ7vbDz9vZlWLs+iia6aedVNdXNiI7VtxOS/aVWn7VtDGtcfWiimauHy6Bb0+h1GojfFSZhn73wsPKzb0WcTHuX7k/6aKdZbBsvk52BiTRVkRezK6Z1n0lWkT/6x+a1YWFiYVuLeJjWrFGkRpRTzejoY3e1puzOe/PLaKx/mWUbv8m+1Mz0d7adynCszxmj2rkx9Ilo27+7WyNiW4/Y8Wn0vXer41TP6Jga77uk0fwfS6XnWN7fWef/ABi/K98ZV+Bb+ie5D/8AL2n30eaB5XvjK54Fv6J7kP8A8vaffR5tp6OX0f6z/db3aUA1d4AAMG5Q/jLaXi+UN5YNyh/GW0vF8oZr1cz2o8vT7+0oABs4gBZt3dg87TKzqJiOmiifrLatZtO0MWtFY3lz7vbDqy4pycrWmz/pp66v0hb6KKbdEUURpTHRD7TEUxERGkR0Q+ruPHFIU73m0obe+3z9jVVaa8yuJ6+HHT+/xUlpGbai/h3bMxwqomP5M3V9RXa26fDP9IAgTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO3YuD/ANQzYx5uejjmzVM6a9BEbnRxOrE2fm5cTNjHrriOvoj+a54Oxdn4kxVRZ59ccedXPOn9P5JGIj5dcz+PSsV08+soLZo9FUw91r1Uc7Kv00REx6tHHWNe3qSmNu7s21THPoqu1RPtVz0/hHDr/qmBNGGkIpy2n1eFrFxrVE0WrFqimdNYimIjh/fSrG/Ez+2Y9OvCLc6R+P8ARblR34+3WPDn6yxmiIo2xTvdOcivv7L+7/8A1DW2Scivv7L+7+bW1Cer6T2c8l+ZAGHvAAMX5XvjK54Fv6J7kP8A8vaffR5oHle+MrngW/oneRD2Npd9Hm29HB6P9Zn+VvdpYDV3gAAwblD+MtpeL5Q3lg3KF8ZbS8XyhmvVzPajy9Pv7SgH2mJqqimmJmZ4REdb7boruXKbdumaqqp0iI61x3e2JTh/9xkaVX5jhHDSj+qWlJvO0OGteKxvLw3c2F6KYys2iJr/ANFE8eb856lifRepSKxtCna03neQBs1Ge7ds+g2vk2+yvXp16ePm0JUN9rEUZtm/H/lpmOns0/VBqI3rumwTtOyvgKa0AAAAAAAAAAAAAAAAAAAAAAAAAAAAA98PFv5d6LVi3VXV16RwjvB4xEzOkcZTWyt3snK5tzI/wbU8dJ9qY0Tux9iY2FRFdyIu354zVMcI7v760us48G/OyvfNtyqp+9WBi4NjGoxrfN1qqmZ4zM9Dy3N98f8AFV5O/fr2cbvqcG5vvj/jn6w0mIjLtDeJmce8rqAuqgAAqO/H26x4c/VblR34+24/hz9UOfupcPeTnIr7/wAv7v5w1tknIr7/AMv7v5w1tQnq+ldnPJfmQBh7wADF+V74zueBb+id5EPY2l30eaC5XvjK54Fv6J3kQ9jaXfR5tvRwej/Wf7re7SwGrvAABg3KF8Z7Sj/9fKG8sG5Q/jLaXi+UMw5ntR5en39pSO72Ls3E9aMqzeyJ4TVFXCOvSNJT2sa6a8de1mL2tZOTZpmm1kXbdMxpMU1zETCzTNwxts4O+LinfdpIr25t7Lv036796qu3TzaaIn++5YVqluOu6tevDOwD51ay2avqD3ysek2X6WNP8KqJ79eCbpmKo1pnWPk8No2JycG9YjTWumYjh1/3+rTJXirMNqTtaJZwA89eAAAAAAAAAAAAAAAAAAAAAAAAAAAemNZryL9Fm3GtVc6QD32Xg3s/JizajSOmqqeimP1XnZuBj4FmLdmnj11T0z+L5snAtbPxotW41q09eqf9UuxdxYuGN56quTJxTtHQATIVZ359jF76vJw7me+J8Kryd2/XsYvfV5OHcz3xPhT9YU7eKtV8NdAFxVAAFR34+24/hz9VuVHfj7bj+HP1Q5+6lw95Ocivv/L+7+bW2Scivv8Ay/u/m1tQnq+k9m/J/mfYAYe+AAxfle+MrngW/oneRD2Npd9HmguV74yueBb+id5EPY2l30ebb0cHo/1mf5W92lgNXeAADBuUP4y2l4vlDeWDcofxltLxfKGa9XM9qPL0+/tKAfYiZmIiNZl8TO6mBOVnRfqiPRWZ1nXrnqjzb1ibTtDh5naN1o2HifsWzbVmdOdpNVUx2zx/vudwPRrEVjaFGZ3neRB735foNnehpn17s6d0aJuZ0jVRN5M39s2lVzapm3b9WmJ4d/D++hFntw12+qTDXe32eGJtPNxaudbyK9J01iqZmJ0S+JvPXzOZl2Yr4cZo61cFSt7V6SszWJ6vTIqpqv3KqPZmqZjho8watgAAAAAAAAAAAAAAAAAAAAAAAAABa9zdn823VnXKY51UaW+M8I61WtUeku0W4nTnVRH5tHwrMY+JasU8IopintTYK723+iLNbauz2AXVQABWd+vYxe+rycO5nvifCq+sO7fr2MXvq8nDuZ74nwp+sKVvFWq+GugC6qgACo78fbcfw5+q3Kjvx9tx/Dn6oc/dS4e8nORX3/l/d/NrbJORX3/l/d/NrahPV9J7N+T/ADPsAMPfAAYvyvfGVzwLf0TvIh7G0u+jzQXK98ZXPAt/RO8iHsbS76PNtPRwej/WZ/lb3aWA1d4AAMG5Q/jLaXi+UNzzsqxhYlzKybkW7VqmaqqpnR/P28u0Kdq7dzNoUUTRReuTVTE9OnVr82Ycr2oyV+VSm/PffZw2LVd+9RZt0611zpENB2ThUYGFRj0cdONVWnGZnrQ26GzYotzm36I51XC3Ex0R2rIu4KbRxS4PNff+mAHyZ0jVYQIzeTNjD2bXNNUxcuerRw/vv+aiJTeXOnM2jVTTP+HamaaeOvHrlFqGW/FZcx14agCNIAAAAAAAAAAAAAAAAAAAAAAAAAAAA7tgUxXtjGiY1iK4np6Pm0FQd3PfOP8AxL8t6fuyrZ+sACwgAAVnfr2MXvq8nDuZ74nwp+sO7fr2MXvq8nDuZ74nwp+sKVvFWq+GugC6qgACo78fbcfw5+q3Kjvx9tx/Dn6oc/dS4e8nORX3/l/d/NrbJORX3/l/d/NrahPV9J7N+T/M+wAw98ABi/K98ZXPAt/RO8iHsbS76PNBcr3xlc8C39E7yIextLvo8209HB6P9Zn+VvdpYDV3gTMREzM6RHTIz3lS3snEt1bF2dd0v1x/j3KKuNEfu98/Q6qeu1tNHhnJf/s/RB8qO9P/AFLLnZODc1w7NX+JVH/krj59kf30K5u3suc/Ji5dpn9ntz63+6dOhw7Ow7udlU2LUTxn1qtPZjtX/BxreJi27FuOFEdOnSsYsfFP7PmOu1l8+Scl55y9qaYppimmNIjhEQ+gvPMENvRtH9jw5s26o9Nc4RpM60x1ylcm9Rj2K71ydKKI1mdWe7Ty7mdmV5FyemdKY7I6kOe/DG0dZS4qcU7z6OYBSWwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEju575xv41+UHdz3zjfxr8uafuyrZ+9AAnQAAKzv17GL31eTh3M98T4U/WHdv17GL31eTh3M98T4U/WFK3irVfDXQBdVQABUd+PtuP4c/VblR34+24/hz9UOfupcPeTnIr7/AMv7v5tbZJyK+/8AL+7+bW1Cer6T2c8n+Z9gBh74ADF+V74yueBb+id5EPY2l30eaC5XvjK54Fv6J3kQ9jaXfR5tp6OD0f6z/db3aWCtb871Y+72HNFE03M65E+jt9n+6r5atXa6nUY9NjnJknaIc3KHvbb2Hi/seJVRXtC7HCNdfR09s8fyj8WN0U5GblaRz7t65VxmdZmZ7ZfrJvZO0M6q9errvZF6vWZnjNUyt+7myacCz6W7pORXHHh7MdibHjm07Q+bfFPid9Xk47co9IdGxdm29n4sUxETdqiJrq111nr/AASAL9axWNoeHMzad5AQ28u1YwsebFqqJv3I7fZjtYtaKxvJWs2naETvZtOL9z9jsVRNuifXqiemY4aK++zMzMzMzMz0zL4oWtNp3lerWKxtAA1ZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASO7nvnG/jX5Qd3PfON/Gvy5p+7Ktn70ACdAAArO/XsYvfV5OHcz3xPhT9Yd2/XsYvfV5OHcz3xPhT9YUreKtV8NdAF1VAAFR34+24/hz9VuVHfj7bj+HP1Q5+6lw95Ocivv/L+7+bW2Scivv8Ay/u/m1tQnq+k9nPJfmQBh74ADF+V74yueBb+id5EOjaX/p5oLle+M7ngW/o5tzt543d2dnxZtekyr/Ni1r7NOmvGf0bej55TPTT/ABS2TJ0i1vdpm/O9WNu9h8y3NN3OuRPorWvs/wC6eyI/mxTOysraObXk5Nyq9fu1azM9My+5eRlbRzqr9+uu/kXatZmemZWnd7YlOJTGRkxFV/qieilvSk2naFX4p8UvrL8VuVY6R/8Aepu3saMOiMnIpiciqOEfuRPV85ToL9KxSNoeDa02neQHjlX7WNYqvXq4pppjpmf5NpnZrEbvLambawcSq/cmNYj1aeuqepQc3IuZeTXfuzrVXOunZHY99sbQu7QyZuVzMUR7FPZDiUcuTjn9lzHThgARJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEhu775x/wCJf1A3d984/wDEv65p+7Ktn6wAJ0AACs79exi99Xk4dzPfE+FP1h3b9exi99Xk4dzPfE+FP1hSt4q1Xw10AXVUAAVHfj7bj+HP1W5Ud+PtuP4c/VDn7qXD3k5yK+/8v7v5w1tknIr7/wAv7v5w1tQnq+ldnPJfmQBh7wPxfu2rFmq9euU27dMa1VVTpER2ss3739qzKbmzti11UWJ4V5EcJrjriOyPmRG7z9f8Rw6KnFfnPpHrKH5VMixk74X6rF2i5TRbooqmmdYiqI4wrFi1cvXabVqia66p0iIh6YeLkZt+LViia65njPZ3yuuxNj2Nn24rmIrvzHGvs7uxPjxzeeT5pqtRx5LZJ6zO7w3e2NThUReyKaar88f4U0C7WsUjaHnWtNp3kB+Ltyi1bquXKopppjWZ1bMF67RatzcuVRTREazMzoo+8G1atoX+bRMxYon1Y7fm9d4Ns151c2bMzTjx+E19/wAkMpZcvFyjotYsfDznqAIUwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD937Vdm5Nu5GlUA7d3ffOP/ABL+oG7vvnH/AIl/XNP3ZVs/WABOgAAVnfr2MXvq8nBuZ74/4qvJ379exi99Xk4NzffH/FV5KVvFWq+GuoC6qgACo78fbcfw5+q3Kjvx9useHP1Q5+6lw95Ocivv/L+7+bW2Scivv7L+7/8A1DWbtyi1RNd25TbojpqqmIiPz6FCer6R2dmI0W8/WX6RW8W3tm7BxPT517SqfYt08aq5+X6qlvbyi4+PFeJsSKb93WYm/VHqU93azLOzMzaWZVkZd65kX6541TxmSIQ/Ee0OPFvTT85+vpH+0xvdvZtHeC7NFyqbOHExNFimeHDrmeuUfsjZOTtGvWiOZZifWuTHD8O1JbD3em5FORnerT002+ue/gtNq3Raoii3RTTTEaRER0LOLDxc56OG1GrtktN7zvMvDZuBj4FmLVijvqmOMz08XUC3ERHKFKZmZ3kB4ZuXZw7E3r9fNpj85ZmdiOb0u3KLVE13KoppiOMzwjh3qVt/bFe0Lk27czTj0zwj97veW29rXto3p4zRZj2aP1Rqlly8XKOi1jx8POeoAhSgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACc3oxKqYx8yI9Wu3FM9+n6INfLVm3n7GtWrtGtFdqNO2OHCe/oSY68W8NL24dpVLYFdFva+PVXVFNPO4zM6Qv7OM7Gu4WVVYu8KqZ4THX81m3d25F6KcXLq0udFFX739UmC8V3rKPNSbRvCxD4+rasAArO/Xs43fV5ODc33x/xVeTu359jF76vJw7m++P8AjnyU7eKtV8NdQFxVAfmuuiimaq6opiOuZ0gH6VHfiJ/bbE6TpNudJ/FL5+8GBjc6mmqb1yn/AE09H5qvtnal3addE10RRRb15tMTr06a/RXzZKzG0J8VLRO8pLcbeCzu7mZWXcs13qq7PMopjhrOuvGex5by71bW27cqjIvzax5nhYtzMUfj2z3onExMjLucyxaqrn5dELLsvdq3bmLmbVFyqNJ5kez/AFVq45tPKF62syVxfJ4v6for+zdm5WfXpYo9WOmqeiFv2TsXFwI50xF29w9aqI4cOrsSNq1Raoii3TTTTHREQ/a3TDFec85efbLNv2AEyIHyZ0hA7b3gt4/Os4mly70TVPRS1teKRvLatZtO0O/a+1MfZ9uZrnnXJjSmiO35qXtLPyM+96S/Vwj2aY6KYeGReu37tV29XNddXTMvNSyZJut0xxUARtwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeN0rsXNi26NYmbc1RP5zPH8P5KOsG5eXTay7mNXVMRdiJojq1jp/FLhtteEeWN6p/bOzLO0bE0TpTdj2K9OOvzUraGDkYN6bd+iY/dqjoqj5NFeWRZtX7c271umumY0mJjh/fBYyYeLnHVBjy8PKeil7N27mYfq1z6e3rrpVPH81hxN4tn350rrmzV/vjh+f9/i4to7r0VTVcw7vo+uKKuMfhP5oXK2PtHHiZrxqppidOdTxhDE5Mabal+a72M3EvzpZyLdcz0RE8fye3pLev+ZT+bNLtuu1XNFyiqiuOmmqNJh+7eRkW6ebbv3aKeymuYhtGon1hr8iPSVj34qpmjF5tUTxq8kdundtWdq8+7cpt0+jnjVOkdSLu3rt3T0t2uvTo51Uzo/CGb724ksV2rwtBubW2db152Vb1iOjX6OG/vNgUTpbi5cjXSZiNOHbGqqWsLLuzEW8e7VMxrHqzxjtdtnYG07lWlViLfCJiaqo48fkk+be3RH8qkdXXlb0ZNczFizRbjjpMzrMofLzsvK+0X6647J6Fgx91Y4TkZUz2xRT8/wC+xMYWyMDEqiq1Yp58TrFVXGYn8WflZL9448deim4Wys/L0m1Yqin96vhH9U/s/dizbnnZlybs8NKaeELDwfUlcFY680ds0z05POxZs2KIotW6KKYjSIpjR6An6IeoD5MxEa1TpoD68M3Lx8OzN3IuRTTHR2z3dqG2vvHZs861h6Xbmnt660xPmq+bl38u9Vdv1zVMz0dUdyC+eI5RzTUwzPVJ7b27ezJ9FjzVasx08eNSFBUtabTvKzEREbQAMMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD0x7tdi/RetzpXROsS8wGjbNyqM3Dt5FE+1HGOyet0qHsHalezr+lWtVmufWp7PmvFi9bv2qbtqrnU1dEx1r2LJF429VPJjms/s9AEqN+ZpiaZpmI5s8Zjqn5vKrDw6p1qxbMz86Ie4xtDO8ueMPEidYxbET8rcPaiiiiJiimmmJidYiOrsfoNoN5fKYppjSmmI7n0GWAAAH5rqppjWqqI7wfp8Q20N4sLH1psz6euOqno+XHsVzaO2s7NnSbnoqP3bfDVDbPWvTmlrhtP7LPtPbuHh+pTV6a5+7RPRKrbT2vmZ06V18yjo5lE6QjxWvltZYrjrXoAI24AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA79k7Uydn3Nbc863PtUT0THk4BmJ26ExuvmzdtYeZpTFyLd2dfUq+X8vmkonXjDMY4TrDvxdr7Qxp9TIrrjsrnnQsV1Ex3kFsH0aAKjj705NNMRfsUVz+9HD+X9XVG9ViIjXGuT26aQkjPRHOGyyCvTvViacMe/P5fq/E71WppnTGrierjr5wz86n1Y+TZZBU7m9V7m1RbxqNf8ATMz0d8dbiu7w7Tr6LtNE66xNNLWdRVtGCy7110Uac6umnXtnpR2XtzZ2PRNXp4uTx0iidZ1j6KRdyMi7Excv3K4mdZiapmNXkjnUT6N4wR6rHm70XaoiMWzFEcJma/5xwQmXm5WVVM379devTGvD8nOIbXtbrKWKxXoANWwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//Z" alt="Hisab Logo"
+          style="width:52px;height:52px;object-fit:contain;flex-shrink:0;
+            mix-blend-mode:screen;filter:brightness(1.1) drop-shadow(0 4px 12px rgba(30,136,229,0.4));" />
+        <div style="line-height:1.25;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;line-height:1.1;">
+            <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
+            <span style="color:rgba(255,255,255,0.25);font-weight:300;font-size:0.52em;vertical-align:middle;">—</span>
+            <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
+          </div>
+          <div style="font-size:11px;margin-top:3px;white-space:nowrap;">
+            <span style="font-style:italic;background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য</span>
+            <span style="color:rgba(255,255,255,0.2);margin:0 4px;">—</span>
+            <span style="font-style:italic;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;font-size:0.88em;background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">For Future Savings</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;margin-top:14px;">
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:6px 16px;font-size:12px;color:rgba(255,255,255,0.72);backdrop-filter:blur(8px);">
+          <span style="width:7px;height:7px;background:#00E5CC;border-radius:50%;display:inline-block;animation:ldot 2s infinite;"></span>
+          Professional Double-Entry Accounting
+<span style="width:7px;height:7px;background:#00E5CC;border-radius:50%;display:inline-block;animation:ldot 2s infinite;"></span>
+        </div>
+      </div>
+      <div class="lftr-socials" style="gap:18px;margin-top:22px;justify-content:center;">
+        <a class="lftr-soc" href="#">📘</a>
+        <a class="lftr-soc" href="#">📺</a>
+        <a class="lftr-soc" href="#">💬</a>
+      </div>
+    </div>
+    <div>
+      <div class="lftr-col-t">Navigation</div>
+      <a class="lftr-lnk" href="#features">Features</a>
+      <a class="lftr-lnk" href="#how-it-works">How It Works</a>
+      <a class="lftr-lnk" href="#pricing">Pricing</a>
+      <a class="lftr-lnk" href="#contact">Contact</a>
+    </div>
+    <div>
+      <div class="lftr-col-t">Account</div>
+      <a class="lftr-lnk" href="login.html">Log In</a>
+      <a class="lftr-lnk" href="register.html">Register Free</a>
+      <a class="lftr-lnk" href="forgot-password.html">Forgot Password</a>
+    </div>
+    <div>
+      <div class="lftr-col-t">Legal</div>
+      <a class="lftr-lnk" href="#">Privacy Policy</a>
+      <a class="lftr-lnk" href="#">Terms of Service</a>
+      <a class="lftr-lnk" href="#">Cookie Policy</a>
+      <div style="margin-top:14px;">
+        <div class="lpill">
+          <button class="active" onclick="setLanguage('en')" data-lang="en">EN</button>
+          <button onclick="setLanguage('bn')" data-lang="bn">বাং</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lftr-bot">
+    <div class="lftr-copy">© 2026 Hisab — হিসাব. All rights reserved.</div>
+    <div class="lftr-copy">Made with ❤️ for Bangladesh 🇧🇩</div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+  // Sticky nav
+  window.addEventListener('scroll', () => {
+    document.getElementById('lnav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // Scroll-triggered fade-up
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fup').forEach(el => io.observe(el));
+
+  // Hero items appear on load
+  document.querySelectorAll('.lhero .fup').forEach((el, i) => {
+    setTimeout(() => el.classList.add('vis'), 80 + i * 160);
+  });
+
+  // Language pill sync
+  document.querySelectorAll('.lpill button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.lpill button[data-lang="' + btn.dataset.lang + '"]')
+        .forEach(b => b.classList.add('active'));
+      document.querySelectorAll('.lpill button:not([data-lang="' + btn.dataset.lang + '"])')
+        .forEach(b => b.classList.remove('active'));
+    });
+  });
+
+  // Set nav logo image src
+  const navLogoImg = document.getElementById('nav-logo-img');
+  if (navLogoImg && LOGO.imageUrl) {
+    navLogoImg.src = LOGO.imageUrl;
+    navLogoImg.style.mixBlendMode = 'screen';
+    navLogoImg.style.filter = 'drop-shadow(0 2px 8px rgba(30,136,229,0.4)) brightness(1.1)';
+  }
+
+  // Story carousel manual shift
+  let storyOffset = 0;
+  function shiftStories(dir) {
+    const track = document.getElementById('story-track');
+    storyOffset += dir * 362;
+    track.style.animation = 'none';
+    track.style.transform = 'translateX(' + (-storyOffset) + 'px)';
+    track.style.transition = 'transform 0.5s ease';
+    setTimeout(() => {
+      // Reset loop
+      const maxShift = 8 * 362;
+      if (storyOffset >= maxShift) { storyOffset = 0; track.style.transition = 'none'; track.style.transform = 'translateX(0)'; }
+      if (storyOffset < 0) { storyOffset = (8-1) * 362; track.style.transition = 'none'; track.style.transform = 'translateX(-' + storyOffset + 'px)'; }
+    }, 500);
+  }
+</script>
+<!-- ══ APPS COMING SOON MODAL ══ -->
+<div id="apps-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:center;justify-content:center;"
+  onclick="if(event.target===this)this.classList.remove('open');">
+  <div style="background:linear-gradient(160deg,#02203A,#0C3D6E);border:1px solid rgba(255,255,255,0.12);border-radius:24px;padding:48px 40px;max-width:480px;width:90%;text-align:center;position:relative;box-shadow:0 24px 64px rgba(0,0,0,0.4);">
+
+    <!-- Close -->
+    <button onclick="document.getElementById('apps-modal').classList.remove('open')"
+      style="position:absolute;top:16px;right:18px;background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.6);width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;line-height:1;">×</button>
+
+    <!-- Animated phone icon -->
+    <div style="font-size:64px;margin-bottom:16px;animation:appBounce 2s ease-in-out infinite;">📱</div>
+
+    <!-- Title -->
+    <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:800;margin-bottom:8px;">
+      <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab Apps</span>
+    </div>
+    <div style="font-size:13px;font-style:italic;margin-bottom:24px;">
+      <span style="background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য — For Future Savings</span>
+    </div>
+
+    <!-- Working badge -->
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,229,204,0.12);border:1px solid rgba(0,229,204,0.3);border-radius:100px;padding:7px 18px;margin-bottom:24px;">
+      <span style="width:8px;height:8px;background:#00E5CC;border-radius:50%;display:inline-block;animation:ldot 1.5s infinite;"></span>
+      <span style="font-size:13px;font-weight:700;color:#00E5CC;">Work in Progress</span>
+    </div>
+
+    <!-- Message -->
+    <p style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.75;margin-bottom:28px;">
+      We are working hard to bring the <strong style="color:#fff;">Hisab mobile app</strong> to<br>
+      <strong style="color:#fff;">Android</strong> &amp; <strong style="color:#fff;">iOS</strong>.<br><br>
+      Please be patient — it will be worth the wait! 🙏
+    </p>
+
+    <!-- Progress bar -->
+    <div style="background:rgba(255,255,255,0.08);border-radius:100px;height:8px;overflow:hidden;margin-bottom:10px;">
+      <div style="height:100%;width:62%;background:linear-gradient(90deg,#1E88E5,#00E5CC);border-radius:100px;animation:appProgress 3s ease-in-out infinite alternate;"></div>
+    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:28px;">Development progress — stay tuned!</div>
+
+    <!-- Platform badges -->
+    <div style="display:flex;gap:12px;justify-content:center;">
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:10px 18px;">
+        <span style="font-size:22px;">🤖</span>
+        <div style="text-align:left;">
+          <div style="font-size:10px;color:rgba(255,255,255,0.45);">Coming soon on</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">Android</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:10px 18px;">
+        <span style="font-size:22px;">🍎</span>
+        <div style="text-align:left;">
+          <div style="font-size:10px;color:rgba(255,255,255,0.45);">Coming soon on</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">iOS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+#apps-modal.open { display:flex !important; }
+@keyframes appBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes appProgress { 0%{width:55%} 100%{width:72%} }
+</style>
+
+</body>
+</html>

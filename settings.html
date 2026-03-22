@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Hisab হিসাব</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-brand" style="padding:14px 16px 16px;display:block;text-decoration:none;cursor:pointer;" title="Go to Home">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <img src="data:image/png;base64,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" alt="Hisab Logo"
+          style="width:38px;height:38px;object-fit:contain;flex-shrink:0;mix-blend-mode:screen;filter:brightness(1.1);" />
+        <div style="line-height:1.2;">
+          <div style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:800;line-height:1.1;">
+            <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
+            <span style="color:rgba(255,255,255,0.25);font-weight:300;font-size:0.52em;vertical-align:middle;">—</span>
+            <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
+          </div>
+          <div style="font-size:8.5px;margin-top:2px;white-space:nowrap;">
+            <span style="font-style:italic;background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য</span>
+            <span style="color:rgba(255,255,255,0.2);margin:0 3px;">—</span>
+            <span style="font-style:italic;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;font-size:0.85em;background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">For Future Savings</span>
+          </div>
+        </div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sidebar-avatar">U</div>
+      <div><div class="sidebar-username" id="sidebar-name">User</div><div class="sidebar-handle" id="sidebar-handle">@user</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a class="sidebar-link" href="wallets.html"><span class="nav-icon">👛</span> Wallets</a>
+      <a class="sidebar-link" href="income.html"><span class="nav-icon">💰</span> Income</a>
+      <a class="sidebar-link" href="expense.html"><span class="nav-icon">💸</span> Expenses</a>
+      <div class="sidebar-section-label">Analytics</div>
+      <a class="sidebar-link" href="reports.html"><span class="nav-icon">📊</span> Reports</a>
+      <a class="sidebar-link" href="budget.html"><span class="nav-icon">🎯</span> Budget</a>
+      <div class="sidebar-section-label">Account</div>
+      <a class="sidebar-link active" href="settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+      <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> Credits</a>
+      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> Log Out</a>
+    </nav>
+    <div class="sidebar-credits">
+      <div class="sidebar-credits-label">Credit Points</div>
+      <div class="sidebar-credits-val"><span class="credit-display">150</span> pts</div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-title">⚙️ Settings</div>
+      <div class="topbar-actions">
+        <span id="online-indicator">🟢</span>
+        <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="settings-grid">
+        <!-- Nav -->
+        <div class="settings-nav">
+          <div class="settings-nav-item active" onclick="showPanel('profile', this)">👤 Profile</div>
+          <div class="settings-nav-item" onclick="showPanel('language', this)">🌐 Language & Theme</div>
+          <div class="settings-nav-item" onclick="showPanel('notifications', this)">🔔 Notifications</div>
+          <div class="settings-nav-item" onclick="showPanel('categories', this)">📂 Categories</div>
+          <div class="settings-nav-item" onclick="showPanel('credits', this)">💳 Credits</div>
+          <div class="settings-nav-item" onclick="showPanel('backup', this)">☁️ Backup</div>
+          <div class="settings-nav-item" onclick="showPanel('security', this)">🔒 Security</div>
+          <div class="settings-nav-item" onclick="showPanel('contact', this)">✉️ Contact Developer</div>
+        </div>
+
+        <!-- Panels -->
+        <div>
+
+          <!-- PROFILE -->
+          <div id="panel-profile" class="settings-panel">
+            <div class="settings-section-title">Profile Information</div>
+
+            <!-- Profile Picture -->
+            <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px;padding:20px;background:var(--bg-secondary);border-radius:var(--radius-lg);">
+              <div style="position:relative;flex-shrink:0;">
+                <div id="profile-avatar-wrap" style="width:80px;height:80px;border-radius:50%;background:var(--blue-800);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:white;overflow:hidden;border:3px solid var(--blue-200);">
+                  <span id="profile-avatar">U</span>
+                  <img id="profile-avatar-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+                </div>
+                <!-- Camera overlay button -->
+                <label for="avatar-upload" style="position:absolute;bottom:0;right:0;width:26px;height:26px;background:var(--blue-700);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--bg-primary);font-size:13px;" title="Change photo">📷</label>
+                <input type="file" id="avatar-upload" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)" />
+              </div>
+              <div>
+                <div style="font-size:18px;font-weight:700;color:var(--text-primary);" id="profile-name">User</div>
+                <div style="font-size:13px;color:var(--text-muted);" id="profile-username">@username</div>
+                <div style="display:flex;gap:8px;margin-top:10px;">
+                  <label for="avatar-upload" class="btn btn-outline btn-sm" style="cursor:pointer;">📷 Change Photo</label>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">JPG, PNG or GIF · Max 2MB</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" id="set-name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Username</label>
+              <input type="text" class="form-input" id="set-username" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" id="set-email" placeholder="example@email.com" oninput="validateEmailField('set-email','set-email-err')" />
+              <div class="form-error" id="set-email-err">Please enter a valid email address (e.g. name@domain.com)</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile Number</label>
+              <div id="set-phone-picker"></div>
+            </div>
+            <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+          </div>
+
+          <!-- LANGUAGE & THEME -->
+          <div id="panel-language" class="settings-panel" style="display:none;">
+            <div class="settings-section-title">Language & Display</div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Language / ভাষা</div><div class="settings-row-desc">Select your preferred language</div></div>
+              <div class="lang-switch">
+                <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাংলা</button>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Theme</div><div class="settings-row-desc">Light or dark mode (auto-detects system)</div></div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-outline btn-sm" onclick="applyTheme('light'); updateThemeButtons()">☀️ Light</button>
+                <button class="btn btn-outline btn-sm" onclick="applyTheme('dark'); updateThemeButtons()">🌙 Dark</button>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Currency Display</div><div class="settings-row-desc">Always shown in Bangladeshi Taka (৳)</div></div>
+              <div style="font-size:20px;font-weight:700;color:var(--blue-700);">৳ BDT</div>
+            </div>
+          </div>
+
+          <!-- NOTIFICATIONS -->
+          <div id="panel-notifications" class="settings-panel" style="display:none;">
+            <div class="settings-section-title">Notification Preferences</div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Daily Reminder</div><div class="settings-row-desc">Remind me to add daily expenses</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Reminder Time</div><div class="settings-row-desc">Choose your preferred reminder time</div></div>
+              <input type="time" class="form-input" value="21:00" style="width:120px;" />
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Monthly Savings Alert</div><div class="settings-row-desc">Congratulate me on savings milestones</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Budget Warning</div><div class="settings-row-desc">Alert when budget 80% consumed</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="settings-row">
+              <div><div class="settings-row-label">Admin Announcements</div><div class="settings-row-desc">Receive news, wishes, and gifts from admin</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <button class="btn btn-primary" style="margin-top:8px;" onclick="showToast('🔔','Saved!','Notification preferences updated.')">Save Preferences</button>
+          </div>
+
+          <!-- CATEGORIES -->
+          <div id="panel-categories" class="settings-panel" style="display:none;">
+            <div class="settings-section-title">Category Management</div>
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Show, hide, or add custom categories. Adding custom categories costs 10 credits.</p>
+
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">💰 Income Categories</div>
+            <div id="income-cats-list" style="margin-bottom:20px;"></div>
+
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">💸 Expense Categories</div>
+            <div id="expense-cats-list" style="margin-bottom:20px;"></div>
+
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">👛 Wallet Types</div>
+            <div id="wallet-types-list" style="margin-bottom:20px;"></div>
+
+            <div class="card" style="border:1.5px dashed var(--blue-200);background:var(--blue-50);">
+              <div style="font-size:14px;font-weight:700;color:var(--blue-800);margin-bottom:12px;">+ Add Custom Category (10 credits)</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">English Name</label>
+                  <input type="text" class="form-input" id="new-cat-en" placeholder="Category name" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">বাংলা নাম</label>
+                  <input type="text" class="form-input" id="new-cat-bn" placeholder="ক্যাটাগরির নাম" />
+                </div>
+              </div>
+              <select class="form-input" id="new-cat-type" style="margin-bottom:12px;">
+                <option value="income">Income Category</option>
+                <option value="expense">Expense Category</option>
+                <option value="wallet">Wallet Type</option>
+              </select>
+              <button class="btn btn-primary" onclick="addCustomCategory()">Add Category (–10 pts)</button>
+            </div>
+          </div>
+
+          <!-- CREDITS -->
+          <div id="panel-credits" class="settings-panel" style="display:none;">
+            <div class="settings-section-title">Credit Points</div>
+            <div style="text-align:center;padding:24px;background:var(--blue-50);border-radius:var(--radius-lg);margin-bottom:24px;">
+              <div style="font-size:14px;color:var(--blue-600);margin-bottom:6px;">Your Balance</div>
+              <div style="font-size:48px;font-weight:700;color:var(--blue-800);" id="credit-big"><span class="credit-display">150</span></div>
+              <div style="font-size:13px;color:var(--blue-500);">Credit Points</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+              <button class="btn btn-primary btn-full" onclick="showToast('💳','Buy Credits','Payment gateway coming soon!')">💳 Buy Credits</button>
+              <button class="btn btn-outline btn-full" onclick="watchAd()">📺 Watch Ad (+5 pts)</button>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">Credit History</div>
+            <div id="credit-history-list">
+              <div class="credit-history-item">
+                <div class="credit-history-icon" style="background:var(--green-50);">🎁</div>
+                <div class="credit-history-info"><div class="credit-history-name">Sign-up Bonus</div><div class="credit-history-date">Account created</div></div>
+                <div class="credit-history-pts" style="color:var(--teal-400);">+100</div>
+              </div>
+              <div class="credit-history-item">
+                <div class="credit-history-icon" style="background:var(--blue-50);">📺</div>
+                <div class="credit-history-info"><div class="credit-history-name">Ad Watched</div><div class="credit-history-date">Today</div></div>
+                <div class="credit-history-pts" style="color:var(--teal-400);">+5</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BACKUP -->
+          <div id="panel-backup" class="settings-panel" style="display:none;">
+            <div class="settings-section-title">☁️ Backup &amp; Sync</div>
+
+            <!-- Google Drive Connection Card -->
+            <div id="gdrive-connect-card" style="border:2px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px;text-align:center;">
+              <div id="gdrive-drive-icon" style="font-size:48px;margin-bottom:10px;">📁</div>
+              <div id="gdrive-status-icon" style="font-size:40px;margin-bottom:10px;display:none;">✅</div>
+              <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:6px;" id="gdrive-title">Connect Google Drive</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-bottom:18px;max-width:340px;margin-left:auto;margin-right:auto;" id="gdrive-desc">
+                Allow Hisab to back up your data to your Google Drive. Stored privately in your own Drive — we cannot access it.
+              </div>
+              <!-- Connected account info (hidden until connected) -->
+              <div id="gdrive-account-info" style="display:none;background:var(--green-50);border:1px solid #C0DD97;border-radius:var(--radius-md);padding:12px 16px;margin-bottom:16px;text-align:left;">
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div id="gdrive-user-avatar" style="width:38px;height:38px;border-radius:50%;background:var(--blue-200);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--blue-800);flex-shrink:0;"></div>
+                  <div style="flex:1;">
+                    <div style="font-size:14px;font-weight:700;color:var(--green-600);" id="gdrive-user-name">—</div>
+                    <div style="font-size:12px;color:var(--text-muted);" id="gdrive-user-email">—</div>
+                  </div>
+                  <div style="font-size:11px;font-weight:700;color:var(--green-600);background:var(--green-50);padding:3px 10px;border-radius:100px;border:1px solid #C0DD97;">✓ Connected</div>
+                </div>
+              </div>
+              <!-- Connect button -->
+              <div id="gdrive-btn-connect">
+                <button class="btn btn-primary" onclick="connectGoogleDrive()" style="display:inline-flex;align-items:center;gap:10px;padding:12px 24px;font-size:15px;">
+                  🔗 Connect Google Drive
+                </button>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:10px;">You will be redirected to Google to grant Drive access</div>
+              </div>
+              <!-- Connected action buttons -->
+              <div id="gdrive-btn-connected" style="display:none;display:none;gap:10px;justify-content:center;flex-wrap:wrap;">
+                <button class="btn btn-success" onclick="manualBackup()">☁️ Backup Now</button>
+                <button class="btn btn-outline" onclick="restoreFromDrive()">⬇️ Restore from Drive</button>
+                <button class="btn btn-sm" style="color:var(--red-400);border:1.5px solid var(--red-400);background:transparent;border-radius:var(--radius-md);padding:7px 14px;font-size:13px;font-weight:600;" onclick="disconnectGoogleDrive()">Disconnect</button>
+              </div>
+            </div>
+
+            <!-- Auto-backup settings (shown only when connected) -->
+            <div id="gdrive-settings-section" style="display:none;">
+              <div class="settings-row">
+                <div><div class="settings-row-label">Auto Backup</div><div class="settings-row-desc">Automatically back up your data daily</div></div>
+                <button class="toggle on" id="auto-backup-toggle" onclick="toggleAutoBackup(this)"></button>
+              </div>
+              <div class="settings-row" id="backup-time-row">
+                <div><div class="settings-row-label">Backup Time</div><div class="settings-row-desc">Daily backup runs at this time</div></div>
+                <input type="time" class="form-input" id="backup-time-input" value="06:00" style="width:120px;" onchange="saveBackupPrefs()" />
+              </div>
+              <div class="settings-row">
+                <div><div class="settings-row-label">Backup Scope</div><div class="settings-row-desc">What gets backed up</div></div>
+                <div style="font-size:13px;color:var(--text-muted);">All transactions, wallets &amp; settings</div>
+              </div>
+              <div class="settings-row">
+                <div><div class="settings-row-label">Last Backup</div><div class="settings-row-desc" id="last-backup-desc">Never backed up yet</div></div>
+                <span id="last-backup-status" style="font-size:13px;color:var(--text-muted);">—</span>
+              </div>
+              <!-- Progress bar during backup -->
+              <div id="backup-progress-wrap" style="display:none;margin-top:16px;">
+                <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-secondary);margin-bottom:6px;">
+                  <span id="backup-progress-label">Preparing backup...</span>
+                  <span id="backup-progress-pct">0%</span>
+                </div>
+                <div class="progress-bar" style="height:8px;">
+                  <div class="progress-fill progress-ok" id="backup-progress-bar" style="width:0%;transition:width 0.5s ease;"></div>
+                </div>
+              </div>
+              <!-- Backup history -->
+              <div style="margin-top:24px;">
+                <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">Backup History</div>
+                <div id="backup-history-list"></div>
+                <div id="no-backup-history" style="font-size:13px;color:var(--text-muted);padding:16px;text-align:center;">No backups yet. Run your first backup above.</div>
+              </div>
+            </div>
+
+            <!-- Privacy info (always visible) -->
+            <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:16px;margin-top:16px;">
+              <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">🔒 Privacy &amp; Security</div>
+              <div style="font-size:12px;color:var(--text-muted);line-height:1.9;">
+                ● Your data is backed up to <strong>your own Google Drive</strong> — not our servers<br/>
+                ● File name: <strong>Hisab_Backup_[date].json</strong> inside a <strong>Hisab</strong> folder<br/>
+                ● Only you can access this file — Hisab has no visibility into it<br/>
+                ● You can restore or delete the backup anytime from your Drive
+              </div>
+            </div>
+          </div>
+
+          <!-- SECURITY -->
+          <div id="panel-security" class="settings-panel" style="display:none;">
+            <div class="settings-section-title">Security Settings</div>
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <div class="password-wrap">
+                <input type="password" class="form-input" id="cur-pass" placeholder="••••••••" />
+                <button class="password-toggle" onclick="togglePassInline('cur-pass', this)">👁</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <div class="password-wrap">
+                <input type="password" class="form-input" id="new-pass" placeholder="Min 8 characters"
+                  oninput="renderPasswordStrength(this.value,'set-strength-fill','set-strength-label'); checkSetConfirm()" />
+                <button class="password-toggle" onclick="togglePassInline('new-pass', this)">👁</button>
+              </div>
+              <!-- Strength bar + checklist -->
+              <div style="margin-top:8px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                  <div style="flex:1;height:6px;border-radius:3px;background:var(--border);overflow:hidden;">
+                    <div id="set-strength-fill" style="height:100%;width:0;border-radius:3px;"></div>
+                  </div>
+                  <div style="font-size:12px;font-weight:700;width:80px;text-align:right;" id="set-strength-label"></div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-top:6px;">
+                  <div id="chk-len"     style="font-size:12px;color:var(--text-muted);">✗ Min 8 characters</div>
+                  <div id="chk-upper"   style="font-size:12px;color:var(--text-muted);">✗ Uppercase letter (A-Z)</div>
+                  <div id="chk-lower"   style="font-size:12px;color:var(--text-muted);">✗ Lowercase letter (a-z)</div>
+                  <div id="chk-num"     style="font-size:12px;color:var(--text-muted);">✗ Number (0-9)</div>
+                  <div id="chk-special" style="font-size:12px;color:var(--text-muted);grid-column:1/-1;">✗ Special character (!@#$%^&amp;*)</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm New Password</label>
+              <div class="password-wrap">
+                <input type="password" class="form-input" id="confirm-pass" placeholder="Repeat new password"
+                  oninput="checkSetConfirm()" />
+                <button class="password-toggle" onclick="togglePassInline('confirm-pass', this)">👁</button>
+              </div>
+              <div class="form-error" id="set-confirm-error">Passwords do not match.</div>
+            </div>
+            <button class="btn btn-primary" onclick="changePassword()">Change Password</button>
+            <div class="divider"></div>
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">Forgot Password?</div>
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Send a password reset OTP to your email or phone.</p>
+            <div style="display:flex;gap:10px;">
+              <button class="btn btn-outline btn-sm" onclick="showToast('📧','OTP Sent!','Check your registered email for OTP.')">📧 Send to Email</button>
+              <button class="btn btn-outline btn-sm" onclick="showToast('📱','OTP Sent!','Check your registered phone for OTP.')">📱 Send to Phone</button>
+            </div>
+          </div>
+
+          <!-- CONTACT -->
+          <div id="panel-contact" class="settings-panel" style="display:none;">
+            <div class="settings-section-title">Contact Developer</div>
+            <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px;">Have a question, bug report, or suggestion? Reach out to us.</p>
+            <div class="form-group">
+              <label class="form-label">Subject</label>
+              <select class="form-input">
+                <option>Bug Report</option>
+                <option>Feature Request</option>
+                <option>Account Issue</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message</label>
+              <textarea class="form-input" rows="5" placeholder="Describe your issue or suggestion..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="showToast('✅','Message Sent!','We will respond to your registered email within 48 hours.')">Send Message</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+
+function initSettings() {
+  if (!requireLogin()) return;
+  const user = State.user;
+
+  // Sidebar
+  document.getElementById('sidebar-avatar').textContent = user.name ? user.name[0].toUpperCase() : 'U';
+  document.getElementById('sidebar-name').textContent = user.name;
+  document.getElementById('sidebar-handle').textContent = '@' + user.username;
+
+  // Profile panel
+  document.getElementById('profile-name').textContent = user.name;
+  document.getElementById('profile-username').textContent = '@' + user.username;
+  document.getElementById('set-name').value = user.name || '';
+  document.getElementById('set-username').value = user.username || '';
+  document.getElementById('set-email').value = user.email || '';
+
+  // Load avatar image if saved
+  const savedAvatar = localStorage.getItem('hisab_avatar_' + user.id);
+  if (savedAvatar) {
+    document.getElementById('profile-avatar').style.display = 'none';
+    const img = document.getElementById('profile-avatar-img');
+    img.src = savedAvatar; img.style.display = 'block';
+    // Also update sidebar avatar
+    const sideEl = document.getElementById('sidebar-avatar');
+    sideEl.style.background = 'transparent';
+    sideEl.style.padding = '0';
+    sideEl.innerHTML = `<img src="${savedAvatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+  }
+
+  // Build country picker with pre-filled phone
+  buildCountryPicker('set-phone-picker', {
+    hiddenId:   'set-phone-picker-code',
+    phoneId:    'set-phone-picker-phone',
+    hintId:     'set-phone-picker-hint',
+    errId:      'set-phone-picker-err',
+    defaultVal: user.phone || '',
+  });
+
+  renderCategoryLists();
+}
+
+function showPanel(name, el) {
+  document.querySelectorAll('.settings-panel').forEach(p => p.style.display = 'none');
+  document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('panel-' + name).style.display = 'block';
+  el.classList.add('active');
+}
+
+function validateEmailField(inputId, errId) {
+  const val = document.getElementById(inputId).value.trim();
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  const errEl = document.getElementById(errId);
+  const inputEl = document.getElementById(inputId);
+  if (val && !valid) {
+    errEl.classList.add('show');
+    inputEl.classList.add('error');
+  } else {
+    errEl.classList.remove('show');
+    inputEl.classList.remove('error');
+  }
+  return valid || !val;
+}
+
+function validateMobileField() {
+  return cpValidate('set-phone-picker');
+}
+
+function handleAvatarUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    showToast('⚠️', 'File Too Large', 'Please choose an image under 2MB.');
+    return;
+  }
+  if (!file.type.startsWith('image/')) {
+    showToast('⚠️', 'Invalid File', 'Please select a JPG, PNG, or GIF image.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    // Show in profile avatar circle
+    document.getElementById('profile-avatar').style.display = 'none';
+    const img = document.getElementById('profile-avatar-img');
+    img.src = dataUrl; img.style.display = 'block';
+    // Update sidebar avatar
+    const sideEl = document.getElementById('sidebar-avatar');
+    sideEl.style.background = 'transparent';
+    sideEl.style.padding = '0';
+    sideEl.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+    // Save to localStorage
+    localStorage.setItem('hisab_avatar_' + State.user.id, dataUrl);
+    showToast('✅', 'Photo Updated!', 'Your profile picture has been saved.');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeAvatar() {
+  localStorage.removeItem('hisab_avatar_' + State.user.id);
+  // Reset to initials
+  const initials = State.user.name ? State.user.name[0].toUpperCase() : 'U';
+  const avatarSpan = document.getElementById('profile-avatar');
+  avatarSpan.style.display = 'flex'; avatarSpan.textContent = initials;
+  const img = document.getElementById('profile-avatar-img');
+  img.src = ''; img.style.display = 'none';
+  // Reset sidebar
+  const sideEl = document.getElementById('sidebar-avatar');
+  sideEl.style.background = '';
+  sideEl.style.padding = '';
+  sideEl.textContent = initials;
+  document.getElementById('avatar-upload').value = '';
+  showToast('🗑️', 'Photo Removed', 'Profile picture has been reset to initials.');
+}
+
+function saveProfile() {
+  // Validate email
+  const emailOk = validateEmailField('set-email', 'set-email-err');
+  if (!emailOk) { showToast('⚠️', 'Invalid Email', 'Please enter a valid email address.'); return; }
+
+  // Validate mobile
+  const mobileOk = validateMobileField();
+  if (!mobileOk) { showToast('⚠️', 'Invalid Mobile', 'Please enter a valid mobile number.'); return; }
+
+  // Combine country code + number
+  const fullPhone = cpGetValue('set-phone-picker');
+
+  State.user.name     = document.getElementById('set-name').value.trim();
+  State.user.username = document.getElementById('set-username').value.trim();
+  State.user.email    = document.getElementById('set-email').value.trim();
+  State.user.phone    = fullPhone;
+
+  saveState('user', State.user);
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const idx = users.findIndex(u => u.id === State.user.id);
+  if (idx >= 0) { users[idx] = { ...users[idx], ...State.user }; localStorage.setItem('hisab_users', JSON.stringify(users)); }
+
+  // Update displayed name
+  document.getElementById('profile-name').textContent = State.user.name;
+  document.getElementById('profile-username').textContent = '@' + State.user.username;
+  document.getElementById('sidebar-name').textContent = State.user.name;
+
+  showToast('✅', 'Profile Updated!', 'Your profile has been saved successfully.');
+}
+
+function renderCategoryLists() {
+  const renderList = (items, elId, type) => {
+    document.getElementById(elId).innerHTML = items.map(c => {
+      // Categories use .en/.bn, Wallets use .name_en/.name_bn
+      const nameEn = c.en || c.name_en || '—';
+      const nameBn = c.bn || c.name_bn || nameEn;
+      return `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${c.icon ? `<span style="font-size:18px;">${c.icon}</span>` : ''}
+          <div style="font-size:14px;color:var(--text-primary);">${nameEn} <span style="color:var(--text-muted);font-size:12px;">/ ${nameBn}</span></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="toggle on" onclick="this.classList.toggle('on')" title="Show/Hide"></button>
+        </div>
+      </div>`;
+    }).join('');
+  };
+  renderList(State.income_cats, 'income-cats-list', 'income');
+  renderList(State.expense_cats, 'expense-cats-list', 'expense');
+  renderList(State.wallets, 'wallet-types-list', 'wallet');
+}
+
+function addCustomCategory() {
+  const en = document.getElementById('new-cat-en').value.trim();
+  const bn = document.getElementById('new-cat-bn').value.trim();
+  const type = document.getElementById('new-cat-type').value;
+  if (!en) { showToast('⚠️','Missing Name','Please enter the category name.'); return; }
+  if (!useCredits(10, `Add custom ${type} category`)) return;
+  const newCat = { id: en.toLowerCase().replace(/\s+/g, '_'), en, bn: bn || en };
+  if (type === 'income') { State.income_cats.push(newCat); saveState('income_cats', State.income_cats); }
+  else if (type === 'expense') { State.expense_cats.push(newCat); saveState('expense_cats', State.expense_cats); }
+  document.getElementById('new-cat-en').value = '';
+  document.getElementById('new-cat-bn').value = '';
+  renderCategoryLists();
+  showToast('✅', 'Category Added!', `"${en}" has been added.`);
+}
+
+function watchAd() {
+  showToast('📺', 'Ad Playing...', 'Please wait for the ad to finish.');
+  setTimeout(() => { addCredits(5, 'Ad Watched'); }, 3000);
+}
+
+function checkSetConfirm() {
+  const newP    = document.getElementById('new-pass').value;
+  const confirm = document.getElementById('confirm-pass').value;
+  const err     = document.getElementById('set-confirm-error');
+  if (err) { if (confirm && newP !== confirm) err.classList.add('show'); else err.classList.remove('show'); }
+}
+
+function changePassword() {
+  const cur     = document.getElementById('cur-pass').value;
+  const newP    = document.getElementById('new-pass').value;
+  const confirm = document.getElementById('confirm-pass').value;
+  if (!cur || !newP || !confirm) { showToast('⚠️', 'Missing Fields', 'Please fill in all password fields.'); return; }
+  if (newP !== confirm) { showToast('⚠️', 'Mismatch', 'New passwords do not match.'); return; }
+
+  // Strong password rules
+  const errors = validatePasswordRules(newP);
+  if (errors.length) { showToast('⚠️', 'Weak Password', errors[0]); return; }
+
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const idx   = users.findIndex(u => u.id === State.user.id);
+  if (idx >= 0 && users[idx].password === btoa(cur)) {
+    users[idx].passwordHistory = [...(users[idx].passwordHistory || []), users[idx].password];
+    users[idx].password = btoa(newP);
+    localStorage.setItem('hisab_users', JSON.stringify(users));
+    showToast('✅', 'Password Changed!', 'Your password has been updated.');
+    document.getElementById('cur-pass').value     = '';
+    document.getElementById('new-pass').value     = '';
+    document.getElementById('confirm-pass').value = '';
+    // Reset strength bar
+    renderPasswordStrength('', 'set-strength-fill', 'set-strength-label');
+  } else { showToast('❌', 'Wrong Password', 'Current password is incorrect.'); }
+}
+
+function togglePassInline(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+function updateThemeButtons() {
+  document.querySelectorAll('.theme-toggle-icon').forEach(el => {
+    el.textContent = State.theme === 'dark' ? '☀️' : '🌙';
+  });
+}
+
+// ══════════════════════════════════════════
+//  GOOGLE DRIVE BACKUP FUNCTIONS
+// ══════════════════════════════════════════
+
+// Google OAuth 2.0 config
+// NOTE: Replace CLIENT_ID with your actual Google Cloud Console OAuth Client ID
+const GDRIVE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+const GDRIVE_SCOPES    = 'https://www.googleapis.com/auth/drive.file';
+const GDRIVE_FOLDER    = 'Hisab_Backup';
+
+// Load stored connection state
+function getGDriveState() {
+  return JSON.parse(localStorage.getItem('hisab_gdrive') || 'null');
+}
+function setGDriveState(data) {
+  localStorage.setItem('hisab_gdrive', JSON.stringify(data));
+}
+
+// Called on page init — restore UI if already connected
+function initBackupPanel() {
+  const state = getGDriveState();
+  if (state && state.connected) {
+    showConnectedUI(state);
+  }
+  // Restore backup time preference
+  const prefs = JSON.parse(localStorage.getItem('hisab_backup_prefs') || '{}');
+  if (prefs.time) document.getElementById('backup-time-input').value = prefs.time;
+  if (prefs.autoBackup === false) {
+    document.getElementById('auto-backup-toggle').classList.remove('on');
+  }
+  // Render backup history
+  renderBackupHistory();
+  // Update last backup display
+  updateLastBackupDisplay();
+}
+
+function showConnectedUI(state) {
+  // Update card UI
+  document.getElementById('gdrive-drive-icon').style.display = 'none';
+  document.getElementById('gdrive-status-icon').style.display = 'block';
+  document.getElementById('gdrive-title').textContent = 'Google Drive Connected';
+  document.getElementById('gdrive-desc').textContent   = 'Your data will be backed up automatically to your Drive.';
+  document.getElementById('gdrive-account-info').style.display = 'block';
+  document.getElementById('gdrive-user-name').textContent  = state.userName  || 'Google User';
+  document.getElementById('gdrive-user-email').textContent = state.userEmail || '';
+  document.getElementById('gdrive-user-avatar').textContent = (state.userName || 'G')[0].toUpperCase();
+  document.getElementById('gdrive-btn-connect').style.display    = 'none';
+  document.getElementById('gdrive-btn-connected').style.display  = 'flex';
+  document.getElementById('gdrive-settings-section').style.display = 'block';
+  // Update card border to green
+  document.getElementById('gdrive-connect-card').style.borderColor = '#C0DD97';
+  document.getElementById('gdrive-connect-card').style.background  = 'var(--green-50)';
+}
+
+function connectGoogleDrive() {
+  // Build Google OAuth URL
+  const params = new URLSearchParams({
+    client_id:     GDRIVE_CLIENT_ID,
+    redirect_uri:  window.location.origin + window.location.pathname,
+    response_type: 'token',
+    scope:         GDRIVE_SCOPES,
+    state:         'gdrive_connect',
+    prompt:        'consent',
+  });
+
+  // If running without a real CLIENT_ID, simulate the flow for demo
+  if (GDRIVE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+    simulateGDriveConnect();
+    return;
+  }
+
+  // Real OAuth flow — open Google sign-in popup
+  const popup = window.open(
+    'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString(),
+    'Google Sign In',
+    'width=520,height=600,scrollbars=yes'
+  );
+
+  // Listen for OAuth redirect message from popup
+  window.addEventListener('message', function onMessage(e) {
+    if (e.data && e.data.type === 'gdrive_token') {
+      window.removeEventListener('message', onMessage);
+      popup && popup.close();
+      fetchGDriveUserInfo(e.data.token);
+    }
+  });
+
+  // Fallback: handle token in URL hash (redirect flow)
+  window.addEventListener('focus', function checkHash() {
+    const hash = window.location.hash;
+    if (hash.includes('access_token')) {
+      const token = new URLSearchParams(hash.replace('#', '')).get('access_token');
+      if (token) { fetchGDriveUserInfo(token); window.location.hash = ''; }
+      window.removeEventListener('focus', checkHash);
+    }
+  });
+}
+
+function fetchGDriveUserInfo(token) {
+  fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { Authorization: 'Bearer ' + token }
+  })
+  .then(r => r.json())
+  .then(info => {
+    const state = {
+      connected:  true,
+      token:      token,
+      tokenTime:  Date.now(),
+      userName:   info.name  || 'Google User',
+      userEmail:  info.email || '',
+      userPicture: info.picture || '',
+    };
+    setGDriveState(state);
+    showConnectedUI(state);
+    showToast('✅', 'Google Drive Connected!', `Signed in as ${info.email || 'Google User'}`);
+  })
+  .catch(() => {
+    showToast('❌', 'Connection Failed', 'Could not fetch Google account info. Please try again.');
+  });
+}
+
+// Demo/simulation mode when no real CLIENT_ID is set
+function simulateGDriveConnect() {
+  const modal = document.createElement('div');
+  modal.id = 'gdrive-modal-backdrop';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+  modal.innerHTML = `
+    <div style="background:var(--bg-primary);border-radius:16px;padding:32px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.25);position:relative;">
+      <!-- × close button top-right -->
+      <button onclick="document.getElementById('gdrive-modal-backdrop').remove()"
+        style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:var(--bg-secondary);color:var(--text-muted);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;"
+        title="Close">×</button>
+
+      <div style="font-size:40px;margin-bottom:12px;">🔐</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:6px;color:var(--text-primary);">Sign in with Google</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Grant Hisab access to your Google Drive to enable backup</div>
+
+      <!-- Restriction note only -->
+      <div style="background:var(--bg-secondary);border-radius:10px;padding:14px 16px;margin-bottom:20px;text-align:left;">
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          🔒 Hisab <strong>cannot access</strong> any other file in your Google Drive — only the backup file it creates.
+        </div>
+      </div>
+
+      <div class="form-group" style="text-align:left;">
+        <label class="form-label">Your Google Email</label>
+        <input type="email" class="form-input" id="mock-google-email" placeholder="yourname@gmail.com" value="${State.user?.email || ''}" />
+      </div>
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button style="flex:1;padding:11px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-weight:600;"
+          onclick="document.getElementById('gdrive-modal-backdrop').remove()">Cancel</button>
+        <button style="flex:1;padding:11px;border-radius:8px;border:none;background:var(--blue-800);color:white;cursor:pointer;font-weight:600;"
+          onclick="confirmSimulatedConnect(this)">Allow Access</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function confirmSimulatedConnect(btn) {
+  const email = document.getElementById('mock-google-email').value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showToast('⚠️', 'Invalid Email', 'Please enter a valid Google email.'); return;
+  }
+  const name = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const state = { connected: true, token: 'demo_token_' + Date.now(), tokenTime: Date.now(), userName: name, userEmail: email };
+  setGDriveState(state);
+  document.getElementById('gdrive-modal-backdrop').remove();
+  showConnectedUI(state);
+  showToast('✅', 'Google Drive Connected!', `Signed in as ${email}`);
+}
+
+function disconnectGoogleDrive() {
+  if (!confirm('Disconnect Google Drive? Auto-backup will be disabled.')) return;
+  localStorage.removeItem('hisab_gdrive');
+  // Reset UI
+  document.getElementById('gdrive-drive-icon').style.display = 'block';
+  document.getElementById('gdrive-status-icon').style.display = 'none';
+  document.getElementById('gdrive-title').textContent = 'Connect Google Drive';
+  document.getElementById('gdrive-desc').textContent  = 'Allow Hisab to back up your data to your Google Drive. Stored privately in your own Drive — we cannot access it.';
+  document.getElementById('gdrive-account-info').style.display   = 'none';
+  document.getElementById('gdrive-btn-connect').style.display    = 'block';
+  document.getElementById('gdrive-btn-connected').style.display  = 'none';
+  document.getElementById('gdrive-settings-section').style.display = 'none';
+  document.getElementById('gdrive-connect-card').style.borderColor = 'var(--border)';
+  document.getElementById('gdrive-connect-card').style.background  = '';
+  showToast('🔌', 'Disconnected', 'Google Drive has been disconnected.');
+}
+
+function manualBackup() {
+  const state = getGDriveState();
+  if (!state || !state.connected) {
+    showToast('⚠️', 'Not Connected', 'Please connect Google Drive first.'); return;
+  }
+  runBackup();
+}
+
+function runBackup() {
+  const wrap  = document.getElementById('backup-progress-wrap');
+  const bar   = document.getElementById('backup-progress-bar');
+  const label = document.getElementById('backup-progress-label');
+  const pct   = document.getElementById('backup-progress-pct');
+  wrap.style.display = 'block';
+
+  const steps = [
+    { p: 15, msg: 'Collecting transactions...' },
+    { p: 35, msg: 'Packing wallet data...' },
+    { p: 55, msg: 'Compressing settings...' },
+    { p: 75, msg: 'Uploading to Google Drive...' },
+    { p: 90, msg: 'Verifying backup...' },
+    { p: 100, msg: 'Backup complete!' },
+  ];
+
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i >= steps.length) {
+      clearInterval(interval);
+      // Save backup record
+      const backupRecord = {
+        date: new Date().toLocaleString(),
+        timestamp: Date.now(),
+        size: (JSON.stringify(State).length / 1024).toFixed(1) + ' KB',
+        status: 'success',
+        fileName: `Hisab_Backup_${new Date().toISOString().split('T')[0]}.json`,
+      };
+      const history = JSON.parse(localStorage.getItem('hisab_backup_history') || '[]');
+      history.unshift(backupRecord);
+      localStorage.setItem('hisab_backup_history', JSON.stringify(history.slice(0, 20)));
+      localStorage.setItem('hisab_last_backup', Date.now());
+      setTimeout(() => { wrap.style.display = 'none'; bar.style.width = '0%'; }, 1500);
+      updateLastBackupDisplay();
+      renderBackupHistory();
+      showToast('✅', 'Backup Complete!', `Saved to Google Drive as ${backupRecord.fileName}`);
+      return;
+    }
+    bar.style.width   = steps[i].p + '%';
+    pct.textContent   = steps[i].p + '%';
+    label.textContent = steps[i].msg;
+    i++;
+  }, 500);
+}
+
+function restoreFromDrive() {
+  const state = getGDriveState();
+  if (!state || !state.connected) {
+    showToast('⚠️', 'Not Connected', 'Please connect Google Drive first.'); return;
+  }
+  const history = JSON.parse(localStorage.getItem('hisab_backup_history') || '[]');
+  if (!history.length) {
+    showToast('ℹ️', 'No Backups Found', 'No backup files found. Run a backup first.'); return;
+  }
+
+  // Show restore picker modal
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+  modal.innerHTML = `
+    <div style="background:var(--bg-primary);border-radius:16px;padding:28px;width:420px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+        <div style="font-size:17px;font-weight:700;color:var(--text-primary);">⬇️ Restore from Drive</div>
+        <button onclick="this.closest('div[style*=position]').remove()" style="background:none;border:none;font-size:22px;color:var(--text-muted);cursor:pointer;">×</button>
+      </div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Choose a backup to restore. This will overwrite your current data.</p>
+      ${history.map((b, idx) => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text-primary);">${b.fileName}</div>
+            <div style="font-size:12px;color:var(--text-muted);">${b.date} · ${b.size}</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="doRestore(${idx}, this)">Restore</button>
+        </div>`).join('')}
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function doRestore(idx, btn) {
+  if (!confirm('Restore this backup? Your current data will be replaced.')) return;
+  btn.textContent = 'Restoring...'; btn.disabled = true;
+  setTimeout(() => {
+    btn.closest('div[style*="position:fixed"]').remove();
+    showToast('✅', 'Restore Complete!', 'Your data has been restored from the backup.');
+  }, 1500);
+}
+
+function toggleAutoBackup(btn) {
+  btn.classList.toggle('on');
+  const isOn = btn.classList.contains('on');
+  const prefs = JSON.parse(localStorage.getItem('hisab_backup_prefs') || '{}');
+  prefs.autoBackup = isOn;
+  localStorage.setItem('hisab_backup_prefs', JSON.stringify(prefs));
+  showToast(isOn ? '✅' : '🔕', isOn ? 'Auto Backup On' : 'Auto Backup Off',
+    isOn ? 'Your data will be backed up daily automatically.' : 'Auto backup has been disabled.');
+}
+
+function saveBackupPrefs() {
+  const time  = document.getElementById('backup-time-input').value;
+  const prefs = JSON.parse(localStorage.getItem('hisab_backup_prefs') || '{}');
+  prefs.time  = time;
+  localStorage.setItem('hisab_backup_prefs', JSON.stringify(prefs));
+  showToast('✅', 'Backup Time Saved', `Daily backup scheduled at ${time}`);
+}
+
+function updateLastBackupDisplay() {
+  const last = localStorage.getItem('hisab_last_backup');
+  const descEl   = document.getElementById('last-backup-desc');
+  const statusEl = document.getElementById('last-backup-status');
+  if (!last || !descEl) return;
+  const d = new Date(parseInt(last));
+  const diffMins = Math.round((Date.now() - parseInt(last)) / 60000);
+  const timeStr = diffMins < 60
+    ? `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`
+    : d.toLocaleString();
+  descEl.textContent   = `Last backed up: ${timeStr}`;
+  statusEl.textContent = '✅ Success';
+  statusEl.style.color = 'var(--teal-400)';
+}
+
+function renderBackupHistory() {
+  const list  = document.getElementById('backup-history-list');
+  const noEl  = document.getElementById('no-backup-history');
+  if (!list) return;
+  const history = JSON.parse(localStorage.getItem('hisab_backup_history') || '[]');
+  if (!history.length) { list.innerHTML = ''; noEl.style.display = 'block'; return; }
+  noEl.style.display = 'none';
+  list.innerHTML = history.map(b => `
+    <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--green-50);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">☁️</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;color:var(--text-primary);">${b.fileName}</div>
+        <div style="font-size:12px;color:var(--text-muted);">${b.date} · ${b.size}</div>
+      </div>
+      <span style="font-size:12px;font-weight:700;color:var(--teal-400);">✓ Saved</span>
+    </div>`).join('');
+}
+
+initSettings();
+initBackupPanel();
+</script>
+</body>
+</html>

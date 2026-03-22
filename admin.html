@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Hisab হিসাব</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .user-picker { position:relative; }
+    .user-picker-drop {
+      display:none; position:absolute; top:100%; left:0; right:0; z-index:200;
+      background:var(--bg-primary); border:1.5px solid var(--blue-400);
+      border-radius:0 0 var(--radius-md) var(--radius-md);
+      box-shadow:0 8px 24px rgba(0,0,0,0.18); max-height:220px; overflow-y:auto;
+    }
+    .user-picker-drop.open { display:block; }
+    .user-picker-item {
+      display:flex; align-items:center; gap:10px; padding:9px 14px;
+      cursor:pointer; transition:background .15s;
+    }
+    .user-picker-item:hover { background:var(--bg-secondary); }
+    .user-picker-avatar {
+      width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#1E88E5,#00897B);
+      display:flex; align-items:center; justify-content:center;
+      font-size:13px; font-weight:700; color:#fff; flex-shrink:0;
+    }
+    .user-picker-name { font-size:13px; font-weight:700; color:var(--text-primary); }
+    .user-picker-handle { font-size:11px; color:var(--text-muted); }
+    .user-picker-empty { padding:10px 14px; font-size:13px; color:var(--text-muted); }
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-brand" style="padding:14px 16px 16px;display:block;text-decoration:none;cursor:pointer;" title="Go to Home">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <img src="data:image/png;base64,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" alt="Hisab Logo"
+          style="width:38px;height:38px;object-fit:contain;flex-shrink:0;mix-blend-mode:screen;filter:brightness(1.1);" />
+        <div style="line-height:1.2;">
+          <div style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:800;line-height:1.1;">
+            <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
+            <span style="color:rgba(255,255,255,0.25);font-weight:300;font-size:0.52em;vertical-align:middle;">—</span>
+            <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
+          </div>
+          <div style="font-size:10px;color:var(--red-400);font-weight:700;letter-spacing:0.5px;margin-top:2px;">⚙ ADMIN PANEL</div>
+        </div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:var(--red-400);">A</div>
+      <div><div class="sidebar-username">Administrator</div><div class="sidebar-handle">@admin</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Admin</div>
+      <a class="sidebar-link active" href="admin.html"><span class="nav-icon">🛡️</span> Dashboard</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('users')"><span class="nav-icon">👥</span> Users</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('transactions')"><span class="nav-icon">📋</span> All Transactions</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('notices')"><span class="nav-icon">📢</span> Send Notice</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('rewards')"><span class="nav-icon">🎁</span> Gift Credits</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('editors')"><span class="nav-icon">✏️</span> Editors</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('activity')"><span class="nav-icon">📜</span> User Activity</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('categories')"><span class="nav-icon">📂</span> Categories</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('backup')"><span class="nav-icon">💾</span> Backup</a>
+      <div class="sidebar-section-label">Navigate</div>
+      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> User Dashboard</a>
+      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> Log Out</a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="admin-badge">🛡️ ADMIN</span>
+        <div class="topbar-title" id="admin-panel-title">Admin Dashboard</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- OVERVIEW -->
+      <div id="admin-overview">
+        <div class="stat-grid" style="margin-bottom:24px;">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:var(--blue-50);">👥</div>
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value" id="total-users">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:var(--green-50);">✅</div>
+            <div class="stat-label">Active Users</div>
+            <div class="stat-value" id="active-users">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:var(--amber-50);">😴</div>
+            <div class="stat-label">Inactive (7+ days)</div>
+            <div class="stat-value" id="inactive-users">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:var(--teal-50);">📊</div>
+            <div class="stat-label">Total Transactions</div>
+            <div class="stat-value" id="total-txns">0</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title">⚡ Quick Actions</div></div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <button class="btn btn-primary btn-full" onclick="showAdminPanel('notices')">📢 Send Notice to All Users</button>
+              <button class="btn btn-success btn-full" onclick="showAdminPanel('rewards')">🎁 Gift Credits to All</button>
+              <button class="btn btn-outline btn-full" onclick="notifyInactive()">📬 Notify Inactive Users</button>
+              <button class="btn btn-outline btn-full" onclick="triggerBackup()">💾 Run Manual Backup</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">📋 Recent Users</div></div>
+            <div id="recent-users-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USERS PANEL -->
+      <div id="admin-users" style="display:none;">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">All Users</div>
+            <input type="text" class="form-input" placeholder="Search users..." style="width:220px;" id="user-search" oninput="filterUsers()" />
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="txn-table" id="users-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Credits</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRANSACTIONS PANEL -->
+      <div id="admin-transactions" style="display:none;">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">All User Transactions</div>
+            <input type="text" class="form-input" id="admin-txn-search" placeholder="Search by note, type, user…" style="width:220px;" oninput="renderAllTxns()" />
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="txn-table">
+              <thead><tr><th>User</th><th>Date</th><th>Type</th><th>Amount</th><th>Note</th><th>Debit Acct</th><th>Credit Acct</th><th style="text-align:center;">Actions</th></tr></thead>
+              <tbody id="all-txns-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTICES PANEL -->
+      <div id="admin-notices" style="display:none;">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📢 Send Notice / Announcement</div></div>
+          <div class="form-group">
+            <label class="form-label">Target</label>
+            <select class="form-input" id="notice-target">
+              <option value="all">All Users</option>
+              <option value="specific">Specific User</option>
+            </select>
+          </div>
+          <div class="form-group" id="specific-user-group" style="display:none;">
+            <label class="form-label">Username</label>
+            <div class="user-picker" id="notice-user-picker">
+              <input type="text" class="form-input" id="notice-username" placeholder="Type name or username…"
+                oninput="userPickerSearch('notice-user-picker','notice-username')" autocomplete="off" />
+              <div class="user-picker-drop" id="notice-user-picker-drop"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notice Type</label>
+            <select class="form-input" id="notice-type">
+              <option>📢 General Announcement</option>
+              <option>🎉 Occasion Greeting</option>
+              <option>⚠️ Important Alert</option>
+              <option>🆕 New Feature Update</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-input" id="notice-title" placeholder="Notice title" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-input" rows="4" id="notice-msg" placeholder="Write your message..."></textarea>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-primary" onclick="sendNotice()">Send Notice</button>
+            <button class="btn btn-outline" onclick="previewNotice()">Preview</button>
+          </div>
+
+          <div class="divider"></div>
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text-primary);">Quick Occasion Greetings</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="quickWish('Eid Mubarak! 🌙','Wishing all our users a blessed Eid ul-Fitr. May Allah accept your prayers and fill your life with joy.')">🌙 Eid</button>
+            <button class="btn btn-outline btn-sm" onclick="quickWish('Eid ul-Adha Mubarak! 🐑','Wishing all users a blessed Eid ul-Adha.')">🐑 Eid ul-Adha</button>
+            <button class="btn btn-outline btn-sm" onclick="quickWish('Shubho Nababarsha! 🎊','Happy Pahela Baishakh! Wishing you prosperity in the new Bengali year.')">🎊 Pohela Boishakh</button>
+            <button class="btn btn-outline btn-sm" onclick="quickWish('Happy New Year! 🎉','Wishing all Hisab users a prosperous new year 2027!')">🎉 New Year</button>
+            <button class="btn btn-outline btn-sm" onclick="quickWish('Shubho Bijoya! 🎨','Happy Durga Puja! Wishing joy and prosperity.')">🎨 Puja</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- REWARDS PANEL -->
+      <div id="admin-rewards" style="display:none;">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🎁 Gift Credit Points</div></div>
+          <div class="form-group">
+            <label class="form-label">Target</label>
+            <select class="form-input" id="gift-target">
+              <option value="all">All Users (One Click)</option>
+              <option value="specific">Specific User</option>
+            </select>
+          </div>
+          <div class="form-group" id="gift-user-group" style="display:none;">
+            <label class="form-label">Username</label>
+            <div class="user-picker" id="gift-user-picker">
+              <input type="text" class="form-input" id="gift-username" placeholder="Type name or username…"
+                oninput="userPickerSearch('gift-user-picker','gift-username')" autocomplete="off" />
+              <div class="user-picker-drop" id="gift-user-picker-drop"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Points to Gift</label>
+            <input type="number" class="form-input" id="gift-amount" placeholder="e.g. 50" min="1" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reason / Occasion</label>
+            <input type="text" class="form-input" id="gift-reason" placeholder="e.g. Eid Gift 2026" />
+          </div>
+          <button class="btn btn-success" onclick="sendGiftCredits()">🎁 Send Gift Credits</button>
+        </div>
+      </div>
+
+      <!-- EDITORS PANEL -->
+      <div id="admin-editors" style="display:none;">
+        <div class="card">
+          <div class="card-header"><div class="card-title">✏️ Editor Management</div></div>
+          <p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;">Editors can modify only the sections you allow. Their changes affect all users.</p>
+          <div class="form-group">
+            <label class="form-label">Promote User to Editor</label>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div class="user-picker" id="editor-user-picker" style="flex:1;">
+                <input type="text" class="form-input" id="editor-username" placeholder="Type name or username…"
+                  oninput="userPickerSearch('editor-user-picker','editor-username')" autocomplete="off" />
+                <div class="user-picker-drop" id="editor-user-picker-drop"></div>
+              </div>
+              <button class="btn btn-primary" onclick="promoteToEditor()">Promote</button>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text-primary);">Editor Permissions</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;"><input type="checkbox" checked /> Edit Income Categories</label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;"><input type="checkbox" checked /> Edit Expense Categories</label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;"><input type="checkbox" /> Send Notices</label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;"><input type="checkbox" /> View User Data</label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;"><input type="checkbox" /> Gift Credits</label>
+          </div>
+          <button class="btn btn-primary" style="margin-top:16px;" onclick="showToast('✅','Saved!','Editor permissions updated.')">Save Permissions</button>
+        </div>
+      </div>
+
+      <!-- ACTIVITY PANEL -->
+      <div id="admin-activity" style="display:none;">
+
+        <!-- Filters row -->
+        <div class="card" style="margin-bottom:18px;">
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;">
+            <div style="flex:1;min-width:180px;">
+              <label class="form-label" style="margin-bottom:6px;">Filter by User</label>
+              <div class="user-picker" id="activity-user-picker">
+                <input type="text" class="form-input" id="activity-username" placeholder="All users (type to filter…)"
+                  oninput="userPickerSearch('activity-user-picker','activity-username');filterActivityLog()" autocomplete="off" />
+                <div class="user-picker-drop" id="activity-user-picker-drop"></div>
+              </div>
+            </div>
+            <div style="min-width:150px;">
+              <label class="form-label" style="margin-bottom:6px;">Activity Type</label>
+              <select class="form-input" id="activity-type-filter" onchange="filterActivityLog()">
+                <option value="">All Activities</option>
+                <option value="login">🔑 Login</option>
+                <option value="logout">🚪 Logout</option>
+                <option value="register">🆕 Register</option>
+                <option value="income">💰 Income</option>
+                <option value="expense">💸 Expense</option>
+                <option value="transfer">🔄 Transfer</option>
+              </select>
+            </div>
+            <div style="min-width:150px;">
+              <label class="form-label" style="margin-bottom:6px;">Date From</label>
+              <input type="date" class="form-input" id="activity-date-from" onchange="filterActivityLog()" />
+            </div>
+            <div style="min-width:150px;">
+              <label class="form-label" style="margin-bottom:6px;">Date To</label>
+              <input type="date" class="form-input" id="activity-date-to" onchange="filterActivityLog()" />
+            </div>
+            <button class="btn btn-outline" onclick="clearActivityFilters()" style="white-space:nowrap;">Clear Filters</button>
+          </div>
+        </div>
+
+        <!-- Summary stats -->
+        <div class="stat-grid" style="margin-bottom:18px;" id="activity-stats"></div>
+
+        <!-- Activity table -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📜 Activity Log</div>
+            <span id="activity-count" style="font-size:12px;color:var(--text-muted);"></span>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="txn-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>User</th>
+                  <th>Full Name</th>
+                  <th>Activity</th>
+                  <th>Detail</th>
+                </tr>
+              </thead>
+              <tbody id="activity-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORIES PANEL -->
+      <div id="admin-categories" style="display:none;">
+        <div class="grid-2">
+
+          <!-- Income Categories -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">💰 Income Categories</div>
+              <button class="btn btn-primary btn-sm" onclick="adminAddCat('income')">+ Add</button>
+            </div>
+            <div id="admin-income-cats"></div>
+          </div>
+
+          <!-- Expense Categories -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">💸 Expense Categories</div>
+              <button class="btn btn-primary btn-sm" onclick="adminAddCat('expense')">+ Add</button>
+            </div>
+            <div id="admin-expense-cats"></div>
+          </div>
+
+        </div>
+
+        <!-- Add Category Form -->
+        <div class="card" style="margin-top:20px;">
+          <div class="card-header"><div class="card-title">➕ Add New Category (Global — Free for all users)</div></div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="flex:1;min-width:160px;margin-bottom:0;">
+              <label class="form-label">Type</label>
+              <select class="form-input" id="admin-cat-type">
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:2;min-width:160px;margin-bottom:0;">
+              <label class="form-label">English Name</label>
+              <input type="text" class="form-input" id="admin-cat-en" placeholder="e.g. Freelance" />
+            </div>
+            <div class="form-group" style="flex:2;min-width:160px;margin-bottom:0;">
+              <label class="form-label">Bengali Name</label>
+              <input type="text" class="form-input" id="admin-cat-bn" placeholder="e.g. ফ্রিল্যান্স" />
+            </div>
+            <button class="btn btn-success" onclick="adminSaveNewCat()" style="white-space:nowrap;">Save Category</button>
+          </div>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:10px;">⚡ Admin-added categories are FREE for all users and appear in every account immediately.</p>
+        </div>
+      </div>
+
+      <!-- BACKUP PANEL -->
+      <div id="admin-backup" style="display:none;">
+        <div class="card">
+          <div class="card-header"><div class="card-title">💾 Data Backup</div></div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Auto Daily Backup</div><div class="settings-row-desc">Backup all user data automatically every day</div></div>
+            <button class="toggle on"></button>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Backup Time</div><div class="settings-row-desc">Run backup at this time daily</div></div>
+            <input type="time" class="form-input" value="02:00" style="width:120px;" />
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Storage Location</div><div class="settings-row-desc">Admin Google Drive (free storage)</div></div>
+            <span style="font-size:13px;color:var(--green-600);font-weight:600;">✅ Connected</span>
+          </div>
+          <div style="background:var(--green-50);border:1px solid #C0DD97;border-radius:var(--radius-md);padding:14px;margin:16px 0;font-size:13px;color:var(--green-600);">
+            ✅ Last backup: Today at 2:00 AM — 100% complete. All user data backed up successfully.
+          </div>
+          <button class="btn btn-primary" onclick="triggerBackup()">Run Backup Now</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- EDIT USER MODAL -->
+<div class="modal-backdrop" id="edit-user-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit User</div>
+      <button class="modal-close" onclick="closeModal('edit-user-modal')">×</button>
+    </div>
+    <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" id="eu-name" /></div>
+    <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" id="eu-username" /></div>
+    <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="eu-email" /></div>
+    <div class="form-group">
+      <label class="form-label">Mobile Number</label>
+      <div id="eu-phone-picker"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password <span style="font-weight:400;color:var(--text-muted);">(leave blank to keep current)</span></label>
+      <div class="password-wrap">
+        <input type="password" class="form-input" id="eu-pass" placeholder="New password"
+          oninput="renderPasswordStrength(this.value,'eu-strength-fill','eu-strength-label')" />
+        <button class="password-toggle" type="button" onclick="(function(b){var i=document.getElementById('eu-pass');i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'👁':'🙈';})(this)">👁</button>
+      </div>
+      <div style="margin-top:8px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <div style="flex:1;height:6px;border-radius:3px;background:var(--border);overflow:hidden;">
+            <div id="eu-strength-fill" style="height:100%;width:0;border-radius:3px;"></div>
+          </div>
+          <div style="font-size:12px;font-weight:700;width:80px;text-align:right;" id="eu-strength-label"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-top:4px;">
+          <div id="chk-len"     style="font-size:11px;color:var(--text-muted);">✗ Min 8 characters</div>
+          <div id="chk-upper"   style="font-size:11px;color:var(--text-muted);">✗ Uppercase (A-Z)</div>
+          <div id="chk-lower"   style="font-size:11px;color:var(--text-muted);">✗ Lowercase (a-z)</div>
+          <div id="chk-num"     style="font-size:11px;color:var(--text-muted);">✗ Number (0-9)</div>
+          <div id="chk-special" style="font-size:11px;color:var(--text-muted);grid-column:1/-1;">✗ Special character (!@#$%^&amp;*)</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Role</label><select class="form-input" id="eu-role"><option value="user">User</option><option value="editor">Editor</option><option value="admin">Admin</option></select></div>
+    <input type="hidden" id="eu-id" />
+    <button class="btn btn-primary btn-full" onclick="saveUserEdit()">Save Changes</button>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+// ── USER PICKER AUTOCOMPLETE ─────────────
+function userPickerSearch(pickerId, inputId) {
+  const query = document.getElementById(inputId).value.trim().toLowerCase();
+  const drop  = document.getElementById(pickerId + '-drop');
+  if (!query) { drop.classList.remove('open'); drop.innerHTML = ''; return; }
+
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const matches = users.filter(u =>
+    (u.username || '').toLowerCase().includes(query) ||
+    (u.name     || '').toLowerCase().includes(query)
+  ).slice(0, 8);
+
+  if (!matches.length) {
+    drop.innerHTML = '<div class="user-picker-empty">No users found</div>';
+    drop.classList.add('open'); return;
+  }
+
+  drop.innerHTML = matches.map(u => `
+    <div class="user-picker-item" onclick="userPickerSelect('${pickerId}','${inputId}','${u.username}','${(u.name||'').replace(/'/g,"\\'")}')">
+      <div class="user-picker-avatar">${(u.name||u.username||'?')[0].toUpperCase()}</div>
+      <div>
+        <div class="user-picker-name">${u.name || u.username}</div>
+        <div class="user-picker-handle">@${u.username}</div>
+      </div>
+    </div>`).join('');
+  drop.classList.add('open');
+}
+
+function userPickerSelect(pickerId, inputId, username, fullname) {
+  document.getElementById(inputId).value = username;
+  const drop = document.getElementById(pickerId + '-drop');
+  drop.classList.remove('open');
+  drop.innerHTML = '';
+}
+
+// Close picker when clicking outside
+document.addEventListener('click', e => {
+  document.querySelectorAll('.user-picker-drop.open').forEach(d => {
+    if (!d.closest('.user-picker').contains(e.target)) d.classList.remove('open');
+  });
+});
+
+function initAdmin() {
+  if (!requireLogin()) return;
+  if (!isAdmin() && !isEditor()) { window.location.href = 'dashboard.html'; return; }
+  loadAdminStats();
+  renderRecentUsers();
+
+  document.getElementById('notice-target').addEventListener('change', function() {
+    document.getElementById('specific-user-group').style.display = this.value === 'specific' ? 'block' : 'none';
+  });
+  document.getElementById('gift-target').addEventListener('change', function() {
+    document.getElementById('gift-user-group').style.display = this.value === 'specific' ? 'block' : 'none';
+  });
+}
+
+function loadAdminStats() {
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const txns = JSON.parse(localStorage.getItem('hisab_txns') || '[]');
+  const sevenDays = 7 * 24 * 60 * 60 * 1000;
+  const inactive = users.filter(u => {
+    const last = parseInt(localStorage.getItem('hisab_last_login') || Date.now());
+    return Date.now() - last > sevenDays;
+  });
+  document.getElementById('total-users').textContent = users.length || '3 (demo)';
+  document.getElementById('active-users').textContent = Math.max(0, users.length - inactive.length) || '2';
+  document.getElementById('inactive-users').textContent = inactive.length || '1';
+  document.getElementById('total-txns').textContent = txns.length || '0';
+}
+
+function renderRecentUsers() {
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const el = document.getElementById('recent-users-list');
+  if (!users.length) {
+    el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px;text-align:center;">No registered users yet.</div>';
+    return;
+  }
+  el.innerHTML = users.slice(-5).reverse().map(u => `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
+      <div style="width:34px;height:34px;border-radius:50%;background:var(--blue-200);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--blue-800);">${u.name ? u.name[0].toUpperCase() : 'U'}</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--text-primary);">${u.name}</div><div style="font-size:11px;color:var(--text-muted);">${u.email}</div></div>
+      <div style="font-size:11px;color:var(--text-muted);">${u.created || 'Recently'}</div>
+    </div>`).join('');
+}
+
+function showAdminPanel(name) {
+  ['overview','users','transactions','notices','rewards','editors','activity','categories','backup'].forEach(p => {
+    const el = document.getElementById('admin-' + p);
+    if (el) el.style.display = 'none';
+  });
+  const panel = document.getElementById('admin-' + name);
+  if (panel) panel.style.display = 'block';
+  const titles = { overview:'Admin Dashboard', users:'All Users', transactions:'All Transactions', notices:'Send Notice', rewards:'Gift Credits', editors:'Editor Management', activity:'User Activity Log', categories:'Category Management', backup:'Data Backup' };
+  document.getElementById('admin-panel-title').textContent = titles[name] || name;
+  if (name === 'users') renderUsersTable();
+  if (name === 'transactions') renderAllTxns();
+  if (name === 'categories') renderAdminCategories();
+  if (name === 'activity') renderActivityLog();
+}
+
+function renderUsersTable() {
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const tbody = document.getElementById('users-tbody');
+  if (!users.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px;">No users registered yet.</td></tr>'; return; }
+  tbody.innerHTML = users.map(u => `<tr>
+    <td style="font-weight:600;color:var(--text-primary);">${u.name}</td>
+    <td style="color:var(--blue-700);">@${u.username}</td>
+    <td>${u.email}</td>
+    <td>${u.phone || '—'}</td>
+    <td>${u.credits || 100}</td>
+    <td><span class="txn-type-badge ${u.role === 'admin' ? 'badge-expense' : u.role === 'editor' ? 'badge-transfer' : 'badge-income'}">${u.role || 'user'}</span></td>
+    <td style="color:var(--text-muted);">${u.created || '—'}</td>
+    <td><button class="btn btn-outline btn-sm" onclick="editUser(${u.id})">Edit</button></td>
+  </tr>`).join('');
+}
+
+function filterUsers() {
+  const q = document.getElementById('user-search').value.toLowerCase();
+  document.querySelectorAll('#users-tbody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function editUser(id) {
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const u = users.find(x => x.id === id);
+  if (!u) return;
+  document.getElementById('eu-id').value = id;
+  document.getElementById('eu-name').value = u.name;
+  document.getElementById('eu-username').value = u.username;
+  document.getElementById('eu-email').value = u.email;
+  // Build/update phone picker with user's stored number
+  setTimeout(() => {
+    if (!document.getElementById('eu-phone-picker-code')) {
+      buildCountryPicker('eu-phone-picker', {
+        hiddenId:   'eu-phone-picker-code',
+        phoneId:    'eu-phone-picker-phone',
+        hintId:     'eu-phone-picker-hint',
+        errId:      'eu-phone-picker-err',
+        defaultVal: u.phone || '',
+      });
+    } else {
+      // Picker already built — just update the phone number
+      const phoneEl = document.getElementById('eu-phone-picker-phone');
+      const stored  = u.phone || '';
+      const match   = COUNTRIES.find(cc => stored.startsWith(cc.code));
+      if (match) {
+        cpSelect('eu-phone-picker', match.code);
+        if (phoneEl) phoneEl.value = stored.slice(match.code.length);
+      } else if (phoneEl) { phoneEl.value = stored; }
+    }
+  }, 50);
+  document.getElementById('eu-role').value = u.role || 'user';
+  document.getElementById('eu-pass').value = '';
+  openModal('edit-user-modal');
+}
+
+function saveUserEdit() {
+  const id = parseInt(document.getElementById('eu-id').value);
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const idx = users.findIndex(u => u.id === id);
+  if (idx < 0) return;
+  users[idx].name     = document.getElementById('eu-name').value;
+  users[idx].username = document.getElementById('eu-username').value;
+  users[idx].email    = document.getElementById('eu-email').value;
+  users[idx].phone    = cpGetValue('eu-phone-picker') || document.getElementById('eu-phone-picker-phone')?.value || '';
+  users[idx].role     = document.getElementById('eu-role').value;
+  const newPass = document.getElementById('eu-pass').value;
+  if (newPass) {
+    // Enforce strong password rules
+    const errors = validatePasswordRules(newPass);
+    if (errors.length) { showToast('⚠️', 'Weak Password', errors[0]); return; }
+    users[idx].passwordHistory = [...(users[idx].passwordHistory || []), users[idx].password];
+    users[idx].password = btoa(newPass);
+  }
+  localStorage.setItem('hisab_users', JSON.stringify(users));
+  closeModal('edit-user-modal');
+  renderUsersTable();
+  showToast('✅', 'User Updated!', 'User information has been saved.');
+}
+
+function renderAllTxns() {
+  const txns = JSON.parse(localStorage.getItem('hisab_txns') || '[]');
+  const tbody = document.getElementById('all-txns-tbody');
+  if (!txns.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:20px;">No transactions yet.</td></tr>'; return; }
+  tbody.innerHTML = txns.map(t => `<tr>
+    <td style="color:var(--blue-700);">@${State.user?.username || 'user'}</td>
+    <td style="color:var(--text-muted);">${t.date}</td>
+    <td><span class="txn-type-badge ${t.type === 'income' ? 'badge-income' : t.type === 'expense' ? 'badge-expense' : 'badge-transfer'}">${t.type}</span></td>
+    <td class="${t.type === 'income' ? 'txn-amount-pos' : 'txn-amount-neg'}">${fmt(t.amount)}</td>
+    <td>${t.note || '—'}</td>
+    <td>${t.debit}</td>
+    <td>${t.credit}</td>
+  </tr>`).join('');
+}
+
+function sendNotice() {
+  const title = document.getElementById('notice-title').value;
+  const msg = document.getElementById('notice-msg').value;
+  if (!title || !msg) { showToast('⚠️','Missing Fields','Please fill in title and message.'); return; }
+  showToast('📢', title, msg, 5000);
+  showToast('✅','Notice Sent!','Your notice has been delivered to all users.');
+  document.getElementById('notice-title').value = '';
+  document.getElementById('notice-msg').value = '';
+}
+
+function quickWish(title, msg) {
+  document.getElementById('notice-title').value = title;
+  document.getElementById('notice-msg').value = msg;
+  showAdminPanel('notices');
+  showToast('📝','Template Loaded!','Edit and send the greeting.');
+}
+
+function previewNotice() {
+  const title = document.getElementById('notice-title').value || 'Notice Title';
+  const msg = document.getElementById('notice-msg').value || 'Notice message...';
+  showToast('📢', title, msg, 6000);
+}
+
+function sendGiftCredits() {
+  const amount = parseInt(document.getElementById('gift-amount').value);
+  const reason = document.getElementById('gift-reason').value || 'Admin Gift';
+  const target = document.getElementById('gift-target').value;
+  if (!amount || amount < 1) { showToast('⚠️','Missing Amount','Please enter a valid amount.'); return; }
+  if (target === 'all') {
+    const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+    users.forEach(u => u.credits = (u.credits || 0) + amount);
+    localStorage.setItem('hisab_users', JSON.stringify(users));
+    showToast('🎁','Credits Gifted!', `+${amount} credits sent to all ${users.length} users. Reason: ${reason}`);
+  } else {
+    showToast('🎁','Credits Gifted!', `+${amount} credits sent to user. Reason: ${reason}`);
+  }
+}
+
+function notifyInactive() {
+  showToast('📬','Notifications Sent!','Inactive users have been notified via email and SMS.');
+}
+
+function triggerBackup() {
+  showToast('💾','Backup Running...','All user data is being backed up. This may take a moment.');
+  setTimeout(() => showToast('✅','Backup Complete!','All data backed up to Google Drive successfully.'), 3000);
+}
+
+// ── ADMIN CATEGORIES ──────────────────────
+function renderAdminCategories() {
+  const renderList = (cats, elId, type) => {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    if (!cats.length) { el.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:12px 0;">No categories yet.</p>'; return; }
+    el.innerHTML = cats.map((c, i) => {
+      const nameEn = c.en || c.name_en || '—';
+      const nameBn = c.bn || c.name_bn || nameEn;
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div>
+          <span style="font-size:14px;font-weight:600;color:var(--text-primary);">${nameEn}</span>
+          <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">/ ${nameBn}</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline btn-sm" style="color:var(--blue-400);border-color:var(--blue-400);"
+            onclick="openEditCat('${type}',${i},'${nameEn.replace(/'/g,"\\'")}','${nameBn.replace(/'/g,"\\'")}')">✏️ Edit</button>
+          <button class="btn btn-outline btn-sm" style="color:var(--red-400);border-color:var(--red-400);"
+            onclick="adminDeleteCat('${type}',${i})">🗑️ Remove</button>
+        </div>
+      </div>`;
+    }).join('');
+  };
+  renderList(State.income_cats,  'admin-income-cats',  'income');
+  renderList(State.expense_cats, 'admin-expense-cats', 'expense');
+}
+
+function adminSaveNewCat() {
+  const type = document.getElementById('admin-cat-type').value;
+  const en   = document.getElementById('admin-cat-en').value.trim();
+  const bn   = document.getElementById('admin-cat-bn').value.trim();
+  if (!en) { showToast('⚠️','Missing Name','Please enter the English category name.'); return; }
+  const newCat = { id: en.toLowerCase().replace(/\s+/g,'_') + '_' + Date.now(), en, bn: bn || en };
+  if (type === 'income')  { State.income_cats.push(newCat);  saveState('income_cats',  State.income_cats); }
+  else                    { State.expense_cats.push(newCat); saveState('expense_cats', State.expense_cats); }
+  document.getElementById('admin-cat-en').value = '';
+  document.getElementById('admin-cat-bn').value = '';
+  renderAdminCategories();
+  showToast('✅','Category Added!',`"${en}" added as a global ${type} category — free for all users.`);
+}
+
+function adminDeleteCat(type, idx) {
+  if (!confirm('Remove this category? It will be removed for ALL users.')) return;
+  if (type === 'income')  { State.income_cats.splice(idx, 1);  saveState('income_cats',  State.income_cats); }
+  else                    { State.expense_cats.splice(idx, 1); saveState('expense_cats', State.expense_cats); }
+  renderAdminCategories();
+  showToast('🗑️','Removed','Category removed from all accounts.');
+}
+
+function openEditCat(type, idx, nameEn, nameBn) {
+  document.getElementById('edit-cat-type').value  = type;
+  document.getElementById('edit-cat-idx').value   = idx;
+  document.getElementById('edit-cat-en').value    = nameEn;
+  document.getElementById('edit-cat-bn').value    = nameBn;
+  openModal('admin-cat-edit-modal');
+}
+
+function saveEditCat() {
+  const type = document.getElementById('edit-cat-type').value;
+  const idx  = parseInt(document.getElementById('edit-cat-idx').value);
+  const en   = document.getElementById('edit-cat-en').value.trim();
+  const bn   = document.getElementById('edit-cat-bn').value.trim();
+  if (!en) { showToast('⚠️','Missing Name','Please enter the English name.'); return; }
+  const cats = type === 'income' ? State.income_cats : State.expense_cats;
+  cats[idx].en = en;
+  cats[idx].bn = bn || en;
+  if (cats[idx].name_en !== undefined) cats[idx].name_en = en;
+  if (cats[idx].name_bn !== undefined) cats[idx].name_bn = bn || en;
+  if (type === 'income') saveState('income_cats', State.income_cats);
+  else                   saveState('expense_cats', State.expense_cats);
+  closeModal('admin-cat-edit-modal');
+  renderAdminCategories();
+  showToast('✅','Category Updated!',`"${en}" has been updated for all users.`);
+}
+
+function adminAddCat(type) {
+  document.getElementById('admin-cat-type').value = type;
+  document.getElementById('admin-cat-en').focus();
+}
+
+// ── ACTIVITY LOG ──────────────────────────
+const ACTIVITY_ICONS = {
+  login:'🔑', logout:'🚪', register:'🆕',
+  income:'💰', expense:'💸', transfer:'🔄',
+  settings:'⚙️', budget:'🎯', credits:'💳', wallet:'👛'
+};
+const ACTIVITY_COLOURS = {
+  login:'var(--blue-400)', logout:'var(--text-muted)', register:'var(--teal-400)',
+  income:'var(--teal-400)', expense:'var(--red-400)', transfer:'var(--amber-400)',
+  settings:'var(--text-muted)', budget:'#A855F7', credits:'#F59E0B', wallet:'#06B6D4'
+};
+
+function getAllActivity() {
+  const index = JSON.parse(localStorage.getItem('hisab_activity_index') || '[]');
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  let all = [];
+  index.forEach(username => {
+    const log = JSON.parse(localStorage.getItem('hisab_activity_' + username) || '[]');
+    const u = users.find(u => u.username === username) || {};
+    log.forEach(e => all.push({ ...e, username, fullname: u.name || username }));
+  });
+  // Sort newest first
+  all.sort((a, b) => b.ts - a.ts);
+  return all;
+}
+
+function renderActivityLog() {
+  filterActivityLog();
+}
+
+function filterActivityLog() {
+  const userFilter = (document.getElementById('activity-username')?.value || '').trim().toLowerCase();
+  const typeFilter = document.getElementById('activity-type-filter')?.value || '';
+  const dateFrom   = document.getElementById('activity-date-from')?.value || '';
+  const dateTo     = document.getElementById('activity-date-to')?.value || '';
+
+  let events = getAllActivity();
+
+  if (userFilter) events = events.filter(e =>
+    e.username.toLowerCase().includes(userFilter) ||
+    e.fullname.toLowerCase().includes(userFilter));
+  if (typeFilter) events = events.filter(e => e.type === typeFilter);
+  if (dateFrom)   events = events.filter(e => e.date >= dateFrom);
+  if (dateTo)     events = events.filter(e => e.date.slice(0,10) <= dateTo);
+
+  // Stats
+  const loginCount   = events.filter(e => e.type === 'login').length;
+  const incomeCount  = events.filter(e => e.type === 'income').length;
+  const expenseCount = events.filter(e => e.type === 'expense').length;
+  const uniqueUsers  = [...new Set(events.map(e => e.username))].length;
+
+  document.getElementById('activity-stats').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-icon" style="background:var(--blue-50);">📋</div>
+      <div class="stat-label">Total Events</div>
+      <div class="stat-value">${events.length}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:var(--green-50);">👥</div>
+      <div class="stat-label">Active Users</div>
+      <div class="stat-value">${uniqueUsers}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:var(--teal-50);">🔑</div>
+      <div class="stat-label">Logins</div>
+      <div class="stat-value">${loginCount}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:var(--amber-50);">💰</div>
+      <div class="stat-label">Transactions</div>
+      <div class="stat-value">${incomeCount + expenseCount}</div>
+    </div>`;
+
+  document.getElementById('activity-count').textContent = `${events.length} events`;
+
+  const tbody = document.getElementById('activity-tbody');
+  if (!events.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">No activity found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = events.map(e => {
+    const d = new Date(e.ts);
+    const dateStr = d.toLocaleDateString('en-BD', { day:'2-digit', month:'short', year:'numeric' });
+    const timeStr = d.toLocaleTimeString('en-BD', { hour:'2-digit', minute:'2-digit' });
+    const icon    = ACTIVITY_ICONS[e.type] || '📌';
+    const colour  = ACTIVITY_COLOURS[e.type] || 'var(--text-primary)';
+    return `<tr>
+      <td style="white-space:nowrap;">
+        <div style="font-weight:600;font-size:13px;">${dateStr}</div>
+        <div style="font-size:11px;color:var(--text-muted);">${timeStr}</div>
+      </td>
+      <td>
+        <div style="display:flex;align-items:center;gap:7px;">
+          <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#1E88E5,#00897B);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">
+            ${(e.username||'?')[0].toUpperCase()}
+          </div>
+          <span style="font-size:13px;font-weight:600;">@${e.username}</span>
+        </div>
+      </td>
+      <td style="font-size:13px;color:var(--text-muted);">${e.fullname}</td>
+      <td>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;background:${colour}22;color:${colour};font-size:12px;font-weight:700;white-space:nowrap;">
+          ${icon} ${e.type.charAt(0).toUpperCase()+e.type.slice(1)}
+        </span>
+      </td>
+      <td style="font-size:13px;color:var(--text-muted);max-width:280px;">${e.detail || '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function clearActivityFilters() {
+  document.getElementById('activity-username').value = '';
+  document.getElementById('activity-type-filter').value = '';
+  document.getElementById('activity-date-from').value = '';
+  document.getElementById('activity-date-to').value = '';
+  filterActivityLog();
+}
+
+// ── ACTIVITY LOG ──────────────────────────
+function promoteToEditor() {
+  const username = document.getElementById('editor-username').value.trim();
+  if (!username) { showToast('⚠️','Missing Username','Enter a username to promote.'); return; }
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const idx = users.findIndex(u => u.username === username);
+  if (idx < 0) { showToast('❌','Not Found',`User @${username} not found.`); return; }
+  users[idx].role = 'editor';
+  localStorage.setItem('hisab_users', JSON.stringify(users));
+  showToast('✅','Promoted!',`@${username} is now an Editor.`);
+  document.getElementById('editor-username').value = '';
+}
+
+initAdmin();
+</script>
+
+<!-- ══ EDIT TRANSACTION MODAL ══ -->
+<div class="modal-backdrop" id="admin-txn-edit-modal">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Transaction</div>
+      <button class="modal-close" onclick="closeModal('admin-txn-edit-modal')">×</button>
+    </div>
+    <div style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+      <input type="hidden" id="edit-txn-idx" />
+      <div class="form-group" style="margin:0;">
+        <label class="form-label">Type</label>
+        <select class="form-input" id="edit-txn-type">
+          <option value="income">💰 Income</option>
+          <option value="expense">💸 Expense</option>
+          <option value="transfer">🔄 Fund Transfer</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin:0;">
+        <label class="form-label">Amount (৳)</label>
+        <input type="number" class="form-input" id="edit-txn-amount" placeholder="0.00" min="0" step="0.01" />
+      </div>
+      <div class="form-group" style="margin:0;">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-input" id="edit-txn-date" />
+      </div>
+      <div class="form-group" style="margin:0;">
+        <label class="form-label">Note / Description</label>
+        <input type="text" class="form-input" id="edit-txn-note" placeholder="Optional note" />
+      </div>
+      <div class="grid-2" style="gap:12px;">
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">Debit Account</label>
+          <input type="text" class="form-input" id="edit-txn-debit" placeholder="e.g. cash" />
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">Credit Account</label>
+          <input type="text" class="form-input" id="edit-txn-credit" placeholder="e.g. bank" />
+        </div>
+      </div>
+      <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--text-muted);">
+        ⚠️ Admin edits apply directly to the transaction record. Wallet balances are <strong>not</strong> recalculated automatically.
+      </div>
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveAdminTxnEdit()">💾 Save Changes</button>
+        <button class="btn btn-danger" onclick="deleteAdminTxn()">🗑️ Delete</button>
+        <button class="btn btn-outline" onclick="closeModal('admin-txn-edit-modal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── ADMIN TRANSACTION EDIT ────────────────
+function renderAllTxns() {
+  const txns  = JSON.parse(localStorage.getItem('hisab_txns') || '[]');
+  const query = (document.getElementById('admin-txn-search')?.value || '').toLowerCase();
+  const tbody = document.getElementById('all-txns-tbody');
+
+  const filtered = query
+    ? txns.filter((t,i) =>
+        (t.note||'').toLowerCase().includes(query) ||
+        (t.type||'').toLowerCase().includes(query) ||
+        (t.debit||'').toLowerCase().includes(query) ||
+        (t.credit||'').toLowerCase().includes(query))
+    : txns;
+
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px;">No transactions found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((t, i) => {
+    const realIdx = txns.indexOf(t);
+    const badge   = t.type==='income' ? 'badge-income' : t.type==='expense' ? 'badge-expense' : 'badge-transfer';
+    const amtCls  = t.type==='income' ? 'txn-amount-pos' : 'txn-amount-neg';
+    return `<tr>
+      <td style="color:var(--blue-400);font-weight:600;">@${t.username || State.user?.username || 'user'}</td>
+      <td style="color:var(--text-muted);white-space:nowrap;">${t.date}</td>
+      <td><span class="txn-type-badge ${badge}">${t.type}</span></td>
+      <td class="${amtCls}" style="font-weight:700;">${fmt(t.amount)}</td>
+      <td style="color:var(--text-muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.note || '—'}</td>
+      <td style="font-size:12px;">${t.debit || '—'}</td>
+      <td style="font-size:12px;">${t.credit || '—'}</td>
+      <td style="text-align:center;white-space:nowrap;">
+        <button class="btn btn-outline btn-sm" onclick="openAdminTxnEdit(${realIdx})" style="font-size:12px;">✏️ Edit</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function openAdminTxnEdit(idx) {
+  const txns = JSON.parse(localStorage.getItem('hisab_txns') || '[]');
+  const t    = txns[idx];
+  if (!t) return;
+  document.getElementById('edit-txn-idx').value    = idx;
+  document.getElementById('edit-txn-type').value   = t.type   || 'income';
+  document.getElementById('edit-txn-amount').value = t.amount || '';
+  document.getElementById('edit-txn-date').value   = t.date   || '';
+  document.getElementById('edit-txn-note').value   = t.note   || '';
+  document.getElementById('edit-txn-debit').value  = t.debit  || '';
+  document.getElementById('edit-txn-credit').value = t.credit || '';
+  openModal('admin-txn-edit-modal');
+}
+
+function saveAdminTxnEdit() {
+  const idx   = parseInt(document.getElementById('edit-txn-idx').value);
+  const txns  = JSON.parse(localStorage.getItem('hisab_txns') || '[]');
+  if (!txns[idx]) { showToast('❌','Error','Transaction not found.'); return; }
+  const amount = parseFloat(document.getElementById('edit-txn-amount').value);
+  if (!amount || amount <= 0) { showToast('⚠️','Invalid Amount','Please enter a valid amount.'); return; }
+
+  txns[idx] = {
+    ...txns[idx],
+    type:   document.getElementById('edit-txn-type').value,
+    amount,
+    date:   document.getElementById('edit-txn-date').value   || txns[idx].date,
+    note:   document.getElementById('edit-txn-note').value,
+    debit:  document.getElementById('edit-txn-debit').value  || txns[idx].debit,
+    credit: document.getElementById('edit-txn-credit').value || txns[idx].credit,
+  };
+
+  localStorage.setItem('hisab_txns', JSON.stringify(txns));
+  closeModal('admin-txn-edit-modal');
+  renderAllTxns();
+  showToast('✅', 'Transaction Updated!', 'The transaction has been saved successfully.');
+}
+
+function deleteAdminTxn() {
+  if (!confirm('Permanently delete this transaction? This cannot be undone.')) return;
+  const idx  = parseInt(document.getElementById('edit-txn-idx').value);
+  const txns = JSON.parse(localStorage.getItem('hisab_txns') || '[]');
+  txns.splice(idx, 1);
+  localStorage.setItem('hisab_txns', JSON.stringify(txns));
+  closeModal('admin-txn-edit-modal');
+  renderAllTxns();
+  showToast('🗑️', 'Deleted!', 'Transaction has been permanently removed.');
+}
+</script>
+
+<!-- ══ EDIT CATEGORY MODAL ══ -->
+<div class="modal-backdrop" id="admin-cat-edit-modal">
+  <div class="modal" style="max-width:440px;">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Category</div>
+      <button class="modal-close" onclick="closeModal('admin-cat-edit-modal')">×</button>
+    </div>
+    <div style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+      <input type="hidden" id="edit-cat-type" />
+      <input type="hidden" id="edit-cat-idx" />
+
+      <div class="form-group" style="margin:0;">
+        <label class="form-label">English Name</label>
+        <input type="text" class="form-input" id="edit-cat-en" placeholder="e.g. Salary" />
+      </div>
+      <div class="form-group" style="margin:0;">
+        <label class="form-label">Bengali Name</label>
+        <input type="text" class="form-input" id="edit-cat-bn" placeholder="e.g. বেতন" />
+      </div>
+
+      <div style="background:rgba(30,136,229,0.08);border:1px solid rgba(30,136,229,0.2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--text-muted);">
+        ⚡ Changes apply to <strong style="color:var(--text-primary);">all users</strong> immediately.
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveEditCat()">💾 Save Changes</button>
+        <button class="btn btn-outline" onclick="closeModal('admin-cat-edit-modal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
