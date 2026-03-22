@@ -359,7 +359,7 @@ function doRegister() {
 
   const result = registerUser({ name, username, email, phone, password: pass });
   if (result.error) {
-    errEl.textContent = '⚠️ ' + result.error    errEl.classList.add('show'); return;
+    errEl.textContent = '⚠️ ' + result.error;  errEl.classList.add('show'); return;
   }
   // Success — redirect to dashboard
   window.location.href = 'dashboard.html';
