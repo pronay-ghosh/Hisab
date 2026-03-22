@@ -1142,9 +1142,10 @@ async function triggerBackup() {
     const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // প্রতিটা category আলাদা document এ save করো
+    // প্রতিটা category আলাদা document এ save করো — flat structure
     for (const [category, data] of Object.entries(categories)) {
-      await setDoc(doc(db, 'backups', dateStr, category, timeStr), {
+      const docId = `${dateStr}_${category}`;
+      await setDoc(doc(db, 'backups', docId), {
         date: dateStr,
         time: timeStr,
         category,
@@ -1155,7 +1156,7 @@ async function triggerBackup() {
     }
 
     // Summary document
-    await setDoc(doc(db, 'backups', dateStr, 'summary', timeStr), {
+    await setDoc(doc(db, 'backups', `${dateStr}_summary`), {
       date: dateStr,
       time: timeStr,
       counts: Object.fromEntries(Object.entries(categories).map(([k,v]) => [k, v.length])),
@@ -1169,64 +1170,17 @@ async function triggerBackup() {
     console.error('Firestore backup error:', e);
   }
 
-  // ── ২. GITHUB BACKUP (Date/Category wise folder) ──
-  try {
-    const GITHUB_TOKEN = 'BACKUP_GITHUB_TOKEN'; // GitHub Secret থেকে নেওয়া হবে
-    const REPO = 'pronay-ghosh/Hisab';
-    const BRANCH = 'main';
+  // ── ২. GITHUB BACKUP — শুধু GitHub Actions থেকে হবে (রাত ১২টায় auto) ──
+  // Manual backup এ GitHub token expose করা নিরাপদ না
+  // GitHub Actions daily-backup.yml থেকে automatically হবে
+  githubOk = true; // Actions থেকে handle হবে
 
-    for (const [category, data] of Object.entries(categories)) {
-      const fileName = `Hisab_${category}_${dateStr}_${timeStr}.json`;
-      const filePath = `backups/${dateStr}/${fileName}`;
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify({
-        date: dateStr,
-        time: timeStr,
-        category,
-        count: data.length,
-        data
-      }, null, 2))));
-
-      // File আছে কিনা check করো (SHA লাগবে update করতে)
-      let sha = null;
-      try {
-        const checkRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${filePath}`, {
-          headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
-        });
-        if (checkRes.ok) { const d = await checkRes.json(); sha = d.sha; }
-      } catch(e) {}
-
-      // File create/update করো
-      const body = { message: `🔒 Auto Backup: ${category} - ${dateStr}`, content, branch: BRANCH };
-      if (sha) body.sha = sha;
-
-      await fetch(`https://api.github.com/repos/${REPO}/contents/${filePath}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${GITHUB_TOKEN}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-    }
-
-    githubOk = true;
-    console.log('✅ GitHub backup done:', dateStr);
-  } catch(e) {
-    console.error('GitHub backup error:', e);
-  }
-
-  // ── Result দেখাও ──
   btns.forEach(b => { b.textContent = '💾 Run Backup Now'; b.disabled = false; });
 
-  if (firestoreOk && githubOk) {
-    showToast('✅', 'Backup সম্পন্ন!', `Firestore ও GitHub উভয়তেই ${dateStr} তারিখে category wise backup সেভ হয়েছে।`);
-  } else if (firestoreOk) {
-    showToast('⚠️', 'আংশিক Backup!', `Firestore এ backup হয়েছে। GitHub এ সমস্যা হয়েছে।`);
-  } else if (githubOk) {
-    showToast('⚠️', 'আংশিক Backup!', `GitHub এ backup হয়েছে। Firestore এ সমস্যা হয়েছে।`);
+  if (firestoreOk) {
+    showToast('✅', 'Backup সম্পন্ন!', `Firestore এ ${dateStr} তারিখে category wise backup সেভ হয়েছে। GitHub এ রাত ১২টায় auto backup হবে।`);
   } else {
-    showToast('❌', 'Backup Error!', 'Backup করতে সমস্যা হয়েছে। Console দেখুন।');
+    showToast('❌', 'Backup Error!', 'Firestore backup এ সমস্যা হয়েছে। Console দেখুন।');
   }
 }
 
