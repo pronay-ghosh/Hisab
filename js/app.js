@@ -4,6 +4,9 @@
 
 'use strict';
 
+// ── FLASH PREVENTION — add class instantly before any render ──
+document.documentElement.classList.add('no-transition');
+
 // ══════════════════════════════════════════
 //  ✦ LOGO CONFIGURATION — CHANGE HERE ONCE
 //  This updates the logo across every page automatically.
@@ -1120,8 +1123,18 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch(e) { /* silent fail */ }
   })();
 
+  // Apply theme & language first
   applyTheme(State.theme);
   setLanguage(State.lang);
+
+  // ── Remove no-transition after theme is applied ──
+  // Small delay ensures the browser has painted with correct theme
+  // before enabling transitions — prevents hover/theme flash on load
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove('no-transition');
+    });
+  });
   updateOnlineStatus();
   checkDailyReminder();
   updateCreditDisplay();
