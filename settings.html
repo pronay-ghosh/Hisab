@@ -116,7 +116,7 @@
             <div class="form-group">
               <label class="form-label">Email Address</label>
               <input type="email" class="form-input" id="set-email" placeholder="example@email.com" oninput="validateEmailField('set-email','set-email-err')" />
-              <div class="form-error" id="set-email-err">Please enter a valid email address (e.g. name@domain.com)</div>
+              <div class="form-error" id="set-email-err">Please enter a valid email address (e.g. <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="90fef1fdf5d0f4fffdf1f9febef3fffd">[email&#160;protected]</a>)</div>
             </div>
             <div class="form-group">
               <label class="form-label">Mobile Number</label>
@@ -401,7 +401,7 @@
   </div>
 </div>
 
-<script src="js/app.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/app.js"></script>
 <script>
 
 function initSettings() {
@@ -670,6 +670,28 @@ function initBackupPanel() {
   renderBackupHistory();
   // Update last backup display
   updateLastBackupDisplay();
+  // Check if auto-backup should run today
+  checkAutoBackupDue();
+}
+
+function checkAutoBackupDue() {
+  const state = getGDriveState();
+  if (!state || !state.connected) return;
+  const prefs = JSON.parse(localStorage.getItem('hisab_backup_prefs') || '{}');
+  if (prefs.autoBackup === false) return;
+
+  const backupTime = prefs.time || '06:00';
+  const [bh, bm]   = backupTime.split(':').map(Number);
+  const now         = new Date();
+  const lastBackup  = parseInt(localStorage.getItem('hisab_last_backup') || '0');
+  const lastDate    = new Date(lastBackup).toDateString();
+  const todayDue    = new Date(); todayDue.setHours(bh, bm, 0, 0);
+
+  // Run if time has passed today AND not yet backed up today
+  if (now >= todayDue && lastDate !== now.toDateString()) {
+    console.log('🤖 Auto backup triggered at', now.toLocaleTimeString());
+    setTimeout(() => runBackup(), 2000); // slight delay after page load
+  }
 }
 
 function showConnectedUI(state) {
@@ -824,6 +846,112 @@ function disconnectGoogleDrive() {
   showToast('🔌', 'Disconnected', 'Google Drive has been disconnected.');
 }
 
+// ══════════════════════════════════════════
+//  GOOGLE DRIVE BACKUP — Folder Structure:
+//
+//  Hisab_Backup/
+//  └── Users/                     ← common folder for all users
+//      ├── alice/                  ← per-user folder
+//      │   ├── 2026-03-22_alice_001.json
+//      │   └── 2026-03-22_alice_002.json
+//      └── bob/
+//          └── 2026-03-22_bob_001.json
+// ══════════════════════════════════════════
+
+// ── Drive API helper: find or create a folder ──
+async function gdriveGetOrCreateFolder(token, name, parentId) {
+  // Search for existing
+  const q = `name='${name}' and mimeType='application/vnd.google-apps.folder' and trashed=false` +
+            (parentId ? ` and '${parentId}' in parents` : '');
+  const searchRes = await fetch(
+    `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=files(id,name)`,
+    { headers: { Authorization: 'Bearer ' + token } }
+  );
+  const searchData = await searchRes.json();
+  if (searchData.files && searchData.files.length > 0) return searchData.files[0].id;
+
+  // Create new folder
+  const meta = { name, mimeType: 'application/vnd.google-apps.folder' };
+  if (parentId) meta.parents = [parentId];
+  const createRes = await fetch('https://www.googleapis.com/drive/v3/files', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify(meta)
+  });
+  const created = await createRes.json();
+  return created.id;
+}
+
+// ── Drive API helper: get next serial number for a user ──
+async function gdriveGetNextSerial(token, userFolderId, dateStr, username) {
+  const q = `name contains '${dateStr}_${username}_' and '${userFolderId}' in parents and trashed=false`;
+  const res = await fetch(
+    `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=files(name)&orderBy=name desc`,
+    { headers: { Authorization: 'Bearer ' + token } }
+  );
+  const data = await res.json();
+  if (!data.files || !data.files.length) return '001';
+  // Extract last serial from filename like 2026-03-22_alice_003.json
+  const lastName = data.files[0].name;
+  const match    = lastName.match(/_(\d{3})\.json$/);
+  const lastNum  = match ? parseInt(match[1]) : 0;
+  return String(lastNum + 1).padStart(3, '0');
+}
+
+// ── Upload JSON file to a Drive folder ──
+async function gdriveUploadFile(token, folderId, fileName, jsonData) {
+  const content  = JSON.stringify(jsonData, null, 2);
+  const boundary = 'hisab_boundary_' + Date.now();
+  const body = [
+    `--${boundary}`,
+    'Content-Type: application/json; charset=UTF-8',
+    '',
+    JSON.stringify({ name: fileName, parents: [folderId] }),
+    `--${boundary}`,
+    'Content-Type: application/json',
+    '',
+    content,
+    `--${boundary}--`
+  ].join('
+');
+
+  const res = await fetch(
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,size',
+    {
+      method:  'POST',
+      headers: {
+        Authorization:  'Bearer ' + token,
+        'Content-Type': `multipart/related; boundary=${boundary}`
+      },
+      body
+    }
+  );
+  return await res.json();
+}
+
+// ── Collect this user's full data ──
+function collectUserData(username) {
+  return {
+    profile:      JSON.parse(localStorage.getItem('hisab_users') || '[]').find(u => u.username === username) || {},
+    transactions: JSON.parse(localStorage.getItem('hisab_txns_'         + username) || '[]'),
+    wallets:      JSON.parse(localStorage.getItem('hisab_wallets_'      + username) || '[]'),
+    budgets:      JSON.parse(localStorage.getItem('hisab_budgets_'      + username) || '{}'),
+    income_cats:  JSON.parse(localStorage.getItem('hisab_income_cats_'  + username) || '[]'),
+    expense_cats: JSON.parse(localStorage.getItem('hisab_expense_cats_' + username) || '[]'),
+    credits:      parseInt(localStorage.getItem('hisab_credits_'        + username) || '0'),
+  };
+}
+
+// ── Update progress bar ──
+function setProgress(pct, msg) {
+  const bar   = document.getElementById('backup-progress-bar');
+  const label = document.getElementById('backup-progress-label');
+  const pctEl = document.getElementById('backup-progress-pct');
+  if (bar)   bar.style.width   = pct + '%';
+  if (label) label.textContent = msg;
+  if (pctEl) pctEl.textContent = pct + '%';
+}
+
 function manualBackup() {
   const state = getGDriveState();
   if (!state || !state.connected) {
@@ -832,49 +960,100 @@ function manualBackup() {
   runBackup();
 }
 
-function runBackup() {
-  const wrap  = document.getElementById('backup-progress-wrap');
-  const bar   = document.getElementById('backup-progress-bar');
-  const label = document.getElementById('backup-progress-label');
-  const pct   = document.getElementById('backup-progress-pct');
-  wrap.style.display = 'block';
+async function runBackup() {
+  const state = getGDriveState();
+  if (!state || !state.token) {
+    showToast('⚠️', 'Not Connected', 'Please connect Google Drive first.'); return;
+  }
 
-  const steps = [
-    { p: 15, msg: 'Collecting transactions...' },
-    { p: 35, msg: 'Packing wallet data...' },
-    { p: 55, msg: 'Compressing settings...' },
-    { p: 75, msg: 'Uploading to Google Drive...' },
-    { p: 90, msg: 'Verifying backup...' },
-    { p: 100, msg: 'Backup complete!' },
-  ];
+  const wrap = document.getElementById('backup-progress-wrap');
+  if (wrap) wrap.style.display = 'block';
+  setProgress(5, 'Starting backup…');
 
-  let i = 0;
-  const interval = setInterval(() => {
-    if (i >= steps.length) {
-      clearInterval(interval);
-      // Save backup record
-      const backupRecord = {
-        date: new Date().toLocaleString(),
-        timestamp: Date.now(),
-        size: (JSON.stringify(State).length / 1024).toFixed(1) + ' KB',
-        status: 'success',
-        fileName: `Hisab_Backup_${new Date().toISOString().split('T')[0]}.json`,
-      };
-      const history = JSON.parse(localStorage.getItem('hisab_backup_history') || '[]');
-      history.unshift(backupRecord);
-      localStorage.setItem('hisab_backup_history', JSON.stringify(history.slice(0, 20)));
-      localStorage.setItem('hisab_last_backup', Date.now());
-      setTimeout(() => { wrap.style.display = 'none'; bar.style.width = '0%'; }, 1500);
-      updateLastBackupDisplay();
-      renderBackupHistory();
-      showToast('✅', 'Backup Complete!', `Saved to Google Drive as ${backupRecord.fileName}`);
-      return;
+  const token    = state.token;
+  const now      = new Date();
+  const dateStr  = now.toISOString().split('T')[0];            // 2026-03-22
+  const username = State.user?.username || 'unknown';
+
+  try {
+    // ── Step 1: Get/create root folder: Hisab_Backup ──
+    setProgress(15, 'Finding Hisab_Backup folder…');
+    const rootId = await gdriveGetOrCreateFolder(token, 'Hisab_Backup', null);
+
+    // ── Step 2: Get/create Users/ folder ──
+    setProgress(30, 'Finding Users/ folder…');
+    const usersId = await gdriveGetOrCreateFolder(token, 'Users', rootId);
+
+    // ── Step 3: Get/create user's own folder ──
+    setProgress(45, `Finding ${username}/ folder…`);
+    const userFolderId = await gdriveGetOrCreateFolder(token, username, usersId);
+
+    // ── Step 4: Build serial filename ──
+    setProgress(60, 'Checking existing backups…');
+    const serial   = await gdriveGetNextSerial(token, userFolderId, dateStr, username);
+    const fileName = `${dateStr}_${username}_${serial}.json`;
+
+    // ── Step 5: Collect data ──
+    setProgress(72, 'Collecting your data…');
+    const data = {
+      backupMeta: {
+        createdAt: now.toISOString(),
+        date:      dateStr,
+        serial,
+        username,
+        fileName,
+        version:   '1.0',
+      },
+      ...collectUserData(username),
+    };
+
+    // ── Step 6: Upload ──
+    setProgress(85, `Uploading ${fileName}…`);
+    const uploaded = await gdriveUploadFile(token, userFolderId, fileName, data);
+
+    if (!uploaded.id) throw new Error('Upload failed: ' + JSON.stringify(uploaded));
+
+    // ── Step 7: Save record ──
+    setProgress(95, 'Saving backup record…');
+    const record = {
+      date:      now.toLocaleString(),
+      timestamp: Date.now(),
+      dateStr,
+      serial,
+      fileName,
+      fileId:    uploaded.id,
+      size:      ((JSON.stringify(data).length) / 1024).toFixed(1) + ' KB',
+      status:    'success',
+      path:      `Hisab_Backup/Users/${username}/${fileName}`,
+    };
+    const history = JSON.parse(localStorage.getItem('hisab_backup_history') || '[]');
+    history.unshift(record);
+    localStorage.setItem('hisab_backup_history', JSON.stringify(history.slice(0, 30)));
+    localStorage.setItem('hisab_last_backup', Date.now());
+
+    setProgress(100, '✅ Backup complete!');
+    setTimeout(() => {
+      if (wrap) { wrap.style.display = 'none'; setProgress(0, ''); }
+    }, 1800);
+
+    updateLastBackupDisplay();
+    renderBackupHistory();
+    showToast('✅', 'Backup Complete!',
+      `Saved: Hisab_Backup/Users/${username}/${fileName}`);
+
+  } catch(e) {
+    console.error('Backup error:', e);
+    setProgress(0, '');
+    if (wrap) wrap.style.display = 'none';
+
+    // Token expired? Try to reconnect
+    if (e.message && e.message.includes('401')) {
+      showToast('🔑', 'Session Expired', 'Please reconnect Google Drive and try again.');
+      disconnectGoogleDrive();
+    } else {
+      showToast('❌', 'Backup Failed', e.message || 'Check your internet connection.');
     }
-    bar.style.width   = steps[i].p + '%';
-    pct.textContent   = steps[i].p + '%';
-    label.textContent = steps[i].msg;
-    i++;
-  }, 500);
+  }
 }
 
 function restoreFromDrive() {
@@ -956,21 +1135,11 @@ function renderBackupHistory() {
   const noEl  = document.getElementById('no-backup-history');
   if (!list) return;
   const history = JSON.parse(localStorage.getItem('hisab_backup_history') || '[]');
-  if (!history.length) { list.innerHTML = ''; noEl.style.display = 'block'; return; }
-  noEl.style.display = 'none';
+  if (!history.length) { list.innerHTML = ''; if (noEl) noEl.style.display = 'block'; return; }
+  if (noEl) noEl.style.display = 'none';
   list.innerHTML = history.map(b => `
     <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);">
       <div style="width:36px;height:36px;border-radius:50%;background:var(--green-50);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">☁️</div>
       <div style="flex:1;">
         <div style="font-size:13px;font-weight:600;color:var(--text-primary);">${b.fileName}</div>
-        <div style="font-size:12px;color:var(--text-muted);">${b.date} · ${b.size}</div>
-      </div>
-      <span style="font-size:12px;font-weight:700;color:var(--teal-400);">✓ Saved</span>
-    </div>`).join('');
-}
-
-initSettings();
-initBackupPanel();
-</script>
-</body>
-</html>
+        <div style="font-size:12px;color:var(--text-mut
