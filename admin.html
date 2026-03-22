@@ -429,21 +429,7 @@
           <button class="btn btn-primary" style="background:linear-gradient(135deg,#f59e0b,#ef4444);" onclick="forceRefreshAllUsers()">🔄 Force Refresh All Users</button>
         </div>
 
-        <!-- Migrate Data Card -->
-        <div class="card" style="margin-top:20px;">
-          <div class="card-header"><div class="card-title">🔁 Data Migration</div></div>
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">localStorage → Firestore</div>
-              <div class="settings-row-desc">আপনার browser এর সব user data Firestore এ copy করুন — একবারই করতে হবে</div>
-            </div>
-          </div>
-          <div style="background:rgba(249,168,37,0.08);border:1px solid rgba(249,168,37,0.3);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text-muted);margin:12px 0;">
-            ⚠️ এটা শুধু <strong style="color:var(--text-primary);">একবার</strong> করুন। এরপর থেকে নতুন user automatically Firestore এ save হবে।
-          </div>
-          <div id="migrate-status" style="font-size:13px;color:var(--text-muted);margin-bottom:12px;"></div>
-          <button class="btn btn-primary" style="background:linear-gradient(135deg,#8b5cf6,#06b6d4);" onclick="migrateLocalToFirestore()">🔁 Migrate Data to Firestore</button>
-        </div>
+        <!-- Auto Clear Cache Card -->
         <div class="card" style="margin-top:20px;">
           <div class="card-header"><div class="card-title">🧹 Auto Clear Cache</div></div>
           <div class="settings-row">
@@ -451,7 +437,7 @@
               <div class="settings-row-label">Auto Clear সক্রিয়</div>
               <div class="settings-row-desc">প্রতিদিন নির্দিষ্ট সময়ে সব user এর cache automatically clear হবে</div>
             </div>
-            <button class="toggle" id="auto-clear-toggle" onclick="toggleAutoClear()" style="background:var(--green-500);"></button>
+            <button class="toggle" id="auto-clear-toggle" onclick="toggleAutoClear()" style="min-width:44px;height:24px;border-radius:12px;border:none;cursor:pointer;background:#ccc;position:relative;transition:background 0.3s;"></button>
           </div>
           <div class="settings-row">
             <div>
@@ -464,20 +450,23 @@
           <button class="btn btn-outline" style="border-color:#ef4444;color:#ef4444;" onclick="manualClearCache()">🗑️ এখনই Cache Clear করুন</button>
         </div>
 
-        <!-- Migrate Data Card -->
+        <!-- Data Migration Card -->
         <div class="card" style="margin-top:20px;">
-          <div class="card-header"><div class="card-title">🚀 Data Migration</div></div>
+          <div class="card-header"><div class="card-title">🔁 Data Migration</div></div>
           <div class="settings-row">
             <div>
               <div class="settings-row-label">localStorage → Firestore</div>
-              <div class="settings-row-desc">আপনার browser এর সব user data Firestore এ copy করুন — একবারই করতে হবে</div>
+              <div class="settings-row-desc">সব user data Firestore এ migrate করুন — যেকোনো সময় চাপা যাবে</div>
             </div>
           </div>
-          <div style="background:rgba(249,168,37,0.1);border:1px solid rgba(249,168,37,0.3);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text-muted);margin:12px 0;">
-            ⚠️ এটা শুধু একবার করুন। সব user এর data Firestore এ চলে যাবে।
+          <div style="background:rgba(249,168,37,0.08);border:1px solid rgba(249,168,37,0.3);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text-muted);margin:12px 0;">
+            ℹ️ প্রতিদিন automatically migrate হয়। চাইলে এখনই manually করতে পারবেন — যতবার চাইবেন।
           </div>
-          <div id="migrate-status" style="font-size:13px;margin-bottom:12px;"></div>
-          <button class="btn btn-primary" style="background:linear-gradient(135deg,#10B981,#06B6D4);" onclick="migrateToFirestore()">🚀 এখনই Migrate করুন</button>
+          <div id="migrate-status" style="font-size:13px;color:var(--text-muted);margin-bottom:12px;"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-primary" style="background:linear-gradient(135deg,#8b5cf6,#06b6d4);" onclick="runMigration()">🔁 এখনই Migrate করুন</button>
+            <button class="btn btn-outline" onclick="checkMigrationStatus()">📊 Migration Status দেখুন</button>
+          </div>
         </div>
 
     </div>
@@ -849,10 +838,131 @@ function notifyInactive() {
 }
 
 // ── DATA MIGRATION ───────────────────────────────────────────────
-async function migrateLocalToFirestore() {
-  const btn = document.querySelector('[onclick="migrateLocalToFirestore()"]');
+async function runMigration() {
+  const btn = document.querySelector('[onclick="runMigration()"]');
   const statusEl = document.getElementById('migrate-status');
   if (btn) { btn.textContent = '⏳ Migrating...'; btn.disabled = true; }
+
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, setDoc, collection, writeBatch, getCountFromServer } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const firebaseConfig = {
+      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+      authDomain: "hisab-4-u.firebaseapp.com",
+      projectId: "hisab-4-u",
+      storageBucket: "hisab-4-u.firebasestorage.app",
+      messagingSenderId: "957694095044",
+      appId: "1:957694095044:web:1649995ac9734d4d062391"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+    const transactions = JSON.parse(localStorage.getItem('hisab_transactions') || '[]');
+    const wallets = JSON.parse(localStorage.getItem('hisab_wallets') || '[]');
+    const budgets = JSON.parse(localStorage.getItem('hisab_budgets') || '[]');
+
+    let userCount = 0, txCount = 0;
+
+    // Users migrate
+    if (users.length > 0) {
+      const batch = writeBatch(db);
+      users.forEach(u => {
+        if (u.email || u.username) {
+          const id = (u.email || u.username).replace(/[^a-zA-Z0-9]/g, '_');
+          const userData = { ...u };
+          delete userData.password;
+          batch.set(doc(db, 'users', id), { ...userData, migratedAt: new Date().toISOString() }, { merge: true });
+          userCount++;
+        }
+      });
+      await batch.commit();
+    }
+
+    // Transactions migrate
+    if (transactions.length > 0) {
+      const batch2 = writeBatch(db);
+      transactions.forEach(t => {
+        if (t.id) {
+          batch2.set(doc(db, 'transactions', String(t.id)), { ...t, migratedAt: new Date().toISOString() }, { merge: true });
+          txCount++;
+        }
+      });
+      await batch2.commit();
+    }
+
+    // Wallets migrate
+    if (wallets.length > 0) {
+      const batch3 = writeBatch(db);
+      wallets.forEach((w, i) => {
+        batch3.set(doc(db, 'wallets', String(w.id || i)), { ...w, migratedAt: new Date().toISOString() }, { merge: true });
+      });
+      await batch3.commit();
+    }
+
+    // Migration log সেভ
+    await setDoc(doc(db, 'app_config', 'migration'), {
+      lastRun: new Date().toISOString(),
+      userCount,
+      txCount,
+      walletsCount: wallets.length,
+      budgetsCount: budgets.length
+    }, { merge: true });
+
+    localStorage.setItem('hisab_last_migration', new Date().toDateString());
+
+    if (statusEl) {
+      statusEl.innerHTML = `✅ <strong>${userCount} users</strong>, <strong>${txCount} transactions</strong>, <strong>${wallets.length} wallets</strong> migrate সম্পন্ন! <span style="color:var(--text-muted);font-size:11px;">${new Date().toLocaleString('bn-BD')}</span>`;
+      statusEl.style.color = 'var(--green-600)';
+    }
+    showToast('✅', 'Migration সম্পন্ন!', `${userCount} users, ${txCount} transactions Firestore এ save হয়েছে।`);
+
+  } catch(e) {
+    console.error(e);
+    if (statusEl) { statusEl.innerHTML = `❌ Error: ${e.message}`; statusEl.style.color = 'var(--red-400)'; }
+    showToast('❌', 'Migration Error!', e.message);
+  } finally {
+    if (btn) { btn.textContent = '🔁 এখনই Migrate করুন'; btn.disabled = false; }
+  }
+}
+
+async function checkMigrationStatus() {
+  const statusEl = document.getElementById('migrate-status');
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, getDoc, collection, getCountFromServer } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const firebaseConfig = {
+      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+      authDomain: "hisab-4-u.firebaseapp.com",
+      projectId: "hisab-4-u",
+      storageBucket: "hisab-4-u.firebasestorage.app",
+      messagingSenderId: "957694095044",
+      appId: "1:957694095044:web:1649995ac9734d4d062391"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const [usersSnap, txSnap] = await Promise.all([
+      getCountFromServer(collection(db, 'users')),
+      getCountFromServer(collection(db, 'transactions'))
+    ]);
+
+    const logSnap = await getDoc(doc(db, 'app_config', 'migration'));
+    const lastRun = logSnap.exists() ? logSnap.data().lastRun : null;
+
+    if (statusEl) {
+      statusEl.innerHTML = `📊 Firestore এ: <strong>${usersSnap.data().count} users</strong>, <strong>${txSnap.data().count} transactions</strong>${lastRun ? ` | শেষ migration: <strong>${new Date(lastRun).toLocaleString('bn-BD')}</strong>` : ''}`;
+      statusEl.style.color = 'var(--blue-400)';
+    }
+  } catch(e) {
+    if (statusEl) { statusEl.innerHTML = `❌ Status check করতে সমস্যা: ${e.message}`; }
+  }
+}
+
+async function migrateLocalToFirestore() { await runMigration(); }
+async function migrateToFirestore() { await runMigration(); }
+
+// ── AUTO CLEAR CACHE ──────────────────────────────────────────────
 
   try {
     const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
@@ -904,6 +1014,7 @@ async function migrateLocalToFirestore() {
 function toggleAutoClear() {
   const toggle = document.getElementById('auto-clear-toggle');
   const isOn = toggle.classList.toggle('on');
+  toggle.style.background = isOn ? '#10B981' : '#ccc';
   localStorage.setItem('hisab_auto_clear_enabled', isOn ? '1' : '0');
   showToast(isOn ? '✅' : '⏸️', isOn ? 'Auto Clear চালু!' : 'Auto Clear বন্ধ!', isOn ? 'প্রতিদিন নির্দিষ্ট সময়ে cache clear হবে।' : 'Auto Clear নিষ্ক্রিয় করা হয়েছে।');
   updateAutoClearStatus();
@@ -923,7 +1034,10 @@ function updateAutoClearStatus() {
   const toggle = document.getElementById('auto-clear-toggle');
   const statusEl = document.getElementById('auto-clear-status');
   const timeInput = document.getElementById('auto-clear-time');
-  if (toggle) { toggle.className = 'toggle' + (enabled ? ' on' : ''); }
+  if (toggle) {
+    toggle.className = 'toggle' + (enabled ? ' on' : '');
+    toggle.style.background = enabled ? '#10B981' : '#ccc';
+  }
   if (timeInput) { timeInput.value = time; }
   if (statusEl) {
     statusEl.innerHTML = lastClear
