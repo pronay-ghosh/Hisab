@@ -781,16 +781,28 @@ function useCredits(amount, reason) {
   saveState('credits', State.credits);
   showToast('💳', 'Credits Used', `-${amount} credits for: ${reason}`);
   updateCreditDisplay();
+  // ── Credit log ──
+  _writeCreditLog({ type:'transaction', amount: -amount, label: reason, note: reason });
   return true;
 }
 
+function _writeCreditLog(entry) {
+  if (!State.user || isPrivilegedUser()) return;
+  const key = 'hisab_credit_log_' + State.user.username;
+  const log = JSON.parse(localStorage.getItem(key) || '[]');
+  log.unshift({ id: Date.now(), timestamp: new Date().toISOString(), ...entry });
+  if (log.length > 500) log.splice(500);
+  localStorage.setItem(key, JSON.stringify(log));
+}
+
 function addCredits(amount, reason) {
-  // Admin/editor credits stay at ∞ — no need to increment
   if (isPrivilegedUser()) return;
   State.credits += amount;
   saveState('credits', State.credits);
   showToast('🎉', 'Credits Earned!', `+${amount} credits: ${reason}`);
   updateCreditDisplay();
+  // ── Credit log ──
+  _writeCreditLog({ type:'other_add', amount: +amount, label: reason, note: reason });
 }
 
 function updateCreditDisplay() {
@@ -950,6 +962,9 @@ function registerUser(data) {
   State.credits = 100;
   saveState('credits', 100); // saves to user-specific key via saveState
   logActivity(user.username, 'register', 'Account created — 100 credits granted');
+  // Credit log — sign-up bonus
+  const _regKey = 'hisab_credit_log_' + user.username;
+  localStorage.setItem(_regKey, JSON.stringify([{ id: Date.now(), timestamp: new Date().toISOString(), type:'signup', amount:100, label:'Sign-up Bonus', note:'Welcome gift — 100 free credits' }]));
 
   // ── Firestore এ save করো ──
   (async () => {
