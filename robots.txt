@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /register
+
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /income
+Disallow: /expense
+Disallow: /wallets
+Disallow: /reports
+Disallow: /budget
+Disallow: /settings
+Disallow: /credits
+
+Sitemap: https://amarhisab.web.app/sitemap.xml
