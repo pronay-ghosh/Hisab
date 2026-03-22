@@ -60,6 +60,7 @@
       <a class="sidebar-link" href="#" onclick="showAdminPanel('transactions')"><span class="nav-icon">📋</span> All Transactions</a>
       <a class="sidebar-link" href="#" onclick="showAdminPanel('notices')"><span class="nav-icon">📢</span> Send Notice</a>
       <a class="sidebar-link" href="#" onclick="showAdminPanel('rewards')"><span class="nav-icon">🎁</span> Gift Credits</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('sellcredits')"><span class="nav-icon">💰</span> Sell Credits</a>
       <a class="sidebar-link" href="#" onclick="showAdminPanel('editors')"><span class="nav-icon">✏️</span> Editors</a>
       <a class="sidebar-link" href="#" onclick="showAdminPanel('activity')"><span class="nav-icon">📜</span> User Activity</a>
       <a class="sidebar-link" href="#" onclick="showAdminPanel('categories')"><span class="nav-icon">📂</span> Categories</a>
@@ -250,6 +251,125 @@
             <input type="text" class="form-input" id="gift-reason" placeholder="e.g. Eid Gift 2026" />
           </div>
           <button class="btn btn-success" onclick="sendGiftCredits()">🎁 Send Gift Credits</button>
+        </div>
+      </div>
+
+      <!-- SELL CREDITS PANEL -->
+      <div id="admin-sellcredits" style="display:none;">
+
+        <!-- Credit Packages -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="card-title">💰 Sell Credits to User</div>
+          </div>
+
+          <!-- User Picker -->
+          <div class="form-group">
+            <label class="form-label">Select User</label>
+            <div class="user-picker" id="sell-user-picker">
+              <input type="text" class="form-input" id="sell-username"
+                placeholder="Type name or username to search…"
+                oninput="userPickerSearch('sell-user-picker','sell-username')"
+                autocomplete="off" />
+              <div class="user-picker-drop" id="sell-user-picker-drop"></div>
+            </div>
+          </div>
+
+          <!-- Quick packages -->
+          <div class="form-group">
+            <label class="form-label">Credit Package</label>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px;">
+              <div class="sell-pkg" onclick="selectPackage(100,50)" style="border:2px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;">
+                <div style="font-size:22px;margin-bottom:4px;">🥉</div>
+                <div style="font-weight:700;font-size:16px;color:var(--text-primary);">100 Credits</div>
+                <div style="font-size:13px;color:var(--blue-700);font-weight:600;">৳ 50</div>
+              </div>
+              <div class="sell-pkg" onclick="selectPackage(250,100)" style="border:2px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;">
+                <div style="font-size:22px;margin-bottom:4px;">🥈</div>
+                <div style="font-weight:700;font-size:16px;color:var(--text-primary);">250 Credits</div>
+                <div style="font-size:13px;color:var(--blue-700);font-weight:600;">৳ 100</div>
+              </div>
+              <div class="sell-pkg" onclick="selectPackage(600,200)" style="border:2px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;">
+                <div style="font-size:22px;margin-bottom:4px;">🥇</div>
+                <div style="font-weight:700;font-size:16px;color:var(--text-primary);">600 Credits</div>
+                <div style="font-size:13px;color:var(--blue-700);font-weight:600;">৳ 200</div>
+              </div>
+              <div class="sell-pkg" onclick="selectPackage(1500,450)" style="border:2px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;">
+                <div style="font-size:22px;margin-bottom:4px;">💎</div>
+                <div style="font-weight:700;font-size:16px;color:var(--text-primary);">1500 Credits</div>
+                <div style="font-size:13px;color:var(--blue-700);font-weight:600;">৳ 450</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom amount -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Credits to Sell</label>
+              <input type="number" class="form-input" id="sell-credits" placeholder="e.g. 500" min="1"
+                oninput="updateSellPreview()" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Price (৳)</label>
+              <input type="number" class="form-input" id="sell-price" placeholder="e.g. 150" min="0"
+                oninput="updateSellPreview()" />
+            </div>
+          </div>
+
+          <!-- Payment method -->
+          <div class="form-group" style="margin-top:14px;">
+            <label class="form-label">Payment Method</label>
+            <select class="form-input" id="sell-payment-method">
+              <option value="bkash">bKash</option>
+              <option value="nagad">Nagad</option>
+              <option value="rocket">Rocket</option>
+              <option value="bank">Bank Transfer</option>
+              <option value="cash">Cash</option>
+              <option value="free">Free / Complimentary</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <!-- Transaction ID -->
+          <div class="form-group">
+            <label class="form-label">Transaction / Reference ID <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+            <input type="text" class="form-input" id="sell-txn-ref" placeholder="e.g. BK2026XXXXXX" />
+          </div>
+
+          <!-- Note -->
+          <div class="form-group">
+            <label class="form-label">Note <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+            <input type="text" class="form-input" id="sell-note" placeholder="e.g. March package, loyalty bonus…" />
+          </div>
+
+          <!-- Preview -->
+          <div id="sell-preview" style="display:none;background:rgba(30,136,229,0.08);border:1px solid rgba(30,136,229,0.25);border-radius:12px;padding:14px;margin-bottom:16px;">
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:6px;">📋 Summary</div>
+            <div id="sell-preview-text" style="font-size:14px;color:var(--text-primary);font-weight:600;line-height:1.7;"></div>
+          </div>
+
+          <button class="btn btn-primary btn-full btn-lg" id="sell-credits-btn" onclick="processSellCredits()" style="background:linear-gradient(135deg,#1E88E5,#00897B);">
+            💰 Confirm & Add Credits
+          </button>
+        </div>
+
+        <!-- Sales History -->
+        <div class="card">
+          <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="card-title">📜 Sales History</div>
+            <button class="btn btn-outline btn-sm" onclick="renderSalesHistory()">🔄 Refresh</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="txn-table">
+              <thead><tr>
+                <th>Date</th><th>User</th><th>Credits</th><th>Price</th><th>Method</th><th>Ref ID</th><th>Note</th>
+              </tr></thead>
+              <tbody id="sales-history-tbody">
+                <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:20px;">No sales yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="sales-total" style="margin-top:12px;font-size:13px;color:var(--text-muted);text-align:right;"></div>
         </div>
       </div>
 
@@ -608,16 +728,17 @@ function renderRecentUsers() {
 }
 
 function showAdminPanel(name) {
-  ['overview','users','transactions','notices','rewards','editors','activity','categories','backup'].forEach(p => {
+  ['overview','users','transactions','notices','rewards','sellcredits','editors','activity','categories','backup'].forEach(p => {
     const el = document.getElementById('admin-' + p);
     if (el) el.style.display = 'none';
   });
   const panel = document.getElementById('admin-' + name);
   if (panel) panel.style.display = 'block';
-  const titles = { overview:'Admin Dashboard', users:'All Users', transactions:'All Transactions', notices:'Send Notice', rewards:'Gift Credits', editors:'Editor Management', activity:'User Activity Log', categories:'Category Management', backup:'Data Backup' };
+  const titles = { overview:'Admin Dashboard', users:'All Users', transactions:'All Transactions', notices:'Send Notice', rewards:'Gift Credits', sellcredits:'💰 Sell Credits', editors:'Editor Management', activity:'User Activity Log', categories:'Category Management', backup:'Data Backup' };
   document.getElementById('admin-panel-title').textContent = titles[name] || name;
   if (name === 'users') renderUsersTable();
   if (name === 'transactions') renderAllTxns();
+  if (name === 'sellcredits') renderSalesHistory();
   if (name === 'categories') renderAdminCategories();
   if (name === 'activity') renderActivityLog();
 }
@@ -821,6 +942,159 @@ function previewNotice() {
 }
 
 // ── FIRESTORE GIFT CREDITS & BACKUP ──────────────────────────────
+// ── SELL CREDITS — Package selector ──────
+function selectPackage(credits, price) {
+  document.getElementById('sell-credits').value = credits;
+  document.getElementById('sell-price').value   = price;
+  // Highlight selected package
+  document.querySelectorAll('.sell-pkg').forEach(el => {
+    el.style.borderColor    = 'var(--border)';
+    el.style.background     = '';
+    el.style.transform      = '';
+  });
+  event.currentTarget.style.borderColor = '#1E88E5';
+  event.currentTarget.style.background  = 'rgba(30,136,229,0.08)';
+  event.currentTarget.style.transform   = 'scale(1.03)';
+  updateSellPreview();
+}
+
+function updateSellPreview() {
+  const credits  = parseInt(document.getElementById('sell-credits').value) || 0;
+  const price    = parseFloat(document.getElementById('sell-price').value) || 0;
+  const username = document.getElementById('sell-username')?.value?.trim() || '—';
+  const preview  = document.getElementById('sell-preview');
+  const text     = document.getElementById('sell-preview-text');
+  if (credits > 0) {
+    preview.style.display = 'block';
+    text.innerHTML =
+      `👤 User: <strong>${username}</strong><br>` +
+      `💳 Credits: <strong style="color:#1E88E5;">${credits.toLocaleString()}</strong><br>` +
+      (price > 0 ? `💵 Price: <strong style="color:#10b981;">৳ ${price}</strong>` : `🎁 Price: <strong style="color:#f59e0b;">Free</strong>`);
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+async function processSellCredits() {
+  const username = document.getElementById('sell-username')?.value?.trim();
+  const credits  = parseInt(document.getElementById('sell-credits').value);
+  const price    = parseFloat(document.getElementById('sell-price').value) || 0;
+  const method   = document.getElementById('sell-payment-method').value;
+  const ref      = document.getElementById('sell-txn-ref').value.trim();
+  const note     = document.getElementById('sell-note').value.trim();
+  const btn      = document.getElementById('sell-credits-btn');
+
+  if (!username) { showToast('⚠️','Missing User','Please select a user first.'); return; }
+  if (!credits || credits < 1) { showToast('⚠️','Missing Credits','Please enter credits amount.'); return; }
+
+  // Find user in localStorage
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const uIdx  = users.findIndex(u => u.username === username || u.name === username);
+  if (uIdx < 0) { showToast('❌','User Not Found',`@${username} not found.`); return; }
+
+  if (!confirm(`Add ${credits} credits to @${users[uIdx].username}${price > 0 ? ` for ৳${price}` : ' (free)'}?`)) return;
+
+  if (btn) { btn.textContent = '⏳ Processing...'; btn.disabled = true; }
+
+  try {
+    // ── Update localStorage credits ──
+    users[uIdx].credits = (users[uIdx].credits || 0) + credits;
+    localStorage.setItem('hisab_users', JSON.stringify(users));
+
+    // Also update user-specific credits key
+    const credKey = 'hisab_credits_' + users[uIdx].username;
+    const current = parseInt(localStorage.getItem(credKey) || '0');
+    localStorage.setItem(credKey, current + credits);
+
+    // ── Save to sales log ──
+    const sale = {
+      id:        Date.now(),
+      date:      new Date().toISOString().split('T')[0],
+      time:      new Date().toLocaleTimeString('en-BD'),
+      username:  users[uIdx].username,
+      name:      users[uIdx].name,
+      credits,
+      price,
+      method,
+      ref:       ref || '—',
+      note:      note || '—',
+      soldBy:    'admin',
+    };
+    const salesLog = JSON.parse(localStorage.getItem('hisab_sales_log') || '[]');
+    salesLog.unshift(sale);
+    localStorage.setItem('hisab_sales_log', JSON.stringify(salesLog));
+
+    // ── Firestore sync ──
+    try {
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, updateDoc, collection, addDoc, serverTimestamp, increment } =
+        await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const app = getApps().length ? getApps()[0] : initializeApp({
+        apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",authDomain:"hisab-4-u.firebaseapp.com",
+        projectId:"hisab-4-u",storageBucket:"hisab-4-u.firebasestorage.app",
+        messagingSenderId:"957694095044",appId:"1:957694095044:web:1649995ac9734d4d062391"
+      });
+      const db = getFirestore(app);
+      await updateDoc(doc(db, 'users', users[uIdx].username), { credits: increment(credits) });
+      await addDoc(collection(db, 'sales_log'), { ...sale, timestamp: serverTimestamp() });
+    } catch(e) { console.warn('Firestore sync failed:', e); }
+
+    // ── Reset form ──
+    document.getElementById('sell-username').value       = '';
+    document.getElementById('sell-credits').value        = '';
+    document.getElementById('sell-price').value          = '';
+    document.getElementById('sell-txn-ref').value        = '';
+    document.getElementById('sell-note').value           = '';
+    document.getElementById('sell-preview').style.display = 'none';
+    document.querySelectorAll('.sell-pkg').forEach(el => {
+      el.style.borderColor = 'var(--border)';
+      el.style.background  = '';
+      el.style.transform   = '';
+    });
+
+    showToast('✅', 'Credits Sold!',
+      `+${credits} credits added to @${users[uIdx].username}${price > 0 ? ` · ৳${price} via ${method}` : ' (free)'}`);
+    renderSalesHistory();
+
+  } catch(e) {
+    console.error(e);
+    showToast('❌', 'Error', 'Failed to add credits. Try again.');
+  } finally {
+    if (btn) { btn.textContent = '💰 Confirm & Add Credits'; btn.disabled = false; }
+  }
+}
+
+function renderSalesHistory() {
+  const salesLog = JSON.parse(localStorage.getItem('hisab_sales_log') || '[]');
+  const tbody    = document.getElementById('sales-history-tbody');
+  if (!tbody) return;
+
+  if (!salesLog.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:20px;">No sales yet.</td></tr>';
+    document.getElementById('sales-total').textContent = '';
+    return;
+  }
+
+  const methodIcon = { bkash:'🟣', nagad:'🟠', rocket:'🟤', bank:'🏦', cash:'💵', free:'🎁', other:'📋' };
+  tbody.innerHTML = salesLog.map(s => `
+    <tr>
+      <td style="color:var(--text-muted);white-space:nowrap;">${s.date} <span style="font-size:11px;">${s.time||''}</span></td>
+      <td style="color:var(--blue-400);font-weight:600;">@${s.username}<br><span style="font-size:11px;color:var(--text-muted);">${s.name||''}</span></td>
+      <td style="font-weight:700;color:#1E88E5;">+${s.credits.toLocaleString()}</td>
+      <td style="font-weight:600;color:#10b981;">${s.price > 0 ? '৳ '+s.price : '<span style="color:#f59e0b;">Free</span>'}</td>
+      <td>${(methodIcon[s.method]||'📋')} ${s.method}</td>
+      <td style="font-size:12px;color:var(--text-muted);">${s.ref}</td>
+      <td style="font-size:12px;color:var(--text-muted);">${s.note}</td>
+    </tr>`).join('');
+
+  const totalRevenue = salesLog.reduce((s, x) => s + (x.price || 0), 0);
+  const totalCredits = salesLog.reduce((s, x) => s + (x.credits || 0), 0);
+  document.getElementById('sales-total').innerHTML =
+    `Total: <strong>${salesLog.length}</strong> sales · ` +
+    `<strong style="color:#1E88E5;">${totalCredits.toLocaleString()} credits</strong> sold · ` +
+    `<strong style="color:#10b981;">৳ ${totalRevenue.toLocaleString()}</strong> revenue`;
+}
+
 async function sendGiftCredits() {
   const amount = parseInt(document.getElementById('gift-amount').value);
   const reason = document.getElementById('gift-reason').value || 'Admin Gift';
