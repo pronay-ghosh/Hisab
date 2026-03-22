@@ -699,21 +699,6 @@ function saveUserEdit() {
   showToast('✅', 'User Updated!', 'User information has been saved.');
 }
 
-function renderAllTxns() {
-  const txns = JSON.parse(localStorage.getItem('hisab_txns') || '[]');
-  const tbody = document.getElementById('all-txns-tbody');
-  if (!txns.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:20px;">No transactions yet.</td></tr>'; return; }
-  tbody.innerHTML = txns.map(t => `<tr>
-    <td style="color:var(--blue-700);">@${State.user?.username || 'user'}</td>
-    <td style="color:var(--text-muted);">${t.date}</td>
-    <td><span class="txn-type-badge ${t.type === 'income' ? 'badge-income' : t.type === 'expense' ? 'badge-expense' : 'badge-transfer'}">${t.type}</span></td>
-    <td class="${t.type === 'income' ? 'txn-amount-pos' : 'txn-amount-neg'}">${fmt(t.amount)}</td>
-    <td>${t.note || '—'}</td>
-    <td>${t.debit}</td>
-    <td>${t.credit}</td>
-  </tr>`).join('');
-}
-
 function sendNotice() {
   const title = document.getElementById('notice-title').value;
   const msg = document.getElementById('notice-msg').value;
@@ -963,54 +948,6 @@ async function migrateLocalToFirestore() { await runMigration(); }
 async function migrateToFirestore() { await runMigration(); }
 
 // ── AUTO CLEAR CACHE ──────────────────────────────────────────────
-
-  try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const firebaseConfig = {
-      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
-      authDomain: "hisab-4-u.firebaseapp.com",
-      projectId: "hisab-4-u",
-      storageBucket: "hisab-4-u.firebasestorage.app",
-      messagingSenderId: "957694095044",
-      appId: "1:957694095044:web:1649995ac9734d4d062391"
-    };
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
-
-    if (users.length === 0) {
-      if (statusEl) { statusEl.innerHTML = '⚠️ localStorage এ কোনো user নেই।'; statusEl.style.color = 'var(--yellow-500)'; }
-      showToast('⚠️', 'কোনো User নেই!', 'localStorage এ কোনো user পাওয়া যায়নি।');
-      return;
-    }
-
-    let count = 0;
-    for (const user of users) {
-      const firestoreUser = { ...user };
-      delete firestoreUser.password;
-      await setDoc(doc(db, 'users', String(user.username || user.id)), firestoreUser);
-      count++;
-      if (statusEl) { statusEl.innerHTML = `⏳ ${count}/${users.length} user migrate হচ্ছে...`; }
-    }
-
-    if (statusEl) {
-      statusEl.innerHTML = `✅ <strong>${count} জন user</strong> সফলভাবে Firestore এ migrate হয়েছে!`;
-      statusEl.style.color = 'var(--green-600)';
-    }
-    showToast('✅', 'Migration সম্পন্ন!', `${count} জন user Firestore এ save হয়েছে।`);
-
-  } catch(e) {
-    console.error(e);
-    if (statusEl) { statusEl.innerHTML = `❌ Error: ${e.message}`; statusEl.style.color = 'var(--red-400)'; }
-    showToast('❌', 'Migration Error!', 'Data migrate করতে সমস্যা হয়েছে।');
-  } finally {
-    if (btn) { btn.textContent = '🔁 Migrate Data to Firestore'; btn.disabled = false; }
-  }
-}
-
-// ── AUTO CLEAR CACHE ──────────────────────────────────────────────
 function toggleAutoClear() {
   const toggle = document.getElementById('auto-clear-toggle');
   const isOn = toggle.classList.toggle('on');
@@ -1123,69 +1060,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ── MIGRATE localStorage → FIRESTORE ─────────────────────────────
-async function migrateToFirestore() {
-  const btn = document.querySelector('[onclick="migrateToFirestore()"]');
-  const statusEl = document.getElementById('migrate-status');
-  if (btn) { btn.textContent = '⏳ Migrating...'; btn.disabled = true; }
-  if (statusEl) { statusEl.textContent = '⏳ Migration চলছে...'; statusEl.style.color = 'var(--blue-400)'; }
-
-  try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
-      authDomain: "hisab-4-u.firebaseapp.com",
-      projectId: "hisab-4-u",
-      storageBucket: "hisab-4-u.firebasestorage.app",
-      messagingSenderId: "957694095044",
-      appId: "1:957694095044:web:1649995ac9734d4d062391"
-    };
-
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // সব user migrate করো
-    const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
-    let count = 0;
-
-    for (const user of users) {
-      const firestoreUser = { ...user };
-      delete firestoreUser.password; // password Firestore এ রাখব না
-      firestoreUser.migratedAt = new Date().toISOString();
-      await setDoc(doc(db, 'users', String(user.username)), firestoreUser);
-      count++;
-      if (statusEl) {
-        statusEl.textContent = `⏳ ${count}/${users.length} user migrate হচ্ছে...`;
-      }
-    }
-
-    // Migration log save করো
-    await setDoc(doc(db, 'app_config', 'migration'), {
-      migratedAt: serverTimestamp(),
-      userCount: count,
-      migratedBy: 'admin'
-    });
-
-    if (statusEl) {
-      statusEl.innerHTML = `✅ <strong>${count} জন user</strong> সফলভাবে Firestore এ migrate হয়েছে!`;
-      statusEl.style.color = 'var(--green-600)';
-    }
-
-    showToast('🚀', 'Migration সম্পন্ন!', `${count} জন user এর data Firestore এ save হয়েছে।`);
-
-  } catch(e) {
-    console.error(e);
-    if (statusEl) {
-      statusEl.textContent = '❌ Migration এ সমস্যা হয়েছে। আবার চেষ্টা করুন।';
-      statusEl.style.color = '#ef4444';
-    }
-    showToast('❌', 'Migration Error!', 'Data migrate করতে সমস্যা হয়েছে।');
-  } finally {
-    if (btn) { btn.textContent = '🚀 এখনই Migrate করুন'; btn.disabled = false; }
-  }
-}
-
 async function forceRefreshAllUsers() {
   const btn = document.querySelector('[onclick="forceRefreshAllUsers()"]');
   if (btn) { btn.textContent = '⏳ Processing...'; btn.disabled = true; }
