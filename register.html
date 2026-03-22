@@ -196,7 +196,7 @@
         <label class="form-label" data-t="reg_email">Email Address</label>
         <input type="email" class="form-input" id="reg-email" placeholder="your@email.com"
           oninput="liveEmailCheck(this)" />
-        <div class="form-error" id="reg-email-err">Please enter a valid email address (e.g. name@example.com)</div>
+        <div class="form-error" id="reg-email-err">Please enter a valid email address (e.g. <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c8a6a9a5ad88adb0a9a5b8a4ade6aba7a5">[email&#160;protected]</a>)</div>
       </div>
 
       <!-- Phone -->
@@ -254,7 +254,7 @@
   </div>
 </div>
 
-<script src="js/app.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/app.js"></script>
 <script>
 // Build country picker on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -357,13 +357,117 @@ function doRegister() {
     errEl.textContent = '⚠️ Please accept the Terms of Service.'; errEl.classList.add('show'); return;
   }
 
+  // ── Check duplicate email/phone BEFORE registerUser ──
+  const existingUsers = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const dupEmail = existingUsers.find(u => u.email === email);
+  const dupPhone = phone && existingUsers.find(u => u.phone === phone);
+
+  if (dupEmail) {
+    showWarningModal('email', email);
+    return;
+  }
+  if (dupPhone) {
+    showWarningModal('phone', phone);
+    return;
+  }
+
   const result = registerUser({ name, username, email, phone, password: pass });
   if (result.error) {
-    errEl.textContent = '⚠️ ' + result.error;  errEl.classList.add('show'); return;
+    // Catch any remaining duplicate from registerUser
+    if (result.error.toLowerCase().includes('email')) {
+      showWarningModal('email', email);
+    } else if (result.error.toLowerCase().includes('username')) {
+      errEl.textContent = '⚠️ Username already taken. Please choose another.';
+      errEl.classList.add('show');
+    } else {
+      errEl.textContent = '⚠️ ' + result.error;
+      errEl.classList.add('show');
+    }
+    return;
   }
-  // Success — redirect to dashboard
-  window.location.href = 'dashboard.html';
+
+  // ── Success! Show congratulations popup ──
+  showCongratsModal(name);
+}
+
+// ── Warning Modal (duplicate email/phone) ─
+function showWarningModal(type, value) {
+  const titleEl = document.getElementById('warn-title');
+  const msgEl   = document.getElementById('warn-msg');
+  if (type === 'email') {
+    titleEl.textContent = 'Email Already Registered';
+    msgEl.innerHTML = `An account with email <strong>${value}</strong> already exists.<br><br>Please log in or use a different email address.`;
+  } else {
+    titleEl.textContent = 'Mobile Number Already Registered';
+    msgEl.innerHTML = `An account with this mobile number <strong>${value}</strong> already exists.<br><br>Please log in or use a different number.`;
+  }
+  showModal('warn-modal');
+}
+
+// ── Congrats Modal ────────────────────────
+function showCongratsModal(name) {
+  document.getElementById('congrats-name').textContent = name;
+  showModal('congrats-modal');
+  // Progress bar animate
+  setTimeout(() => {
+    document.getElementById('congrats-bar').style.width = '100%';
+  }, 100);
+  // Redirect after 3s
+  setTimeout(() => {
+    window.location.href = 'login.html';
+  }, 3200);
+}
+
+function showModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'flex';
+}
+function hideModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
 }
 </script>
+
+<!-- ══ WARNING MODAL (already registered) ══ -->
+<div id="warn-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+  <div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:20px;padding:36px 32px;max-width:400px;width:90%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.4);">
+    <div style="font-size:52px;margin-bottom:12px;">⚠️</div>
+    <h3 id="warn-title" style="font-size:20px;font-weight:700;color:var(--text-primary);margin-bottom:10px;"></h3>
+    <p id="warn-msg" style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:24px;"></p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <a href="login.html" class="btn btn-primary btn-full" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;">
+        🔑 Go to Login
+      </a>
+      <a href="forgot-password.html" class="btn btn-outline btn-full" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;">
+        🔒 Forgot Password?
+      </a>
+      <button class="btn btn-outline btn-full" onclick="hideModal('warn-modal')" style="margin-top:4px;">
+        ← Use Different Details
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONGRATULATIONS MODAL ══ -->
+<div id="congrats-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+  <div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:20px;padding:40px 32px;max-width:400px;width:90%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.4);">
+    <div style="font-size:64px;margin-bottom:14px;">🎉</div>
+    <h3 style="font-size:22px;font-weight:700;background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">
+      Congratulations!
+    </h3>
+    <p style="font-size:15px;color:var(--text-primary);font-weight:600;margin-bottom:6px;">
+      Welcome, <span id="congrats-name"></span>! 🎊
+    </p>
+    <p style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:6px;">
+      Your account has been created successfully.<br>
+      You received <strong style="color:#00E5CC;">100 free credits</strong> to get started!
+    </p>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Redirecting to login page...</p>
+    <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;">
+      <div id="congrats-bar" style="height:100%;width:0;background:linear-gradient(90deg,#1E88E5,#00E5CC);border-radius:3px;transition:width 3s linear;"></div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
