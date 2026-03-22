@@ -359,14 +359,12 @@ function initCredits() {
     el.textContent = State.credits;
   });
 
-  // Seed sign-up bonus log if first time
-  const logKey = 'hisab_credit_log_' + user.username;
+  // If log is empty but user has credits, seed sign-up bonus
+  const logKey  = 'hisab_credit_log_' + user.username;
   const existing = JSON.parse(localStorage.getItem(logKey) || '[]');
-  if (!existing.length) {
-    // Seed from any credits already existing
-    if (State.credits > 0) {
-      addCreditLog({ type:'signup', label:'Sign-up Bonus', amount: 100, note:'Welcome gift' });
-    }
+  if (!existing.length && State.credits >= 100) {
+    const log = [{ id: Date.now(), timestamp: user.created ? new Date(user.created).toISOString() : new Date().toISOString(), type:'signup', amount:100, label:'Sign-up Bonus', note:'Welcome gift — 100 free credits' }];
+    localStorage.setItem(logKey, JSON.stringify(log));
   }
 
   renderCreditHistory();
@@ -394,8 +392,18 @@ function watchAd() {
 
 function claimAdCredits() {
   closeModal('ad-modal');
-  addCredits(5, 'Ad Watched');
-  addCreditLog({ type:'ad', amount:+5, note:'Ad watched' });
+  // addCredits logs automatically via app.js _writeCreditLog
+  // But we want type 'ad' specifically — write directly
+  if (State.user && !isPrivilegedUser()) {
+    const key = 'hisab_credit_log_' + State.user.username;
+    const log = JSON.parse(localStorage.getItem(key) || '[]');
+    log.unshift({ id: Date.now(), timestamp: new Date().toISOString(), type:'ad', amount:5, label:'Ad Watched', note:'Earned by watching ad' });
+    localStorage.setItem(key, JSON.stringify(log));
+    State.credits += 5;
+    saveState('credits', State.credits);
+    showToast('🎉', 'Credits Earned!', '+5 credits for watching ad');
+    updateCreditDisplay();
+  }
   renderCreditHistory();
 }
 
@@ -405,24 +413,7 @@ function buyCredits(pts, price) {
   // Log will be added by admin via Sell Credits panel
 }
 
-// ── Patch useCredits & addCredits to also log ──
-// Override addCredits from app.js to include logging
-const _origAddCredits = addCredits;
-window.addCredits = function(amount, reason) {
-  _origAddCredits(amount, reason);
-  addCreditLog({ type: amount > 0 ? 'other_add' : 'other_use', amount, label: reason, note: reason });
-  renderCreditHistory();
-};
-
-const _origUseCredits = useCredits;
-window.useCredits = function(amount, reason) {
-  const result = _origUseCredits(amount, reason);
-  if (result) {
-    addCreditLog({ type:'transaction', amount: -amount, label: reason, note: reason });
-    renderCreditHistory();
-  }
-  return result;
-};
+// app.js handles credit logging via _writeCreditLog automatically
 
 document.addEventListener('DOMContentLoaded', initCredits);
 </script>
