@@ -809,6 +809,8 @@ function loginUser(username, password) {
   const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const user = users.find(u => (u.username === username || u.email === username));
   if (!user) return { error: 'User not found' };
+  if (user.deleted === true) return { error: 'This account has been deleted. Contact admin.' };
+  if (user.banned  === true) return { error: 'Your account has been banned. Contact admin.' };
   if (user.password !== btoa(password)) return { error: 'Wrong password' };
   State.user = user;
   saveState('user', user);
@@ -876,6 +878,9 @@ async function restoreUserFromFirestore(username, password) {
 
     if (!foundUser) return { error: 'User not found' };
 
+    // Ban / delete check
+    if (foundUser.deleted === true) return { error: 'This account has been deleted. Contact admin.' };
+    if (foundUser.banned  === true) return { error: 'Your account has been banned. Contact admin.' };
     // Password verify করো
     if (foundUser.password !== btoa(password)) return { error: 'Wrong password' };
 
