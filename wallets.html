@@ -442,7 +442,6 @@ function deleteWalletType(typeId) {
   populateWalletTypeSelects();
   showToast('🗑️', 'Type Deleted!', `"${t.name_en}" wallet type deleted.`);
 }
-}
 
 function renderWalletTxns(filter = '') {
   const tbody = document.getElementById('wallet-txn-tbody');
