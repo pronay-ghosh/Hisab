@@ -132,11 +132,12 @@ function togglePass(id, btn) {
   else { inp.type = 'password'; btn.textContent = '👁'; }
 }
 
-function doLogin() {
+async function doLogin() {
   const user  = document.getElementById('login-user').value.trim();
   const pass  = document.getElementById('login-pass').value;
   const keep  = document.getElementById('keep-logged-in').checked;
   const errEl = document.getElementById('login-error');
+  const btn   = document.getElementById('login-btn');
   errEl.classList.remove('show');
 
   if (!user || !pass) {
@@ -144,28 +145,40 @@ function doLogin() {
     errEl.classList.add('show'); return;
   }
 
-  // Check admin
+  // ── Admin check ──
   if (user === 'admin' && pass === 'Hisab@Admin2026!') {
     const adminUser = { id: 0, name: 'Administrator', username: 'admin', email: 'admin@hisab.app', role: 'admin' };
     State.user = adminUser;
     saveState('user', adminUser);
     localStorage.setItem('hisab_last_login', Date.now());
-    // If keep logged in, set a far-future flag
     if (keep) localStorage.setItem('hisab_keep_login', '1');
     else localStorage.removeItem('hisab_keep_login');
     window.location.href = 'admin.html';
     return;
   }
 
+  // ── Step 1: localStorage থেকে চেষ্টা ──
   const result = loginUser(user, pass);
-  if (result.error) {
-    errEl.textContent = '⚠️ ' + result.error;
-    errEl.classList.add('show'); return;
+  if (result.success) {
+    if (keep) localStorage.setItem('hisab_keep_login', '1');
+    else localStorage.removeItem('hisab_keep_login');
+    window.location.href = 'dashboard.html';
+    return;
   }
-  // Store keep-login preference
-  if (keep) localStorage.setItem('hisab_keep_login', '1');
-  else localStorage.removeItem('hisab_keep_login');
-  window.location.href = 'dashboard.html';
+
+  // ── Step 2: Firestore থেকে restore করো (cloud backup) ──
+  if (btn) { btn.querySelector('span').textContent = '⏳ Checking cloud...'; btn.disabled = true; }
+  const restored = await restoreUserFromFirestore(user, pass);
+  if (restored.success) {
+    if (keep) localStorage.setItem('hisab_keep_login', '1');
+    else localStorage.removeItem('hisab_keep_login');
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
+  errEl.textContent = '⚠️ ' + restored.error;
+  errEl.classList.add('show');
+  if (btn) { btn.querySelector('span').textContent = (State.lang === 'bn' ? 'লগ ইন' : 'Log In'); btn.disabled = false; }
 }
 
 document.getElementById('login-pass').addEventListener('keydown', e => {
