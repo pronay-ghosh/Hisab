@@ -22,4 +22,7 @@
       { "source": "/reports", "destination": "/reports.html" },
       { "source": "/settings", "destination": "/settings.html" },
       { "source": "/wallets", "destination": "/wallets.html" },
-      { "source": "/forgot-passwor
+      { "source": "/forgot-password", "destination": "/forgot-password.html" }
+    ]
+  }
+}
