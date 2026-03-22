@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel — Hisab হিসাব</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/mobile.css" />
   <style>
     .user-picker { position:relative; }
     .user-picker-drop {
@@ -72,6 +73,7 @@
 
   <div class="main-content">
     <div class="topbar">
+      <button class="hamburger-btn" id="sidebar-toggle" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
       <div style="display:flex;align-items:center;gap:12px;">
         <span class="admin-badge">🛡️ ADMIN</span>
         <div class="topbar-title" id="admin-panel-title">Admin Dashboard</div>

@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard — Hisab হিসাব</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/mobile.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -66,7 +67,7 @@
   <div class="main-content">
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:12px;">
-        <button class="topbar-icon-btn" id="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')" style="display:none;">☰</button>
+        <button class="hamburger-btn" id="sidebar-toggle" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
         <div>
           <div class="topbar-title" data-t="dash_welcome" id="topbar-welcome">Welcome back</div>
           <div style="font-size:12px;color:var(--text-muted);margin-top:2px;" id="topbar-fullname"></div>

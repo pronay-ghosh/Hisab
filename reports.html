@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reports — Hisab হিসাব</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/mobile.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -57,6 +58,7 @@
 
   <div class="main-content">
     <div class="topbar">
+      <button class="hamburger-btn" id="sidebar-toggle" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
       <div class="topbar-title">📊 Reports & Analytics</div>
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
