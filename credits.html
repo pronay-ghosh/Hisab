@@ -190,11 +190,34 @@
 
       <!-- History -->
       <div class="card">
-        <div class="card-header"><div class="card-title">Transaction History</div></div>
-        <div id="credit-history">
-          <div class="credit-history-item"><div class="credit-history-icon" style="background:var(--green-50);color:var(--green-600);">🎁</div><div class="credit-history-info"><div class="credit-history-name">Sign-up Bonus</div><div class="credit-history-date">Account creation</div></div><div class="credit-history-pts" style="color:var(--teal-400);">+100</div></div>
-          <div class="credit-history-item"><div class="credit-history-icon" style="background:var(--blue-50);color:var(--blue-700);">📺</div><div class="credit-history-info"><div class="credit-history-name">Ad Watched</div><div class="credit-history-date">Today</div></div><div class="credit-history-pts" style="color:var(--teal-400);">+5</div></div>
-          <div id="no-history" style="text-align:center;padding:20px;color:var(--text-muted);display:none;">No credit history yet.</div>
+        <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="card-title">📋 Credit Transaction History</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="history-filter" class="form-input" style="width:130px;font-size:13px;padding:6px 10px;" onchange="renderCreditHistory()">
+              <option value="all">All</option>
+              <option value="credit">+ Credits Only</option>
+              <option value="debit">- Credits Only</option>
+            </select>
+            <button class="btn btn-outline btn-sm" onclick="renderCreditHistory()">🔄</button>
+          </div>
+        </div>
+        <!-- Summary bar -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+          <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Total Earned</div>
+            <div id="hist-total-earned" style="font-size:18px;font-weight:700;color:#10b981;">+0</div>
+          </div>
+          <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Total Used</div>
+            <div id="hist-total-used" style="font-size:18px;font-weight:700;color:#ef4444;">-0</div>
+          </div>
+          <div style="background:rgba(30,136,229,0.08);border:1px solid rgba(30,136,229,0.2);border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Balance</div>
+            <div id="hist-balance" style="font-size:18px;font-weight:700;color:var(--blue-700);">0</div>
+          </div>
+        </div>
+        <div id="credit-history-list">
+          <div style="text-align:center;padding:30px;color:var(--text-muted);">Loading history...</div>
         </div>
       </div>
     </div>
@@ -208,7 +231,7 @@
     <div style="font-size:36px;margin:16px 0;">💳</div>
     <p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;">Online payment gateway will be available soon. For now, contact admin for manual credit top-up.</p>
     <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:16px;margin-bottom:16px;font-size:13px;color:var(--text-secondary);">
-      📧 Contact: <strong>admin@hisab.app</strong><br/>📱 WhatsApp: <strong>+880-XXXXXXXXXX</strong>
+      📧 Contact: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ddbcb9b0b4b39db5b4aebcbff3bcadad">[email&#160;protected]</a></strong><br/>📱 WhatsApp: <strong>+880-XXXXXXXXXX</strong>
     </div>
     <button class="btn btn-primary btn-full" onclick="closeModal('buy-modal')">OK, Got It</button>
   </div>
@@ -228,28 +251,142 @@
 
 <script src="js/app.js"></script>
 <script>
+// ── CREDIT LOG HELPERS ────────────────────
+// Key: hisab_credit_log_username → array of log entries
+function getCreditLog() {
+  if (!State.user) return [];
+  const key = 'hisab_credit_log_' + State.user.username;
+  return JSON.parse(localStorage.getItem(key) || '[]');
+}
+
+function addCreditLog(entry) {
+  if (!State.user) return;
+  const key = 'hisab_credit_log_' + State.user.username;
+  const log = JSON.parse(localStorage.getItem(key) || '[]');
+  log.unshift({
+    id:        Date.now(),
+    timestamp: new Date().toISOString(),
+    ...entry,
+  });
+  localStorage.setItem(key, JSON.stringify(log));
+}
+
+// ── ICONS / LABELS per type ───────────────
+const CREDIT_TYPE_META = {
+  signup:      { icon:'🎁', label:'Sign-up Bonus',      color:'#10b981' },
+  ad:          { icon:'📺', label:'Ad Watched',          color:'#10b981' },
+  gift:        { icon:'🎀', label:'Admin Gift',          color:'#10b981' },
+  sell:        { icon:'💰', label:'Credits Purchased',   color:'#1E88E5' },
+  transaction: { icon:'💸', label:'Transaction Used',    color:'#ef4444' },
+  ai:          { icon:'🤖', label:'AI Feature Used',     color:'#ef4444' },
+  report:      { icon:'📊', label:'Report Generated',    color:'#ef4444' },
+  budget:      { icon:'📋', label:'Budget Used',         color:'#ef4444' },
+  refund:      { icon:'↩️', label:'Refund',              color:'#f59e0b' },
+  adjustment:  { icon:'⚙️', label:'Admin Adjustment',    color:'#6366f1' },
+  other_add:   { icon:'➕', label:'Credits Added',       color:'#10b981' },
+  other_use:   { icon:'➖', label:'Credits Used',        color:'#ef4444' },
+};
+
+function getMeta(type, amount) {
+  const meta = CREDIT_TYPE_META[type] || (amount >= 0
+    ? CREDIT_TYPE_META.other_add
+    : CREDIT_TYPE_META.other_use);
+  return meta;
+}
+
+// ── RENDER HISTORY ────────────────────────
+function renderCreditHistory() {
+  const log      = getCreditLog();
+  const filter   = document.getElementById('history-filter')?.value || 'all';
+  const listEl   = document.getElementById('credit-history-list');
+  const earnedEl = document.getElementById('hist-total-earned');
+  const usedEl   = document.getElementById('hist-total-used');
+  const balEl    = document.getElementById('hist-balance');
+
+  // Compute totals from full log
+  let totalEarned = 0, totalUsed = 0;
+  log.forEach(e => {
+    if (e.amount > 0) totalEarned += e.amount;
+    else totalUsed += Math.abs(e.amount);
+  });
+  if (earnedEl) earnedEl.textContent = '+' + totalEarned.toLocaleString();
+  if (usedEl)   usedEl.textContent   = '-' + totalUsed.toLocaleString();
+  if (balEl)    balEl.textContent    = (totalEarned - totalUsed).toLocaleString();
+
+  // Filter
+  const filtered = filter === 'credit' ? log.filter(e => e.amount > 0)
+                 : filter === 'debit'  ? log.filter(e => e.amount < 0)
+                 : log;
+
+  if (!filtered.length) {
+    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);">No credit history yet.</div>';
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(e => {
+    const meta   = getMeta(e.type, e.amount);
+    const isPos  = e.amount >= 0;
+    const amtStr = (isPos ? '+' : '') + e.amount;
+    const color  = isPos ? '#10b981' : '#ef4444';
+    const dt     = e.timestamp ? new Date(e.timestamp) : null;
+    const dateStr = dt ? dt.toLocaleDateString('en-BD', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+    const timeStr = dt ? dt.toLocaleTimeString('en-BD', { hour:'2-digit', minute:'2-digit' }) : '';
+    return `
+    <div class="credit-history-item" style="border-bottom:1px solid var(--border);padding:12px 0;display:flex;align-items:center;gap:12px;">
+      <div style="width:40px;height:40px;border-radius:10px;background:${isPos ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.1)'};display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">
+        ${meta.icon}
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:14px;font-weight:600;color:var(--text-primary);">${e.label || meta.label}</div>
+        ${e.note ? `<div style="font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.note}</div>` : ''}
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${dateStr} <span style="opacity:0.6;">${timeStr}</span></div>
+      </div>
+      <div style="font-size:16px;font-weight:700;color:${color};white-space:nowrap;">${amtStr}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── INIT ──────────────────────────────────
 function initCredits() {
   if (!requireLogin()) return;
   const user = State.user;
-  document.getElementById('sidebar-avatar').textContent = user.name?user.name[0].toUpperCase():'U';
-  document.getElementById('sidebar-name').textContent = user.name;
-  document.getElementById('sidebar-handle').textContent = '@'+user.username;
+  document.getElementById('sidebar-avatar').textContent = user.name ? user.name[0].toUpperCase() : 'U';
+  document.getElementById('sidebar-name').textContent    = user.name;
+  document.getElementById('sidebar-handle').textContent  = '@' + user.username;
+
+  // Update balance display
+  document.querySelectorAll('.credit-display').forEach(el => {
+    el.textContent = State.credits;
+  });
+
+  // Seed sign-up bonus log if first time
+  const logKey = 'hisab_credit_log_' + user.username;
+  const existing = JSON.parse(localStorage.getItem(logKey) || '[]');
+  if (!existing.length) {
+    // Seed from any credits already existing
+    if (State.credits > 0) {
+      addCreditLog({ type:'signup', label:'Sign-up Bonus', amount: 100, note:'Welcome gift' });
+    }
+  }
+
+  renderCreditHistory();
 }
 
+// ── AD WATCH ──────────────────────────────
 function watchAd() {
   openModal('ad-modal');
-  let seconds = 30; let elapsed = 0;
+  let seconds = 30, elapsed = 0;
   document.getElementById('ad-countdown').textContent = seconds;
-  document.getElementById('ad-progress').style.width = '0%';
-  document.getElementById('ad-claim-btn').disabled = true;
+  document.getElementById('ad-progress').style.width  = '0%';
+  document.getElementById('ad-claim-btn').disabled    = true;
   document.getElementById('ad-claim-btn').textContent = 'Claim +5 Credits (wait...)';
   const interval = setInterval(() => {
     elapsed++; seconds--;
     document.getElementById('ad-countdown').textContent = seconds;
-    document.getElementById('ad-progress').style.width = (elapsed/30*100)+'%';
+    document.getElementById('ad-progress').style.width  = (elapsed / 30 * 100) + '%';
     if (seconds <= 0) {
       clearInterval(interval);
-      document.getElementById('ad-claim-btn').disabled = false;
+      document.getElementById('ad-claim-btn').disabled    = false;
       document.getElementById('ad-claim-btn').textContent = '🎉 Claim +5 Credits!';
     }
   }, 1000);
@@ -258,24 +395,36 @@ function watchAd() {
 function claimAdCredits() {
   closeModal('ad-modal');
   addCredits(5, 'Ad Watched');
-  addCreditHistory('📺','Ad Watched','Just now','+5','var(--teal-400)');
+  addCreditLog({ type:'ad', amount:+5, note:'Ad watched' });
+  renderCreditHistory();
 }
 
+// ── BUY ───────────────────────────────────
 function buyCredits(pts, price) {
   openModal('buy-modal');
+  // Log will be added by admin via Sell Credits panel
 }
 
-function addCreditHistory(icon, name, date, pts, color) {
-  const history = document.getElementById('credit-history');
-  const noHistory = document.getElementById('no-history');
-  noHistory.style.display = 'none';
-  const item = document.createElement('div');
-  item.className = 'credit-history-item';
-  item.innerHTML = `<div class="credit-history-icon" style="background:var(--bg-secondary);">${icon}</div><div class="credit-history-info"><div class="credit-history-name">${name}</div><div class="credit-history-date">${date}</div></div><div class="credit-history-pts" style="color:${color};">${pts}</div>`;
-  history.insertBefore(item, history.firstChild);
-}
+// ── Patch useCredits & addCredits to also log ──
+// Override addCredits from app.js to include logging
+const _origAddCredits = addCredits;
+window.addCredits = function(amount, reason) {
+  _origAddCredits(amount, reason);
+  addCreditLog({ type: amount > 0 ? 'other_add' : 'other_use', amount, label: reason, note: reason });
+  renderCreditHistory();
+};
 
-initCredits();
+const _origUseCredits = useCredits;
+window.useCredits = function(amount, reason) {
+  const result = _origUseCredits(amount, reason);
+  if (result) {
+    addCreditLog({ type:'transaction', amount: -amount, label: reason, note: reason });
+    renderCreditHistory();
+  }
+  return result;
+};
+
+document.addEventListener('DOMContentLoaded', initCredits);
 </script>
 </body>
 </html>

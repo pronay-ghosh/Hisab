@@ -1009,6 +1009,11 @@ async function sendGiftCredits() {
           if (idx >= 0) { users[idx].credits = (users[idx].credits || 0) + amount; localStorage.setItem('hisab_users', JSON.stringify(users)); }
 
           showToast('🎁', 'Credits Gifted!', `+${amount} credits সফলভাবে ${username} কে দেওয়া হয়েছে। কারণ: ${reason}`);
+          // ── Write to user credit log ──
+          const gKey = 'hisab_credit_log_' + username;
+          const gLog = JSON.parse(localStorage.getItem(gKey) || '[]');
+          gLog.unshift({ id: Date.now(), timestamp: new Date().toISOString(), type:'gift', amount, label:'Admin Gift', note: reason });
+          localStorage.setItem(gKey, JSON.stringify(gLog));
           found = true;
           break;
         }
@@ -1795,6 +1800,116 @@ function deleteAdminTxn() {
     </div>
   </div>
 </div>
+
+
+<script>
+// ── SELL CREDITS FUNCTIONS ────────────────
+function selectPackage(credits, price, el) {
+  document.getElementById('sell-credits').value = credits;
+  document.getElementById('sell-price').value   = price;
+  document.querySelectorAll('.sell-pkg').forEach(p => {
+    p.style.borderColor = 'var(--border)';
+    p.style.background  = '';
+    p.style.transform   = '';
+  });
+  if (el) { el.style.borderColor='#1E88E5'; el.style.background='rgba(30,136,229,0.08)'; el.style.transform='scale(1.03)'; }
+  updateSellPreview();
+}
+
+function updateSellPreview() {
+  const credits  = parseInt(document.getElementById('sell-credits')?.value) || 0;
+  const price    = parseFloat(document.getElementById('sell-price')?.value) || 0;
+  const username = document.getElementById('sell-username')?.value?.trim() || '—';
+  const preview  = document.getElementById('sell-preview');
+  const text     = document.getElementById('sell-preview-text');
+  if (!preview||!text) return;
+  if (credits > 0) {
+    preview.style.display = 'block';
+    text.innerHTML = `👤 User: <strong>${username}</strong><br>💳 Credits: <strong style="color:#1E88E5;">${credits.toLocaleString()}</strong><br>${price>0?`💵 Price: <strong style="color:#10b981;">৳ ${price}</strong>`:`🎁 Price: <strong style="color:#f59e0b;">Free</strong>`}`;
+  } else { preview.style.display = 'none'; }
+}
+
+async function processSellCredits() {
+  const username = document.getElementById('sell-username')?.value?.trim();
+  const credits  = parseInt(document.getElementById('sell-credits').value);
+  const price    = parseFloat(document.getElementById('sell-price').value) || 0;
+  const method   = document.getElementById('sell-payment-method').value;
+  const ref      = document.getElementById('sell-txn-ref').value.trim();
+  const note     = document.getElementById('sell-note').value.trim();
+  const btn      = document.getElementById('sell-credits-btn');
+
+  if (!username) { showToast('⚠️','Missing User','Please select a user first.'); return; }
+  if (!credits || credits < 1) { showToast('⚠️','Missing Credits','Please enter credits amount.'); return; }
+
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  const uIdx  = users.findIndex(u => u.username === username || u.name === username);
+  if (uIdx < 0) { showToast('❌','User Not Found',`@${username} not found.`); return; }
+  if (!confirm(`Add ${credits} credits to @${users[uIdx].username}${price>0?` for ৳${price}`:' (free)'}?`)) return;
+
+  if (btn) { btn.textContent='⏳ Processing...'; btn.disabled=true; }
+  try {
+    // Update user credits
+    users[uIdx].credits = (users[uIdx].credits || 0) + credits;
+    localStorage.setItem('hisab_users', JSON.stringify(users));
+    const credKey = 'hisab_credits_' + users[uIdx].username;
+    localStorage.setItem(credKey, parseInt(localStorage.getItem(credKey)||'0') + credits);
+
+    // Save sales log
+    const sale = { id:Date.now(), date:new Date().toISOString().split('T')[0], time:new Date().toLocaleTimeString('en-BD'), username:users[uIdx].username, name:users[uIdx].name, credits, price, method, ref:ref||'—', note:note||'—', soldBy:'admin' };
+    const salesLog = JSON.parse(localStorage.getItem('hisab_sales_log') || '[]');
+    salesLog.unshift(sale);
+    localStorage.setItem('hisab_sales_log', JSON.stringify(salesLog));
+
+    // ── Write to user credit log ──
+    const creditLogKey = 'hisab_credit_log_' + users[uIdx].username;
+    const creditLog    = JSON.parse(localStorage.getItem(creditLogKey) || '[]');
+    creditLog.unshift({ id:Date.now(), timestamp:new Date().toISOString(), type:'sell', amount:credits, label:'Credits Purchased', note:`${method.toUpperCase()} · ৳${price}${ref?' · Ref:'+ref:''}${note?' · '+note:''}` });
+    localStorage.setItem(creditLogKey, JSON.stringify(creditLog));
+
+    // Firestore sync
+    try {
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, updateDoc, collection, addDoc, serverTimestamp, increment } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const app = getApps().length ? getApps()[0] : initializeApp({ apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",authDomain:"hisab-4-u.firebaseapp.com",projectId:"hisab-4-u",storageBucket:"hisab-4-u.firebasestorage.app",messagingSenderId:"957694095044",appId:"1:957694095044:web:1649995ac9734d4d062391" });
+      const db = getFirestore(app);
+      await updateDoc(doc(db,'users',users[uIdx].username),{credits:increment(credits)});
+      await addDoc(collection(db,'sales_log'),{...sale,timestamp:serverTimestamp()});
+    } catch(e) { console.warn('Firestore sync failed:',e); }
+
+    // Reset form
+    ['sell-username','sell-credits','sell-price','sell-txn-ref','sell-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    const prev=document.getElementById('sell-preview'); if(prev)prev.style.display='none';
+    document.querySelectorAll('.sell-pkg').forEach(p=>{p.style.borderColor='var(--border)';p.style.background='';p.style.transform='';});
+
+    showToast('✅','Credits Sold!',`+${credits} credits added to @${users[uIdx].username}${price>0?` · ৳${price} via ${method}`:' (free)'}`);
+    renderSalesHistory();
+  } catch(e) {
+    console.error(e); showToast('❌','Error','Failed to add credits. Try again.');
+  } finally {
+    if (btn) { btn.textContent='💰 Confirm & Add Credits'; btn.disabled=false; }
+  }
+}
+
+function renderSalesHistory() {
+  const salesLog = JSON.parse(localStorage.getItem('hisab_sales_log') || '[]');
+  const tbody    = document.getElementById('sales-history-tbody');
+  if (!tbody) return;
+  if (!salesLog.length) { tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:20px;">No sales yet.</td></tr>'; document.getElementById('sales-total').textContent=''; return; }
+  const icon={bkash:'🟣',nagad:'🟠',rocket:'🟤',bank:'🏦',cash:'💵',free:'🎁',other:'📋'};
+  tbody.innerHTML=salesLog.map(s=>`<tr>
+    <td style="color:var(--text-muted);white-space:nowrap;">${s.date}<br><span style="font-size:11px;">${s.time||''}</span></td>
+    <td style="color:var(--blue-400);font-weight:600;">@${s.username}<br><span style="font-size:11px;color:var(--text-muted);">${s.name||''}</span></td>
+    <td style="font-weight:700;color:#1E88E5;">+${Number(s.credits).toLocaleString()}</td>
+    <td style="font-weight:600;color:#10b981;">${s.price>0?'৳ '+s.price:'<span style="color:#f59e0b;">Free</span>'}</td>
+    <td>${(icon[s.method]||'📋')} ${s.method}</td>
+    <td style="font-size:12px;color:var(--text-muted);">${s.ref}</td>
+    <td style="font-size:12px;color:var(--text-muted);">${s.note}</td>
+  </tr>`).join('');
+  const rev=salesLog.reduce((s,x)=>s+(x.price||0),0);
+  const crd=salesLog.reduce((s,x)=>s+(x.credits||0),0);
+  document.getElementById('sales-total').innerHTML=`Total: <strong>${salesLog.length}</strong> sales &nbsp;·&nbsp; <strong style="color:#1E88E5;">${crd.toLocaleString()} credits</strong> &nbsp;·&nbsp; <strong style="color:#10b981;">৳ ${rev.toLocaleString()}</strong> revenue`;
+}
+</script>
 
 </body>
 </html>

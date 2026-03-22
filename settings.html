@@ -254,7 +254,21 @@
                   <div id="gdrive-user-avatar" style="width:38px;height:38px;border-radius:50%;background:var(--blue-200);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--blue-800);flex-shrink:0;"></div>
                   <div style="flex:1;">
                     <div style="font-size:14px;font-weight:700;color:var(--green-600);" id="gdrive-user-name">—</div>
-                    <div style="font-size:12px;color:var(--text-muted);" id="gdrive-user-email">—</div>
+                    <div style="font-size:12px;color:var(--text-muted);">${b.date} · ${b.size}</div>
+      </div>
+      <span style="font-size:12px;color:var(--teal-400);font-weight:600;">✅ ${b.status}</span>
+    </div>`).join('');
+}
+
+// ── DOMContentLoaded — initialize everything ──
+document.addEventListener('DOMContentLoaded', () => {
+  initSettings();
+  initBackupPanel();
+  renderBackupHistory();
+});
+</script>
+</body>
+</html>ed);" id="gdrive-user-email">—</div>
                   </div>
                   <div style="font-size:11px;font-weight:700;color:var(--green-600);background:var(--green-50);padding:3px 10px;border-radius:100px;border:1px solid #C0DD97;">✓ Connected</div>
                 </div>
@@ -264,7 +278,21 @@
                 <button class="btn btn-primary" onclick="connectGoogleDrive()" style="display:inline-flex;align-items:center;gap:10px;padding:12px 24px;font-size:15px;">
                   🔗 Connect Google Drive
                 </button>
-                <div style="font-size:12px;color:var(--text-muted);margin-top:10px;">You will be redirected to Google to grant Drive access</div>
+                <div style="font-size:12px;color:var(--text-muted);">${b.date} · ${b.size}</div>
+      </div>
+      <span style="font-size:12px;color:var(--teal-400);font-weight:600;">✅ ${b.status}</span>
+    </div>`).join('');
+}
+
+// ── DOMContentLoaded — initialize everything ──
+document.addEventListener('DOMContentLoaded', () => {
+  initSettings();
+  initBackupPanel();
+  renderBackupHistory();
+});
+</script>
+</body>
+</html>ed);margin-top:10px;">You will be redirected to Google to grant Drive access</div>
               </div>
               <!-- Connected action buttons -->
               <div id="gdrive-btn-connected" style="display:none;display:none;gap:10px;justify-content:center;flex-wrap:wrap;">
@@ -313,7 +341,21 @@
             <!-- Privacy info (always visible) -->
             <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:16px;margin-top:16px;">
               <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">🔒 Privacy &amp; Security</div>
-              <div style="font-size:12px;color:var(--text-muted);line-height:1.9;">
+              <div style="font-size:12px;color:var(--text-muted);">${b.date} · ${b.size}</div>
+      </div>
+      <span style="font-size:12px;color:var(--teal-400);font-weight:600;">✅ ${b.status}</span>
+    </div>`).join('');
+}
+
+// ── DOMContentLoaded — initialize everything ──
+document.addEventListener('DOMContentLoaded', () => {
+  initSettings();
+  initBackupPanel();
+  renderBackupHistory();
+});
+</script>
+</body>
+</html>ed);line-height:1.9;">
                 ● Your data is backed up to <strong>your own Google Drive</strong> — not our servers<br/>
                 ● File name: <strong>Hisab_Backup_[date].json</strong> inside a <strong>Hisab</strong> folder<br/>
                 ● Only you can access this file — Hisab has no visibility into it<br/>
@@ -538,12 +580,32 @@ function saveProfile() {
   saveState('user', State.user);
   const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const idx = users.findIndex(u => u.id === State.user.id);
-  if (idx >= 0) { users[idx] = { ...users[idx], ...State.user }; localStorage.setItem('hisab_users', JSON.stringify(users)); }
+  if (idx >= 0) {
+    users[idx] = { ...users[idx], ...State.user };
+    localStorage.setItem('hisab_users', JSON.stringify(users));
+  }
 
-  // Update displayed name
+  // Update displayed name & handle
   document.getElementById('profile-name').textContent = State.user.name;
   document.getElementById('profile-username').textContent = '@' + State.user.username;
   document.getElementById('sidebar-name').textContent = State.user.name;
+  document.getElementById('sidebar-handle').textContent = '@' + State.user.username;
+
+  // ── Firestore sync ──
+  (async () => {
+    try {
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const app = getApps().length ? getApps()[0] : initializeApp({
+        apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4", authDomain:"hisab-4-u.firebaseapp.com",
+        projectId:"hisab-4-u", storageBucket:"hisab-4-u.firebasestorage.app",
+        messagingSenderId:"957694095044", appId:"1:957694095044:web:1649995ac9734d4d062391"
+      });
+      const db = getFirestore(app);
+      const { password, ...safeUser } = State.user;
+      await updateDoc(doc(db, 'users', String(State.user.username)), { ...safeUser, updatedAt: new Date().toISOString() });
+    } catch(e) { console.warn('Firestore profile sync failed:', e); }
+  })();
 
   showToast('✅', 'Profile Updated!', 'Your profile has been saved successfully.');
 }
@@ -902,6 +964,20 @@ function restoreFromDrive() {
           <div>
             <div style="font-size:13px;font-weight:600;color:var(--text-primary);">${b.fileName}</div>
             <div style="font-size:12px;color:var(--text-muted);">${b.date} · ${b.size}</div>
+      </div>
+      <span style="font-size:12px;color:var(--teal-400);font-weight:600;">✅ ${b.status}</span>
+    </div>`).join('');
+}
+
+// ── DOMContentLoaded — initialize everything ──
+document.addEventListener('DOMContentLoaded', () => {
+  initSettings();
+  initBackupPanel();
+  renderBackupHistory();
+});
+</script>
+</body>
+</html>ed);">${b.date} · ${b.size}</div>
           </div>
           <button class="btn btn-primary btn-sm" onclick="doRestore(${idx}, this)">Restore</button>
         </div>`).join('')}
@@ -963,4 +1039,18 @@ function renderBackupHistory() {
       <div style="width:36px;height:36px;border-radius:50%;background:var(--green-50);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">☁️</div>
       <div style="flex:1;">
         <div style="font-size:13px;font-weight:600;color:var(--text-primary);">${b.fileName}</div>
-        <div style="font-size:12px;color:var(--text-mut
+        <div style="font-size:12px;color:var(--text-muted);">${b.date} · ${b.size}</div>
+      </div>
+      <span style="font-size:12px;color:var(--teal-400);font-weight:600;">✅ ${b.status}</span>
+    </div>`).join('');
+}
+
+// ── DOMContentLoaded — initialize everything ──
+document.addEventListener('DOMContentLoaded', () => {
+  initSettings();
+  initBackupPanel();
+  renderBackupHistory();
+});
+</script>
+</body>
+</html>
