@@ -157,6 +157,51 @@ const LANG = {
     savings_congrats: '🎉 Congratulations!',
     savings_msg: 'You saved this month!',
     savings_yearly: 'Yearly Summary',
+    // Income page
+    inc_this_month:'This Month', inc_this_year:'This Year', inc_top_source:'Top Source',
+    inc_total_entries:'Total Entries', inc_by_source:'Income by Source',
+    inc_monthly_trend:'Monthly Trend', inc_transactions:'Income Transactions',
+    inc_add_btn:'+ Add Income', inc_save_btn:'Save Income',
+    inc_wallet_label:'Wallet (money received in)', inc_source_label:'Income Source',
+    // Expense page
+    exp_top_cat:'Top Category', exp_by_cat:'Expense by Category',
+    exp_monthly_trend:'Monthly Expense Trend', exp_transactions:'Expense Transactions',
+    exp_add_btn:'+ Add Expense', exp_save_btn:'Save Expense',
+    // Dashboard
+    dash_overview:'This Month Overview',
+    // Wallet
+    wlt_transactions:'Wallet Transactions',
+    // Budget
+    bgt_total:'Total Budget', bgt_spent_so_far:'Spent So Far',
+    bgt_remaining:'Remaining', bgt_used_pct:'Used %',
+    bgt_vs_actual:'Budget vs Actual — This Month',
+    bgt_vs_chart:'Budget vs Actual Chart', bgt_set_monthly:'✏️ Set Monthly Budget',
+    // Reports
+    rpt_spending_dist:'Spending Distribution', rpt_budget_actual:'Budget vs Actual',
+    // Credits
+    crd_earn_title:'💚 Earn Credits', crd_use_title:'❤️ Use Credits',
+    crd_buy_title:'💳 Buy Credit Packs', crd_history_title:'📋 Credit Transaction History',
+    // Settings sections
+    set_profile_info:'Profile Information', set_lang_display:'Language & Display',
+    set_notif_prefs:'Notification Preferences', set_cat_mgmt:'Category Management',
+    set_credit_pts:'Credit Points', set_security_settings:'Security Settings',
+    set_contact_dev:'Contact Developer',
+    // Table headers
+    tbl_date:'Date', tbl_source:'Source', tbl_wallet:'Wallet', tbl_note:'Note',
+    tbl_amount:'Amount', tbl_action:'Action', tbl_category:'Category',
+    tbl_desc:'Description', tbl_type:'Type', tbl_debit:'Debit', tbl_credit:'Credit',
+    tbl_from:'From', tbl_to:'To', tbl_month:'Month', tbl_income:'Income',
+    tbl_expense:'Expense', tbl_savings:'Savings', tbl_status:'Status', tbl_balance:'Balance',
+    // Misc
+    save_changes:'Save Changes', txn_wallet_from:'Wallet (paid from)',
+    // Settings labels
+    set_full_name:'Full Name', set_username_lbl:'Username', set_email_lbl:'Email Address',
+    set_mobile_lbl:'Mobile Number', set_cur_pass_lbl:'Current Password',
+    set_new_pass_lbl:'New Password', set_confirm_pass_lbl:'Confirm New Password',
+    set_lang_theme:'Language & Theme', set_cats_nav:'Categories',
+    set_cred_nav:'Credits', set_backup_nav:'Backup',
+    set_security:'Security', set_contact_nav:'Contact Developer',
+    set_notif:'Notifications', set_profile:'Profile',
   },
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
@@ -210,6 +255,51 @@ const LANG = {
     savings_congrats: '🎉 অভিনন্দন!',
     savings_msg: 'এই মাসে আপনি সঞ্চয় করেছেন!',
     savings_yearly: 'বার্ষিক সারসংক্ষেপ',
+    // Income page
+    inc_this_month:'এই মাসে', inc_this_year:'এই বছরে', inc_top_source:'শীর্ষ উৎস',
+    inc_total_entries:'মোট এন্ট্রি', inc_by_source:'উৎস অনুযায়ী আয়',
+    inc_monthly_trend:'মাসিক ধারা', inc_transactions:'আয়ের লেনদেন',
+    inc_add_btn:'+ আয় যোগ করুন', inc_save_btn:'আয় সংরক্ষণ করুন',
+    inc_wallet_label:'ওয়ালেট (যেখানে টাকা জমা হবে)', inc_source_label:'আয়ের উৎস',
+    // Expense page
+    exp_top_cat:'শীর্ষ ক্যাটাগরি', exp_by_cat:'ক্যাটাগরি অনুযায়ী খরচ',
+    exp_monthly_trend:'মাসিক খরচের ধারা', exp_transactions:'খরচের লেনদেন',
+    exp_add_btn:'+ খরচ যোগ করুন', exp_save_btn:'খরচ সংরক্ষণ করুন',
+    // Dashboard
+    dash_overview:'এই মাসের সংক্ষেপ',
+    // Wallet
+    wlt_transactions:'ওয়ালেট লেনদেন',
+    // Budget
+    bgt_total:'মোট বাজেট', bgt_spent_so_far:'এখন পর্যন্ত খরচ',
+    bgt_remaining:'বাকি আছে', bgt_used_pct:'ব্যবহৃত %',
+    bgt_vs_actual:'বাজেট বনাম প্রকৃত — এই মাসে',
+    bgt_vs_chart:'বাজেট বনাম প্রকৃত চার্ট', bgt_set_monthly:'✏️ মাসিক বাজেট নির্ধারণ করুন',
+    // Reports
+    rpt_spending_dist:'খরচের বিবরণ', rpt_budget_actual:'বাজেট বনাম প্রকৃত',
+    // Credits
+    crd_earn_title:'💚 ক্রেডিট অর্জন করুন', crd_use_title:'❤️ ক্রেডিট ব্যবহার করুন',
+    crd_buy_title:'💳 ক্রেডিট প্যাক কিনুন', crd_history_title:'📋 ক্রেডিট লেনদেনের ইতিহাস',
+    // Settings sections
+    set_profile_info:'প্রোফাইল তথ্য', set_lang_display:'ভাষা ও প্রদর্শনী',
+    set_notif_prefs:'নোটিফিকেশন পছন্দ', set_cat_mgmt:'ক্যাটাগরি ব্যবস্থাপনা',
+    set_credit_pts:'ক্রেডিট পয়েন্ট', set_security_settings:'নিরাপত্তা সেটিংস',
+    set_contact_dev:'ডেভেলপারের সাথে যোগাযোগ',
+    // Table headers
+    tbl_date:'তারিখ', tbl_source:'উৎস', tbl_wallet:'ওয়ালেট', tbl_note:'নোট',
+    tbl_amount:'পরিমাণ', tbl_action:'কার্যক্রম', tbl_category:'ক্যাটাগরি',
+    tbl_desc:'বিবরণ', tbl_type:'ধরন', tbl_debit:'ডেবিট', tbl_credit:'ক্রেডিট',
+    tbl_from:'যেখান থেকে', tbl_to:'যেখানে', tbl_month:'মাস', tbl_income:'আয়',
+    tbl_expense:'খরচ', tbl_savings:'সঞ্চয়', tbl_status:'অবস্থা', tbl_balance:'ব্যালেন্স',
+    // Misc
+    save_changes:'পরিবর্তন সংরক্ষণ করুন', txn_wallet_from:'ওয়ালেট (যেখান থেকে)',
+    // Settings labels
+    set_full_name:'পুরো নাম', set_username_lbl:'ইউজারনেম', set_email_lbl:'ইমেইল ঠিকানা',
+    set_mobile_lbl:'মোবাইল নম্বর', set_cur_pass_lbl:'বর্তমান পাসওয়ার্ড',
+    set_new_pass_lbl:'নতুন পাসওয়ার্ড', set_confirm_pass_lbl:'নতুন পাসওয়ার্ড নিশ্চিত করুন',
+    set_lang_theme:'ভাষা ও থিম', set_cats_nav:'ক্যাটাগরি',
+    set_cred_nav:'ক্রেডিট', set_backup_nav:'ব্যাকআপ',
+    set_security:'নিরাপত্তা', set_contact_nav:'ডেভেলপারের সাথে যোগাযোগ',
+    set_notif:'নোটিফিকেশন', set_profile:'প্রোফাইল',
   }
 };
 
@@ -483,13 +573,38 @@ function toggleTheme() {
 function setLanguage(lang) {
   State.lang = lang;
   localStorage.setItem('hisab_lang', lang);
+
+  // 1. Update data-t elements
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
-    if (LANG[lang][key]) el.textContent = LANG[lang][key];
+    if (LANG[lang] && LANG[lang][key]) el.textContent = LANG[lang][key];
   });
+
+  // 2. Update data-t-ph placeholder elements
+  document.querySelectorAll('[data-t-ph]').forEach(el => {
+    const key = el.getAttribute('data-t-ph');
+    if (LANG[lang] && LANG[lang][key]) el.placeholder = LANG[lang][key];
+  });
+
+  // 3. Active button highlight
   document.querySelectorAll('.lang-btn-switch').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
+
+  // 4. Re-render all dynamic components that use State.lang
+  [
+    'renderWallets','renderTxnTable','renderStats','renderCatCards',
+    'renderIncomeBars','renderIncomeTrend','renderIncomeTable',
+    'renderExpStats','renderExpCatCards','renderExpBars','renderExpTrend','renderExpenseTable',
+    'renderWalletTypeList','renderWalletTxns',
+    'renderBudgetProgress','renderBudgetChart',
+    'renderAll','renderYearlySummary',
+    'renderCreditHistory','renderAllTxns','renderUsersTable',
+    'renderSalesHistory','renderAdminCategories',
+  ].forEach(fn => { if (typeof window[fn] === 'function') window[fn](); });
+
+  // 5. Call page-specific applyLang
+  if (typeof window.applyLang === 'function') window.applyLang(lang);
 }
 
 // ── USERNAME GENERATOR ────────────────────
