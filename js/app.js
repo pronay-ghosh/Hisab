@@ -229,6 +229,9 @@ const LANG = {
     crd_pts_unit:'pts',
     crd_total_earned:'Total Earned', crd_total_used:'Total Used',
     crd_balance_lbl:'Balance', crd_loading_history:'Loading history...',
+    pack_pts_100:'100 pts', pack_pts_500:'500 pts',
+    pack_pts_1000:'1000 pts', pack_pts_5000:'5000 pts',
+    pack_best_value:'৳ 99 — Best Value', pack_buy_btn:'Buy',
     // Dashboard
     dash_all_wallets:'All wallets combined', dash_this_month:'This month',
     dash_this_month_exp:'This month', dash_inc_minus_exp:'Income – Expense',
@@ -416,6 +419,9 @@ const LANG = {
     crd_pts_unit:'পয়েন্ট',
     crd_total_earned:'মোট অর্জিত', crd_total_used:'মোট ব্যবহৃত',
     crd_balance_lbl:'ব্যালেন্স', crd_loading_history:'ইতিহাস লোড হচ্ছে...',
+    pack_pts_100:'১০০ পয়েন্ট', pack_pts_500:'৫০০ পয়েন্ট',
+    pack_pts_1000:'১০০০ পয়েন্ট', pack_pts_5000:'৫০০০ পয়েন্ট',
+    pack_best_value:'৳ ৯৯ — সেরা মূল্য', pack_buy_btn:'কিনুন',
     // Dashboard
     dash_all_wallets:'সব ওয়ালেট মিলিয়ে', dash_this_month:'এই মাসে',
     dash_this_month_exp:'এই মাসে', dash_inc_minus_exp:'আয় – খরচ',
@@ -1466,6 +1472,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Apply theme & language first
   applyTheme(State.theme);
   setLanguage(State.lang);
+
+  // Re-apply language after DOM is fully ready (for pages that build components in DOMContentLoaded)
+  document.addEventListener('DOMContentLoaded', () => {
+    setLanguage(State.lang);
+  });
 
   // ── Remove no-transition after theme is applied ──
   // Small delay ensures the browser has painted with correct theme
