@@ -202,6 +202,8 @@ function initReports() {
 
   renderAll();
   renderYearlySummary();
+  // Apply language after all components built
+  setTimeout(() => { if (typeof window.applyLang === 'function') window.applyLang(State.lang || 'en'); }, 0);
 }
 
 function setPeriod(period, btn) {
@@ -509,7 +511,14 @@ window.applyLang = function(lang) {
     if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
   const fc=document.getElementById('cat-filter');
-  if(fc&&fc.options[0]&&fc.options[0].value==='')fc.options[0].text=bn?'সব ক্যাটাগরি':'All Categories';
+  if(fc&&fc.options[0]&&fc.options[0].value==='') fc.options[0].text=bn?'সব ক্যাটাগরি':'All Categories';
+  // Update dynamic category options
+  if(fc && State && State.expense_cats) {
+    State.expense_cats.forEach((c,i) => {
+      const opt = fc.options[i+1];
+      if(opt) opt.textContent = bn ? c.bn : c.en;
+    });
+  }
   if(typeof renderAll==='function')renderAll();
   if(typeof renderYearlySummary==='function')renderYearlySummary();
 };
