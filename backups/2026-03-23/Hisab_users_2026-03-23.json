@@ -1,0 +1,77 @@
+{
+  "category": "users",
+  "date": "2026-03-23",
+  "time": "2026-03-23T18-36-21",
+  "count": 4,
+  "data": [
+    {
+      "id": 1774198711009,
+      "name": "Amit",
+      "username": "amit",
+      "email": "amrid.420@gmail.com",
+      "phone": "+8801521486789",
+      "password": "QWJjLjEyMzQ1",
+      "created": "2026-03-22",
+      "role": "user",
+      "active": true,
+      "updatedBy": "admin",
+      "passwordHistory": [
+        "QWJjLjEyMzQ1"
+      ],
+      "updatedAt": "2026-03-22T17:36:47.416Z",
+      "credits": 600,
+      "lastSeen": "2026-03-22T18:27:38.647Z"
+    },
+    {
+      "id": 1774198711009,
+      "role": "user",
+      "passwordHistory": [
+        "QWJjLjEyMzQ1"
+      ],
+      "active": true,
+      "source": "localStorage",
+      "password": "QWJjLjEyMzQ1",
+      "phone": "+8801521486789",
+      "email": "amrid.420@gmail.com",
+      "updatedBy": "admin",
+      "credits": 600,
+      "created": "2026-03-22",
+      "name": "Amit",
+      "updatedAt": "2026-03-22T17:36:47.416Z",
+      "username": "amit",
+      "migratedAt": "2026-03-23T18:32:49.117Z",
+      "lastSeen": "2026-03-22T18:27:38.647Z"
+    },
+    {
+      "id": 1774197659428,
+      "name": "Anik",
+      "username": "anik",
+      "email": "anik@mail.com",
+      "phone": "+8801234567890",
+      "password": "QWJjLjEyMzQ1",
+      "created": "2026-03-22",
+      "role": "user",
+      "active": true,
+      "credits": 1100,
+      "lastSeen": "2026-03-23T07:08:30.164Z"
+    },
+    {
+      "id": 1774197659428,
+      "lastSeen": "2026-03-22T16:49:22.403Z",
+      "role": "user",
+      "credits": 1100,
+      "phone": "+8801234567890",
+      "created": "2026-03-22",
+      "passwordHistory": [
+        "QWJjLjEyMzQ1"
+      ],
+      "name": "Anik",
+      "active": true,
+      "email": "anik@mail.com",
+      "username": "anik",
+      "password": "QWJjLjEyMzQ1",
+      "source": "localStorage",
+      "migratedAt": "2026-03-22T18:10:21.408Z"
+    }
+  ]
+}
