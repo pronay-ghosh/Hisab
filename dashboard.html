@@ -113,25 +113,25 @@
           <div class="stat-icon" style="background:var(--blue-50);">💰</div>
           <div class="stat-label" data-t="dash_balance">Total Balance</div>
           <div class="stat-value" id="stat-balance">৳ 0</div>
-          <div class="stat-change up" id="stat-balance-change">All wallets combined</div>
+          <div class="stat-change up" id="stat-balance-change" data-t="dash_all_wallets">All wallets combined</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--green-50);">📈</div>
           <div class="stat-label" data-t="dash_income">Monthly Income</div>
           <div class="stat-value" id="stat-income">৳ 0</div>
-          <div class="stat-change up" id="stat-income-change">This month</div>
+          <div class="stat-change up" id="stat-income-change" data-t="dash_this_month">This month</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--red-50);">📉</div>
           <div class="stat-label" data-t="dash_expense">Monthly Expense</div>
           <div class="stat-value" id="stat-expense">৳ 0</div>
-          <div class="stat-change down" id="stat-expense-change">This month</div>
+          <div class="stat-change down" id="stat-expense-change" data-t="dash_this_month_exp">This month</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--teal-50);">🏦</div>
           <div class="stat-label" data-t="dash_savings">Net Savings</div>
           <div class="stat-value" id="stat-savings">৳ 0</div>
-          <div class="stat-change up" id="stat-savings-change">Income – Expense</div>
+          <div class="stat-change up" id="stat-savings-change" data-t="dash_inc_minus_exp">Income – Expense</div>
         </div>
       </div>
 
@@ -155,7 +155,7 @@
             <div>
               <div class="card-title" data-t="dash_wallets">Wallets</div>
             </div>
-            <a href="wallets.html" class="btn btn-outline btn-sm">View All</a>
+            <a href="wallets.html" class="btn btn-outline btn-sm" data-t="dash_view_all">View All</a>
           </div>
           <div id="wallet-list" style="display:flex;flex-direction:column;gap:10px;"></div>
         </div>
@@ -175,7 +175,7 @@
       <div class="card" style="margin-top:20px;">
         <div class="card-header">
           <div class="card-title" data-t="dash_recent">Recent Transactions</div>
-          <a href="reports.html" class="btn btn-outline btn-sm">View All</a>
+          <a href="reports.html" class="btn btn-outline btn-sm" data-t="dash_view_all">View All</a>
         </div>
         <div style="overflow-x:auto;">
           <table class="txn-table" id="txn-table">
@@ -193,7 +193,7 @@
             <tbody id="txn-tbody"></tbody>
           </table>
           <div id="no-txns" style="text-align:center;padding:36px;color:var(--text-muted);font-size:14px;">
-            No transactions yet. Add your first income or expense!
+            <span data-t="dash_no_txns">No transactions yet. Add your first income or expense!</span>
           </div>
         </div>
       </div>
@@ -436,8 +436,8 @@ function renderOverviewChart() {
     data: {
       labels: months,
       datasets: [
-        { label: 'Income', data: incomes, backgroundColor: 'rgba(29,158,117,0.8)', borderRadius: 6 },
-        { label: 'Expense', data: expenses, backgroundColor: 'rgba(226,75,74,0.8)', borderRadius: 6 },
+        { label: State.lang==='bn'?'আয়':'Income', data: incomes, backgroundColor: 'rgba(29,158,117,0.8)', borderRadius: 6 },
+        { label: State.lang==='bn'?'খরচ':'Expense', data: expenses, backgroundColor: 'rgba(226,75,74,0.8)', borderRadius: 6 },
       ]
     },
     options: {
@@ -480,13 +480,13 @@ function setTxnType(type) {
 
   if (type === 'income') {
     document.getElementById('debit-label').textContent = 'Wallet (where money goes in)';
-    document.getElementById('credit-label').textContent = 'Income Source';
+    document.getElementById('credit-label').textContent = State.lang==='bn'?'আয়ের উৎস':'Income Source';
     debitSel.innerHTML = walletOptions;
     creditSel.innerHTML = incomeOptions;
     catSel.innerHTML = incomeOptions;
   } else if (type === 'expense') {
     document.getElementById('debit-label').textContent = 'Wallet (paid from)';
-    document.getElementById('credit-label').textContent = 'Expense Category';
+    document.getElementById('credit-label').textContent = State.lang==='bn'?'খরচের ক্যাটাগরি':'Expense Category';
     debitSel.innerHTML = walletOptions;
     creditSel.innerHTML = expenseOptions;
     catSel.innerHTML = expenseOptions;
@@ -674,7 +674,6 @@ function _opts(id,opts){const e=document.getElementById(id);if(!e)return;Array.f
 
 window.applyLang = function(lang) {
   const bn = lang==='bn';
-  // Stat labels
   _st('[data-t="dash_balance"]',  bn?'মোট ব্যালেন্স':'Total Balance');
   _st('[data-t="dash_income"]',   bn?'মাসিক আয়':'Monthly Income');
   _st('[data-t="dash_expense"]',  bn?'মাসিক খরচ':'Monthly Expense');
@@ -685,7 +684,12 @@ window.applyLang = function(lang) {
   _st('[data-t="dash_add_income"]',bn?'আয় যোগ করুন':'Add Income');
   _st('[data-t="dash_add_expense"]',bn?'খরচ যোগ করুন':'Add Expense');
   _st('[data-t="dash_transfer"]', bn?'ফান্ড ট্রান্সফার':'Fund Transfer');
-  // Dynamic buttons
+  _st('[data-t="dash_all_wallets"]',   bn?'সব ওয়ালেট মিলিয়ে':'All wallets combined');
+  _st('[data-t="dash_this_month"]',    bn?'এই মাসে':'This month');
+  _st('[data-t="dash_this_month_exp"]',bn?'এই মাসে':'This month');
+  _st('[data-t="dash_inc_minus_exp"]', bn?'আয় – খরচ':'Income – Expense');
+  document.querySelectorAll('[data-t="dash_view_all"]').forEach(el=>{ el.textContent=bn?'সব দেখুন':'View All'; });
+  _st('[data-t="dash_no_txns"]', bn?'এখনো কোনো লেনদেন নেই। প্রথম আয় বা খরচ যোগ করুন!':'No transactions yet. Add your first income or expense!');
   document.querySelectorAll('.btn').forEach(el=>{
     const m={'Accept Suggestion':'পরামর্শ গ্রহণ','Dismiss':'বাতিল','Save Budget':'বাজেট সংরক্ষণ'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
@@ -693,6 +697,7 @@ window.applyLang = function(lang) {
     if(bn&&m[t])el.textContent=m[t];
     else if(!bn&&r[t])el.textContent=r[t];
   });
+  if(typeof renderOverviewChart==='function')renderOverviewChart();
 };
 
 </script>

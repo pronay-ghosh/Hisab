@@ -204,20 +204,20 @@
         <!-- Summary bar -->
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
           <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Total Earned</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;" data-t="crd_total_earned">Total Earned</div>
             <div id="hist-total-earned" style="font-size:18px;font-weight:700;color:#10b981;">+0</div>
           </div>
           <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Total Used</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;" data-t="crd_total_used">Total Used</div>
             <div id="hist-total-used" style="font-size:18px;font-weight:700;color:#ef4444;">-0</div>
           </div>
           <div style="background:rgba(30,136,229,0.08);border:1px solid rgba(30,136,229,0.2);border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Balance</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;" data-t="crd_balance_lbl">Balance</div>
             <div id="hist-balance" style="font-size:18px;font-weight:700;color:var(--blue-700);">0</div>
           </div>
         </div>
         <div id="credit-history-list">
-          <div style="text-align:center;padding:30px;color:var(--text-muted);">Loading history...</div>
+          <div style="text-align:center;padding:30px;color:var(--text-muted);" data-t="crd_loading_history">Loading history...</div>
         </div>
       </div>
     </div>
@@ -320,7 +320,7 @@ function renderCreditHistory() {
                  : log;
 
   if (!filtered.length) {
-    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);">No credit history yet.</div>';
+    listEl.innerHTML = `<div style="text-align:center;padding:30px;color:var(--text-muted);">${(typeof State!=='undefined'&&State.lang==='bn')?'এখনো কোনো ক্রেডিট ইতিহাস নেই।':'No credit history yet.'}</div>`;
     return;
   }
 
@@ -414,6 +414,8 @@ function claimAdCredits() {
     updateCreditDisplay();
   }
   renderCreditHistory();
+  // Apply language after render so all elements get translated
+  if (typeof window.applyLang === 'function') window.applyLang(State.lang || 'en');
 }
 
 // ── BUY ───────────────────────────────────
@@ -457,6 +459,10 @@ window.applyLang = function(lang) {
     const t=el.textContent.trim();
     if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
+  _st('[data-t="crd_total_earned"]',   bn?'মোট অর্জিত':'Total Earned');
+  _st('[data-t="crd_total_used"]',     bn?'মোট ব্যবহৃত':'Total Used');
+  _st('[data-t="crd_balance_lbl"]',    bn?'ব্যালেন্স':'Balance');
+  _st('[data-t="crd_loading_history"]',bn?'ইতিহাস লোড হচ্ছে...':'Loading history...');
   // Balance card & topbar
   _st('[data-t="crd_your_balance_title"]', bn?'আপনার ক্রেডিট ব্যালেন্স':'Your Credit Balance');
   _st('[data-t="crd_page_title"]',         bn?'💳 ক্রেডিট পয়েন্ট':'💳 Credit Points');

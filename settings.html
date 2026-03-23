@@ -99,9 +99,9 @@
                 <div style="font-size:18px;font-weight:700;color:var(--text-primary);" id="profile-name">User</div>
                 <div style="font-size:13px;color:var(--text-muted);" id="profile-username">@username</div>
                 <div style="display:flex;gap:8px;margin-top:10px;">
-                  <label for="avatar-upload" class="btn btn-outline btn-sm" style="cursor:pointer;">📷 Change Photo</label>
+                  <label for="avatar-upload" class="btn btn-outline btn-sm" style="cursor:pointer;" data-t="profile_change_photo">📷 Change Photo</label>
                 </div>
-                <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">JPG, PNG or GIF · Max 2MB</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:6px;" data-t="profile_photo_hint">JPG, PNG or GIF · Max 2MB</div>
               </div>
             </div>
 
@@ -1214,6 +1214,8 @@ window.applyLang = function(lang) {
     const t=el.textContent.trim();
     if(bn&&btnMap[t])el.textContent=btnMap[t]; else if(!bn&&btnRmap[t])el.textContent=btnRmap[t];
   });
+  _st('[data-t="profile_change_photo"]', bn?'📷 ছবি পরিবর্তন করুন':'📷 Change Photo');
+  _st('[data-t="profile_photo_hint"]',   bn?'JPG, PNG বা GIF · সর্বোচ্চ 2MB':'JPG, PNG or GIF · Max 2MB');
   // data-t driven translations (handled by app.js applyTranslations)
   // Extra: Password strength hints
   _st('[data-t="pass_chk_len"]',     bn?'✗ কমপক্ষে ৮ অক্ষর':'✗ Min 8 characters');
