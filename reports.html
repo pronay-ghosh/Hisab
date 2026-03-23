@@ -57,7 +57,7 @@
 
   <div class="main-content">
     <div class="topbar">
-      <div class="topbar-title">📊 Reports & Analytics</div>
+      <div class="topbar-title" data-t="rpt_page_title">📊 Reports & Analytics</div>
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
@@ -65,7 +65,7 @@
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
-        <button class="btn btn-primary btn-sm" onclick="downloadReport()">⬇ Download (5 pts)</button>
+        <button class="btn btn-primary btn-sm" onclick="downloadReport()" data-t="rpt_download_btn">⬇ Download (5 pts)</button>
       </div>
     </div>
 
@@ -479,6 +479,9 @@ function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent
 
 window.applyLang = function(lang) {
   const bn = lang==='bn';
+  // Topbar
+  _st('[data-t="rpt_page_title"]',   bn?'📊 রিপোর্ট ও বিশ্লেষণ':'📊 Reports & Analytics');
+  _st('[data-t="rpt_download_btn"]', bn?'⬇ ডাউনলোড (৫ পয়েন্ট)':'⬇ Download (5 pts)');
   // Period tabs
   _st('[data-t="rpt_daily"]',   bn?'দৈনিক':'Daily');
   _st('[data-t="rpt_weekly"]',  bn?'সাপ্তাহিক':'Weekly');

@@ -1172,6 +1172,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initSettings();
   initBackupPanel();
   renderBackupHistory();
+  // Apply language AFTER all components are built (especially buildCountryPicker)
+  if (typeof window.applyLang === 'function') {
+    window.applyLang(State.lang || 'en');
+  }
 });
 
 function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
