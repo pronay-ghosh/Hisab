@@ -202,6 +202,35 @@ const LANG = {
     set_cred_nav:'Credits', set_backup_nav:'Backup',
     set_security:'Security', set_contact_nav:'Contact Developer',
     set_notif:'Notifications', set_profile:'Profile',
+    // Month short names for charts
+    mshort_jan:'Jan', mshort_feb:'Feb', mshort_mar:'Mar', mshort_apr:'Apr',
+    mshort_may:'May', mshort_jun:'Jun', mshort_jul:'Jul', mshort_aug:'Aug',
+    mshort_sep:'Sep', mshort_oct:'Oct', mshort_nov:'Nov', mshort_dec:'Dec',
+    // Reports AI
+    rpt_no_savings:'No savings this month.', rpt_no_sav_desc:'Your expenses exceeded income by',
+    rpt_tip:'Tip:', rpt_ai_no_data:'No transactions this period.',
+    // Budget extra
+    bgt_income_expected:'Total Income Budget (expected)', bgt_savings_target:'Savings Target',
+    bgt_set_desc:'Set a spending limit for each category. AI suggestion is pre-filled.',
+    bgt_save_manual:'💾 Save Budget',
+    // Credits earn/use section
+    crd_signup_bonus:'Sign-up Bonus', crd_signup_desc:'One time on account creation',
+    crd_watch_ad:'Watch an Ad', crd_watch_desc:'Short 30-second video ad',
+    crd_admin_gift:'Admin Gift (Occasions)', crd_admin_desc:'Eid, Puja, New Year etc.',
+    crd_refer:'Refer a Friend', crd_refer_desc:'When they register and log in',
+    crd_add_cat:'Add Custom Category', crd_add_cat_desc:'Income or Expense head',
+    crd_add_wallet:'Add Custom Wallet', crd_add_wallet_desc:'New wallet type',
+    crd_pdf:'Download PDF Report', crd_pdf_desc:'Any period report',
+    crd_standard:'All Standard Features', crd_standard_desc:'Transactions, reports, charts',
+    crd_your_balance:'Your Balance', crd_buy_btn:'💳 Buy Credits',
+    crd_watch_btn:'📺 Watch Ad (+5 pts)', crd_history_label:'Credit History',
+    crd_signup_label:'Sign-up Bonus', crd_signup_when:'Account created',
+    crd_ad_watched:'Ad Watched', crd_ad_when:'Today',
+    // Income/Expense section headings
+    inc_sources_title:'Income Sources', exp_cats_title:'Expense Categories',
+    // Settings backup buttons
+    backup_now_btn2:'☁️ Backup Now', backup_restore_btn2:'⬇️ Restore from Drive',
+    backup_scope_value:'All transactions, wallets & settings',
   },
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
@@ -300,6 +329,35 @@ const LANG = {
     set_cred_nav:'ক্রেডিট', set_backup_nav:'ব্যাকআপ',
     set_security:'নিরাপত্তা', set_contact_nav:'ডেভেলপারের সাথে যোগাযোগ',
     set_notif:'নোটিফিকেশন', set_profile:'প্রোফাইল',
+    // Month short names for charts
+    mshort_jan:'জান', mshort_feb:'ফেব', mshort_mar:'মার্চ', mshort_apr:'এপ্রিল',
+    mshort_may:'মে', mshort_jun:'জুন', mshort_jul:'জুলাই', mshort_aug:'আগ',
+    mshort_sep:'সেপ', mshort_oct:'অক্টো', mshort_nov:'নভে', mshort_dec:'ডিসে',
+    // Reports AI
+    rpt_no_savings:'এই মাসে কোনো সঞ্চয় নেই।', rpt_no_sav_desc:'আয়ের চেয়ে খরচ বেশি হয়েছে',
+    rpt_tip:'পরামর্শ:', rpt_ai_no_data:'এই সময়ে কোনো লেনদেন নেই।',
+    // Budget extra
+    bgt_income_expected:'মোট আয়ের বাজেট (প্রত্যাশিত)', bgt_savings_target:'সঞ্চয়ের লক্ষ্য',
+    bgt_set_desc:'প্রতিটি ক্যাটাগরির জন্য খরচের সীমা নির্ধারণ করুন। AI পরামর্শ আগে থেকেই দেওয়া আছে।',
+    bgt_save_manual:'💾 বাজেট সংরক্ষণ করুন',
+    // Credits earn/use section
+    crd_signup_bonus:'সাইনআপ বোনাস', crd_signup_desc:'অ্যাকাউন্ট তৈরিতে এককালীন',
+    crd_watch_ad:'বিজ্ঞাপন দেখুন', crd_watch_desc:'৩০ সেকেন্ডের ছোট ভিডিও বিজ্ঞাপন',
+    crd_admin_gift:'অ্যাডমিন উপহার (উপলক্ষ)', crd_admin_desc:'ঈদ, পূজা, নববর্ষ ইত্যাদি',
+    crd_refer:'বন্ধুকে রেফার করুন', crd_refer_desc:'তারা নিবন্ধন ও লগইন করলে',
+    crd_add_cat:'কাস্টম ক্যাটাগরি যোগ করুন', crd_add_cat_desc:'আয় বা খরচের হেড',
+    crd_add_wallet:'কাস্টম ওয়ালেট যোগ করুন', crd_add_wallet_desc:'নতুন ওয়ালেট টাইপ',
+    crd_pdf:'PDF রিপোর্ট ডাউনলোড', crd_pdf_desc:'যেকোনো সময়ের রিপোর্ট',
+    crd_standard:'সব স্ট্যান্ডার্ড ফিচার', crd_standard_desc:'লেনদেন, রিপোর্ট, চার্ট',
+    crd_your_balance:'আপনার ব্যালেন্স', crd_buy_btn:'💳 ক্রেডিট কিনুন',
+    crd_watch_btn:'📺 বিজ্ঞাপন দেখুন (+৫ পয়েন্ট)', crd_history_label:'ক্রেডিট ইতিহাস',
+    crd_signup_label:'সাইনআপ বোনাস', crd_signup_when:'অ্যাকাউন্ট তৈরির সময়',
+    crd_ad_watched:'বিজ্ঞাপন দেখা হয়েছে', crd_ad_when:'আজকে',
+    // Income/Expense section headings
+    inc_sources_title:'আয়ের উৎস', exp_cats_title:'খরচের ক্যাটাগরি',
+    // Settings backup buttons
+    backup_now_btn2:'☁️ এখনই ব্যাকআপ', backup_restore_btn2:'⬇️ ড্রাইভ থেকে পুনরুদ্ধার',
+    backup_scope_value:'সব লেনদেন, ওয়ালেট ও সেটিংস',
   }
 };
 
@@ -560,14 +618,6 @@ function applyTheme(theme) {
   State.theme = theme;
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('hisab_theme', theme);
-  // Update all theme toggle icons
-  document.querySelectorAll('.theme-toggle-icon').forEach(el => {
-    el.textContent = theme === 'dark' ? '☀️' : '🌙';
-  });
-  // Update settings page theme buttons if present
-  document.querySelectorAll('.theme-btn, [data-theme-btn]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.themeBtn === theme || btn.dataset.theme === theme);
-  });
 }
 
 function toggleTheme() {
@@ -594,12 +644,10 @@ function setLanguage(lang) {
     if (LANG[lang] && LANG[lang][key]) el.placeholder = LANG[lang][key];
   });
 
-  // 3. Active button highlight — always sync
+  // 3. Active button highlight
   document.querySelectorAll('.lang-btn-switch').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
-  // Also update html data-lang attribute
-  document.documentElement.setAttribute('data-lang', lang);
 
   // 4. Re-render all dynamic components that use State.lang
   [
@@ -1296,13 +1344,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch(e) { /* silent fail */ }
   })();
 
-  // Apply saved theme & language (persisted in localStorage — survives logout)
+  // Apply theme & language first
   applyTheme(State.theme);
   setLanguage(State.lang);
-  // Sync theme toggle icon
-  document.querySelectorAll('.theme-toggle-icon').forEach(el => {
-    el.textContent = State.theme === 'dark' ? '☀️' : '🌙';
-  });
 
   // ── Remove no-transition after theme is applied ──
   // Small delay ensures the browser has painted with correct theme
