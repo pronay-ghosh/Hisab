@@ -231,6 +231,30 @@ const LANG = {
     // Settings backup buttons
     backup_now_btn2:'☁️ Backup Now', backup_restore_btn2:'⬇️ Restore from Drive',
     backup_scope_value:'All transactions, wallets & settings',
+    // Notification labels
+    notif_daily_label:'Daily Reminder', notif_daily_desc:'Remind me to add daily expenses',
+    notif_time_label:'Reminder Time', notif_time_desc:'Choose your preferred reminder time',
+    notif_savings_label:'Monthly Savings Alert', notif_savings_desc:'Congratulate me on savings milestones',
+    notif_budget_label:'Budget Warning', notif_budget_desc:'Alert when budget 80% consumed',
+    notif_admin_label:'Admin Announcements', notif_admin_desc:'Receive news, wishes, and gifts from admin',
+    notif_save_btn:'Save Preferences',
+    // Backup labels
+    backup_auto_label:'Auto Backup', backup_auto_desc:'Automatically back up your data daily',
+    backup_time_label:'Backup Time', backup_time_desc:'Daily backup runs at this time',
+    backup_scope_label:'Backup Scope', backup_scope_what:'What gets backed up',
+    backup_last_label:'Last Backup', backup_never:'Never backed up yet',
+    backup_history_title:'Backup History', backup_disconnect_btn:'Disconnect',
+    // Categories labels
+    cat_mgmt_desc:'Show, hide, or add custom categories. Adding custom categories costs 10 credits.',
+    cat_income_title:'💰 Income Categories', cat_expense_title:'💸 Expense Categories',
+    cat_wallet_title:'👛 Wallet Types', cat_add_custom_title:'+ Add Custom Category (10 credits)',
+    cat_eng_name_lbl:'English Name', cat_type_income:'Income Category',
+    cat_type_expense:'Expense Category', cat_type_wallet:'Wallet Type',
+    cat_add_btn:'Add Category (–10 pts)',
+    // Security labels
+    sec_change_pass_btn:'Change Password', sec_forgot_title:'Forgot Password?',
+    sec_forgot_desc:'Send a password reset OTP to your email or phone.',
+    sec_send_email_btn:'📧 Send to Email', sec_send_phone_btn:'📱 Send to Phone',
   },
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
@@ -358,6 +382,30 @@ const LANG = {
     // Settings backup buttons
     backup_now_btn2:'☁️ এখনই ব্যাকআপ', backup_restore_btn2:'⬇️ ড্রাইভ থেকে পুনরুদ্ধার',
     backup_scope_value:'সব লেনদেন, ওয়ালেট ও সেটিংস',
+    // Notification labels
+    notif_daily_label:'দৈনিক রিমাইন্ডার', notif_daily_desc:'প্রতিদিনের খরচ যোগ করার কথা মনে করিয়ে দেবে',
+    notif_time_label:'রিমাইন্ডারের সময়', notif_time_desc:'আপনার পছন্দের রিমাইন্ডার সময় বেছে নিন',
+    notif_savings_label:'মাসিক সঞ্চয় সতর্কতা', notif_savings_desc:'সঞ্চয়ের মাইলস্টোনে অভিনন্দন জানাবে',
+    notif_budget_label:'বাজেট সতর্কতা', notif_budget_desc:'বাজেটের ৮০% ব্যবহার হলে সতর্ক করবে',
+    notif_admin_label:'অ্যাডমিন বিজ্ঞপ্তি', notif_admin_desc:'অ্যাডমিনের খবর, শুভেচ্ছা ও উপহার পাবেন',
+    notif_save_btn:'পছন্দ সংরক্ষণ করুন',
+    // Backup labels
+    backup_auto_label:'স্বয়ংক্রিয় ব্যাকআপ', backup_auto_desc:'প্রতিদিন স্বয়ংক্রিয়ভাবে আপনার ডেটা ব্যাকআপ হবে',
+    backup_time_label:'ব্যাকআপের সময়', backup_time_desc:'প্রতিদিন এই সময়ে ব্যাকআপ হবে',
+    backup_scope_label:'ব্যাকআপের পরিধি', backup_scope_what:'কী কী ব্যাকআপ হবে',
+    backup_last_label:'সর্বশেষ ব্যাকআপ', backup_never:'এখনো কোনো ব্যাকআপ হয়নি',
+    backup_history_title:'ব্যাকআপের ইতিহাস', backup_disconnect_btn:'সংযোগ বিচ্ছিন্ন করুন',
+    // Categories labels
+    cat_mgmt_desc:'ক্যাটাগরি দেখান, লুকান বা কাস্টম ক্যাটাগরি যোগ করুন। কাস্টম ক্যাটাগরি যোগ করতে ১০ ক্রেডিট লাগবে।',
+    cat_income_title:'💰 আয়ের ক্যাটাগরি', cat_expense_title:'💸 খরচের ক্যাটাগরি',
+    cat_wallet_title:'👛 ওয়ালেটের ধরন', cat_add_custom_title:'+ কাস্টম ক্যাটাগরি যোগ করুন (১০ ক্রেডিট)',
+    cat_eng_name_lbl:'ইংরেজি নাম', cat_type_income:'আয়ের ক্যাটাগরি',
+    cat_type_expense:'খরচের ক্যাটাগরি', cat_type_wallet:'ওয়ালেটের ধরন',
+    cat_add_btn:'ক্যাটাগরি যোগ করুন (–১০ পয়েন্ট)',
+    // Security labels
+    sec_change_pass_btn:'পাসওয়ার্ড পরিবর্তন করুন', sec_forgot_title:'পাসওয়ার্ড ভুলে গেছেন?',
+    sec_forgot_desc:'আপনার ইমেইল বা ফোনে পাসওয়ার্ড রিসেট OTP পাঠান।',
+    sec_send_email_btn:'📧 ইমেইলে পাঠান', sec_send_phone_btn:'📱 ফোনে পাঠান',
   }
 };
 
