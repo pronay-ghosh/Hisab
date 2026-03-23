@@ -64,7 +64,7 @@
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
-        <button class="btn btn-primary btn-sm" onclick="openModal('add-wallet-modal')">+ Add Wallet</button>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-wallet-modal')" data-t="wlt_add_btn">+ Add Wallet</button>
       </div>
     </div>
 
@@ -74,7 +74,7 @@
         <div>
           <div style="font-size:13px;opacity:0.8;margin-bottom:4px;" data-t="dash_balance">Total Balance</div>
           <div style="font-size:38px;font-weight:700;" id="total-balance-display">৳ 0</div>
-          <div style="font-size:13px;opacity:0.7;margin-top:4px;">Across all wallets</div>
+          <div style="font-size:13px;opacity:0.7;margin-top:4px;" data-t="wlt_across_all">Across all wallets</div>
         </div>
         <div style="display:flex;gap:12px;">
           <button class="btn btn-secondary" onclick="openTransferModal()">⇄ Fund Transfer</button>
@@ -92,10 +92,10 @@
         <div class="card-header">
           <div>
             <div class="card-title" data-t="wlt_transactions">Wallet Transactions</div>
-            <div class="card-subtitle">All movements across wallets</div>
+            <div class="card-subtitle" data-t="wlt_all_movements">All movements across wallets</div>
           </div>
           <select class="form-input" id="wallet-filter" style="width:180px;" onchange="filterWalletTxns()">
-            <option value="">All Wallets</option>
+            <option value="" data-t="wlt_all_wallets">All Wallets</option>
           </select>
         </div>
         <div style="overflow-x:auto;">
@@ -103,7 +103,7 @@
             <thead><tr><th data-t="tbl_date">Date</th><th data-t="tbl_desc">Description</th><th data-t="tbl_type">Type</th><th data-t="tbl_from">From</th><th data-t="tbl_to">To</th><th data-t="tbl_amount">Amount</th></tr></thead>
             <tbody id="wallet-txn-tbody"></tbody>
           </table>
-          <div id="no-wallet-txns" style="text-align:center;padding:36px;color:var(--text-muted);">No transactions yet.</div>
+          <div id="no-wallet-txns" style="text-align:center;padding:36px;color:var(--text-muted);" data-t="wlt_no_txns">No transactions yet.</div>
         </div>
       </div>
     </div>
@@ -312,21 +312,21 @@ function renderWallets() {
     <div class="wallet-card" style="border-color:var(--border);">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
         <div style="font-size:28px;">${icon}</div>
-        <button class="btn btn-outline btn-sm" onclick="openTransferFrom('${w.id}')">Transfer</button>
+        <button class="btn btn-outline btn-sm" onclick="openTransferFrom('${w.id}')">${State.lang==='bn'?'ট্রান্সফার':'Transfer'}</button>
       </div>
       <div class="wallet-card-name">${name}</div>
       <div class="wallet-card-amount" style="color:${bal >= 0 ? 'var(--text-primary)' : 'var(--red-400)'};">${fmt(bal)}</div>
       <div class="wallet-card-meta">
         <div class="wallet-meta-item">
-          <div class="wallet-meta-label">In</div>
+          <div class="wallet-meta-label">${State.lang==='bn'?'আয়':'In'}</div>
           <div class="wallet-meta-val" style="color:var(--teal-400);">+${fmt(income)}</div>
         </div>
         <div class="wallet-meta-item">
-          <div class="wallet-meta-label">Out</div>
+          <div class="wallet-meta-label">${State.lang==='bn'?'ব্যয়':'Out'}</div>
           <div class="wallet-meta-val" style="color:var(--red-400);">-${fmt(expense)}</div>
         </div>
         <div class="wallet-meta-item">
-          <div class="wallet-meta-label">Txns</div>
+          <div class="wallet-meta-label">${State.lang==='bn'?'লেনদেন':'Txns'}</div>
           <div class="wallet-meta-val">${txns.length}</div>
         </div>
       </div>
@@ -335,8 +335,8 @@ function renderWallets() {
   }).join('') + `
     <div class="wallet-card wallet-card-add" style="border:2px dashed var(--border);background:var(--bg-secondary);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px;" onclick="openModal('add-wallet-modal')">
       <div class="wallet-add-icon" style="font-size:36px;margin-bottom:8px;color:var(--text-muted);">+</div>
-      <div style="font-size:14px;font-weight:600;color:var(--text-muted);">Add Wallet</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">–10 credits</div>
+      <div style="font-size:14px;font-weight:600;color:var(--text-muted);">${State.lang==='bn'?'ওয়ালেট যোগ করুন':'Add Wallet'}</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${State.lang==='bn'?'–১০ ক্রেডিট':'–10 credits'}</div>
     </div>`;
 }
 
@@ -502,7 +502,7 @@ function populateWalletSelects() {
   document.getElementById('tr-from').innerHTML = opts;
   document.getElementById('tr-to').innerHTML = opts;
   const filterSel = document.getElementById('wallet-filter');
-  filterSel.innerHTML = '<option value="">All Wallets</option>' + opts;
+  filterSel.innerHTML = `<option value="">${State.lang==='bn'?'সব ওয়ালেট':'All Wallets'}</option>` + opts;
 }
 
 function filterWalletTxns() {
@@ -729,6 +729,12 @@ function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent
 window.applyLang = function(lang) {
   const bn = lang==='bn';
   _st('[data-t="dash_balance"]', bn?'মোট ব্যালেন্স':'Total Balance');
+  _st('[data-t="wlt_across_all"]', bn?'সব ওয়ালেট মিলিয়ে':'Across all wallets');
+  _st('[data-t="wlt_all_movements"]', bn?'সব ওয়ালেটের লেনদেন':'All movements across wallets');
+  _st('[data-t="wlt_no_txns"]', bn?'এখনো কোনো লেনদেন নেই।':'No transactions yet.');
+  _st('[data-t="wlt_add_btn"]', bn?'+ ওয়ালেট যোগ করুন':'+ Add Wallet');
+  const filterSel = document.getElementById('wallet-filter');
+  if(filterSel && filterSel.options[0]) filterSel.options[0].text = bn?'সব ওয়ালেট':'All Wallets';
   document.querySelectorAll('.card-title').forEach(el=>{
     const m={'Wallets & Accounts':'ওয়ালেট ও অ্যাকাউন্ট','Add Wallet':'ওয়ালেট যোগ করুন','Wallet Transactions':'ওয়ালেট লেনদেন','Add New Wallet':'নতুন ওয়ালেট যোগ করুন'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));

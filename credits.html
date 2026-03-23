@@ -163,27 +163,27 @@
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;">
           <div class="pack-card p1">
             <span class="pack-icon">🌱</span>
-            <div class="pack-pts">100 pts</div>
+            <div class="pack-pts" data-t="pack_pts_100">100 pts</div>
             <div class="pack-price">৳ 25</div>
-            <button class="btn btn-outline btn-sm btn-full" onclick="buyCredits(100,25)">Buy</button>
+            <button class="btn btn-outline btn-sm btn-full" onclick="buyCredits(100,25)" data-t="pack_buy_btn">Buy</button>
           </div>
           <div class="pack-card p2">
             <span class="pack-icon">⭐</span>
-            <div class="pack-pts" style="color:white;">500 pts</div>
-            <div class="pack-price" style="color:var(--blue-200);">৳ 99 — Best Value</div>
-            <button class="btn btn-secondary btn-sm btn-full" onclick="buyCredits(500,99)">Buy</button>
+            <div class="pack-pts" style="color:white;" data-t="pack_pts_500">500 pts</div>
+            <div class="pack-price" style="color:var(--blue-200);" data-t="pack_best_value">৳ 99 — Best Value</div>
+            <button class="btn btn-secondary btn-sm btn-full" onclick="buyCredits(500,99)" data-t="pack_buy_btn">Buy</button>
           </div>
           <div class="pack-card p3">
             <span class="pack-icon">💎</span>
-            <div class="pack-pts">1000 pts</div>
+            <div class="pack-pts" data-t="pack_pts_1000">1000 pts</div>
             <div class="pack-price">৳ 179</div>
-            <button class="btn btn-outline btn-sm btn-full" onclick="buyCredits(1000,179)">Buy</button>
+            <button class="btn btn-outline btn-sm btn-full" onclick="buyCredits(1000,179)" data-t="pack_buy_btn">Buy</button>
           </div>
           <div class="pack-card p4">
             <span class="pack-icon">🏆</span>
-            <div class="pack-pts">5000 pts</div>
+            <div class="pack-pts" data-t="pack_pts_5000">5000 pts</div>
             <div class="pack-price">৳ 699</div>
-            <button class="btn btn-outline btn-sm btn-full" onclick="buyCredits(5000,699)">Buy</button>
+            <button class="btn btn-outline btn-sm btn-full" onclick="buyCredits(5000,699)" data-t="pack_buy_btn">Buy</button>
           </div>
         </div>
       </div>
@@ -449,6 +449,13 @@ window.applyLang = function(lang) {
     const t=el.textContent.trim();
     if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
+  // Pack cards
+  _st('[data-t="pack_pts_100"]',  bn?'১০০ পয়েন্ট':'100 pts');
+  _st('[data-t="pack_pts_500"]',  bn?'৫০০ পয়েন্ট':'500 pts');
+  _st('[data-t="pack_pts_1000"]', bn?'১০০০ পয়েন্ট':'1000 pts');
+  _st('[data-t="pack_pts_5000"]', bn?'৫০০০ পয়েন্ট':'5000 pts');
+  _st('[data-t="pack_best_value"]', bn?'৳ ৯৯ — সেরা মূল্য':'৳ 99 — Best Value');
+  document.querySelectorAll('[data-t="pack_buy_btn"]').forEach(el=>{ el.textContent=bn?'কিনুন':'Buy'; });
   // Pack prices text
   document.querySelectorAll('.pack-price').forEach(el=>{
     // Price stays same, only label changes if any

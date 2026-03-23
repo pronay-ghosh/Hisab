@@ -129,21 +129,21 @@
           <div id="panel-language" class="settings-panel" style="display:none;">
             <div class="settings-section-title" data-t="set_lang_display">Language & Display</div>
             <div class="settings-row">
-              <div><div class="settings-row-label">Language / ভাষা</div><div class="settings-row-desc">Select your preferred language</div></div>
+              <div><div class="settings-row-label" data-t="lang_row_label">Language / ভাষা</div><div class="settings-row-desc" data-t="lang_row_desc">Select your preferred language</div></div>
               <div class="lang-switch">
                 <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">English</button>
                 <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাংলা</button>
               </div>
             </div>
             <div class="settings-row">
-              <div><div class="settings-row-label">Theme</div><div class="settings-row-desc">Light or dark mode (auto-detects system)</div></div>
+              <div><div class="settings-row-label" data-t="theme_row_label">Theme</div><div class="settings-row-desc" data-t="theme_row_desc">Light or dark mode (auto-detects system)</div></div>
               <div style="display:flex;gap:8px;">
                 <button class="btn btn-outline btn-sm" onclick="applyTheme('light'); updateThemeButtons()">☀️ Light</button>
                 <button class="btn btn-outline btn-sm" onclick="applyTheme('dark'); updateThemeButtons()">🌙 Dark</button>
               </div>
             </div>
             <div class="settings-row">
-              <div><div class="settings-row-label">Currency Display</div><div class="settings-row-desc">Always shown in Bangladeshi Taka (৳)</div></div>
+              <div><div class="settings-row-label" data-t="currency_row_label">Currency Display</div><div class="settings-row-desc" data-t="currency_row_desc">Always shown in Bangladeshi Taka (৳)</div></div>
               <div style="font-size:20px;font-weight:700;color:var(--blue-700);">৳ BDT</div>
             </div>
           </div>
