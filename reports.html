@@ -121,7 +121,7 @@
 
         <!-- Doughnut Chart -->
         <div class="card">
-          <div class="card-header"><div class="card-title">Spending Distribution</div></div>
+          <div class="card-header"><div class="card-title" data-t="rpt_spending_dist">Spending Distribution</div></div>
           <div style="height:260px;position:relative;">
             <canvas id="doughnut-chart"></canvas>
           </div>
@@ -140,7 +140,7 @@
 
       <!-- Budget vs Actual -->
       <div class="card" style="margin-top:20px;" id="budget-actual-card">
-        <div class="card-header"><div class="card-title">Budget vs Actual</div></div>
+        <div class="card-header"><div class="card-title" data-t="rpt_budget_actual">Budget vs Actual</div></div>
         <div id="budget-actual-content"></div>
       </div>
 
@@ -159,11 +159,11 @@
           <table class="txn-table" id="yearly-table">
             <thead>
               <tr>
-                <th>Month</th>
-                <th>Income</th>
-                <th>Expense</th>
-                <th>Savings</th>
-                <th>Status</th>
+                <th data-t="tbl_month">Month</th>
+                <th data-t="tbl_income">Income</th>
+                <th data-t="tbl_expense">Expense</th>
+                <th data-t="tbl_savings">Savings</th>
+                <th data-t="tbl_status">Status</th>
               </tr>
             </thead>
             <tbody id="yearly-tbody"></tbody>
@@ -444,7 +444,7 @@ function downloadReport() {
     </div>
 
     <h2>Wallet Balances</h2>
-    <table><thead><tr><th>Wallet</th><th style="text-align:right;">Balance</th></tr></thead>
+    <table><thead><tr><th data-t="tbl_wallet">Wallet</th><th style="text-align:right;" data-t="tbl_balance">Balance</th></tr></thead>
     <tbody>${walletRows}</tbody></table>
 
     <h2>Recent Transactions (Last ${recent.length})</h2>

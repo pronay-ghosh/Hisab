@@ -105,7 +105,7 @@
       <!-- Ways to Earn/Use -->
       <div class="grid-2" style="margin-bottom:28px;">
         <div class="card">
-          <div class="card-header"><div class="card-title" style="color:var(--teal-400);">💚 Earn Credits</div></div>
+          <div class="card-header"><div class="card-title" style="color:var(--teal-400);" data-t="crd_earn_title">💚 Earn Credits</div></div>
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">🎁</span>
@@ -131,7 +131,7 @@
         </div>
 
         <div class="card">
-          <div class="card-header"><div class="card-title" style="color:var(--red-400);">❤️ Use Credits</div></div>
+          <div class="card-header"><div class="card-title" style="color:var(--red-400);" data-t="crd_use_title">❤️ Use Credits</div></div>
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">📂</span>
@@ -159,7 +159,7 @@
 
       <!-- Buy Packs -->
       <div class="card" style="margin-bottom:28px;">
-        <div class="card-header"><div class="card-title">💳 Buy Credit Packs</div></div>
+        <div class="card-header"><div class="card-title" data-t="crd_buy_title">💳 Buy Credit Packs</div></div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;">
           <div class="pack-card p1">
             <span class="pack-icon">🌱</span>
@@ -191,7 +191,7 @@
       <!-- History -->
       <div class="card">
         <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
-          <div class="card-title">📋 Credit Transaction History</div>
+          <div class="card-title" data-t="crd_history_title">📋 Credit Transaction History</div>
           <div style="display:flex;gap:8px;align-items:center;">
             <select id="history-filter" class="form-input" style="width:130px;font-size:13px;padding:6px 10px;" onchange="renderCreditHistory()">
               <option value="all">All</option>

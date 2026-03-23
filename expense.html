@@ -64,7 +64,7 @@
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
-        <button class="btn btn-danger btn-sm" onclick="openModal('add-expense-modal')">+ Add Expense</button>
+        <button class="btn btn-danger btn-sm" onclick="openModal('add-expense-modal')"><span data-t="exp_add_btn">+ Add Expense</span></button>
       </div>
     </div>
 
@@ -72,33 +72,33 @@
       <div class="stat-grid" style="margin-bottom:24px;">
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--red-50);">📅</div>
-          <div class="stat-label">This Month</div>
+          <div class="stat-label" data-t="inc_this_month">This Month</div>
           <div class="stat-value" id="exp-month" style="color:var(--red-400);">৳ 0</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--amber-50);">📆</div>
-          <div class="stat-label">This Year</div>
+          <div class="stat-label" data-t="inc_this_year">This Year</div>
           <div class="stat-value" id="exp-year" style="color:var(--red-400);">৳ 0</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--red-50);">📌</div>
-          <div class="stat-label">Top Category</div>
+          <div class="stat-label" data-t="exp_top_cat">Top Category</div>
           <div class="stat-value" id="exp-top" style="font-size:18px;">—</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--blue-50);">#</div>
-          <div class="stat-label">Total Entries</div>
+          <div class="stat-label" data-t="inc_total_entries">Total Entries</div>
           <div class="stat-value" id="exp-count">0</div>
         </div>
       </div>
 
       <div class="grid-2" style="margin-bottom:24px;">
         <div class="card">
-          <div class="card-header"><div class="card-title">Expense by Category</div></div>
+          <div class="card-header"><div class="card-title" data-t="exp_by_cat">Expense by Category</div></div>
           <div id="expense-bars" class="bar-chart-wrap"></div>
         </div>
         <div class="card">
-          <div class="card-header"><div class="card-title">Monthly Expense Trend</div></div>
+          <div class="card-header"><div class="card-title" data-t="exp_monthly_trend">Monthly Expense Trend</div></div>
           <div style="height:220px;position:relative;"><canvas id="expense-trend-chart"></canvas></div>
         </div>
       </div>
@@ -112,7 +112,7 @@
       <!-- Transactions -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Expense Transactions</div>
+          <div class="card-title" data-t="exp_transactions">Expense Transactions</div>
           <div style="display:flex;gap:8px;">
             <select class="form-input" id="exp-filter-cat" style="width:160px;" onchange="renderExpenseTable()"><option value="">All Categories</option></select>
             <input type="month" class="form-input" id="exp-filter-month" style="width:150px;" onchange="renderExpenseTable()" />
@@ -120,7 +120,7 @@
         </div>
         <div style="overflow-x:auto;">
           <table class="txn-table" id="expense-table">
-            <thead><tr><th>Date</th><th>Category</th><th>Wallet</th><th>Note</th><th>Amount</th><th>Action</th></tr></thead>
+            <thead><tr><th data-t="tbl_date">Date</th><th data-t="tbl_category">Category</th><th data-t="tbl_wallet">Wallet</th><th data-t="tbl_note">Note</th><th data-t="tbl_amount">Amount</th><th data-t="tbl_action">Action</th></tr></thead>
             <tbody id="expense-tbody"></tbody>
           </table>
           <div id="no-expense" style="text-align:center;padding:36px;color:var(--text-muted);">No expenses recorded yet.</div>
@@ -164,7 +164,7 @@
         <input type="text" class="form-input" id="exp-note" placeholder="Optional description" />
       </div>
     </div>
-    <button class="btn btn-danger btn-full" onclick="saveExpense()">Save Expense</button>
+    <button class="btn btn-danger btn-full" onclick="saveExpense()"><span data-t="exp_save_btn">Save Expense</span></button>
   </div>
 </div>
 

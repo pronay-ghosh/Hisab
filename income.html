@@ -64,7 +64,7 @@
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
-        <button class="btn btn-success btn-sm" onclick="openModal('add-income-modal')">+ Add Income</button>
+        <button class="btn btn-success btn-sm" onclick="openModal('add-income-modal')"><span data-t="inc_add_btn">+ Add Income</span></button>
       </div>
     </div>
 
@@ -73,22 +73,22 @@
       <div class="stat-grid" style="margin-bottom:24px;">
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--green-50);">📅</div>
-          <div class="stat-label">This Month</div>
+          <div class="stat-label" data-t="inc_this_month">This Month</div>
           <div class="stat-value" id="inc-month" style="color:var(--teal-400);">৳ 0</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--blue-50);">📆</div>
-          <div class="stat-label">This Year</div>
+          <div class="stat-label" data-t="inc_this_year">This Year</div>
           <div class="stat-value" id="inc-year" style="color:var(--teal-400);">৳ 0</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--amber-50);">💼</div>
-          <div class="stat-label">Top Source</div>
+          <div class="stat-label" data-t="inc_top_source">Top Source</div>
           <div class="stat-value" id="inc-top" style="font-size:18px;">—</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:var(--teal-50);">#</div>
-          <div class="stat-label">Total Entries</div>
+          <div class="stat-label" data-t="inc_total_entries">Total Entries</div>
           <div class="stat-value" id="inc-count">0</div>
         </div>
       </div>
@@ -96,12 +96,12 @@
       <div class="grid-2" style="margin-bottom:24px;">
         <!-- Income by Source -->
         <div class="card">
-          <div class="card-header"><div class="card-title">Income by Source</div></div>
+          <div class="card-header"><div class="card-title" data-t="inc_by_source">Income by Source</div></div>
           <div id="income-bars" class="bar-chart-wrap"></div>
         </div>
         <!-- Monthly Trend -->
         <div class="card">
-          <div class="card-header"><div class="card-title">Monthly Trend</div></div>
+          <div class="card-header"><div class="card-title" data-t="inc_monthly_trend">Monthly Trend</div></div>
           <div style="height:220px;position:relative;"><canvas id="income-trend-chart"></canvas></div>
         </div>
       </div>
@@ -115,7 +115,7 @@
       <!-- Transactions Table -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Income Transactions</div>
+          <div class="card-title" data-t="inc_transactions">Income Transactions</div>
           <div style="display:flex;gap:8px;">
             <select class="form-input" id="inc-filter-cat" style="width:160px;" onchange="renderIncomeTable()">
               <option value="">All Sources</option>
@@ -125,7 +125,7 @@
         </div>
         <div style="overflow-x:auto;">
           <table class="txn-table" id="income-table">
-            <thead><tr><th>Date</th><th>Source</th><th>Wallet</th><th>Note</th><th>Amount</th><th>Action</th></tr></thead>
+            <thead><tr><th data-t="tbl_date">Date</th><th data-t="tbl_source">Source</th><th data-t="tbl_wallet">Wallet</th><th data-t="tbl_note">Note</th><th data-t="tbl_amount">Amount</th><th data-t="tbl_action">Action</th></tr></thead>
             <tbody id="income-tbody"></tbody>
           </table>
           <div id="no-income" style="text-align:center;padding:36px;color:var(--text-muted);">No income recorded yet. Add your first income!</div>
@@ -151,11 +151,11 @@
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">Wallet (money received in)</label>
+        <label class="form-label" data-t="inc_wallet_label">Wallet (money received in)</label>
         <select class="form-input" id="inc-wallet"></select>
       </div>
       <div class="form-group">
-        <label class="form-label">Income Source</label>
+        <label class="form-label" data-t="inc_source_label">Income Source</label>
         <select class="form-input" id="inc-source"></select>
       </div>
     </div>
@@ -169,7 +169,7 @@
         <input type="text" class="form-input" id="inc-note" placeholder="e.g. March salary" />
       </div>
     </div>
-    <button class="btn btn-success btn-full" onclick="saveIncome()">Save Income</button>
+    <button class="btn btn-success btn-full" onclick="saveIncome()"><span data-t="inc_save_btn">Save Income</span></button>
   </div>
 </div>
 
@@ -184,32 +184,32 @@
       <span>ℹ️</span><span>Every income entry records money received into a wallet from a source.</span>
     </div>
     <div class="form-group">
-      <label class="form-label">Amount (৳)</label>
+      <label class="form-label" data-t="txn_amount">Amount (৳)</label>
       <input type="number" class="form-input" id="edit-inc-amount" placeholder="0.00" min="0.01" step="0.01" />
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">Wallet (paid from)</label>
+        <label class="form-label" data-t="txn_wallet_from">Wallet (paid from)</label>
         <select class="form-input" id="edit-inc-wallet"></select>
       </div>
       <div class="form-group">
-        <label class="form-label">Income Source</label>
+        <label class="form-label" data-t="inc_source_label">Income Source</label>
         <select class="form-input" id="edit-inc-source"></select>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">Date</label>
+        <label class="form-label" data-t="txn_date">Date</label>
         <input type="date" class="form-input" id="edit-inc-date" />
       </div>
       <div class="form-group">
-        <label class="form-label">Note</label>
+        <label class="form-label" data-t="txn_note">Note</label>
         <input type="text" class="form-input" id="edit-inc-note" placeholder="Optional" />
       </div>
     </div>
     <input type="hidden" id="edit-inc-id" />
     <div style="display:flex;gap:10px;">
-      <button class="btn btn-success btn-full" onclick="saveEditIncome()">Save Changes</button>
+      <button class="btn btn-success btn-full" onclick="saveEditIncome()"><span data-t="save_changes">Save Changes</span></button>
       <button class="btn btn-outline" onclick="closeModal('edit-income-modal')">Cancel</button>
     </div>
   </div>

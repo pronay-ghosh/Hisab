@@ -91,7 +91,7 @@
       <div class="card" style="margin-top:24px;">
         <div class="card-header">
           <div>
-            <div class="card-title">Wallet Transactions</div>
+            <div class="card-title" data-t="wlt_transactions">Wallet Transactions</div>
             <div class="card-subtitle">All movements across wallets</div>
           </div>
           <select class="form-input" id="wallet-filter" style="width:180px;" onchange="filterWalletTxns()">
@@ -100,7 +100,7 @@
         </div>
         <div style="overflow-x:auto;">
           <table class="txn-table" id="wallet-txn-table">
-            <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>From</th><th>To</th><th>Amount</th></tr></thead>
+            <thead><tr><th data-t="tbl_date">Date</th><th data-t="tbl_desc">Description</th><th data-t="tbl_type">Type</th><th data-t="tbl_from">From</th><th data-t="tbl_to">To</th><th data-t="tbl_amount">Amount</th></tr></thead>
             <tbody id="wallet-txn-tbody"></tbody>
           </table>
           <div id="no-wallet-txns" style="text-align:center;padding:36px;color:var(--text-muted);">No transactions yet.</div>

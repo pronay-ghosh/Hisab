@@ -67,13 +67,13 @@
       <div class="settings-grid">
         <!-- Nav -->
         <div class="settings-nav">
-          <div class="settings-nav-item active" onclick="showPanel('profile', this)">👤 Profile</div>
-          <div class="settings-nav-item" onclick="showPanel('language', this)">🌐 Language & Theme</div>
-          <div class="settings-nav-item" onclick="showPanel('notifications', this)">🔔 Notifications</div>
-          <div class="settings-nav-item" onclick="showPanel('categories', this)">📂 Categories</div>
-          <div class="settings-nav-item" onclick="showPanel('credits', this)">💳 Credits</div>
-          <div class="settings-nav-item" onclick="showPanel('backup', this)">☁️ Backup</div>
-          <div class="settings-nav-item" onclick="showPanel('security', this)">🔒 Security</div>
+          <div class="settings-nav-item active" onclick="showPanel('profile', this)" data-t="set_profile">👤 Profile</div>
+          <div class="settings-nav-item" data-placeholder data-placeholder data-placeholder data-placeholder data-placeholder data-placeholder data-placeholder onclick="showPanel('language', this)" data-t="set_lang_theme">🌐 Language & Theme</div>
+          <div class="settings-nav-item" onclick="showPanel('notifications', this)" data-t="set_notif">🔔 Notifications</div>
+          <div class="settings-nav-item" onclick="showPanel('categories', this)" data-t="set_cats_nav">📂 Categories</div>
+          <div class="settings-nav-item" onclick="showPanel('credits', this)" data-t="set_cred_nav">💳 Credits</div>
+          <div class="settings-nav-item" onclick="showPanel('backup', this)" data-t="set_backup_nav">☁️ Backup</div>
+          <div class="settings-nav-item" onclick="showPanel('security', this)" data-t="set_security">🔒 Security</div>
           <div class="settings-nav-item" onclick="showPanel('contact', this)">✉️ Contact Developer</div>
         </div>
 
@@ -82,7 +82,7 @@
 
           <!-- PROFILE -->
           <div id="panel-profile" class="settings-panel">
-            <div class="settings-section-title">Profile Information</div>
+            <div class="settings-section-title" data-t="set_profile_info">Profile Information</div>
 
             <!-- Profile Picture -->
             <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px;padding:20px;background:var(--bg-secondary);border-radius:var(--radius-lg);">
@@ -106,20 +106,20 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label">Full Name</label>
+              <label class="form-label" data-t="set_full_name">Full Name</label>
               <input type="text" class="form-input" id="set-name" />
             </div>
             <div class="form-group">
-              <label class="form-label">Username</label>
+              <label class="form-label" data-t="set_username_lbl">Username</label>
               <input type="text" class="form-input" id="set-username" />
             </div>
             <div class="form-group">
-              <label class="form-label">Email Address</label>
+              <label class="form-label" data-t="set_email_lbl">Email Address</label>
               <input type="email" class="form-input" id="set-email" placeholder="example@email.com" oninput="validateEmailField('set-email','set-email-err')" />
               <div class="form-error" id="set-email-err">Please enter a valid email address (e.g. <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="90fef1fdf5d0f4fffdf1f9febef3fffd">[email&#160;protected]</a>)</div>
             </div>
             <div class="form-group">
-              <label class="form-label">Mobile Number</label>
+              <label class="form-label" data-t="set_mobile_lbl">Mobile Number</label>
               <div id="set-phone-picker"></div>
             </div>
             <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
@@ -127,7 +127,7 @@
 
           <!-- LANGUAGE & THEME -->
           <div id="panel-language" class="settings-panel" style="display:none;">
-            <div class="settings-section-title">Language & Display</div>
+            <div class="settings-section-title" data-t="set_lang_display">Language & Display</div>
             <div class="settings-row">
               <div><div class="settings-row-label">Language / ভাষা</div><div class="settings-row-desc">Select your preferred language</div></div>
               <div class="lang-switch">
@@ -150,7 +150,7 @@
 
           <!-- NOTIFICATIONS -->
           <div id="panel-notifications" class="settings-panel" style="display:none;">
-            <div class="settings-section-title">Notification Preferences</div>
+            <div class="settings-section-title" data-t="set_notif_prefs">Notification Preferences</div>
             <div class="settings-row">
               <div><div class="settings-row-label">Daily Reminder</div><div class="settings-row-desc">Remind me to add daily expenses</div></div>
               <button class="toggle on" onclick="this.classList.toggle('on')"></button>
@@ -176,7 +176,7 @@
 
           <!-- CATEGORIES -->
           <div id="panel-categories" class="settings-panel" style="display:none;">
-            <div class="settings-section-title">Category Management</div>
+            <div class="settings-section-title" data-t="set_cat_mgmt">Category Management</div>
             <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Show, hide, or add custom categories. Adding custom categories costs 10 credits.</p>
 
             <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">💰 Income Categories</div>
@@ -211,7 +211,7 @@
 
           <!-- CREDITS -->
           <div id="panel-credits" class="settings-panel" style="display:none;">
-            <div class="settings-section-title">Credit Points</div>
+            <div class="settings-section-title" data-t="set_credit_pts">Credit Points</div>
             <div style="text-align:center;padding:24px;background:var(--blue-50);border-radius:var(--radius-lg);margin-bottom:24px;">
               <div style="font-size:14px;color:var(--blue-600);margin-bottom:6px;">Your Balance</div>
               <div style="font-size:48px;font-weight:700;color:var(--blue-800);" id="credit-big"><span class="credit-display">150</span></div>
@@ -324,16 +324,16 @@
 
           <!-- SECURITY -->
           <div id="panel-security" class="settings-panel" style="display:none;">
-            <div class="settings-section-title">Security Settings</div>
+            <div class="settings-section-title" data-t="set_security_settings">Security Settings</div>
             <div class="form-group">
-              <label class="form-label">Current Password</label>
+              <label class="form-label" data-t="set_cur_pass_lbl">Current Password</label>
               <div class="password-wrap">
                 <input type="password" class="form-input" id="cur-pass" placeholder="••••••••" />
                 <button class="password-toggle" onclick="togglePassInline('cur-pass', this)">👁</button>
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label">New Password</label>
+              <label class="form-label" data-t="set_new_pass_lbl">New Password</label>
               <div class="password-wrap">
                 <input type="password" class="form-input" id="new-pass" placeholder="Min 8 characters"
                   oninput="renderPasswordStrength(this.value,'set-strength-fill','set-strength-label'); checkSetConfirm()" />
@@ -357,7 +357,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label">Confirm New Password</label>
+              <label class="form-label" data-t="set_confirm_pass_lbl">Confirm New Password</label>
               <div class="password-wrap">
                 <input type="password" class="form-input" id="confirm-pass" placeholder="Repeat new password"
                   oninput="checkSetConfirm()" />
@@ -409,7 +409,7 @@
             <div id="sec-otp-step3" style="display:none;margin-top:14px;">
               <div style="font-size:13px;font-weight:600;color:#10b981;margin-bottom:12px;">✅ OTP Verified! Set your new password.</div>
               <div class="form-group">
-                <label class="form-label">New Password</label>
+                <label class="form-label" data-t="set_new_pass_lbl">New Password</label>
                 <div class="password-wrap">
                   <input type="password" class="form-input" id="sec-new-pass" placeholder="Min 8 characters"
                     oninput="renderPasswordStrength(this.value,'sec-strength-fill','sec-strength-label');secCheckConfirm()" />
@@ -423,7 +423,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Confirm New Password</label>
+                <label class="form-label" data-t="set_confirm_pass_lbl">Confirm New Password</label>
                 <div class="password-wrap">
                   <input type="password" class="form-input" id="sec-confirm-pass" placeholder="Repeat password" oninput="secCheckConfirm()" />
                   <button class="password-toggle" type="button" onclick="togglePassInline('sec-confirm-pass',this)">👁</button>
@@ -437,7 +437,7 @@
 
           <!-- CONTACT -->
           <div id="panel-contact" class="settings-panel" style="display:none;">
-            <div class="settings-section-title">Contact Developer</div>
+            <div class="settings-section-title" data-t="set_contact_dev">Contact Developer</div>
             <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px;">Have a question, bug report, or suggestion? Reach out to us.</p>
             <div class="form-group">
               <label class="form-label">Subject</label>

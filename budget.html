@@ -79,27 +79,27 @@
 
       <!-- Budget Summary -->
       <div class="stat-grid" style="margin-bottom:24px;">
-        <div class="stat-card"><div class="stat-icon" style="background:var(--blue-50);">🎯</div><div class="stat-label">Total Budget</div><div class="stat-value" id="budget-total">৳ 0</div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:var(--red-50);">💸</div><div class="stat-label">Spent So Far</div><div class="stat-value" id="budget-spent" style="color:var(--red-400);">৳ 0</div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:var(--green-50);">✅</div><div class="stat-label">Remaining</div><div class="stat-value" id="budget-remaining" style="color:var(--teal-400);">৳ 0</div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:var(--amber-50);">📊</div><div class="stat-label">Used %</div><div class="stat-value" id="budget-pct">0%</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--blue-50);">🎯</div><div class="stat-label" data-t="bgt_total">Total Budget</div><div class="stat-value" id="budget-total">৳ 0</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--red-50);">💸</div><div class="stat-label" data-t="bgt_spent_so_far">Spent So Far</div><div class="stat-value" id="budget-spent" style="color:var(--red-400);">৳ 0</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--green-50);">✅</div><div class="stat-label" data-t="bgt_remaining">Remaining</div><div class="stat-value" id="budget-remaining" style="color:var(--teal-400);">৳ 0</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--amber-50);">📊</div><div class="stat-label" data-t="bgt_used_pct">Used %</div><div class="stat-value" id="budget-pct">0%</div></div>
       </div>
 
       <!-- Budget Progress -->
       <div class="card" style="margin-bottom:24px;">
-        <div class="card-header"><div class="card-title">Budget vs Actual — This Month</div></div>
+        <div class="card-header"><div class="card-title" data-t="bgt_vs_actual">Budget vs Actual — This Month</div></div>
         <div id="budget-progress-list"></div>
       </div>
 
       <!-- Chart -->
       <div class="card" style="margin-bottom:24px;">
-        <div class="card-header"><div class="card-title">Budget vs Actual Chart</div></div>
+        <div class="card-header"><div class="card-title" data-t="bgt_vs_chart">Budget vs Actual Chart</div></div>
         <div style="height:280px;position:relative;"><canvas id="budget-chart"></canvas></div>
       </div>
 
       <!-- Manual Budget Form -->
       <div class="card" id="manual-budget-section">
-        <div class="card-header"><div class="card-title">✏️ Set Monthly Budget</div></div>
+        <div class="card-header"><div class="card-title" data-t="bgt_set_monthly">✏️ Set Monthly Budget</div></div>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Set a spending limit for each category. AI suggestion is pre-filled.</p>
         <div id="budget-form-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:20px;"></div>
         <div class="form-row" style="max-width:400px;">

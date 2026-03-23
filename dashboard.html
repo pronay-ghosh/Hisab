@@ -163,7 +163,7 @@
         <!-- MINI CHART -->
         <div class="card">
           <div class="card-header">
-            <div class="card-title">This Month Overview</div>
+            <div class="card-title" data-t="dash_overview">This Month Overview</div>
           </div>
           <div style="height:200px;position:relative;">
             <canvas id="overview-chart"></canvas>
@@ -181,13 +181,13 @@
           <table class="txn-table" id="txn-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                <th>Amount</th>
+                <th data-t="tbl_date">Date</th>
+                <th data-t="tbl_desc">Description</th>
+                <th data-t="tbl_category">Category</th>
+                <th data-t="tbl_type">Type</th>
+                <th data-t="tbl_debit">Debit</th>
+                <th data-t="tbl_credit">Credit</th>
+                <th data-t="tbl_amount">Amount</th>
               </tr>
             </thead>
             <tbody id="txn-tbody"></tbody>
