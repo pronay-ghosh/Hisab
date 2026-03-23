@@ -239,6 +239,10 @@ const LANG = {
     wlt_across_all:'Across all wallets', wlt_all_movements:'All movements across wallets',
     wlt_no_txns:'No transactions yet.', wlt_add_btn:'+ Add Wallet',
     wlt_all_wallets:'All Wallets',
+    wlt_fund_transfer:'⇄ Fund Transfer', wlt_fund_transfer_title:'⇄ Fund Transfer',
+    wlt_double_entry_note:'Double-entry: Money moves out of one wallet and into another.',
+    wlt_tr_amount:'Amount (৳)', wlt_tr_from:'From', wlt_tr_to:'To',
+    wlt_after_transfer:'After Transfer:', wlt_tr_submit:'Transfer Fund',
     // Notification labels
     notif_daily_label:'Daily Reminder', notif_daily_desc:'Remind me to add daily expenses',
     notif_time_label:'Reminder Time', notif_time_desc:'Choose your preferred reminder time',
@@ -263,6 +267,18 @@ const LANG = {
     sec_change_pass_btn:'Change Password', sec_forgot_title:'Forgot Password?',
     sec_forgot_desc:'Send a password reset OTP to your email or phone.',
     sec_send_email_btn:'📧 Send to Email', sec_send_phone_btn:'📱 Send to Phone',
+    // Password strength hints
+    pass_chk_len:'✗ Min 8 characters', pass_chk_upper:'✗ Uppercase letter (A-Z)',
+    pass_chk_lower:'✗ Lowercase letter (a-z)', pass_chk_num:'✗ Number (0-9)',
+    pass_chk_special:'✗ Special character (!@#$%^&*)',
+    // Backup privacy
+    backup_privacy_title:'🔒 Privacy & Security',
+    // Contact Developer form
+    contact_desc:'Have a question, bug report, or suggestion? Reach out to us.',
+    contact_subject_lbl:'Subject', contact_msg_lbl:'Message',
+    contact_opt_bug:'Bug Report', contact_opt_feature:'Feature Request',
+    contact_opt_account:'Account Issue', contact_opt_other:'Other',
+    contact_send_btn:'Send Message',
   },
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
@@ -422,6 +438,18 @@ const LANG = {
     sec_change_pass_btn:'পাসওয়ার্ড পরিবর্তন করুন', sec_forgot_title:'পাসওয়ার্ড ভুলে গেছেন?',
     sec_forgot_desc:'আপনার ইমেইল বা ফোনে পাসওয়ার্ড রিসেট OTP পাঠান।',
     sec_send_email_btn:'📧 ইমেইলে পাঠান', sec_send_phone_btn:'📱 ফোনে পাঠান',
+    // Password strength hints
+    pass_chk_len:'✗ কমপক্ষে ৮ অক্ষর', pass_chk_upper:'✗ বড় হাতের অক্ষর (A-Z)',
+    pass_chk_lower:'✗ ছোট হাতের অক্ষর (a-z)', pass_chk_num:'✗ সংখ্যা (0-9)',
+    pass_chk_special:'✗ বিশেষ চিহ্ন (!@#$%^&*)',
+    // Backup privacy
+    backup_privacy_title:'🔒 গোপনীয়তা ও নিরাপত্তা',
+    // Contact Developer form
+    contact_desc:'কোনো প্রশ্ন, বাগ রিপোর্ট বা পরামর্শ আছে? আমাদের জানান।',
+    contact_subject_lbl:'বিষয়', contact_msg_lbl:'বার্তা',
+    contact_opt_bug:'বাগ রিপোর্ট', contact_opt_feature:'নতুন ফিচারের অনুরোধ',
+    contact_opt_account:'অ্যাকাউন্ট সমস্যা', contact_opt_other:'অন্যান্য',
+    contact_send_btn:'বার্তা পাঠান',
   }
 };
 
@@ -645,11 +673,14 @@ function cpSelect(containerId, code) {
   const phoneEl = document.getElementById(containerId + '-phone');
   if (phoneEl) phoneEl.placeholder = '0'.repeat(c.digits);
 
+  const _bn = (typeof State !== 'undefined' && State.lang === 'bn');
   const hintEl = document.getElementById(containerId + '-hint');
-  if (hintEl) hintEl.textContent = `Enter ${c.digits}-digit mobile number for ${c.name}`;
+  if (hintEl) hintEl.textContent = _bn
+    ? `${c.name}-এর জন্য ${c.digits}-সংখ্যার মোবাইল নম্বর দিন`
+    : `Enter ${c.digits}-digit mobile number for ${c.name}`;
 
   const errEl = document.getElementById(containerId + '-err');
-  if (errEl) { errEl.textContent = `Invalid mobile number format for ${c.name}.`; errEl.classList.remove('show'); }
+  if (errEl) { errEl.textContent = _bn ? `${c.name}-এর জন্য মোবাইল নম্বরের ফরম্যাট সঠিক নয়।` : `Invalid mobile number format for ${c.name}.`; errEl.classList.remove('show'); }
 
   document.getElementById(containerId + '-dd').style.display = 'none';
   const srch = document.getElementById(containerId + '-search');
