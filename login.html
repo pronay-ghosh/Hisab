@@ -2,7 +2,15 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+// Apply saved theme & language immediately to prevent flash
+(function(){
+  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
+})();
+</script>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -79,7 +87,7 @@
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
         <a href="index.html" style="font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">← Back</a>
         <div class="lang-switch">
-          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">EN</button>
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>

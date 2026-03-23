@@ -2,7 +2,15 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+// Apply saved theme & language immediately to prevent flash
+(function(){
+  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
+})();
+</script>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -131,7 +139,7 @@
             <div class="settings-row">
               <div><div class="settings-row-label">Language / ভাষা</div><div class="settings-row-desc">Select your preferred language</div></div>
               <div class="lang-switch">
-                <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">English</button>
                 <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাংলা</button>
               </div>
             </div>
@@ -1169,8 +1177,6 @@ async function secResetPassword() {
 // ── DOMContentLoaded ──────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initSettings();
-
-if (typeof setLanguage === 'function') setLanguage(State.lang || localStorage.getItem('hisab_lang') || 'en');
   initBackupPanel();
   renderBackupHistory();
 });

@@ -2,7 +2,15 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+// Apply saved theme & language immediately to prevent flash
+(function(){
+  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
+})();
+</script>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <title>Income — Hisab হিসাব</title>
@@ -60,7 +68,7 @@
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
-          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">EN</button>
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
@@ -423,8 +431,6 @@ function saveEditIncome() {
 }
 
 initIncome();
-// Apply saved language after page init (dropdowns must be populated first)
-if (typeof setLanguage === 'function') setLanguage(State.lang || localStorage.getItem('hisab_lang') || 'en');
 
 function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
 function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
@@ -467,20 +473,10 @@ window.applyLang = function(lang) {
     const t=el.textContent.trim();
     if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
-  // Re-populate selects with correct language
-  const iw = document.getElementById('inc-wallet');
-  if(iw) iw.innerHTML = State.wallets.map(w=>`<option value="${w.id}">${w.icon||'💰'} ${bn?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
-  const srcOpts = State.income_cats.map(c=>`<option value="${c.id}">${bn?c.bn:c.en}</option>`).join('');
-  const is = document.getElementById('inc-source');
-  if(is) is.innerHTML = srcOpts;
+  // Filter "All Sources"
   const fc=document.getElementById('inc-filter-cat');
-  if(fc){ const v=fc.value; fc.innerHTML=`<option value="">${bn?'সব উৎস':'All Sources'}</option>`+srcOpts; fc.value=v; }
-  // Edit modal dropdowns
-  const ew=document.getElementById('edit-inc-wallet');
-  if(ew) ew.innerHTML=State.wallets.map(w=>`<option value="${w.id}">${w.icon||'💰'} ${bn?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
-  const es=document.getElementById('edit-inc-source');
-  if(es) es.innerHTML=srcOpts;
-  // Re-render
+  if(fc&&fc.options[0])fc.options[0].text=bn?'সব উৎস':'All Sources';
+  // Re-render dynamic data with new lang
   if(typeof renderStats==='function')renderStats();
   if(typeof renderCatCards==='function')renderCatCards();
   if(typeof renderIncomeBars==='function')renderIncomeBars();

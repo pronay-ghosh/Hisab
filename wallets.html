@@ -2,7 +2,15 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+// Apply saved theme & language immediately to prevent flash
+(function(){
+  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
+})();
+</script>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <title>Wallets — Hisab হিসাব</title>
@@ -60,7 +68,7 @@
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
-          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">EN</button>
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
@@ -721,8 +729,6 @@ function doTransfer() {
 
 initWallets();
 
-if (typeof setLanguage === 'function') setLanguage(State.lang || localStorage.getItem('hisab_lang') || 'en');
-
 function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
 function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
 function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=txt;}
@@ -731,7 +737,6 @@ function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent
 window.applyLang = function(lang) {
   const bn = lang==='bn';
   _st('[data-t="dash_balance"]', bn?'মোট ব্যালেন্স':'Total Balance');
-  _st('[data-t="wlt_transactions"]', bn?'ওয়ালেট লেনদেন':'Wallet Transactions');
   document.querySelectorAll('.card-title').forEach(el=>{
     const m={'Wallets & Accounts':'ওয়ালেট ও অ্যাকাউন্ট','Add Wallet':'ওয়ালেট যোগ করুন','Wallet Transactions':'ওয়ালেট লেনদেন','Add New Wallet':'নতুন ওয়ালেট যোগ করুন'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
@@ -741,21 +746,23 @@ window.applyLang = function(lang) {
   document.querySelectorAll('.form-label').forEach(el=>{
     const m={'Wallet Name':'ওয়ালেটের নাম','Initial Balance':'প্রাথমিক ব্যালেন্স','Icon':'আইকন','Type':'ধরন','Balance':'ব্যালেন্স'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim(); if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
+  });
+  document.querySelectorAll('th').forEach(el=>{
+    const m={'Date':'তারিখ','Type':'ধরন','Amount':'পরিমাণ','Note':'নোট','Balance':'ব্যালেন্স'};
+    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
   document.querySelectorAll('.btn').forEach(el=>{
-    const m={'+ Add Wallet':'+ ওয়ালেট যোগ করুন','Save':'সংরক্ষণ করুন','Cancel':'বাতিল'};
+    const m={'+ Add Wallet':'+ ওয়ালেট যোগ করুন','Save':'সংরক্ষণ করুন','Cancel':'বাতিল','All Wallets':'সব ওয়ালেট'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim(); if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
-  // Re-populate wallet filter dropdown
   const fw=document.getElementById('txn-filter-wallet');
-  if(fw){
-    const v=fw.value;
-    const wOpts=State.wallets.map(w=>`<option value="${w.id}">${w.icon||'👛'} ${bn?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
-    fw.innerHTML=`<option value="">${bn?'সব ওয়ালেট':'All Wallets'}</option>`+wOpts;
-    fw.value=v;
-  }
+  if(fw&&fw.options[0])fw.options[0].text=bn?'সব ওয়ালেট':'All Wallets';
   if(typeof renderWallets==='function')renderWallets();
   if(typeof renderWalletTxns==='function')renderWalletTxns();
 };

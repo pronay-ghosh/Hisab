@@ -2,7 +2,15 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+// Apply saved theme & language immediately to prevent flash
+(function(){
+  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
+})();
+</script>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -1111,11 +1119,6 @@
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/app.js"></script>
 <script>
-// ── Lang helpers ──
-function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
-function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
-function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
-
   // Sticky nav
   window.addEventListener('scroll', () => {
     document.getElementById('lnav').classList.toggle('scrolled', window.scrollY > 10);
@@ -1165,25 +1168,6 @@ function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.place
       if (storyOffset < 0) { storyOffset = (8-1) * 362; track.style.transition = 'none'; track.style.transform = 'translateX(-' + storyOffset + 'px)'; }
     }, 500);
   }
-
-window.applyLang = function(lang) {
-  const bn = lang === 'bn';
-  // Nav links
-  document.querySelectorAll('[data-t]').forEach(el => {
-    const LANG_LOCAL = {
-      en: { nav_home:'Home', nav_features:'Features', nav_pricing:'Pricing', nav_contact:'Contact', nav_login:'Log In', nav_register:'Get Started',
-            hero_badge:'Double-Entry Accounting System', hero_cta1:'Start Free', hero_cta2:'See How It Works',
-            feat_tag:'Features', feat_title:'Everything you need to manage money' },
-      bn: { nav_home:'হোম', nav_features:'বৈশিষ্ট্য', nav_pricing:'মূল্য', nav_contact:'যোগাযোগ', nav_login:'লগ ইন', nav_register:'শুরু করুন',
-            hero_badge:'দ্বৈত প্রবিষ্টি হিসাব ব্যবস্থা', hero_cta1:'বিনামূল্যে শুরু', hero_cta2:'কীভাবে কাজ করে',
-            feat_tag:'বৈশিষ্ট্য', feat_title:'অর্থ ব্যবস্থাপনায় যা দরকার সব কিছু' }
-    };
-    const key = el.getAttribute('data-t');
-    const L = LANG_LOCAL[lang] || LANG_LOCAL.en;
-    if (L[key]) el.textContent = L[key];
-  });
-};
-
 </script>
 <!-- ══ APPS COMING SOON MODAL ══ -->
 <div id="apps-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:center;justify-content:center;"

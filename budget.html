@@ -2,7 +2,15 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+// Apply saved theme & language immediately to prevent flash
+(function(){
+  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
+})();
+</script>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <title>Budget — Hisab হিসাব</title>
@@ -54,7 +62,7 @@
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
-          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">EN</button>
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
@@ -247,8 +255,6 @@ function renderBudgetChart() {
 
 initBudget();
 
-if (typeof setLanguage === 'function') setLanguage(State.lang || localStorage.getItem('hisab_lang') || 'en');
-
 function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
 function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
 function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=txt;}
@@ -256,26 +262,25 @@ function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent
 
 window.applyLang = function(lang) {
   const bn = lang==='bn';
-  // Re-populate category dropdown
-  const bc=document.getElementById('budget-cat');
-  if(bc) bc.innerHTML=State.expense_cats.map(c=>`<option value="${c.id}">${bn?c.bn:c.en}</option>`).join('');
-  // Card/stat labels via data-t (handled by setLanguage)
-  // Extra card titles
   document.querySelectorAll('.card-title').forEach(el=>{
-    const m={'Budget Planner':'বাজেট পরিকল্পনা','Monthly Budget Overview':'মাসিক বাজেট সংক্ষেপ','AI Budget Suggestion':'AI বাজেট পরামর্শ','Budget Progress':'বাজেট অগ্রগতি','✏️ Set Monthly Budget':'✏️ মাসিক বাজেট নির্ধারণ করুন','Budget vs Actual — This Month':'বাজেট বনাম প্রকৃত — এই মাসে','Budget vs Actual Chart':'বাজেট বনাম প্রকৃত চার্ট'};
+    const m={'Budget Planner':'বাজেট পরিকল্পনা','Monthly Budget Overview':'মাসিক বাজেট সংক্ষেপ','AI Budget Suggestion':'AI বাজেট পরামর্শ','Add Budget':'বাজেট যোগ করুন','Budget Progress':'বাজেট অগ্রগতি'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim(); if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
   document.querySelectorAll('.form-label').forEach(el=>{
     const m={'Category':'ক্যাটাগরি','Budget Amount':'বাজেট পরিমাণ','Month':'মাস'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim(); if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
   document.querySelectorAll('.btn').forEach(el=>{
     const m={'Add Budget':'বাজেট যোগ করুন','Get AI Suggestion':'AI পরামর্শ নিন','Save Budget':'বাজেট সংরক্ষণ','Cancel':'বাতিল'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim(); if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
+  // Spent/Left labels inside dynamic renders
   if(typeof renderBudgetProgress==='function')renderBudgetProgress();
   if(typeof renderBudgetChart==='function')renderBudgetChart();
 };
