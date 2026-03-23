@@ -177,6 +177,7 @@ const LANG = {
     bgt_vs_actual:'Budget vs Actual — This Month',
     bgt_vs_chart:'Budget vs Actual Chart', bgt_set_monthly:'✏️ Set Monthly Budget',
     // Reports
+    rpt_page_title:'📊 Reports & Analytics', rpt_download_btn:'⬇ Download (5 pts)',
     rpt_spending_dist:'Spending Distribution', rpt_budget_actual:'Budget vs Actual',
     // Credits
     crd_earn_title:'💚 Earn Credits', crd_use_title:'❤️ Use Credits',
@@ -363,6 +364,7 @@ const LANG = {
     bgt_vs_actual:'বাজেট বনাম প্রকৃত — এই মাসে',
     bgt_vs_chart:'বাজেট বনাম প্রকৃত চার্ট', bgt_set_monthly:'✏️ মাসিক বাজেট নির্ধারণ করুন',
     // Reports
+    rpt_page_title:'📊 রিপোর্ট ও বিশ্লেষণ', rpt_download_btn:'⬇ ডাউনলোড (৫ পয়েন্ট)',
     rpt_spending_dist:'খরচের বিবরণ', rpt_budget_actual:'বাজেট বনাম প্রকৃত',
     // Credits
     crd_earn_title:'💚 ক্রেডিট অর্জন করুন', crd_use_title:'❤️ ক্রেডিট ব্যবহার করুন',
@@ -633,7 +635,7 @@ function buildCountryPicker(containerId, opts) {
         oninput="this.value=this.value.replace(/[^0-9]/g,''); cpValidate('${containerId}')" />
       <input type="hidden" id="${pid}" value="${selected.code}" data-digits="${selected.digits}" />
     </div>
-    <div id="${hintId}" style="font-size:12px;color:var(--text-muted);margin-top:5px;">Enter ${selected.digits}-digit mobile number for ${selected.name}</div>
+    <div id="${hintId}" style="font-size:12px;color:var(--text-muted);margin-top:5px;">${(typeof State!=='undefined'&&State.lang==='bn')?`${selected.name}-এর জন্য ${selected.digits}-সংখ্যার মোবাইল নম্বর দিন`:`Enter ${selected.digits}-digit mobile number for ${selected.name}`}</div>
     <div id="${errId}" class="form-error">Invalid mobile number format for ${selected.name}.</div>`;
 
   // Store selected on the container element for access
