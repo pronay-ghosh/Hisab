@@ -75,12 +75,12 @@
       <a class="sidebar-link active" href="credits.html"><span class="nav-icon">💳</span> <span data-t="nav_credits_p">Credits</span></a>
       <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
-    <div class="sidebar-credits"><div class="sidebar-credits-label">Credit Points</div><div class="sidebar-credits-val"><span class="credit-display">150</span> pts</div></div>
+    <div class="sidebar-credits"><div class="sidebar-credits-label" data-t="set_credit_pts">Credit Points</div><div class="sidebar-credits-val"><span class="credit-display">150</span> <span data-t="crd_pts_unit">pts</span></div></div>
   </aside>
 
   <div class="main-content">
     <div class="topbar">
-      <div class="topbar-title">💳 Credit Points</div>
+      <div class="topbar-title" data-t="crd_page_title">💳 Credit Points</div>
       <div class="topbar-actions">
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
         <div class="lang-switch">
@@ -93,9 +93,9 @@
     <div class="page-body">
       <!-- Balance Hero -->
       <div style="background:linear-gradient(135deg,var(--blue-900),var(--blue-700));border-radius:var(--radius-xl);padding:32px;text-align:center;margin-bottom:28px;color:white;position:relative;overflow:hidden;">
-        <div style="font-size:14px;opacity:0.8;margin-bottom:8px;">Your Credit Balance</div>
+        <div style="font-size:14px;opacity:0.8;margin-bottom:8px;" data-t="crd_your_balance_title">Your Credit Balance</div>
         <div style="font-size:64px;font-weight:700;line-height:1;" id="credit-hero"><span class="credit-display">150</span></div>
-        <div style="font-size:16px;opacity:0.8;margin-top:8px;">Credit Points</div>
+        <div style="font-size:16px;opacity:0.8;margin-top:8px;" data-t="set_credit_pts">Credit Points</div>
         <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
           <button class="btn btn-secondary" onclick="openModal('buy-modal')"><span data-t="crd_buy_btn">💳 Buy Credits</span></button>
           <button class="btn btn-secondary" onclick="watchAd()"><span data-t="crd_watch_btn">📺 Watch Ad (+5 pts)</span></button>
@@ -115,7 +115,7 @@
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">📺</span>
               <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);"><span data-t="crd_watch_ad">Watch an Ad</span></div><div style="font-size:12px;color:var(--text-muted);" data-t="crd_watch_desc">Short 30-second video ad</div></div>
-              <div style="display:flex;align-items:center;gap:10px;"><div style="font-weight:700;color:var(--teal-400);">+5</div><button class="btn btn-success btn-sm" onclick="watchAd()">Watch</button></div>
+              <div style="display:flex;align-items:center;gap:10px;"><div style="font-weight:700;color:var(--teal-400);">+5</div><button class="btn btn-success btn-sm" onclick="watchAd()" data-t="crd_watch_btn_sm">Watch</button></div>
             </div>
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">🎉</span>
@@ -240,7 +240,7 @@
 <!-- AD WATCH MODAL -->
 <div class="modal-backdrop" id="ad-modal">
   <div class="modal" style="max-width:380px;text-align:center;">
-    <div class="modal-header"><div class="modal-title">Watch Ad to Earn 5 Credits</div><button class="modal-close" onclick="closeModal('ad-modal')">×</button></div>
+    <div class="modal-header"><div class="modal-title" data-t="crd_ad_modal_title">Watch Ad to Earn 5 Credits</div><button class="modal-close" onclick="closeModal('ad-modal')">×</button></div>
     <div style="background:var(--bg-secondary);border-radius:var(--radius-md);height:200px;display:flex;align-items:center;justify-content:center;margin:16px 0;font-size:14px;color:var(--text-muted);border:1px dashed var(--border-strong);">
       📺 Ad playing... <span id="ad-countdown">30</span>s
     </div>
@@ -339,7 +339,15 @@ function renderCreditHistory() {
       </div>
       <div style="flex:1;min-width:0;">
         <div style="font-size:14px;font-weight:600;color:var(--text-primary);">${meta.label}</div>
-        ${e.note ? `<div style="font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.note_bn && (typeof State !== 'undefined' && State.lang === 'bn') ? e.note_bn : e.note}</div>` : ''}
+        const NOTE_BN = {
+          'Welcome gift — 100 free credits': 'স্বাগত উপহার — ১০০ বিনামূল্যে ক্রেডিট',
+          'Earned by watching ad': 'বিজ্ঞাপন দেখে অর্জিত',
+          'One time on account creation': 'অ্যাকাউন্ট তৈরিতে এককালীন',
+          'Account created': 'অ্যাকাউন্ট তৈরির সময়',
+        };
+        const _lang = (typeof State !== 'undefined' && State.lang === 'bn');
+        const displayNote = _lang ? (e.note_bn || NOTE_BN[e.note] || e.note) : e.note;
+        ${e.note ? `<div style="font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${displayNote}</div>` : ''}
         <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${dateStr} <span style="opacity:0.6;">${timeStr}</span></div>
       </div>
       <div style="font-size:16px;font-weight:700;color:${color};white-space:nowrap;">${amtStr}</div>
@@ -448,6 +456,18 @@ window.applyLang = function(lang) {
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
     const t=el.textContent.trim();
     if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
+  });
+  // Balance card & topbar
+  _st('[data-t="crd_your_balance_title"]', bn?'আপনার ক্রেডিট ব্যালেন্স':'Your Credit Balance');
+  _st('[data-t="crd_page_title"]',         bn?'💳 ক্রেডিট পয়েন্ট':'💳 Credit Points');
+  _st('[data-t="crd_watch_btn_sm"]',       bn?'দেখুন':'Watch');
+  _st('[data-t="crd_ad_modal_title"]',     bn?'বিজ্ঞাপন দেখে ৫ ক্রেডিট অর্জন করুন':'Watch Ad to Earn 5 Credits');
+  _st('[data-t="crd_pts_unit"]',           bn?'পয়েন্ট':'pts');
+  document.querySelectorAll('.sidebar-credits-val').forEach(el=>{
+    // "pts" suffix after the credit display number
+    const span = el.querySelector('.credit-display');
+    const unitSpan = el.querySelector('[data-t="crd_pts_unit"]');
+    if (unitSpan) unitSpan.textContent = bn?'পয়েন্ট':'pts';
   });
   // Pack cards
   _st('[data-t="pack_pts_100"]',  bn?'১০০ পয়েন্ট':'100 pts');
