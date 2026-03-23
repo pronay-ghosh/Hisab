@@ -126,6 +126,11 @@
 
 <script src="js/app.js"></script>
 <script>
+// ── Lang helpers ──
+function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
+function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
+function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
+
 function togglePass(id, btn) {
   const inp = document.getElementById(id);
   if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
@@ -184,6 +189,22 @@ async function doLogin() {
 document.getElementById('login-pass').addEventListener('keydown', e => {
   if (e.key === 'Enter') doLogin();
 });
+
+window.applyLang = function(lang) {
+  const bn = lang === 'bn';
+  _st('[data-t="login_title"]', bn ? 'আবার স্বাগতম' : 'Welcome back');
+  _st('[data-t="login_sub"]', bn ? 'আপনার হিসাব অ্যাকাউন্টে লগ ইন করুন' : 'Log in to your Hisab account');
+  _st('[data-t="login_user"]', bn ? 'ইউজারনেম বা ইমেইল' : 'Username or Email');
+  _st('[data-t="login_pass"]', bn ? 'পাসওয়ার্ড' : 'Password');
+  _st('[data-t="login_forgot"]', bn ? 'পাসওয়ার্ড ভুলে গেছেন?' : 'Forgot password?');
+  _st('[data-t="login_btn"]', bn ? 'লগ ইন' : 'Log In');
+  _st('[data-t="login_keep"]', bn ? 'লগইন রাখুন' : 'Keep me logged in');
+  _st('[data-t="login_no_acc"]', bn ? 'অ্যাকাউন্ট নেই?' : "Don't have an account?");
+  _st('[data-t="login_register"]', bn ? 'নিবন্ধন করুন' : 'Register');
+  _stPh('#login-user', bn ? 'ইউজারনেম বা ইমেইল' : 'Username or Email');
+  _stPh('#login-pass', bn ? 'পাসওয়ার্ড লিখুন' : 'Enter password');
+};
+
 </script>
 </body>
 </html>

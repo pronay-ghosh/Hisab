@@ -665,6 +665,47 @@ function markOpeningBalanceDone() {
 
 // Trigger after dashboard init
 setTimeout(checkOpeningBalance, 600);
+
+// Helper to set text safely
+function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
+function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
+function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
+
+window.applyLang = function(lang) {
+  const bn = lang === 'bn';
+  // Topbar
+  _st('[data-t="dash_welcome"]', bn ? 'স্বাগতম' : 'Welcome back');
+  // Stats
+  _st('[data-t="dash_balance"]', bn ? 'মোট ব্যালেন্স' : 'Total Balance');
+  _st('[data-t="dash_income"]', bn ? 'মাসিক আয়' : 'Monthly Income');
+  _st('[data-t="dash_expense"]', bn ? 'মাসিক খরচ' : 'Monthly Expense');
+  _st('[data-t="dash_savings"]', bn ? 'নিট সঞ্চয়' : 'Net Savings');
+  _st('[data-t="dash_wallets"]', bn ? 'ওয়ালেট' : 'Wallets');
+  _st('[data-t="dash_recent"]', bn ? 'সাম্প্রতিক লেনদেন' : 'Recent Transactions');
+  _st('[data-t="dash_budget_tip"]', bn ? 'বাজেট পরামর্শ' : 'Budget Suggestion');
+  // Sidebar nav
+  document.querySelectorAll('.sidebar-link').forEach(a => {
+    const href = a.getAttribute('href') || '';
+    const map = {
+      'dashboard': bn ? 'ড্যাশবোর্ড' : 'Dashboard',
+      'income': bn ? 'আয়' : 'Income',
+      'expense': bn ? 'খরচ' : 'Expense',
+      'wallets': bn ? 'ওয়ালেট' : 'Wallets',
+      'budget': bn ? 'বাজেট' : 'Budget',
+      'reports': bn ? 'রিপোর্ট' : 'Reports',
+      'settings': bn ? 'সেটিংস' : 'Settings',
+      'credits': bn ? 'ক্রেডিট' : 'Credits',
+    };
+    for (const [key, label] of Object.entries(map)) {
+      if (href.includes(key)) { const span = a.querySelector('.nav-label, span:not(.nav-icon)'); if (span) span.textContent = label; }
+    }
+  });
+  // Add income/expense/transfer buttons
+  _st('[data-t="dash_add_income"]', bn ? 'আয় যোগ করুন' : 'Add Income');
+  _st('[data-t="dash_add_expense"]', bn ? 'খরচ যোগ করুন' : 'Add Expense');
+  _st('[data-t="dash_transfer"]', bn ? 'ফান্ড ট্রান্সফার' : 'Fund Transfer');
+};
+
 </script>
 </body>
 </html>

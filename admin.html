@@ -78,7 +78,11 @@
         <div class="topbar-title" id="admin-panel-title">Admin Dashboard</div>
       </div>
       <div class="topbar-actions">
-        <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
+        <div style="display:flex;gap:4px;align-items:center;margin-right:8px;">
+        <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')" style="font-size:12px;padding:4px 8px;">EN</button>
+        <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')" style="font-size:12px;padding:4px 8px;">বাং</button>
+      </div>
+      <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
       </div>
     </div>
 
@@ -625,6 +629,11 @@
 
 <script src="js/app.js"></script>
 <script>
+// ── Lang helpers ──
+function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
+function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
+function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
+
 // ── USER PICKER AUTOCOMPLETE ─────────────
 function userPickerSearch(pickerId, inputId) {
   const query = document.getElementById(inputId).value.trim().toLowerCase();
@@ -1909,6 +1918,39 @@ function renderSalesHistory() {
   const crd=salesLog.reduce((s,x)=>s+(x.credits||0),0);
   document.getElementById('sales-total').innerHTML=`Total: <strong>${salesLog.length}</strong> sales &nbsp;·&nbsp; <strong style="color:#1E88E5;">${crd.toLocaleString()} credits</strong> &nbsp;·&nbsp; <strong style="color:#10b981;">৳ ${rev.toLocaleString()}</strong> revenue`;
 }
+
+window.applyLang = function(lang) {
+  const bn = lang === 'bn';
+  // Sidebar links
+  document.querySelectorAll('.sidebar-link').forEach(a => {
+    const span = a.querySelector('span:not(.nav-icon)') || a.querySelector('.nav-label');
+    if (!span) return;
+    const txt = span.textContent.trim();
+    const map = {
+      'Dashboard':'ড্যাশবোর্ড','Users':'ব্যবহারকারী','All Transactions':'সব লেনদেন',
+      'Send Notice':'নোটিস পাঠান','Gift Credits':'ক্রেডিট উপহার','Sell Credits':'ক্রেডিট বিক্রয়',
+      'Editors':'সম্পাদক','User Activity':'ব্যবহারকারীর কার্যক্রম','Categories':'ক্যাটাগরি','Backup':'ব্যাকআপ',
+      'User Dashboard':'ব্যবহারকারী ড্যাশবোর্ড','Log Out':'লগ আউট',
+    };
+    const rmap = Object.fromEntries(Object.entries(map).map(([k,v])=>[v,k]));
+    if (bn && map[txt]) span.textContent = map[txt];
+    else if (!bn && rmap[txt]) span.textContent = rmap[txt];
+  });
+  // Card titles
+  document.querySelectorAll('.card-title').forEach(el => {
+    const map = {
+      'All Users':'সব ব্যবহারকারী','All User Transactions':'সব লেনদেন',
+      'Send Notice to Users':'ব্যবহারকারীদের নোটিস পাঠান',
+      '💰 Sell Credits to User':'💰 ক্রেডিট বিক্রয় করুন',
+      '📜 Sales History':'📜 বিক্রয় ইতিহাস',
+    };
+    const rmap = Object.fromEntries(Object.entries(map).map(([k,v])=>[v,k]));
+    const txt = el.textContent.trim();
+    if (bn && map[txt]) el.textContent = map[txt];
+    else if (!bn && rmap[txt]) el.textContent = rmap[txt];
+  });
+};
+
 </script>
 
 </body>

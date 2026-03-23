@@ -120,6 +120,11 @@
 
 <script src="js/app.js"></script>
 <script>
+// ── Lang helpers ──
+function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
+function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
+function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
+
 let budgetChart = null;
 const CAT_ICONS = {rent:'🏠',conv:'🚌',food:'🍽️',travel:'✈️',medicine:'💊',entertainment:'🎬',others:'📦'};
 
@@ -246,6 +251,33 @@ function renderBudgetChart() {
 }
 
 initBudget();
+
+window.applyLang = function(lang) {
+  const bn = lang === 'bn';
+  document.querySelectorAll('.card-title').forEach(el => {
+    const map = {'Budget Planner':'বাজেট পরিকল্পনা','Monthly Budget':'মাসিক বাজেট','AI Budget Suggestion':'AI বাজেট পরামর্শ','Add Budget':'বাজেট যোগ করুন'};
+    const rmap = Object.fromEntries(Object.entries(map).map(([k,v])=>[v,k]));
+    if (bn && map[el.textContent.trim()]) el.textContent = map[el.textContent.trim()];
+    else if (!bn && rmap[el.textContent.trim()]) el.textContent = rmap[el.textContent.trim()];
+  });
+  document.querySelectorAll('.form-label').forEach(el => {
+    const map = {'Category':'ক্যাটাগরি','Budget Amount':'বাজেট পরিমাণ','Month':'মাস'};
+    const rmap = Object.fromEntries(Object.entries(map).map(([k,v])=>[v,k]));
+    if (bn && map[el.textContent.trim()]) el.textContent = map[el.textContent.trim()];
+    else if (!bn && rmap[el.textContent.trim()]) el.textContent = rmap[el.textContent.trim()];
+  });
+  document.querySelectorAll('.btn').forEach(el => {
+    if (['Add Budget','বাজেট যোগ করুন'].includes(el.textContent.trim()))
+      el.textContent = bn ? 'বাজেট যোগ করুন' : 'Add Budget';
+    if (['Get AI Suggestion','AI পরামর্শ নিন'].includes(el.textContent.trim()))
+      el.textContent = bn ? 'AI পরামর্শ নিন' : 'Get AI Suggestion';
+  });
+  const spent = document.querySelectorAll('[data-t="bgt_spent"]');
+  spent.forEach(e => e.textContent = bn ? 'খরচ হয়েছে' : 'Spent');
+  const left = document.querySelectorAll('[data-t="bgt_left"]');
+  left.forEach(e => e.textContent = bn ? 'বাকি আছে' : 'Remaining');
+};
+
 </script>
 </body>
 </html>

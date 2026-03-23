@@ -226,6 +226,11 @@
 
 <script src="js/app.js"></script>
 <script>
+// ── Lang helpers ──
+function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
+function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
+function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
+
 // ── WALLET TYPES (Admin এডিট করতে পারবে) ──────────────────────
 const DEFAULT_WALLET_TYPES = [
   { id: 'cash',        icon: '💵', name_en: 'Cash',              name_bn: 'নগদ' },
@@ -720,6 +725,31 @@ function doTransfer() {
 }
 
 initWallets();
+
+window.applyLang = function(lang) {
+  const bn = lang === 'bn';
+  _st('[data-t="dash_balance"]', bn ? 'মোট ব্যালেন্স' : 'Total Balance');
+  _st('[data-t="wlt_title"]', bn ? 'ওয়ালেট ও অ্যাকাউন্ট' : 'Wallets & Accounts');
+  document.querySelectorAll('.card-title').forEach(el => {
+    if (['Wallets & Accounts','ওয়ালেট ও অ্যাকাউন্ট'].includes(el.textContent.trim()))
+      el.textContent = bn ? 'ওয়ালেট ও অ্যাকাউন্ট' : 'Wallets & Accounts';
+    if (['Add Wallet','ওয়ালেট যোগ করুন'].includes(el.textContent.trim()))
+      el.textContent = bn ? 'ওয়ালেট যোগ করুন' : 'Add Wallet';
+  });
+  document.querySelectorAll('.form-label').forEach(el => {
+    const map = {'Wallet Name':'ওয়ালেটের নাম','Initial Balance':'প্রাথমিক ব্যালেন্স','Icon':'আইকন','Type':'ধরন'};
+    const rmap = {'ওয়ালেটের নাম':'Wallet Name','প্রাথমিক ব্যালেন্স':'Initial Balance','আইকন':'Icon','ধরন':'Type'};
+    if (bn && map[el.textContent.trim()]) el.textContent = map[el.textContent.trim()];
+    else if (!bn && rmap[el.textContent.trim()]) el.textContent = rmap[el.textContent.trim()];
+  });
+  document.querySelectorAll('.btn').forEach(el => {
+    if (['Add Wallet','ওয়ালেট যোগ করুন'].includes(el.textContent.trim()))
+      el.textContent = bn ? 'ওয়ালেট যোগ করুন' : 'Add Wallet';
+    if (['Save','সংরক্ষণ'].includes(el.textContent.trim()))
+      el.textContent = bn ? 'সংরক্ষণ' : 'Save';
+  });
+};
+
 </script>
 <!-- ══ WALLET TYPE MANAGER (Admin Only) ══ -->
 <div id="wallet-type-manager" style="display:none;margin:24px 0;">

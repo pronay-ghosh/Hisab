@@ -423,6 +423,29 @@ function saveEditIncome() {
 }
 
 initIncome();
+
+// Helper to set text safely
+function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
+function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
+function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
+
+window.applyLang = function(lang) {
+  const bn = lang === 'bn';
+  _st('[data-t="dash_add_income"]', bn ? 'আয় যোগ করুন' : 'Add Income');
+  _st('[data-t="txn_amount"]', bn ? 'পরিমাণ (৳)' : 'Amount (৳)');
+  _st('[data-t="txn_date"]', bn ? 'তারিখ' : 'Date');
+  _st('[data-t="txn_note"]', bn ? 'বিবরণ / নোট' : 'Description / Note');
+  _st('[data-t="txn_category"]', bn ? 'ক্যাটাগরি' : 'Category');
+  _st('[data-t="txn_debit"]', bn ? 'ডেবিট অ্যাকাউন্ট (যেখানে জমা)' : 'Credit Account (To)');
+  _st('[data-t="txn_save"]', bn ? 'সংরক্ষণ করুন' : 'Save Transaction');
+  _st('[data-t="txn_cancel"]', bn ? 'বাতিল' : 'Cancel');
+  // Page title / header
+  const titles = document.querySelectorAll('.page-title, .card-title, h2');
+  titles.forEach(el => { if (el.textContent.trim() === 'Income' || el.textContent.trim() === 'আয়') el.textContent = bn ? 'আয়' : 'Income'; });
+  // Txn list header
+  _st('.txn-list-title, [data-t="txn_list"]', bn ? 'লেনদেনের তালিকা' : 'Transaction List');
+};
+
 </script>
 </body>
 </html>

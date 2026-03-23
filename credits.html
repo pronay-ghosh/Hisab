@@ -251,6 +251,11 @@
 
 <script src="js/app.js"></script>
 <script>
+// ── Lang helpers ──
+function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
+function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
+function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
+
 // ── CREDIT LOG HELPERS ────────────────────
 // Key: hisab_credit_log_username → array of log entries
 function getCreditLog() {
@@ -416,6 +421,27 @@ function buyCredits(pts, price) {
 // app.js handles credit logging via _writeCreditLog automatically
 
 document.addEventListener('DOMContentLoaded', initCredits);
+
+window.applyLang = function(lang) {
+  const bn = lang === 'bn';
+  document.querySelectorAll('.card-title').forEach(el => {
+    const map = {'Credit Points':'ক্রেডিট পয়েন্ট','Transaction History':'লেনদেনের ইতিহাস','Credit Transaction History':'ক্রেডিট লেনদেনের ইতিহাস','Buy Credits':'ক্রেডিট কিনুন','Earn Credits':'ক্রেডিট অর্জন করুন'};
+    const rmap = Object.fromEntries(Object.entries(map).map(([k,v])=>[v,k]));
+    if (bn && map[el.textContent.trim()]) el.textContent = map[el.textContent.trim()];
+    else if (!bn && rmap[el.textContent.trim()]) el.textContent = rmap[el.textContent.trim()];
+  });
+  document.querySelectorAll('.btn').forEach(el => {
+    if (['Watch Ad to Earn +5','বিজ্ঞাপন দেখুন (+5)'].includes(el.textContent.trim()))
+      el.textContent = bn ? 'বিজ্ঞাপন দেখুন (+5)' : 'Watch Ad to Earn +5';
+  });
+  const filterEl = document.getElementById('history-filter');
+  if (filterEl) {
+    filterEl.options[0].text = bn ? 'সব' : 'All';
+    filterEl.options[1].text = bn ? '+ শুধু ক্রেডিট' : '+ Credits Only';
+    filterEl.options[2].text = bn ? '- শুধু ডেবিট' : '- Credits Only';
+  }
+};
+
 </script>
 </body>
 </html>
