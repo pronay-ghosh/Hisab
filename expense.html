@@ -432,6 +432,7 @@ function saveEditExpense() {
 }
 
 initExpense();
+if (typeof setLanguage === 'function') setLanguage(State.lang || localStorage.getItem('hisab_lang') || 'en');
 
 function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
 function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
@@ -466,8 +467,18 @@ window.applyLang = function(lang) {
     const t=el.textContent.trim();
     if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
+  // Re-populate expense selects with correct language
+  const ew2 = document.getElementById('exp-wallet');
+  if(ew2) ew2.innerHTML=State.wallets.map(w=>`<option value="${w.id}">${w.icon||'💸'} ${bn?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
+  const catOpts=State.expense_cats.map(c=>`<option value="${c.id}">${bn?c.bn:c.en}</option>`).join('');
+  const ec=document.getElementById('exp-cat');
+  if(ec) ec.innerHTML=catOpts;
   const fc=document.getElementById('exp-filter-cat');
-  if(fc&&fc.options[0])fc.options[0].text=bn?'সব ক্যাটাগরি':'All Categories';
+  if(fc){ const v=fc.value; fc.innerHTML=`<option value="">${bn?'সব ক্যাটাগরি':'All Categories'}</option>`+catOpts; fc.value=v; }
+  const ew3=document.getElementById('edit-exp-wallet');
+  if(ew3) ew3.innerHTML=State.wallets.map(w=>`<option value="${w.id}">${w.icon||'💸'} ${bn?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
+  const ec2=document.getElementById('edit-exp-cat');
+  if(ec2) ec2.innerHTML=catOpts;
   if(typeof renderExpStats==='function')renderExpStats();
   if(typeof renderExpCatCards==='function')renderExpCatCards();
   if(typeof renderExpBars==='function')renderExpBars();

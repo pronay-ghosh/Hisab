@@ -581,6 +581,8 @@ function saveBudget() {
 }
 
 initDashboard();
+
+if (typeof setLanguage === 'function') setLanguage(State.lang || localStorage.getItem('hisab_lang') || 'en');
 </script>
 
 <!-- ══ OPENING BALANCE MODAL ══ -->
@@ -674,7 +676,6 @@ function _opts(id,opts){const e=document.getElementById(id);if(!e)return;Array.f
 
 window.applyLang = function(lang) {
   const bn = lang==='bn';
-  // Stat labels
   _st('[data-t="dash_balance"]',  bn?'মোট ব্যালেন্স':'Total Balance');
   _st('[data-t="dash_income"]',   bn?'মাসিক আয়':'Monthly Income');
   _st('[data-t="dash_expense"]',  bn?'মাসিক খরচ':'Monthly Expense');
@@ -685,13 +686,22 @@ window.applyLang = function(lang) {
   _st('[data-t="dash_add_income"]',bn?'আয় যোগ করুন':'Add Income');
   _st('[data-t="dash_add_expense"]',bn?'খরচ যোগ করুন':'Add Expense');
   _st('[data-t="dash_transfer"]', bn?'ফান্ড ট্রান্সফার':'Fund Transfer');
+  _st('[data-t="dash_overview"]', bn?'এই মাসের সংক্ষেপ':'This Month Overview');
+  // Re-populate all modal dropdowns with correct language
+  const walletOpts = State.wallets.map(w=>`<option value="${w.id}">${w.icon||'👛'} ${bn?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
+  ['txn-debit','txn-credit','transfer-from','transfer-to'].forEach(id=>{
+    const el=document.getElementById(id); if(el){const v=el.value;el.innerHTML=walletOpts;el.value=v;}
+  });
+  const incOpts=State.income_cats.map(c=>`<option value="${c.id}">${bn?c.bn:c.en}</option>`).join('');
+  const expOpts=State.expense_cats.map(c=>`<option value="${c.id}">${bn?c.bn:c.en}</option>`).join('');
+  ['txn-income-cat'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=incOpts;});
+  ['txn-expense-cat'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=expOpts;});
   // Dynamic buttons
   document.querySelectorAll('.btn').forEach(el=>{
-    const m={'Accept Suggestion':'পরামর্শ গ্রহণ','Dismiss':'বাতিল','Save Budget':'বাজেট সংরক্ষণ'};
+    const m={'Accept Suggestion':'পরামর্শ গ্রহণ','Dismiss':'বাতিল','Save Budget':'বাজেট সংরক্ষণ','Save Transaction':'লেনদেন সংরক্ষণ','Cancel':'বাতিল'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
     const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t];
-    else if(!bn&&r[t])el.textContent=r[t];
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
 };
 

@@ -469,6 +469,8 @@ function downloadReport() {
 
 initReports();
 
+if (typeof setLanguage === 'function') setLanguage(State.lang || localStorage.getItem('hisab_lang') || 'en');
+
 function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
 function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
 function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=txt;}

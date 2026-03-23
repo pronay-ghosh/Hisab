@@ -423,6 +423,8 @@ function saveEditIncome() {
 }
 
 initIncome();
+// Apply saved language after page init (dropdowns must be populated first)
+if (typeof setLanguage === 'function') setLanguage(State.lang || localStorage.getItem('hisab_lang') || 'en');
 
 function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
 function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
@@ -465,10 +467,20 @@ window.applyLang = function(lang) {
     const t=el.textContent.trim();
     if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
-  // Filter "All Sources"
+  // Re-populate selects with correct language
+  const iw = document.getElementById('inc-wallet');
+  if(iw) iw.innerHTML = State.wallets.map(w=>`<option value="${w.id}">${w.icon||'💰'} ${bn?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
+  const srcOpts = State.income_cats.map(c=>`<option value="${c.id}">${bn?c.bn:c.en}</option>`).join('');
+  const is = document.getElementById('inc-source');
+  if(is) is.innerHTML = srcOpts;
   const fc=document.getElementById('inc-filter-cat');
-  if(fc&&fc.options[0])fc.options[0].text=bn?'সব উৎস':'All Sources';
-  // Re-render dynamic data with new lang
+  if(fc){ const v=fc.value; fc.innerHTML=`<option value="">${bn?'সব উৎস':'All Sources'}</option>`+srcOpts; fc.value=v; }
+  // Edit modal dropdowns
+  const ew=document.getElementById('edit-inc-wallet');
+  if(ew) ew.innerHTML=State.wallets.map(w=>`<option value="${w.id}">${w.icon||'💰'} ${bn?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
+  const es=document.getElementById('edit-inc-source');
+  if(es) es.innerHTML=srcOpts;
+  // Re-render
   if(typeof renderStats==='function')renderStats();
   if(typeof renderCatCards==='function')renderCatCards();
   if(typeof renderIncomeBars==='function')renderIncomeBars();
