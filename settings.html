@@ -152,47 +152,47 @@
           <div id="panel-notifications" class="settings-panel" style="display:none;">
             <div class="settings-section-title" data-t="set_notif_prefs">Notification Preferences</div>
             <div class="settings-row">
-              <div><div class="settings-row-label">Daily Reminder</div><div class="settings-row-desc">Remind me to add daily expenses</div></div>
+              <div><div class="settings-row-label" data-t="notif_daily_label">Daily Reminder</div><div class="settings-row-desc" data-t="notif_daily_desc">Remind me to add daily expenses</div></div>
               <button class="toggle on" onclick="this.classList.toggle('on')"></button>
             </div>
             <div class="settings-row">
-              <div><div class="settings-row-label">Reminder Time</div><div class="settings-row-desc">Choose your preferred reminder time</div></div>
+              <div><div class="settings-row-label" data-t="notif_time_label">Reminder Time</div><div class="settings-row-desc" data-t="notif_time_desc">Choose your preferred reminder time</div></div>
               <input type="time" class="form-input" value="21:00" style="width:120px;" />
             </div>
             <div class="settings-row">
-              <div><div class="settings-row-label">Monthly Savings Alert</div><div class="settings-row-desc">Congratulate me on savings milestones</div></div>
+              <div><div class="settings-row-label" data-t="notif_savings_label">Monthly Savings Alert</div><div class="settings-row-desc" data-t="notif_savings_desc">Congratulate me on savings milestones</div></div>
               <button class="toggle on" onclick="this.classList.toggle('on')"></button>
             </div>
             <div class="settings-row">
-              <div><div class="settings-row-label">Budget Warning</div><div class="settings-row-desc">Alert when budget 80% consumed</div></div>
+              <div><div class="settings-row-label" data-t="notif_budget_label">Budget Warning</div><div class="settings-row-desc" data-t="notif_budget_desc">Alert when budget 80% consumed</div></div>
               <button class="toggle on" onclick="this.classList.toggle('on')"></button>
             </div>
             <div class="settings-row">
-              <div><div class="settings-row-label">Admin Announcements</div><div class="settings-row-desc">Receive news, wishes, and gifts from admin</div></div>
+              <div><div class="settings-row-label" data-t="notif_admin_label">Admin Announcements</div><div class="settings-row-desc" data-t="notif_admin_desc">Receive news, wishes, and gifts from admin</div></div>
               <button class="toggle on" onclick="this.classList.toggle('on')"></button>
             </div>
-            <button class="btn btn-primary" style="margin-top:8px;" onclick="showToast('🔔','Saved!','Notification preferences updated.')">Save Preferences</button>
+            <button class="btn btn-primary" style="margin-top:8px;" onclick="showToast('🔔','Saved!','Notification preferences updated.')" data-t="notif_save_btn">Save Preferences</button>
           </div>
 
           <!-- CATEGORIES -->
           <div id="panel-categories" class="settings-panel" style="display:none;">
             <div class="settings-section-title" data-t="set_cat_mgmt">Category Management</div>
-            <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Show, hide, or add custom categories. Adding custom categories costs 10 credits.</p>
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;" data-t="cat_mgmt_desc">Show, hide, or add custom categories. Adding custom categories costs 10 credits.</p>
 
-            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">💰 Income Categories</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;" data-t="cat_income_title">💰 Income Categories</div>
             <div id="income-cats-list" style="margin-bottom:20px;"></div>
 
-            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">💸 Expense Categories</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;" data-t="cat_expense_title">💸 Expense Categories</div>
             <div id="expense-cats-list" style="margin-bottom:20px;"></div>
 
-            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">👛 Wallet Types</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;" data-t="cat_wallet_title">👛 Wallet Types</div>
             <div id="wallet-types-list" style="margin-bottom:20px;"></div>
 
             <div class="card" style="border:1.5px dashed var(--blue-200);background:var(--blue-50);">
-              <div style="font-size:14px;font-weight:700;color:var(--blue-800);margin-bottom:12px;">+ Add Custom Category (10 credits)</div>
+              <div style="font-size:14px;font-weight:700;color:var(--blue-800);margin-bottom:12px;" data-t="cat_add_custom_title">+ Add Custom Category (10 credits)</div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">English Name</label>
+                  <label class="form-label" data-t="cat_eng_name_lbl">English Name</label>
                   <input type="text" class="form-input" id="new-cat-en" placeholder="Category name" />
                 </div>
                 <div class="form-group">
@@ -201,11 +201,11 @@
                 </div>
               </div>
               <select class="form-input" id="new-cat-type" style="margin-bottom:12px;">
-                <option value="income">Income Category</option>
-                <option value="expense">Expense Category</option>
-                <option value="wallet">Wallet Type</option>
+                <option value="income" data-t="cat_type_income">Income Category</option>
+                <option value="expense" data-t="cat_type_expense">Expense Category</option>
+                <option value="wallet" data-t="cat_type_wallet">Wallet Type</option>
               </select>
-              <button class="btn btn-primary" onclick="addCustomCategory()">Add Category (–10 pts)</button>
+              <button class="btn btn-primary" onclick="addCustomCategory()" data-t="cat_add_btn">Add Category (–10 pts)</button>
             </div>
           </div>
 
@@ -270,26 +270,26 @@
               <div id="gdrive-btn-connected" style="display:none;display:none;gap:10px;justify-content:center;flex-wrap:wrap;">
                 <button class="btn btn-success" onclick="manualBackup()"><span data-t="backup_now_btn2">☁️ Backup Now</span></button>
                 <button class="btn btn-outline" onclick="restoreFromDrive()"><span data-t="backup_restore_btn2">⬇️ Restore from Drive</span></button>
-                <button class="btn btn-sm" style="color:var(--red-400);border:1.5px solid var(--red-400);background:transparent;border-radius:var(--radius-md);padding:7px 14px;font-size:13px;font-weight:600;" onclick="disconnectGoogleDrive()">Disconnect</button>
+                <button class="btn btn-sm" style="color:var(--red-400);border:1.5px solid var(--red-400);background:transparent;border-radius:var(--radius-md);padding:7px 14px;font-size:13px;font-weight:600;" onclick="disconnectGoogleDrive()" data-t="backup_disconnect_btn">Disconnect</button>
               </div>
             </div>
 
             <!-- Auto-backup settings (shown only when connected) -->
             <div id="gdrive-settings-section" style="display:none;">
               <div class="settings-row">
-                <div><div class="settings-row-label">Auto Backup</div><div class="settings-row-desc">Automatically back up your data daily</div></div>
+                <div><div class="settings-row-label" data-t="backup_auto_label">Auto Backup</div><div class="settings-row-desc" data-t="backup_auto_desc">Automatically back up your data daily</div></div>
                 <button class="toggle on" id="auto-backup-toggle" onclick="toggleAutoBackup(this)"></button>
               </div>
               <div class="settings-row" id="backup-time-row">
-                <div><div class="settings-row-label">Backup Time</div><div class="settings-row-desc">Daily backup runs at this time</div></div>
+                <div><div class="settings-row-label" data-t="backup_time_label">Backup Time</div><div class="settings-row-desc" data-t="backup_time_desc">Daily backup runs at this time</div></div>
                 <input type="time" class="form-input" id="backup-time-input" value="06:00" style="width:120px;" onchange="saveBackupPrefs()" />
               </div>
               <div class="settings-row">
-                <div><div class="settings-row-label">Backup Scope</div><div class="settings-row-desc">What gets backed up</div></div>
+                <div><div class="settings-row-label" data-t="backup_scope_label">Backup Scope</div><div class="settings-row-desc" data-t="backup_scope_what">What gets backed up</div></div>
                 <div style="font-size:13px;color:var(--text-muted);" data-t="backup_scope_value">All transactions, wallets &amp; settings</div>
               </div>
               <div class="settings-row">
-                <div><div class="settings-row-label">Last Backup</div><div class="settings-row-desc" id="last-backup-desc">Never backed up yet</div></div>
+                <div><div class="settings-row-label" data-t="backup_last_label">Last Backup</div><div class="settings-row-desc" id="last-backup-desc" data-t="backup_never">Never backed up yet</div></div>
                 <span id="last-backup-status" style="font-size:13px;color:var(--text-muted);">—</span>
               </div>
               <!-- Progress bar during backup -->
@@ -304,7 +304,7 @@
               </div>
               <!-- Backup history -->
               <div style="margin-top:24px;">
-                <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">Backup History</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;" data-t="backup_history_title">Backup History</div>
                 <div id="backup-history-list"></div>
                 <div id="no-backup-history" style="font-size:13px;color:var(--text-muted);padding:16px;text-align:center;">No backups yet. Run your first backup above.</div>
               </div>
@@ -365,16 +365,16 @@
               </div>
               <div class="form-error" id="set-confirm-error">Passwords do not match.</div>
             </div>
-            <button class="btn btn-primary" onclick="changePassword()">Change Password</button>
+            <button class="btn btn-primary" onclick="changePassword()" data-t="sec_change_pass_btn">Change Password</button>
             <div class="divider"></div>
-            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">Forgot Password?</div>
-            <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Send a password reset OTP to your email or phone.</p>
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:8px;" data-t="sec_forgot_title">Forgot Password?</div>
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;" data-t="sec_forgot_desc">Send a password reset OTP to your email or phone.</p>
 
             <!-- Step 1: Send OTP -->
             <div id="sec-otp-step1">
               <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                <button class="btn btn-outline btn-sm" onclick="secSendOTP('email')">📧 Send to Email</button>
-                <button class="btn btn-outline btn-sm" onclick="secSendOTP('phone')">📱 Send to Phone</button>
+                <button class="btn btn-outline btn-sm" onclick="secSendOTP('email')" data-t="sec_send_email_btn">📧 Send to Email</button>
+                <button class="btn btn-outline btn-sm" onclick="secSendOTP('phone')" data-t="sec_send_phone_btn">📱 Send to Phone</button>
               </div>
               <div id="sec-otp-error" class="dual-warning" style="margin-top:10px;"></div>
             </div>

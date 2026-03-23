@@ -273,25 +273,26 @@ function addCreditLog(entry) {
 
 // ── ICONS / LABELS per type ───────────────
 const CREDIT_TYPE_META = {
-  signup:      { icon:'🎁', label:'Sign-up Bonus',      color:'#10b981' },
-  ad:          { icon:'📺', label:'Ad Watched',          color:'#10b981' },
-  gift:        { icon:'🎀', label:'Admin Gift',          color:'#10b981' },
-  sell:        { icon:'💰', label:'Credits Purchased',   color:'#1E88E5' },
-  transaction: { icon:'💸', label:'Transaction Used',    color:'#ef4444' },
-  ai:          { icon:'🤖', label:'AI Feature Used',     color:'#ef4444' },
-  report:      { icon:'📊', label:'Report Generated',    color:'#ef4444' },
-  budget:      { icon:'📋', label:'Budget Used',         color:'#ef4444' },
-  refund:      { icon:'↩️', label:'Refund',              color:'#f59e0b' },
-  adjustment:  { icon:'⚙️', label:'Admin Adjustment',    color:'#6366f1' },
-  other_add:   { icon:'➕', label:'Credits Added',       color:'#10b981' },
-  other_use:   { icon:'➖', label:'Credits Used',        color:'#ef4444' },
+  signup:      { icon:'🎁', en:'Sign-up Bonus',      bn:'সাইনআপ বোনাস',      color:'#10b981' },
+  ad:          { icon:'📺', en:'Ad Watched',          bn:'বিজ্ঞাপন দেখা হয়েছে', color:'#10b981' },
+  gift:        { icon:'🎀', en:'Admin Gift',          bn:'অ্যাডমিন উপহার',     color:'#10b981' },
+  sell:        { icon:'💰', en:'Credits Purchased',   bn:'ক্রেডিট কেনা হয়েছে', color:'#1E88E5' },
+  transaction: { icon:'💸', en:'Transaction Used',    bn:'লেনদেনে ব্যবহৃত',    color:'#ef4444' },
+  ai:          { icon:'🤖', en:'AI Feature Used',     bn:'AI ফিচারে ব্যবহৃত',  color:'#ef4444' },
+  report:      { icon:'📊', en:'Report Generated',    bn:'রিপোর্ট তৈরি হয়েছে', color:'#ef4444' },
+  budget:      { icon:'📋', en:'Budget Used',         bn:'বাজেটে ব্যবহৃত',     color:'#ef4444' },
+  refund:      { icon:'↩️', en:'Refund',              bn:'ফেরত',               color:'#f59e0b' },
+  adjustment:  { icon:'⚙️', en:'Admin Adjustment',    bn:'অ্যাডমিন সমন্বয়',   color:'#6366f1' },
+  other_add:   { icon:'➕', en:'Credits Added',       bn:'ক্রেডিট যোগ হয়েছে',  color:'#10b981' },
+  other_use:   { icon:'➖', en:'Credits Used',        bn:'ক্রেডিট ব্যবহৃত',    color:'#ef4444' },
 };
 
 function getMeta(type, amount) {
+  const lang = (typeof State !== 'undefined' && State.lang) ? State.lang : 'en';
   const meta = CREDIT_TYPE_META[type] || (amount >= 0
     ? CREDIT_TYPE_META.other_add
     : CREDIT_TYPE_META.other_use);
-  return meta;
+  return { ...meta, label: meta[lang] || meta.en };
 }
 
 // ── RENDER HISTORY ────────────────────────
@@ -337,8 +338,8 @@ function renderCreditHistory() {
         ${meta.icon}
       </div>
       <div style="flex:1;min-width:0;">
-        <div style="font-size:14px;font-weight:600;color:var(--text-primary);">${e.label || meta.label}</div>
-        ${e.note ? `<div style="font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.note}</div>` : ''}
+        <div style="font-size:14px;font-weight:600;color:var(--text-primary);">${meta.label}</div>
+        ${e.note ? `<div style="font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.note_bn && (typeof State !== 'undefined' && State.lang === 'bn') ? e.note_bn : e.note}</div>` : ''}
         <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${dateStr} <span style="opacity:0.6;">${timeStr}</span></div>
       </div>
       <div style="font-size:16px;font-weight:700;color:${color};white-space:nowrap;">${amtStr}</div>
@@ -363,7 +364,7 @@ function initCredits() {
   const logKey  = 'hisab_credit_log_' + user.username;
   const existing = JSON.parse(localStorage.getItem(logKey) || '[]');
   if (!existing.length && State.credits >= 100) {
-    const log = [{ id: Date.now(), timestamp: user.created ? new Date(user.created).toISOString() : new Date().toISOString(), type:'signup', amount:100, label:'Sign-up Bonus', note:'Welcome gift — 100 free credits' }];
+    const log = [{ id: Date.now(), timestamp: user.created ? new Date(user.created).toISOString() : new Date().toISOString(), type:'signup', amount:100, label:'Sign-up Bonus', note:'Welcome gift — 100 free credits', note_bn:'স্বাগত উপহার — ১০০ বিনামূল্যে ক্রেডিট' }];
     localStorage.setItem(logKey, JSON.stringify(log));
   }
 
@@ -397,7 +398,7 @@ function claimAdCredits() {
   if (State.user && !isPrivilegedUser()) {
     const key = 'hisab_credit_log_' + State.user.username;
     const log = JSON.parse(localStorage.getItem(key) || '[]');
-    log.unshift({ id: Date.now(), timestamp: new Date().toISOString(), type:'ad', amount:5, label:'Ad Watched', note:'Earned by watching ad' });
+    log.unshift({ id: Date.now(), timestamp: new Date().toISOString(), type:'ad', amount:5, label:'Ad Watched', note:'Earned by watching ad', note_bn:'বিজ্ঞাপন দেখে অর্জিত' });
     localStorage.setItem(key, JSON.stringify(log));
     State.credits += 5;
     saveState('credits', State.credits);
