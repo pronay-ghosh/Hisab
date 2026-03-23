@@ -226,6 +226,14 @@ const LANG = {
     crd_your_balance_title:'Your Credit Balance', crd_page_title:'💳 Credit Points',
     crd_watch_btn_sm:'Watch', crd_ad_modal_title:'Watch Ad to Earn 5 Credits',
     crd_pts_unit:'pts',
+    crd_total_earned:'Total Earned', crd_total_used:'Total Used',
+    crd_balance_lbl:'Balance', crd_loading_history:'Loading history...',
+    // Dashboard
+    dash_all_wallets:'All wallets combined', dash_this_month:'This month',
+    dash_this_month_exp:'This month', dash_inc_minus_exp:'Income – Expense',
+    dash_view_all:'View All', dash_no_txns:'No transactions yet. Add your first income or expense!',
+    // Profile
+    profile_change_photo:'📷 Change Photo', profile_photo_hint:'JPG, PNG or GIF · Max 2MB',
     crd_watch_btn:'📺 Watch Ad (+5 pts)', crd_history_label:'Credit History',
     crd_signup_label:'Sign-up Bonus', crd_signup_when:'Account created',
     crd_ad_watched:'Ad Watched', crd_ad_when:'Today',
@@ -404,6 +412,14 @@ const LANG = {
     crd_your_balance_title:'আপনার ক্রেডিট ব্যালেন্স', crd_page_title:'💳 ক্রেডিট পয়েন্ট',
     crd_watch_btn_sm:'দেখুন', crd_ad_modal_title:'বিজ্ঞাপন দেখে ৫ ক্রেডিট অর্জন করুন',
     crd_pts_unit:'পয়েন্ট',
+    crd_total_earned:'মোট অর্জিত', crd_total_used:'মোট ব্যবহৃত',
+    crd_balance_lbl:'ব্যালেন্স', crd_loading_history:'ইতিহাস লোড হচ্ছে...',
+    // Dashboard
+    dash_all_wallets:'সব ওয়ালেট মিলিয়ে', dash_this_month:'এই মাসে',
+    dash_this_month_exp:'এই মাসে', dash_inc_minus_exp:'আয় – খরচ',
+    dash_view_all:'সব দেখুন', dash_no_txns:'এখনো কোনো লেনদেন নেই। প্রথম আয় বা খরচ যোগ করুন!',
+    // Profile
+    profile_change_photo:'📷 ছবি পরিবর্তন করুন', profile_photo_hint:'JPG, PNG বা GIF · সর্বোচ্চ 2MB',
     crd_watch_btn:'📺 বিজ্ঞাপন দেখুন (+৫ পয়েন্ট)', crd_history_label:'ক্রেডিট ইতিহাস',
     crd_signup_label:'সাইনআপ বোনাস', crd_signup_when:'অ্যাকাউন্ট তৈরির সময়',
     crd_ad_watched:'বিজ্ঞাপন দেখা হয়েছে', crd_ad_when:'আজকে',
