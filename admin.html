@@ -78,11 +78,7 @@
         <div class="topbar-title" id="admin-panel-title">Admin Dashboard</div>
       </div>
       <div class="topbar-actions">
-        <div style="display:flex;gap:4px;align-items:center;margin-right:8px;">
-        <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')" style="font-size:12px;padding:4px 8px;">EN</button>
-        <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')" style="font-size:12px;padding:4px 8px;">বাং</button>
-      </div>
-      <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
+        <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
       </div>
     </div>
 
@@ -629,11 +625,6 @@
 
 <script src="js/app.js"></script>
 <script>
-// ── Lang helpers ──
-function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
-function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
-function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
-
 // ── USER PICKER AUTOCOMPLETE ─────────────
 function userPickerSearch(pickerId, inputId) {
   const query = document.getElementById(inputId).value.trim().toLowerCase();
@@ -1430,26 +1421,64 @@ function renderAdminCategories() {
   renderList(State.expense_cats, 'admin-expense-cats', 'expense');
 }
 
-function adminSaveNewCat() {
+async function adminSaveNewCat() {
   const type = document.getElementById('admin-cat-type').value;
   const en   = document.getElementById('admin-cat-en').value.trim();
   const bn   = document.getElementById('admin-cat-bn').value.trim();
   if (!en) { showToast('⚠️','Missing Name','Please enter the English category name.'); return; }
   const newCat = { id: en.toLowerCase().replace(/\s+/g,'_') + '_' + Date.now(), en, bn: bn || en };
+
+  // ── 1. Add to admin's own State ──
   if (type === 'income')  { State.income_cats.push(newCat);  saveState('income_cats',  State.income_cats); }
   else                    { State.expense_cats.push(newCat); saveState('expense_cats', State.expense_cats); }
+
+  // ── 2. Propagate to ALL registered users' localStorage ──
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  users.forEach(u => {
+    const key = type === 'income'
+      ? 'hisab_income_cats_' + u.username
+      : 'hisab_expense_cats_' + u.username;
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    // Only add if not already present
+    if (!existing.find(c => c.id === newCat.id)) {
+      existing.push(newCat);
+      localStorage.setItem(key, JSON.stringify(existing));
+    }
+  });
+
+  // ── 3. Save to Firestore global_cats ──
+  await _syncGlobalCatsToFirestore(type);
+
   document.getElementById('admin-cat-en').value = '';
   document.getElementById('admin-cat-bn').value = '';
   renderAdminCategories();
-  showToast('✅','Category Added!',`"${en}" added as a global ${type} category — free for all users.`);
+  showToast('✅','Category Added!',`"${en}" added for ALL users as a global ${type} category.`);
 }
 
-function adminDeleteCat(type, idx) {
+async function adminDeleteCat(type, idx) {
   if (!confirm('Remove this category? It will be removed for ALL users.')) return;
+  const removed = type === 'income' ? State.income_cats[idx] : State.expense_cats[idx];
   if (type === 'income')  { State.income_cats.splice(idx, 1);  saveState('income_cats',  State.income_cats); }
   else                    { State.expense_cats.splice(idx, 1); saveState('expense_cats', State.expense_cats); }
+
+  // ── Remove from ALL users' localStorage ──
+  if (removed) {
+    const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+    users.forEach(u => {
+      const key = type === 'income'
+        ? 'hisab_income_cats_' + u.username
+        : 'hisab_expense_cats_' + u.username;
+      const existing = JSON.parse(localStorage.getItem(key) || '[]');
+      const filtered = existing.filter(c => c.id !== removed.id);
+      localStorage.setItem(key, JSON.stringify(filtered));
+    });
+  }
+
+  // ── Sync to Firestore ──
+  await _syncGlobalCatsToFirestore(type);
+
   renderAdminCategories();
-  showToast('🗑️','Removed','Category removed from all accounts.');
+  showToast('🗑️','Removed','Category removed from all user accounts.');
 }
 
 function openEditCat(type, idx, nameEn, nameBn) {
@@ -1919,37 +1948,76 @@ function renderSalesHistory() {
   document.getElementById('sales-total').innerHTML=`Total: <strong>${salesLog.length}</strong> sales &nbsp;·&nbsp; <strong style="color:#1E88E5;">${crd.toLocaleString()} credits</strong> &nbsp;·&nbsp; <strong style="color:#10b981;">৳ ${rev.toLocaleString()}</strong> revenue`;
 }
 
-window.applyLang = function(lang) {
-  const bn = lang === 'bn';
-  // Sidebar links
-  document.querySelectorAll('.sidebar-link').forEach(a => {
-    const span = a.querySelector('span:not(.nav-icon)') || a.querySelector('.nav-label');
-    if (!span) return;
-    const txt = span.textContent.trim();
-    const map = {
-      'Dashboard':'ড্যাশবোর্ড','Users':'ব্যবহারকারী','All Transactions':'সব লেনদেন',
-      'Send Notice':'নোটিস পাঠান','Gift Credits':'ক্রেডিট উপহার','Sell Credits':'ক্রেডিট বিক্রয়',
-      'Editors':'সম্পাদক','User Activity':'ব্যবহারকারীর কার্যক্রম','Categories':'ক্যাটাগরি','Backup':'ব্যাকআপ',
-      'User Dashboard':'ব্যবহারকারী ড্যাশবোর্ড','Log Out':'লগ আউট',
+// ══════════════════════════════════════════════════════
+// GLOBAL CATS/WALLETS SYNC — Admin → All Users → Firestore
+// ══════════════════════════════════════════════════════
+
+async function _syncGlobalCatsToFirestore(type) {
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app = getApps().length ? getApps()[0] : initializeApp({
+      apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4", authDomain:"hisab-4-u.firebaseapp.com",
+      projectId:"hisab-4-u", storageBucket:"hisab-4-u.firebasestorage.app",
+      messagingSenderId:"957694095044", appId:"1:957694095044:web:1649995ac9734d4d062391"
+    });
+    const db = getFirestore(app);
+    const payload = {
+      income_cats:  State.income_cats,
+      expense_cats: State.expense_cats,
+      updatedAt: new Date().toISOString(),
+      updatedBy: 'admin'
     };
-    const rmap = Object.fromEntries(Object.entries(map).map(([k,v])=>[v,k]));
-    if (bn && map[txt]) span.textContent = map[txt];
-    else if (!bn && rmap[txt]) span.textContent = rmap[txt];
+    await setDoc(doc(db, 'global_config', 'categories'), payload);
+    console.log('✅ Global categories synced to Firestore');
+  } catch(e) { console.warn('Firestore sync failed:', e); }
+}
+
+async function _syncGlobalWalletsToFirestore() {
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app = getApps().length ? getApps()[0] : initializeApp({
+      apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4", authDomain:"hisab-4-u.firebaseapp.com",
+      projectId:"hisab-4-u", storageBucket:"hisab-4-u.firebasestorage.app",
+      messagingSenderId:"957694095044", appId:"1:957694095044:web:1649995ac9734d4d062391"
+    });
+    const db = getFirestore(app);
+    await setDoc(doc(db, 'global_config', 'wallets'), {
+      default_wallets: State.wallets,
+      updatedAt: new Date().toISOString(),
+      updatedBy: 'admin'
+    });
+  } catch(e) { console.warn('Firestore wallet sync failed:', e); }
+}
+
+// ── Admin adds a new default wallet type ──
+async function adminAddGlobalWallet(walletData) {
+  // Add to ALL users
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  users.forEach(u => {
+    const key = 'hisab_wallets_' + u.username;
+    const wallets = JSON.parse(localStorage.getItem(key) || '[]');
+    if (!wallets.find(w => w.id === walletData.id)) {
+      wallets.push({ ...walletData, balance: 0 });
+      localStorage.setItem(key, JSON.stringify(wallets));
+    }
   });
-  // Card titles
-  document.querySelectorAll('.card-title').forEach(el => {
-    const map = {
-      'All Users':'সব ব্যবহারকারী','All User Transactions':'সব লেনদেন',
-      'Send Notice to Users':'ব্যবহারকারীদের নোটিস পাঠান',
-      '💰 Sell Credits to User':'💰 ক্রেডিট বিক্রয় করুন',
-      '📜 Sales History':'📜 বিক্রয় ইতিহাস',
-    };
-    const rmap = Object.fromEntries(Object.entries(map).map(([k,v])=>[v,k]));
-    const txt = el.textContent.trim();
-    if (bn && map[txt]) el.textContent = map[txt];
-    else if (!bn && rmap[txt]) el.textContent = rmap[txt];
+  await _syncGlobalWalletsToFirestore();
+  showToast('✅', 'Wallet Added!', `"${walletData.name_en}" added to all user accounts.`);
+}
+
+// ── Admin removes a wallet type ──
+async function adminRemoveGlobalWallet(walletId) {
+  const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
+  users.forEach(u => {
+    const key = 'hisab_wallets_' + u.username;
+    const wallets = JSON.parse(localStorage.getItem(key) || '[]');
+    localStorage.setItem(key, JSON.stringify(wallets.filter(w => w.id !== walletId)));
   });
-};
+  await _syncGlobalWalletsToFirestore();
+  showToast('🗑️', 'Wallet Removed', 'Wallet type removed from all user accounts.');
+}
 
 </script>
 

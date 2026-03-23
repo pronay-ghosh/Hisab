@@ -35,18 +35,18 @@
       <div><div class="sidebar-username" id="sidebar-name">User</div><div class="sidebar-handle" id="sidebar-handle">@user</div></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="sidebar-section-label">Main</div>
-      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> Dashboard</a>
-      <a class="sidebar-link active" href="wallets.html"><span class="nav-icon">👛</span> Wallets</a>
-      <a class="sidebar-link" href="income.html"><span class="nav-icon">💰</span> Income</a>
-      <a class="sidebar-link" href="expense.html"><span class="nav-icon">💸</span> Expenses</a>
-      <div class="sidebar-section-label">Analytics</div>
-      <a class="sidebar-link" href="reports.html"><span class="nav-icon">📊</span> Reports</a>
-      <a class="sidebar-link" href="budget.html"><span class="nav-icon">🎯</span> Budget</a>
-      <div class="sidebar-section-label">Account</div>
-      <a class="sidebar-link" href="settings.html"><span class="nav-icon">⚙️</span> Settings</a>
-      <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> Credits</a>
-      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> Log Out</a>
+      <div class="sidebar-section-label" data-t="nav_main">Main</div>
+      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> <span data-t="nav_dashboard">Dashboard</span></a>
+      <a class="sidebar-link active" href="wallets.html"><span class="nav-icon">👛</span> <span data-t="nav_wallets">Wallets</span></a>
+      <a class="sidebar-link" href="income.html"><span class="nav-icon">💰</span> <span data-t="nav_income">Income</span></a>
+      <a class="sidebar-link" href="expense.html"><span class="nav-icon">💸</span> <span data-t="nav_expense">Expenses</span></a>
+      <div class="sidebar-section-label" data-t="nav_analytics">Analytics</div>
+      <a class="sidebar-link" href="reports.html"><span class="nav-icon">📊</span> <span data-t="nav_reports">Reports</span></a>
+      <a class="sidebar-link" href="budget.html"><span class="nav-icon">🎯</span> <span data-t="nav_budget">Budget</span></a>
+      <div class="sidebar-section-label" data-t="nav_account">Account</div>
+      <a class="sidebar-link" href="settings.html"><span class="nav-icon">⚙️</span> <span data-t="nav_settings">Settings</span></a>
+      <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> <span data-t="nav_credits_p">Credits</span></a>
+      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
     <div class="sidebar-credits">
       <div class="sidebar-credits-label">Credit Points</div>
@@ -226,11 +226,6 @@
 
 <script src="js/app.js"></script>
 <script>
-// ── Lang helpers ──
-function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
-function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
-function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
-
 // ── WALLET TYPES (Admin এডিট করতে পারবে) ──────────────────────
 const DEFAULT_WALLET_TYPES = [
   { id: 'cash',        icon: '💵', name_en: 'Cash',              name_bn: 'নগদ' },
@@ -726,28 +721,42 @@ function doTransfer() {
 
 initWallets();
 
+function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
+function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
+function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=txt;}
+function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent=txt);}
+
 window.applyLang = function(lang) {
-  const bn = lang === 'bn';
-  _st('[data-t="dash_balance"]', bn ? 'মোট ব্যালেন্স' : 'Total Balance');
-  _st('[data-t="wlt_title"]', bn ? 'ওয়ালেট ও অ্যাকাউন্ট' : 'Wallets & Accounts');
-  document.querySelectorAll('.card-title').forEach(el => {
-    if (['Wallets & Accounts','ওয়ালেট ও অ্যাকাউন্ট'].includes(el.textContent.trim()))
-      el.textContent = bn ? 'ওয়ালেট ও অ্যাকাউন্ট' : 'Wallets & Accounts';
-    if (['Add Wallet','ওয়ালেট যোগ করুন'].includes(el.textContent.trim()))
-      el.textContent = bn ? 'ওয়ালেট যোগ করুন' : 'Add Wallet';
+  const bn = lang==='bn';
+  _st('[data-t="dash_balance"]', bn?'মোট ব্যালেন্স':'Total Balance');
+  document.querySelectorAll('.card-title').forEach(el=>{
+    const m={'Wallets & Accounts':'ওয়ালেট ও অ্যাকাউন্ট','Add Wallet':'ওয়ালেট যোগ করুন','Wallet Transactions':'ওয়ালেট লেনদেন','Add New Wallet':'নতুন ওয়ালেট যোগ করুন'};
+    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
-  document.querySelectorAll('.form-label').forEach(el => {
-    const map = {'Wallet Name':'ওয়ালেটের নাম','Initial Balance':'প্রাথমিক ব্যালেন্স','Icon':'আইকন','Type':'ধরন'};
-    const rmap = {'ওয়ালেটের নাম':'Wallet Name','প্রাথমিক ব্যালেন্স':'Initial Balance','আইকন':'Icon','ধরন':'Type'};
-    if (bn && map[el.textContent.trim()]) el.textContent = map[el.textContent.trim()];
-    else if (!bn && rmap[el.textContent.trim()]) el.textContent = rmap[el.textContent.trim()];
+  document.querySelectorAll('.form-label').forEach(el=>{
+    const m={'Wallet Name':'ওয়ালেটের নাম','Initial Balance':'প্রাথমিক ব্যালেন্স','Icon':'আইকন','Type':'ধরন','Balance':'ব্যালেন্স'};
+    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
-  document.querySelectorAll('.btn').forEach(el => {
-    if (['Add Wallet','ওয়ালেট যোগ করুন'].includes(el.textContent.trim()))
-      el.textContent = bn ? 'ওয়ালেট যোগ করুন' : 'Add Wallet';
-    if (['Save','সংরক্ষণ'].includes(el.textContent.trim()))
-      el.textContent = bn ? 'সংরক্ষণ' : 'Save';
+  document.querySelectorAll('th').forEach(el=>{
+    const m={'Date':'তারিখ','Type':'ধরন','Amount':'পরিমাণ','Note':'নোট','Balance':'ব্যালেন্স'};
+    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
+  document.querySelectorAll('.btn').forEach(el=>{
+    const m={'+ Add Wallet':'+ ওয়ালেট যোগ করুন','Save':'সংরক্ষণ করুন','Cancel':'বাতিল','All Wallets':'সব ওয়ালেট'};
+    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
+  });
+  const fw=document.getElementById('txn-filter-wallet');
+  if(fw&&fw.options[0])fw.options[0].text=bn?'সব ওয়ালেট':'All Wallets';
+  if(typeof renderWallets==='function')renderWallets();
+  if(typeof renderWalletTxns==='function')renderWalletTxns();
 };
 
 </script>

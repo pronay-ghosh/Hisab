@@ -41,19 +41,19 @@
       </div>
     </div>
     <nav class="sidebar-nav">
-      <div class="sidebar-section-label">Main</div>
-      <a class="sidebar-link active" href="dashboard.html"><span class="nav-icon">🏠</span> Dashboard</a>
-      <a class="sidebar-link" href="wallets.html"><span class="nav-icon">👛</span> Wallets</a>
-      <a class="sidebar-link" href="income.html"><span class="nav-icon">💰</span> Income</a>
-      <a class="sidebar-link" href="expense.html"><span class="nav-icon">💸</span> Expenses</a>
-      <div class="sidebar-section-label">Analytics</div>
-      <a class="sidebar-link" href="reports.html"><span class="nav-icon">📊</span> Reports</a>
-      <a class="sidebar-link" href="budget.html"><span class="nav-icon">🎯</span> Budget</a>
-      <div class="sidebar-section-label">Account</div>
-      <a class="sidebar-link" href="settings.html"><span class="nav-icon">⚙️</span> Settings</a>
-      <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> Credits</a>
-      <a class="sidebar-link" id="admin-link" href="admin.html" style="display:none;"><span class="nav-icon">🛡️</span> Admin Panel</a>
-      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> Log Out</a>
+      <div class="sidebar-section-label" data-t="nav_main">Main</div>
+      <a class="sidebar-link active" href="dashboard.html"><span class="nav-icon">🏠</span> <span data-t="nav_dashboard">Dashboard</span></a>
+      <a class="sidebar-link" href="wallets.html"><span class="nav-icon">👛</span> <span data-t="nav_wallets">Wallets</span></a>
+      <a class="sidebar-link" href="income.html"><span class="nav-icon">💰</span> <span data-t="nav_income">Income</span></a>
+      <a class="sidebar-link" href="expense.html"><span class="nav-icon">💸</span> <span data-t="nav_expense">Expenses</span></a>
+      <div class="sidebar-section-label" data-t="nav_analytics">Analytics</div>
+      <a class="sidebar-link" href="reports.html"><span class="nav-icon">📊</span> <span data-t="nav_reports">Reports</span></a>
+      <a class="sidebar-link" href="budget.html"><span class="nav-icon">🎯</span> <span data-t="nav_budget">Budget</span></a>
+      <div class="sidebar-section-label" data-t="nav_account">Account</div>
+      <a class="sidebar-link" href="settings.html"><span class="nav-icon">⚙️</span> <span data-t="nav_settings">Settings</span></a>
+      <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> <span data-t="nav_credits_p">Credits</span></a>
+      <a class="sidebar-link" id="admin-link" href="admin.html" style="display:none;"><span class="nav-icon">🛡️</span> <span data-t="nav_admin">Admin Panel</span></a>
+      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
     <div class="sidebar-credits">
       <div class="sidebar-credits-label">Credit Points</div>
@@ -666,44 +666,33 @@ function markOpeningBalanceDone() {
 // Trigger after dashboard init
 setTimeout(checkOpeningBalance, 600);
 
-// Helper to set text safely
-function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
-function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
-function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
+function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
+function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
+function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=txt;}
+function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent=txt);}
+function _opts(id,opts){const e=document.getElementById(id);if(!e)return;Array.from(e.options).forEach((o,i)=>{if(opts[i]!==undefined)o.text=opts[i];});}
 
 window.applyLang = function(lang) {
-  const bn = lang === 'bn';
-  // Topbar
-  _st('[data-t="dash_welcome"]', bn ? 'স্বাগতম' : 'Welcome back');
-  // Stats
-  _st('[data-t="dash_balance"]', bn ? 'মোট ব্যালেন্স' : 'Total Balance');
-  _st('[data-t="dash_income"]', bn ? 'মাসিক আয়' : 'Monthly Income');
-  _st('[data-t="dash_expense"]', bn ? 'মাসিক খরচ' : 'Monthly Expense');
-  _st('[data-t="dash_savings"]', bn ? 'নিট সঞ্চয়' : 'Net Savings');
-  _st('[data-t="dash_wallets"]', bn ? 'ওয়ালেট' : 'Wallets');
-  _st('[data-t="dash_recent"]', bn ? 'সাম্প্রতিক লেনদেন' : 'Recent Transactions');
-  _st('[data-t="dash_budget_tip"]', bn ? 'বাজেট পরামর্শ' : 'Budget Suggestion');
-  // Sidebar nav
-  document.querySelectorAll('.sidebar-link').forEach(a => {
-    const href = a.getAttribute('href') || '';
-    const map = {
-      'dashboard': bn ? 'ড্যাশবোর্ড' : 'Dashboard',
-      'income': bn ? 'আয়' : 'Income',
-      'expense': bn ? 'খরচ' : 'Expense',
-      'wallets': bn ? 'ওয়ালেট' : 'Wallets',
-      'budget': bn ? 'বাজেট' : 'Budget',
-      'reports': bn ? 'রিপোর্ট' : 'Reports',
-      'settings': bn ? 'সেটিংস' : 'Settings',
-      'credits': bn ? 'ক্রেডিট' : 'Credits',
-    };
-    for (const [key, label] of Object.entries(map)) {
-      if (href.includes(key)) { const span = a.querySelector('.nav-label, span:not(.nav-icon)'); if (span) span.textContent = label; }
-    }
+  const bn = lang==='bn';
+  // Stat labels
+  _st('[data-t="dash_balance"]',  bn?'মোট ব্যালেন্স':'Total Balance');
+  _st('[data-t="dash_income"]',   bn?'মাসিক আয়':'Monthly Income');
+  _st('[data-t="dash_expense"]',  bn?'মাসিক খরচ':'Monthly Expense');
+  _st('[data-t="dash_savings"]',  bn?'নিট সঞ্চয়':'Net Savings');
+  _st('[data-t="dash_wallets"]',  bn?'ওয়ালেট':'Wallets');
+  _st('[data-t="dash_recent"]',   bn?'সাম্প্রতিক লেনদেন':'Recent Transactions');
+  _st('[data-t="dash_budget_tip"]',bn?'বাজেট পরামর্শ':'Budget Suggestion');
+  _st('[data-t="dash_add_income"]',bn?'আয় যোগ করুন':'Add Income');
+  _st('[data-t="dash_add_expense"]',bn?'খরচ যোগ করুন':'Add Expense');
+  _st('[data-t="dash_transfer"]', bn?'ফান্ড ট্রান্সফার':'Fund Transfer');
+  // Dynamic buttons
+  document.querySelectorAll('.btn').forEach(el=>{
+    const m={'Accept Suggestion':'পরামর্শ গ্রহণ','Dismiss':'বাতিল','Save Budget':'বাজেট সংরক্ষণ'};
+    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t];
+    else if(!bn&&r[t])el.textContent=r[t];
   });
-  // Add income/expense/transfer buttons
-  _st('[data-t="dash_add_income"]', bn ? 'আয় যোগ করুন' : 'Add Income');
-  _st('[data-t="dash_add_expense"]', bn ? 'খরচ যোগ করুন' : 'Add Expense');
-  _st('[data-t="dash_transfer"]', bn ? 'ফান্ড ট্রান্সফার' : 'Fund Transfer');
 };
 
 </script>

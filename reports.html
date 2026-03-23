@@ -36,18 +36,18 @@
       <div><div class="sidebar-username" id="sidebar-name">User</div><div class="sidebar-handle" id="sidebar-handle">@user</div></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="sidebar-section-label">Main</div>
-      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> Dashboard</a>
-      <a class="sidebar-link" href="wallets.html"><span class="nav-icon">👛</span> Wallets</a>
-      <a class="sidebar-link" href="income.html"><span class="nav-icon">💰</span> Income</a>
-      <a class="sidebar-link" href="expense.html"><span class="nav-icon">💸</span> Expenses</a>
-      <div class="sidebar-section-label">Analytics</div>
-      <a class="sidebar-link active" href="reports.html"><span class="nav-icon">📊</span> Reports</a>
-      <a class="sidebar-link" href="budget.html"><span class="nav-icon">🎯</span> Budget</a>
-      <div class="sidebar-section-label">Account</div>
-      <a class="sidebar-link" href="settings.html"><span class="nav-icon">⚙️</span> Settings</a>
-      <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> Credits</a>
-      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> Log Out</a>
+      <div class="sidebar-section-label" data-t="nav_main">Main</div>
+      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> <span data-t="nav_dashboard">Dashboard</span></a>
+      <a class="sidebar-link" href="wallets.html"><span class="nav-icon">👛</span> <span data-t="nav_wallets">Wallets</span></a>
+      <a class="sidebar-link" href="income.html"><span class="nav-icon">💰</span> <span data-t="nav_income">Income</span></a>
+      <a class="sidebar-link" href="expense.html"><span class="nav-icon">💸</span> <span data-t="nav_expense">Expenses</span></a>
+      <div class="sidebar-section-label" data-t="nav_analytics">Analytics</div>
+      <a class="sidebar-link active" href="reports.html"><span class="nav-icon">📊</span> <span data-t="nav_reports">Reports</span></a>
+      <a class="sidebar-link" href="budget.html"><span class="nav-icon">🎯</span> <span data-t="nav_budget">Budget</span></a>
+      <div class="sidebar-section-label" data-t="nav_account">Account</div>
+      <a class="sidebar-link" href="settings.html"><span class="nav-icon">⚙️</span> <span data-t="nav_settings">Settings</span></a>
+      <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> <span data-t="nav_credits_p">Credits</span></a>
+      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
     <div class="sidebar-credits">
       <div class="sidebar-credits-label">Credit Points</div>
@@ -176,11 +176,6 @@
 
 <script src="js/app.js"></script>
 <script>
-// ── Lang helpers ──
-function _st(sel, txt) { const e = document.querySelector(sel); if (e) e.textContent = txt; }
-function _stId(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
-function _stPh(sel, txt) { const e = document.querySelector(sel); if (e) e.placeholder = txt; }
-
 let currentPeriod = 'monthly';
 let doughnutChart = null;
 let compareChart = null;
@@ -474,25 +469,41 @@ function downloadReport() {
 
 initReports();
 
+function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
+function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
+function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=txt;}
+function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent=txt);}
+
 window.applyLang = function(lang) {
-  const bn = lang === 'bn';
-  _st('[data-t="rpt_daily"]', bn ? 'দৈনিক' : 'Daily');
-  _st('[data-t="rpt_weekly"]', bn ? 'সাপ্তাহিক' : 'Weekly');
-  _st('[data-t="rpt_monthly"]', bn ? 'মাসিক' : 'Monthly');
-  _st('[data-t="rpt_yearly"]', bn ? 'বার্ষিক' : 'Yearly');
-  _st('[data-t="rpt_income"]', bn ? 'মোট আয়' : 'Total Income');
-  _st('[data-t="rpt_expense"]', bn ? 'মোট খরচ' : 'Total Expense');
-  _st('[data-t="rpt_savings"]', bn ? 'নিট সঞ্চয়' : 'Net Savings');
-  _st('[data-t="rpt_budget"]', bn ? 'বাজেট অবশিষ্ট' : 'Budget Left');
-  _st('[data-t="rpt_bycat"]', bn ? 'খরচ হেড অনুযায়ী' : 'Expense by Category');
-  _st('[data-t="rpt_compare"]', bn ? 'শেষ ৩ মাসের তুলনা' : 'Last 3 Months Comparison');
-  _st('[data-t="rpt_ai"]', bn ? 'AI পরামর্শ' : 'AI Insight');
-  document.querySelectorAll('.card-title').forEach(el => {
-    const map = {'Reports':'রিপোর্ট','Summary':'সারসংক্ষেপ','Expense by Category':'খরচ হেড অনুযায়ী','AI Insight':'AI পরামর্শ'};
-    const rmap = Object.fromEntries(Object.entries(map).map(([k,v])=>[v,k]));
-    if (bn && map[el.textContent.trim()]) el.textContent = map[el.textContent.trim()];
-    else if (!bn && rmap[el.textContent.trim()]) el.textContent = rmap[el.textContent.trim()];
+  const bn = lang==='bn';
+  // Period tabs
+  _st('[data-t="rpt_daily"]',   bn?'দৈনিক':'Daily');
+  _st('[data-t="rpt_weekly"]',  bn?'সাপ্তাহিক':'Weekly');
+  _st('[data-t="rpt_monthly"]', bn?'মাসিক':'Monthly');
+  _st('[data-t="rpt_yearly"]',  bn?'বার্ষিক':'Yearly');
+  // Summary stats
+  _st('[data-t="rpt_income"]',  bn?'মোট আয়':'Total Income');
+  _st('[data-t="rpt_expense"]', bn?'মোট খরচ':'Total Expense');
+  _st('[data-t="rpt_savings"]', bn?'নিট সঞ্চয়':'Net Savings');
+  _st('[data-t="rpt_budget"]',  bn?'বাজেট অবশিষ্ট':'Budget Left');
+  _st('[data-t="rpt_bycat"]',   bn?'খরচ হেড অনুযায়ী':'Expense by Category');
+  _st('[data-t="rpt_compare"]', bn?'শেষ ৩ মাসের তুলনা':'Last 3 Months Comparison');
+  _st('[data-t="rpt_ai"]',      bn?'AI পরামর্শ':'AI Insight');
+  // Card titles
+  document.querySelectorAll('.card-title').forEach(el=>{
+    const m={'Financial Reports':'আর্থিক রিপোর্ট','Summary':'সারসংক্ষেপ','Expense by Category':'ক্যাটাগরি অনুযায়ী খরচ','AI Insight':'AI পরামর্শ','Last 3 Months Comparison':'শেষ ৩ মাসের তুলনা','Yearly Summary':'বার্ষিক সারসংক্ষেপ'};
+    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
+  document.querySelectorAll('.btn').forEach(el=>{
+    const m={'Get AI Insight':'AI পরামর্শ নিন','Download Report':'রিপোর্ট ডাউনলোড করুন'};
+    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
+    const t=el.textContent.trim();
+    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
+  });
+  if(typeof renderAll==='function')renderAll();
+  if(typeof renderYearlySummary==='function')renderYearlySummary();
 };
 
 </script>
