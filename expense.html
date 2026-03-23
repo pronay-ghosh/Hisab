@@ -2,15 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <script>
-// Apply saved theme & language immediately to prevent flash
-(function(){
-  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
-  document.documentElement.setAttribute('data-theme',t);
-  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
-})();
-</script>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <title>Expenses — Hisab হিসাব</title>
@@ -68,7 +60,7 @@
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
-          <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
@@ -113,7 +105,7 @@
 
       <!-- Category Cards -->
       <div style="margin-bottom:24px;">
-        <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">Expense Categories</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:14px;" data-t="exp_cats_title">Expense Categories</div>
         <div class="wallet-grid" id="expense-cat-cards"></div>
       </div>
 
@@ -294,7 +286,8 @@ function renderExpTrend() {
   const now=new Date(); const labels=[]; const data=[];
   for (let i=5;i>=0;i--) {
     const d=new Date(now.getFullYear(),now.getMonth()-i,1);
-    labels.push(d.toLocaleString('default',{month:'short'}));
+    const _mk2=['mshort_jan','mshort_feb','mshort_mar','mshort_apr','mshort_may','mshort_jun','mshort_jul','mshort_aug','mshort_sep','mshort_oct','mshort_nov','mshort_dec'];
+    labels.push((LANG[State.lang]||LANG['en'])[_mk2[d.getMonth()]] || d.toLocaleString('default',{month:'short'}));
     const m=getMonthTotals(d.getFullYear(),d.getMonth());
     data.push(m.expense || 0);
   }

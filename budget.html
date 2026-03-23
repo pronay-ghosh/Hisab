@@ -2,15 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <script>
-// Apply saved theme & language immediately to prevent flash
-(function(){
-  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
-  document.documentElement.setAttribute('data-theme',t);
-  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
-})();
-</script>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <title>Budget — Hisab হিসাব</title>
@@ -62,7 +54,7 @@
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
-          <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
@@ -108,19 +100,19 @@
       <!-- Manual Budget Form -->
       <div class="card" id="manual-budget-section">
         <div class="card-header"><div class="card-title" data-t="bgt_set_monthly">✏️ Set Monthly Budget</div></div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Set a spending limit for each category. AI suggestion is pre-filled.</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;" data-t="bgt_set_desc">Set a spending limit for each category. AI suggestion is pre-filled.</p>
         <div id="budget-form-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:20px;"></div>
         <div class="form-row" style="max-width:400px;">
           <div class="form-group">
-            <label class="form-label">Total Income Budget (expected)</label>
+            <label class="form-label" data-t="bgt_income_expected">Total Income Budget (expected)</label>
             <input type="number" class="form-input" id="budget-income-target" placeholder="e.g. 65000" />
           </div>
           <div class="form-group">
-            <label class="form-label">Savings Target</label>
+            <label class="form-label" data-t="bgt_savings_target">Savings Target</label>
             <input type="number" class="form-input" id="budget-savings-target" placeholder="e.g. 15000" />
           </div>
         </div>
-        <button class="btn btn-primary" onclick="saveBudgetManual()">💾 Save Budget</button>
+        <button class="btn btn-primary" onclick="saveBudgetManual()"><span data-t="bgt_save_manual">💾 Save Budget</span></button>
       </div>
     </div>
   </div>

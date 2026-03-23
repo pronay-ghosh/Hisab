@@ -2,15 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <script>
-// Apply saved theme & language immediately to prevent flash
-(function(){
-  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
-  document.documentElement.setAttribute('data-theme',t);
-  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
-})();
-</script>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -139,7 +131,7 @@
             <div class="settings-row">
               <div><div class="settings-row-label">Language / ভাষা</div><div class="settings-row-desc">Select your preferred language</div></div>
               <div class="lang-switch">
-                <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">English</button>
                 <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাংলা</button>
               </div>
             </div>
@@ -221,24 +213,24 @@
           <div id="panel-credits" class="settings-panel" style="display:none;">
             <div class="settings-section-title" data-t="set_credit_pts">Credit Points</div>
             <div style="text-align:center;padding:24px;background:var(--blue-50);border-radius:var(--radius-lg);margin-bottom:24px;">
-              <div style="font-size:14px;color:var(--blue-600);margin-bottom:6px;">Your Balance</div>
+              <div style="font-size:14px;color:var(--blue-600);margin-bottom:6px;" data-t="crd_your_balance">Your Balance</div>
               <div style="font-size:48px;font-weight:700;color:var(--blue-800);" id="credit-big"><span class="credit-display">150</span></div>
-              <div style="font-size:13px;color:var(--blue-500);">Credit Points</div>
+              <div style="font-size:13px;color:var(--blue-500);" data-t="set_cred_pts">Credit Points</div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
-              <button class="btn btn-primary btn-full" onclick="showToast('💳','Buy Credits','Payment gateway coming soon!')">💳 Buy Credits</button>
-              <button class="btn btn-outline btn-full" onclick="watchAd()">📺 Watch Ad (+5 pts)</button>
+              <button class="btn btn-primary btn-full" onclick="showToast('💳','Buy Credits','Payment gateway coming soon!')"><span data-t="crd_buy_btn">💳 Buy Credits</span></button>
+              <button class="btn btn-outline btn-full" onclick="watchAd()"><span data-t="crd_watch_btn">📺 Watch Ad (+5 pts)</span></button>
             </div>
-            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">Credit History</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;" data-t="crd_history_label">Credit History</div>
             <div id="credit-history-list">
               <div class="credit-history-item">
                 <div class="credit-history-icon" style="background:var(--green-50);">🎁</div>
-                <div class="credit-history-info"><div class="credit-history-name">Sign-up Bonus</div><div class="credit-history-date">Account created</div></div>
+                <div class="credit-history-info"><div class="credit-history-name" data-t="crd_signup_label">Sign-up Bonus</div><div class="credit-history-date" data-t="crd_signup_when">Account created</div></div>
                 <div class="credit-history-pts" style="color:var(--teal-400);">+100</div>
               </div>
               <div class="credit-history-item">
                 <div class="credit-history-icon" style="background:var(--blue-50);">📺</div>
-                <div class="credit-history-info"><div class="credit-history-name">Ad Watched</div><div class="credit-history-date">Today</div></div>
+                <div class="credit-history-info"><div class="credit-history-name" data-t="crd_ad_watched">Ad Watched</div><div class="credit-history-date" data-t="crd_ad_when">Today</div></div>
                 <div class="credit-history-pts" style="color:var(--teal-400);">+5</div>
               </div>
             </div>
@@ -276,8 +268,8 @@
               </div>
               <!-- Connected action buttons -->
               <div id="gdrive-btn-connected" style="display:none;display:none;gap:10px;justify-content:center;flex-wrap:wrap;">
-                <button class="btn btn-success" onclick="manualBackup()">☁️ Backup Now</button>
-                <button class="btn btn-outline" onclick="restoreFromDrive()">⬇️ Restore from Drive</button>
+                <button class="btn btn-success" onclick="manualBackup()"><span data-t="backup_now_btn2">☁️ Backup Now</span></button>
+                <button class="btn btn-outline" onclick="restoreFromDrive()"><span data-t="backup_restore_btn2">⬇️ Restore from Drive</span></button>
                 <button class="btn btn-sm" style="color:var(--red-400);border:1.5px solid var(--red-400);background:transparent;border-radius:var(--radius-md);padding:7px 14px;font-size:13px;font-weight:600;" onclick="disconnectGoogleDrive()">Disconnect</button>
               </div>
             </div>
@@ -294,7 +286,7 @@
               </div>
               <div class="settings-row">
                 <div><div class="settings-row-label">Backup Scope</div><div class="settings-row-desc">What gets backed up</div></div>
-                <div style="font-size:13px;color:var(--text-muted);">All transactions, wallets &amp; settings</div>
+                <div style="font-size:13px;color:var(--text-muted);" data-t="backup_scope_value">All transactions, wallets &amp; settings</div>
               </div>
               <div class="settings-row">
                 <div><div class="settings-row-label">Last Backup</div><div class="settings-row-desc" id="last-backup-desc">Never backed up yet</div></div>

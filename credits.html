@@ -2,15 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <script>
-// Apply saved theme & language immediately to prevent flash
-(function(){
-  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
-  document.documentElement.setAttribute('data-theme',t);
-  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
-})();
-</script>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <title>Credits — Hisab হিসাব</title>
@@ -92,7 +84,7 @@
       <div class="topbar-actions">
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
         <div class="lang-switch">
-          <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
       </div>
@@ -105,8 +97,8 @@
         <div style="font-size:64px;font-weight:700;line-height:1;" id="credit-hero"><span class="credit-display">150</span></div>
         <div style="font-size:16px;opacity:0.8;margin-top:8px;">Credit Points</div>
         <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
-          <button class="btn btn-secondary" onclick="openModal('buy-modal')">💳 Buy Credits</button>
-          <button class="btn btn-secondary" onclick="watchAd()">📺 Watch Ad (+5 pts)</button>
+          <button class="btn btn-secondary" onclick="openModal('buy-modal')"><span data-t="crd_buy_btn">💳 Buy Credits</span></button>
+          <button class="btn btn-secondary" onclick="watchAd()"><span data-t="crd_watch_btn">📺 Watch Ad (+5 pts)</span></button>
         </div>
       </div>
 
@@ -117,22 +109,22 @@
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">🎁</span>
-              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);">Sign-up Bonus</div><div style="font-size:12px;color:var(--text-muted);">One time on account creation</div></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);"><span data-t="crd_signup_bonus">Sign-up Bonus</span></div><div style="font-size:12px;color:var(--text-muted);" data-t="crd_signup_desc">One time on account creation</div></div>
               <div style="font-weight:700;color:var(--teal-400);">+100</div>
             </div>
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">📺</span>
-              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);">Watch an Ad</div><div style="font-size:12px;color:var(--text-muted);">Short 30-second video ad</div></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);"><span data-t="crd_watch_ad">Watch an Ad</span></div><div style="font-size:12px;color:var(--text-muted);" data-t="crd_watch_desc">Short 30-second video ad</div></div>
               <div style="display:flex;align-items:center;gap:10px;"><div style="font-weight:700;color:var(--teal-400);">+5</div><button class="btn btn-success btn-sm" onclick="watchAd()">Watch</button></div>
             </div>
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">🎉</span>
-              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);">Admin Gift (Occasions)</div><div style="font-size:12px;color:var(--text-muted);">Eid, Puja, New Year etc.</div></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);"><span data-t="crd_admin_gift">Admin Gift (Occasions)</span></div><div style="font-size:12px;color:var(--text-muted);" data-t="crd_admin_desc">Eid, Puja, New Year etc.</div></div>
               <div style="font-weight:700;color:var(--teal-400);">Varies</div>
             </div>
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">👥</span>
-              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);">Refer a Friend</div><div style="font-size:12px;color:var(--text-muted);">When they register and log in</div></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);"><span data-t="crd_refer">Refer a Friend</span></div><div style="font-size:12px;color:var(--text-muted);" data-t="crd_refer_desc">When they register and log in</div></div>
               <div style="font-weight:700;color:var(--teal-400);">+20</div>
             </div>
           </div>
@@ -143,22 +135,22 @@
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">📂</span>
-              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);">Add Custom Category</div><div style="font-size:12px;color:var(--text-muted);">Income or Expense head</div></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);"><span data-t="crd_add_cat">Add Custom Category</span></div><div style="font-size:12px;color:var(--text-muted);" data-t="crd_add_cat_desc">Income or Expense head</div></div>
               <div style="font-weight:700;color:var(--red-400);">–10</div>
             </div>
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">👛</span>
-              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);">Add Custom Wallet</div><div style="font-size:12px;color:var(--text-muted);">New wallet type</div></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);"><span data-t="crd_add_wallet">Add Custom Wallet</span></div><div style="font-size:12px;color:var(--text-muted);" data-t="crd_add_wallet_desc">New wallet type</div></div>
               <div style="font-weight:700;color:var(--red-400);">–10</div>
             </div>
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-secondary);border-radius:var(--radius-md);">
               <span style="font-size:24px;">📄</span>
-              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);">Download PDF Report</div><div style="font-size:12px;color:var(--text-muted);">Any period report</div></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--text-primary);"><span data-t="crd_pdf">Download PDF Report</span></div><div style="font-size:12px;color:var(--text-muted);" data-t="crd_pdf_desc">Any period report</div></div>
               <div style="font-weight:700;color:var(--red-400);">–5</div>
             </div>
             <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--green-50);border-radius:var(--radius-md);border:1px solid #C0DD97;">
               <span style="font-size:24px;">✅</span>
-              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--green-600);">All Standard Features</div><div style="font-size:12px;color:var(--green-600);">Transactions, reports, charts</div></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--green-600);"><span data-t="crd_standard">All Standard Features</span></div><div style="font-size:12px;color:var(--green-600);" data-t="crd_standard_desc">Transactions, reports, charts</div></div>
               <div style="font-weight:700;color:var(--green-600);">FREE</div>
             </div>
           </div>

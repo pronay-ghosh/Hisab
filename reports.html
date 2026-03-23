@@ -2,15 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <script>
-// Apply saved theme & language immediately to prevent flash
-(function(){
-  var t=localStorage.getItem('hisab_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
-  document.documentElement.setAttribute('data-theme',t);
-  document.documentElement.setAttribute('data-lang',localStorage.getItem('hisab_lang')||'en');
-})();
-</script>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -69,7 +61,7 @@
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
-          <button class="lang-btn-switch" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
           <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
         </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
@@ -281,7 +273,9 @@ function renderAll() {
   const months = [], incomes = [], expenses = [], savings = [];
   for (let i = 2; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    months.push(d.toLocaleString('default', { month: 'long', year: 'numeric' }));
+    const _mk_c=['month_jan','month_feb','month_mar','month_apr','month_may','month_jun','month_jul','month_aug','month_sep','month_oct','month_nov','month_dec'];
+    const _mn_c=(LANG[State.lang]||LANG['en'])[_mk_c[d.getMonth()]]||d.toLocaleString('default',{month:'long'});
+    months.push(_mn_c + ' ' + d.getFullYear());
     const m = getMonthTotals(d.getFullYear(), d.getMonth());
     incomes.push(m.income || (3 - i) * 5000 + 55000);
     expenses.push(m.expense || (3 - i) * 1000 + 16000);
@@ -345,12 +339,13 @@ function generateAIInsight(totals, catData) {
   if (savings > 0) {
     insight += `✅ <strong>Savings Rate: ${savePct}%</strong> — ${savePct >= 20 ? 'Excellent! You are saving well above the recommended 20%.' : savePct >= 10 ? 'Good progress! Try to reach 20% savings.' : 'Your savings rate is below 10%. Try to reduce expenses.'}<br/><br/>`;
   } else {
-    insight += `❌ <strong>No savings this month.</strong> Your expenses exceeded income by ${fmt(Math.abs(savings))}. Review your spending.<br/><br/>`;
+    const _Lr2=LANG[State.lang]||LANG['en'];
+    insight += `❌ <strong>${_Lr2.rpt_no_savings||'No savings this month.'}</strong> ${_Lr2.rpt_no_sav_desc||'Your expenses exceeded income by'} ${fmt(Math.abs(savings))}. Review your spending.\`;
   }
   if (topCatName) {
     insight += `📌 <strong>Highest Expense: ${topCatName}</strong> — ${topCatPct}% of total expenses (${fmt(topCat[1])}). ${topCatPct > 50 ? 'This single category dominates your budget. Consider ways to reduce it.' : 'This is manageable. Keep monitoring.'}<br/><br/>`;
   }
-  insight += `💡 <strong>Tip:</strong> Setting a monthly budget and reviewing it weekly helps you stay on track and grow savings consistently.`;
+  insight += `💡 <strong>${(LANG[State.lang]||LANG['en']).rpt_tip||'Tip:'}</strong> Setting a monthly budget and reviewing it weekly helps you stay on track and grow savings consistently.`;
   el.innerHTML = insight;
 }
 
