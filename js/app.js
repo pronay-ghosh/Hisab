@@ -157,32 +157,6 @@ const LANG = {
     savings_congrats: '🎉 Congratulations!',
     savings_msg: 'You saved this month!',
     savings_yearly: 'Yearly Summary',
-    // Wallets
-    wlt_title: 'Wallets & Accounts', wlt_add: 'Add Wallet', wlt_total: 'Total Balance',
-    wlt_name: 'Wallet Name', wlt_balance: 'Initial Balance', wlt_icon: 'Icon',
-    // Budget
-    bgt_title: 'Budget Planner', bgt_monthly: 'Monthly Budget', bgt_add: 'Add Budget',
-    bgt_spent: 'Spent', bgt_left: 'Remaining', bgt_ai: 'AI Budget Suggestion',
-    // Credits
-    crd_title: 'Credit Points', crd_balance: 'Your Credits', crd_earn: 'Earn Credits',
-    crd_history: 'Transaction History', crd_buy: 'Buy Credits', crd_watch_ad: 'Watch Ad (+5)',
-    // Settings nav
-    set_profile: 'Profile', set_lang: 'Language & Theme', set_notif: 'Notifications',
-    set_cats: 'Categories', set_cred: 'Credits', set_backup_nav: 'Backup',
-    set_security: 'Security', set_contact_dev: 'Contact Developer',
-    // Forgot password
-    fp_title: 'Password Recovery', fp_sub: 'Send OTP via email or phone',
-    fp_email_btn: 'Send to Email', fp_phone_btn: 'Send to Phone',
-    fp_verify: 'Verify OTP', fp_new_pass: 'New Password', fp_confirm_pass: 'Confirm Password',
-    fp_reset_btn: 'Reset Password',
-    // Income/Expense page
-    inc_title: 'Add Income', exp_title: 'Add Expense',
-    txn_debit_acc: 'Debit Account (From)', txn_credit_acc: 'Credit Account (To)',
-    txn_list: 'Transaction List', txn_no_data: 'No transactions yet',
-    // Sidebar nav
-    nav_dashboard: 'Dashboard', nav_income: 'Income', nav_expense: 'Expense',
-    nav_wallets: 'Wallets', nav_budget: 'Budget', nav_reports: 'Reports',
-    nav_settings: 'Settings', nav_credits_nav: 'Credits', nav_logout: 'Log Out',
   },
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
@@ -236,32 +210,6 @@ const LANG = {
     savings_congrats: '🎉 অভিনন্দন!',
     savings_msg: 'এই মাসে আপনি সঞ্চয় করেছেন!',
     savings_yearly: 'বার্ষিক সারসংক্ষেপ',
-    // Wallets
-    wlt_title: 'ওয়ালেট ও অ্যাকাউন্ট', wlt_add: 'ওয়ালেট যোগ করুন', wlt_total: 'মোট ব্যালেন্স',
-    wlt_name: 'ওয়ালেটের নাম', wlt_balance: 'প্রাথমিক ব্যালেন্স', wlt_icon: 'আইকন',
-    // Budget
-    bgt_title: 'বাজেট পরিকল্পনা', bgt_monthly: 'মাসিক বাজেট', bgt_add: 'বাজেট যোগ করুন',
-    bgt_spent: 'খরচ হয়েছে', bgt_left: 'বাকি আছে', bgt_ai: 'AI বাজেট পরামর্শ',
-    // Credits
-    crd_title: 'ক্রেডিট পয়েন্ট', crd_balance: 'আপনার ক্রেডিট', crd_earn: 'ক্রেডিট অর্জন করুন',
-    crd_history: 'লেনদেনের ইতিহাস', crd_buy: 'ক্রেডিট কিনুন', crd_watch_ad: 'বিজ্ঞাপন দেখুন (+5)',
-    // Settings nav
-    set_profile: 'প্রোফাইল', set_lang: 'ভাষা ও থিম', set_notif: 'নোটিফিকেশন',
-    set_cats: 'ক্যাটাগরি', set_cred: 'ক্রেডিট', set_backup_nav: 'ব্যাকআপ',
-    set_security: 'নিরাপত্তা', set_contact_dev: 'ডেভেলপারের সাথে যোগাযোগ',
-    // Forgot password
-    fp_title: 'পাসওয়ার্ড পুনরুদ্ধার', fp_sub: 'ইমেইল বা ফোন দিয়ে OTP পাঠান',
-    fp_email_btn: 'ইমেইলে পাঠান', fp_phone_btn: 'ফোনে পাঠান',
-    fp_verify: 'OTP যাচাই করুন', fp_new_pass: 'নতুন পাসওয়ার্ড', fp_confirm_pass: 'পাসওয়ার্ড নিশ্চিত করুন',
-    fp_reset_btn: 'পাসওয়ার্ড রিসেট করুন',
-    // Income/Expense page
-    inc_title: 'আয় যোগ করুন', exp_title: 'খরচ যোগ করুন',
-    txn_debit_acc: 'ডেবিট অ্যাকাউন্ট (যেখান থেকে)', txn_credit_acc: 'ক্রেডিট অ্যাকাউন্ট (যেখানে)',
-    txn_list: 'লেনদেনের তালিকা', txn_no_data: 'কোনো লেনদেন নেই',
-    // Sidebar nav
-    nav_dashboard: 'ড্যাশবোর্ড', nav_income: 'আয়', nav_expense: 'খরচ',
-    nav_wallets: 'ওয়ালেট', nav_budget: 'বাজেট', nav_reports: 'রিপোর্ট',
-    nav_settings: 'সেটিংস', nav_credits_nav: 'ক্রেডিট', nav_logout: 'লগ আউট',
   }
 };
 
@@ -535,28 +483,13 @@ function toggleTheme() {
 function setLanguage(lang) {
   State.lang = lang;
   localStorage.setItem('hisab_lang', lang);
-
-  // 1. Update all [data-t] elements
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
-    if (LANG[lang] && LANG[lang][key]) el.textContent = LANG[lang][key];
+    if (LANG[lang][key]) el.textContent = LANG[lang][key];
   });
-
-  // 2. Update all [data-t-ph] placeholder elements
-  document.querySelectorAll('[data-t-ph]').forEach(el => {
-    const key = el.getAttribute('data-t-ph');
-    if (LANG[lang] && LANG[lang][key]) el.placeholder = LANG[lang][key];
-  });
-
-  // 3. Update active button state
   document.querySelectorAll('.lang-btn-switch').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
-
-  // 4. Call page-specific applyLang if defined
-  if (typeof window.applyLang === 'function') {
-    window.applyLang(lang);
-  }
 }
 
 // ── USERNAME GENERATOR ────────────────────
@@ -928,6 +861,8 @@ function loginUser(username, password) {
   saveState('user', user);
   localStorage.setItem('hisab_last_login', Date.now());
   localStorage.setItem('hisab_last_login_' + user.username, Date.now());
+  // ── Merge global categories from Firestore on login ──
+  _mergeGlobalCatsFromFirestore(user.username);
   // Update lastSeen on user record
   const allUsers = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const uIdx = allUsers.findIndex(u => u.username === user.username);
@@ -1344,3 +1279,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 })();
+
+// ── Merge global categories/wallets from Firestore ──
+// Called after every login to ensure user has admin-added items
+async function _mergeGlobalCatsFromFirestore(username) {
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app = getApps().length ? getApps()[0] : initializeApp({
+      apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4", authDomain:"hisab-4-u.firebaseapp.com",
+      projectId:"hisab-4-u", storageBucket:"hisab-4-u.firebasestorage.app",
+      messagingSenderId:"957694095044", appId:"1:957694095044:web:1649995ac9734d4d062391"
+    });
+    const db = getFirestore(app);
+    const snap = await getDoc(doc(db, 'global_config', 'categories'));
+    if (!snap.exists()) return;
+    const global = snap.data();
+
+    // Merge income_cats
+    if (global.income_cats?.length) {
+      const key = 'hisab_income_cats_' + username;
+      const local = JSON.parse(localStorage.getItem(key) || '[]');
+      global.income_cats.forEach(gc => {
+        if (!local.find(lc => lc.id === gc.id)) local.push(gc);
+      });
+      localStorage.setItem(key, JSON.stringify(local));
+      if (State.user?.username === username) State.income_cats = local;
+    }
+
+    // Merge expense_cats
+    if (global.expense_cats?.length) {
+      const key = 'hisab_expense_cats_' + username;
+      const local = JSON.parse(localStorage.getItem(key) || '[]');
+      global.expense_cats.forEach(gc => {
+        if (!local.find(lc => lc.id === gc.id)) local.push(gc);
+      });
+      localStorage.setItem(key, JSON.stringify(local));
+      if (State.user?.username === username) State.expense_cats = local;
+    }
+
+    console.log('✅ Global categories merged for:', username);
+  } catch(e) { console.warn('Global cat merge failed:', e); }
+}
