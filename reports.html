@@ -81,7 +81,7 @@
           </div>
           <input type="month" class="form-input" id="month-selector" style="width:180px;" onchange="renderAll()" />
           <select class="form-input" id="cat-filter" style="width:180px;" onchange="renderAll()">
-            <option value="">All Categories</option>
+            <option value="" data-t="rpt_all_cats">All Categories</option>
           </select>
         </div>
       </div>
@@ -320,7 +320,7 @@ function renderAll() {
       </div>`;
     }).join('');
   } else {
-    budgetActual.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;padding:20px;">No budget set. Go to the Budget page to set one.</div>';
+    budgetActual.innerHTML = `<div style="color:var(--text-muted);font-size:14px;text-align:center;padding:20px;">${State.lang==='bn'?'কোনো বাজেট নির্ধারণ করা হয়নি। বাজেট পেজে গিয়ে নির্ধারণ করুন।':'No budget set. Go to the Budget page to set one.'}</div>`;
   }
 
   // AI Insight
@@ -505,6 +505,8 @@ window.applyLang = function(lang) {
     const t=el.textContent.trim();
     if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
+  const fc=document.getElementById('cat-filter');
+  if(fc&&fc.options[0]&&fc.options[0].value==='')fc.options[0].text=bn?'সব ক্যাটাগরি':'All Categories';
   if(typeof renderAll==='function')renderAll();
   if(typeof renderYearlySummary==='function')renderYearlySummary();
 };

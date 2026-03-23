@@ -237,7 +237,7 @@ function initIncome() {
   const srcOpts = State.income_cats.map(c =>
     `<option value="${c.id}">${State.lang==='bn'?c.bn:c.en}</option>`).join('');
   document.getElementById('inc-source').innerHTML = srcOpts;
-  document.getElementById('inc-filter-cat').innerHTML = '<option value="">All Sources</option>' + srcOpts;
+  document.getElementById('inc-filter-cat').innerHTML = `<option value="">${State.lang==='bn'?'সব উৎস':'All Sources'}</option>` + srcOpts;
 
   renderStats(); renderCatCards(); renderIncomeBars(); renderIncomeTrend(); renderIncomeTable();
 }
@@ -289,7 +289,7 @@ function renderIncomeBars() {
     const name = cat?(State.lang==='bn'?cat.bn:cat.en):id;
     const pct = Math.round((val/maxVal)*100);
     return `<div class="bar-row"><div class="bar-label">${name}</div><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${colors[i%colors.length]};"></div></div><div class="bar-val">${fmt(val)}</div></div>`;
-  }).join('') || '<div style="text-align:center;padding:20px;color:var(--text-muted);">No data yet.</div>';
+  }).join('') || `<div style="text-align:center;padding:20px;color:var(--text-muted);">${State.lang==='bn'?'এখনো কোনো তথ্য নেই।':'No data yet.'}</div>`;
 }
 
 function renderIncomeTrend() {
@@ -469,6 +469,9 @@ window.applyLang = function(lang) {
   // Filter "All Sources"
   const fc=document.getElementById('inc-filter-cat');
   if(fc&&fc.options[0])fc.options[0].text=bn?'সব উৎস':'All Sources';
+  // No data messages
+  const noInc=document.getElementById('no-income');
+  if(noInc) noInc.textContent=bn?'এখনো কোনো আয় লেখা হয়নি। প্রথম আয় যোগ করুন!':'No income recorded yet. Add your first income!';
   // Re-render dynamic data with new lang
   if(typeof renderStats==='function')renderStats();
   if(typeof renderCatCards==='function')renderCatCards();

@@ -67,11 +67,11 @@
         <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;">
           <span style="font-size:36px;">🤖</span>
           <div style="flex:1;">
-            <div style="font-size:16px;font-weight:700;color:var(--blue-800);margin-bottom:6px;">AI Budget Suggestion for This Month</div>
-            <div style="font-size:14px;color:var(--blue-600);line-height:1.7;" id="ai-suggestion-text">Based on your last 3 months, here is a suggested budget...</div>
+            <div style="font-size:16px;font-weight:700;color:var(--blue-800);margin-bottom:6px;" data-t="bgt_ai_title">AI Budget Suggestion for This Month</div>
+            <div style="font-size:14px;color:var(--blue-600);line-height:1.7;" id="ai-suggestion-text" data-t="bgt_ai_loading">Based on your last 3 months, here is a suggested budget...</div>
             <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
-              <button class="btn btn-primary btn-sm" onclick="applyAISuggestion()">✅ Accept Suggestion</button>
-              <button class="btn btn-outline btn-sm" onclick="document.getElementById('manual-budget-section').scrollIntoView({behavior:'smooth'})">✏️ Set Manually</button>
+              <button class="btn btn-primary btn-sm" onclick="applyAISuggestion()" data-t="bgt_accept_btn">✅ Accept Suggestion</button>
+              <button class="btn btn-outline btn-sm" onclick="document.getElementById('manual-budget-section').scrollIntoView({behavior:'smooth'})" data-t="bgt_set_manual_btn">✏️ Set Manually</button>
             </div>
           </div>
         </div>
@@ -139,8 +139,11 @@ function initBudget() {
 function buildAISuggestion() {
   const s = generateBudgetSuggestion();
   const perCat = Math.round(s.expense / State.expense_cats.length);
-  let text = `Expected Income: <strong>${fmt(s.income)}</strong> | Total Expense Budget: <strong>${fmt(s.expense)}</strong> | Savings Target: <strong>${fmt(s.savings)}</strong><br/>`;
-  text += State.expense_cats.map(c => `${CAT_ICONS[c.id]||'📦'} ${c.en}: <strong>${fmt(perCat)}</strong>`).join(' &nbsp;|&nbsp; ');
+  const bn = State.lang==='bn';
+  let text = bn
+    ? `প্রত্যাশিত আয়: <strong>${fmt(s.income)}</strong> | মোট খরচের বাজেট: <strong>${fmt(s.expense)}</strong> | সঞ্চয়ের লক্ষ্য: <strong>${fmt(s.savings)}</strong><br/>`
+    : `Expected Income: <strong>${fmt(s.income)}</strong> | Total Expense Budget: <strong>${fmt(s.expense)}</strong> | Savings Target: <strong>${fmt(s.savings)}</strong><br/>`;
+  text += State.expense_cats.map(c => `${CAT_ICONS[c.id]||'📦'} ${bn?c.bn:c.en}: <strong>${fmt(perCat)}</strong>`).join(' &nbsp;|&nbsp; ');
   document.getElementById('ai-suggestion-text').innerHTML = text;
 }
 
@@ -194,7 +197,7 @@ function renderBudgetProgress() {
   const catData = getExpenseByCategory(now.getFullYear(), now.getMonth());
   const el = document.getElementById('budget-progress-list');
   if (!Object.keys(State.budgets).length) {
-    el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);">No budget set. Use the AI suggestion or set manually below.</div>';
+    el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--text-muted);">${State.lang==='bn'?'কোনো বাজেট নির্ধারণ করা হয়নি। নিচে AI পরামর্শ গ্রহণ করুন বা নিজে নির্ধারণ করুন।':'No budget set. Use the AI suggestion or set manually below.'}</div>`;
     return;
   }
   el.innerHTML = State.expense_cats.map(c => {
@@ -254,6 +257,9 @@ function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent
 
 window.applyLang = function(lang) {
   const bn = lang==='bn';
+  _st('[data-t="bgt_ai_title"]',      bn?'এই মাসের জন্য AI বাজেট পরামর্শ':'AI Budget Suggestion for This Month');
+  _st('[data-t="bgt_accept_btn"]',    bn?'✅ পরামর্শ গ্রহণ করুন':'✅ Accept Suggestion');
+  _st('[data-t="bgt_set_manual_btn"]',bn?'✏️ নিজে নির্ধারণ করুন':'✏️ Set Manually');
   document.querySelectorAll('.card-title').forEach(el=>{
     const m={'Budget Planner':'বাজেট পরিকল্পনা','Monthly Budget Overview':'মাসিক বাজেট সংক্ষেপ','AI Budget Suggestion':'AI বাজেট পরামর্শ','Add Budget':'বাজেট যোগ করুন','Budget Progress':'বাজেট অগ্রগতি'};
     const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
@@ -272,7 +278,8 @@ window.applyLang = function(lang) {
     const t=el.textContent.trim();
     if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
   });
-  // Spent/Left labels inside dynamic renders
+  // Re-render so No budget set message updates too
+  if(typeof buildAISuggestion==='function')buildAISuggestion();
   if(typeof renderBudgetProgress==='function')renderBudgetProgress();
   if(typeof renderBudgetChart==='function')renderBudgetChart();
 };

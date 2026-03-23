@@ -77,7 +77,7 @@
           <div style="font-size:13px;opacity:0.7;margin-top:4px;" data-t="wlt_across_all">Across all wallets</div>
         </div>
         <div style="display:flex;gap:12px;">
-          <button class="btn btn-secondary" onclick="openTransferModal()">⇄ Fund Transfer</button>
+          <button class="btn btn-secondary" onclick="openTransferModal()" data-t="wlt_fund_transfer">⇄ Fund Transfer</button>
         </div>
       </div>
 
@@ -172,30 +172,30 @@
 <div class="modal-backdrop" id="transfer-modal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">⇄ Fund Transfer</div>
+      <div class="modal-title" data-t="wlt_fund_transfer_title">⇄ Fund Transfer</div>
       <button class="modal-close" onclick="closeModal('transfer-modal')">×</button>
     </div>
     <div class="dual-warning show" style="background:var(--blue-50);border-color:var(--blue-200);color:var(--blue-700);">
       <span>ℹ️</span>
-      <span>Double-entry: Money moves out of one wallet and into another.</span>
+      <span data-t="wlt_double_entry_note">Double-entry: Money moves out of one wallet and into another.</span>
     </div>
 
     <!-- Inline error/warning panel -->
     <div id="tr-error" style="display:none;border-radius:var(--radius-md);padding:12px 16px;margin-bottom:14px;font-size:13px;font-weight:600;display:none;align-items:flex-start;gap:10px;"></div>
 
     <div class="form-group">
-      <label class="form-label">Amount (৳)</label>
+      <label class="form-label" data-t="wlt_tr_amount">Amount (৳)</label>
       <input type="number" class="form-input" id="tr-amount" placeholder="0.00" min="0.01" step="0.01" oninput="onTransferInput()" />
     </div>
 
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">From</label>
+        <label class="form-label" data-t="wlt_tr_from">From</label>
         <select class="form-input" id="tr-from" onchange="onTransferInput()"></select>
         <div id="tr-from-balance" style="font-size:12px;margin-top:5px;color:var(--text-muted);"></div>
       </div>
       <div class="form-group">
-        <label class="form-label">To</label>
+        <label class="form-label" data-t="wlt_tr_to">To</label>
         <select class="form-input" id="tr-to" onchange="onTransferInput()"></select>
         <div id="tr-to-balance" style="font-size:12px;margin-top:5px;color:var(--text-muted);"></div>
       </div>
@@ -203,7 +203,7 @@
 
     <!-- Live preview after transfer -->
     <div id="tr-preview" style="display:none;background:var(--bg-secondary);border-radius:var(--radius-md);padding:12px 16px;margin-bottom:14px;font-size:13px;">
-      <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;">After Transfer:</div>
+      <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;" data-t="wlt_after_transfer">After Transfer:</div>
       <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
         <div>From: <span id="preview-from-name" style="font-weight:600;"></span> → <span id="preview-from-after" style="font-weight:700;color:var(--red-400);"></span></div>
         <div>To: <span id="preview-to-name" style="font-weight:600;"></span> → <span id="preview-to-after" style="font-weight:700;color:var(--teal-400);"></span></div>
@@ -220,7 +220,7 @@
         <input type="text" class="form-input" id="tr-note" placeholder="Optional" />
       </div>
     </div>
-    <button class="btn btn-primary btn-full" id="tr-submit-btn" onclick="doTransfer()">Transfer Fund</button>
+    <button class="btn btn-primary btn-full" id="tr-submit-btn" onclick="doTransfer()" data-t="wlt_tr_submit">Transfer Fund</button>
   </div>
 </div>
 
@@ -586,7 +586,7 @@ function resetTransferForm() {
   document.getElementById('tr-from-balance').textContent = '';
   document.getElementById('tr-to-balance').textContent = '';
   document.getElementById('tr-submit-btn').disabled = false;
-  document.getElementById('tr-submit-btn').textContent = 'Transfer Fund';
+  document.getElementById('tr-submit-btn').textContent = State.lang==='bn'?'ফান্ড ট্রান্সফার করুন':'Transfer Fund';
 }
 
 function showTransferError(icon, msg, type) {
@@ -628,7 +628,7 @@ function onTransferInput() {
   // Hide preview by default
   document.getElementById('tr-preview').style.display = 'none';
   submitBtn.disabled = false;
-  submitBtn.textContent = 'Transfer Fund';
+  submitBtn.textContent = State.lang==='bn'?'ফান্ড ট্রান্সফার করুন':'Transfer Fund';
   clearTransferError();
 
   if (!fromWallet || !toWallet) return;
@@ -729,6 +729,14 @@ function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent
 window.applyLang = function(lang) {
   const bn = lang==='bn';
   _st('[data-t="dash_balance"]', bn?'মোট ব্যালেন্স':'Total Balance');
+  _st('[data-t="wlt_fund_transfer"]',       bn?'⇄ ফান্ড ট্রান্সফার':'⇄ Fund Transfer');
+  _st('[data-t="wlt_fund_transfer_title"]', bn?'⇄ ফান্ড ট্রান্সফার':'⇄ Fund Transfer');
+  _st('[data-t="wlt_double_entry_note"]',   bn?'দ্বৈত প্রবিষ্টি: এক ওয়ালেট থেকে টাকা বের হয়ে অন্যটিতে যাবে।':'Double-entry: Money moves out of one wallet and into another.');
+  _st('[data-t="wlt_tr_amount"]',           bn?'পরিমাণ (৳)':'Amount (৳)');
+  _st('[data-t="wlt_tr_from"]',             bn?'যেখান থেকে':'From');
+  _st('[data-t="wlt_tr_to"]',               bn?'যেখানে':'To');
+  _st('[data-t="wlt_after_transfer"]',      bn?'ট্রান্সফারের পর:':'After Transfer:');
+  _st('[data-t="wlt_tr_submit"]',           bn?'ফান্ড ট্রান্সফার করুন':'Transfer Fund');
   _st('[data-t="wlt_across_all"]', bn?'সব ওয়ালেট মিলিয়ে':'Across all wallets');
   _st('[data-t="wlt_all_movements"]', bn?'সব ওয়ালেটের লেনদেন':'All movements across wallets');
   _st('[data-t="wlt_no_txns"]', bn?'এখনো কোনো লেনদেন নেই।':'No transactions yet.');
