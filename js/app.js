@@ -560,6 +560,14 @@ function applyTheme(theme) {
   State.theme = theme;
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('hisab_theme', theme);
+  // Update all theme toggle icons
+  document.querySelectorAll('.theme-toggle-icon').forEach(el => {
+    el.textContent = theme === 'dark' ? '☀️' : '🌙';
+  });
+  // Update settings page theme buttons if present
+  document.querySelectorAll('.theme-btn, [data-theme-btn]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.themeBtn === theme || btn.dataset.theme === theme);
+  });
 }
 
 function toggleTheme() {
@@ -586,10 +594,12 @@ function setLanguage(lang) {
     if (LANG[lang] && LANG[lang][key]) el.placeholder = LANG[lang][key];
   });
 
-  // 3. Active button highlight
+  // 3. Active button highlight — always sync
   document.querySelectorAll('.lang-btn-switch').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
+  // Also update html data-lang attribute
+  document.documentElement.setAttribute('data-lang', lang);
 
   // 4. Re-render all dynamic components that use State.lang
   [
@@ -1286,9 +1296,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch(e) { /* silent fail */ }
   })();
 
-  // Apply theme & language first
+  // Apply saved theme & language (persisted in localStorage — survives logout)
   applyTheme(State.theme);
   setLanguage(State.lang);
+  // Sync theme toggle icon
+  document.querySelectorAll('.theme-toggle-icon').forEach(el => {
+    el.textContent = State.theme === 'dark' ? '☀️' : '🌙';
+  });
 
   // ── Remove no-transition after theme is applied ──
   // Small delay ensures the browser has painted with correct theme
