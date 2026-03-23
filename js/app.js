@@ -231,6 +231,14 @@ const LANG = {
     // Settings backup buttons
     backup_now_btn2:'☁️ Backup Now', backup_restore_btn2:'⬇️ Restore from Drive',
     backup_scope_value:'All transactions, wallets & settings',
+    // Settings Language/Theme/Currency rows
+    lang_row_label:'Language / ভাষা', lang_row_desc:'Select your preferred language',
+    theme_row_label:'Theme', theme_row_desc:'Light or dark mode (auto-detects system)',
+    currency_row_label:'Currency Display', currency_row_desc:'Always shown in Bangladeshi Taka (৳)',
+    // Wallets page
+    wlt_across_all:'Across all wallets', wlt_all_movements:'All movements across wallets',
+    wlt_no_txns:'No transactions yet.', wlt_add_btn:'+ Add Wallet',
+    wlt_all_wallets:'All Wallets',
     // Notification labels
     notif_daily_label:'Daily Reminder', notif_daily_desc:'Remind me to add daily expenses',
     notif_time_label:'Reminder Time', notif_time_desc:'Choose your preferred reminder time',
@@ -382,6 +390,14 @@ const LANG = {
     // Settings backup buttons
     backup_now_btn2:'☁️ এখনই ব্যাকআপ', backup_restore_btn2:'⬇️ ড্রাইভ থেকে পুনরুদ্ধার',
     backup_scope_value:'সব লেনদেন, ওয়ালেট ও সেটিংস',
+    // Settings Language/Theme/Currency rows
+    lang_row_label:'ভাষা / Language', lang_row_desc:'আপনার পছন্দের ভাষা বেছে নিন',
+    theme_row_label:'থিম', theme_row_desc:'লাইট বা ডার্ক মোড (সিস্টেম অনুযায়ী স্বয়ংক্রিয়)',
+    currency_row_label:'মুদ্রা প্রদর্শনী', currency_row_desc:'সবসময় বাংলাদেশি টাকায় (৳) দেখানো হবে',
+    // Wallets page
+    wlt_across_all:'সব ওয়ালেট মিলিয়ে', wlt_all_movements:'সব ওয়ালেটের লেনদেন',
+    wlt_no_txns:'এখনো কোনো লেনদেন নেই।', wlt_add_btn:'+ ওয়ালেট যোগ করুন',
+    wlt_all_wallets:'সব ওয়ালেট',
     // Notification labels
     notif_daily_label:'দৈনিক রিমাইন্ডার', notif_daily_desc:'প্রতিদিনের খরচ যোগ করার কথা মনে করিয়ে দেবে',
     notif_time_label:'রিমাইন্ডারের সময়', notif_time_desc:'আপনার পছন্দের রিমাইন্ডার সময় বেছে নিন',
