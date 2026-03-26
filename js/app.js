@@ -4,15 +4,6 @@
 
 'use strict';
 
-// ── SERVICE WORKER REGISTRATION ──
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('Service Worker registered:', reg.scope))
-      .catch(err => console.log('Service Worker registration failed:', err));
-  });
-}
-
 // ── FLASH PREVENTION — add class instantly before any render ──
 document.documentElement.classList.add('no-transition');
 
@@ -47,66 +38,62 @@ LOGO.imageUrl = null;
 
 // ── LOGO RENDERER ─────────────────────────
 // Injects the logo into every element that has [data-logo] attribute.
+// data-logo="nav"      → small horizontal nav mark + text
+// data-logo="auth"     → large centred auth panel icon
+// data-logo="sidebar"  → sidebar brand block
+// data-logo="footer"   → footer brand name text
 function renderLogos() {
-  const logos = document.querySelectorAll('[data-logo]');
-  if (logos.length === 0) return;
+  document.querySelectorAll('[data-logo]').forEach(el => {
+    const type = el.getAttribute('data-logo');
 
-  const logoHTML = {};
-  const types = ['nav', 'auth', 'sidebar', 'footer', 'hero'];
-
-  types.forEach(type => {
     if (LOGO.imageUrl) {
-      // Image logo HTML
+      // ── IMAGE LOGO ──────────────────────────
       if (type === 'nav') {
-        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:36px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;" />`;
-      } else if (type === 'hero') {
-        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 6px 24px rgba(30,136,229,0.45)) brightness(1.1);mix-blend-mode:screen;" />`;
+        el.innerHTML = `
+          <img src="${LOGO.imageUrl}" alt="${LOGO.altText}"
+            style="height:36px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;" />`;
       } else if (type === 'auth') {
-        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:72px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin:0 auto 16px;" />`;
+        el.innerHTML = `
+          <img src="${LOGO.imageUrl}" alt="${LOGO.altText}"
+            style="height:72px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin:0 auto 16px;" />`;
       } else if (type === 'sidebar') {
-        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:40px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin-bottom:4px;" /><div style="font-size:11px;color:rgba(181,212,244,0.6);">${LOGO.appSub}</div>`;
+        el.innerHTML = `
+          <img src="${LOGO.imageUrl}" alt="${LOGO.altText}"
+            style="height:40px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin-bottom:4px;" />
+          <div style="font-size:11px;color:rgba(181,212,244,0.6);">${LOGO.appSub}</div>`;
       } else if (type === 'footer') {
-        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:44px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin-bottom:8px;" />`;
+        el.innerHTML = `
+          <img src="${LOGO.imageUrl}" alt="${LOGO.altText}"
+            style="height:44px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin-bottom:8px;" />`;
       }
     } else {
-      // Text/Icon logo HTML
+      // ── TEXT / ICON MARK (default) ──────────
       if (type === 'nav') {
-        logoHTML[type] = `
-          <div style="width:38px;height:38px;background:${LOGO.markBg};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:white;font-family:'Playfair Display',serif;box-shadow:0 4px 12px rgba(30,136,229,0.4);flex-shrink:0;">${LOGO.markText}</div>
-          <div style="line-height:1.2;">
-            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:800;line-height:1.1;">
-              <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
-              <span style="color:rgba(255,255,255,0.28);font-weight:300;font-size:0.55em;vertical-align:middle;">—</span>
-              <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
-            </div>
-            <div style="font-size:10px;margin-top:1px;white-space:nowrap;">
-              <span style="font-style:italic;background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য</span>
-              <span style="color:rgba(255,255,255,0.22);margin:0 3px;">—</span>
-              <span style="font-style:italic;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;font-size:0.85em;background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">For Future Savings</span>
-            </div>
+        el.innerHTML = `
+          <div style="width:40px;height:40px;background:${LOGO.markBg};border-radius:10px;
+            display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;
+            color:white;font-family:'Playfair Display',serif;
+            box-shadow:0 4px 12px rgba(30,136,229,0.4);">${LOGO.markText}</div>
+          <div>
+            <strong style="font-size:19px;font-weight:700;color:#fff;display:block;line-height:1.2;">${LOGO.appName}</strong>
+            <span style="font-size:11px;color:rgba(255,255,255,0.45);">${LOGO.appSub}</span>
           </div>`;
-      } else if (type === 'hero') {
-        logoHTML[type] = `<div style="width:110px;height:110px;background:linear-gradient(135deg,#1E88E5,#00E5CC);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:60px;font-weight:700;color:white;font-family:'Playfair Display',serif;box-shadow:0 12px 36px rgba(30,136,229,0.5);">${LOGO.markText}</div>`;
       } else if (type === 'auth') {
-        logoHTML[type] = `<div style="width:72px;height:72px;background:rgba(255,255,255,0.15);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:white;font-family:'Playfair Display',serif;margin:0 auto 16px;border:1px solid rgba(255,255,255,0.2);">${LOGO.markText}</div>`;
+        el.innerHTML = `
+          <div style="width:72px;height:72px;background:rgba(255,255,255,0.15);border-radius:20px;
+            display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;
+            color:white;font-family:'Playfair Display',serif;margin:0 auto 16px;
+            border:1px solid rgba(255,255,255,0.2);">${LOGO.markText}</div>`;
       } else if (type === 'sidebar') {
-        logoHTML[type] = `<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;background:${LOGO.markBg};border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white;font-family:'Playfair Display',serif;">${LOGO.markText}</div><div><div style="font-size:18px;font-weight:700;color:white;">${LOGO.appName}</div><div style="font-size:10px;color:rgba(181,212,244,0.6);margin-top:1px;">${LOGO.appSub}</div></div></div>`;
+        el.innerHTML = `
+          <div style="font-size:22px;font-weight:700;color:white;">${LOGO.appName}</div>
+          <div style="font-size:11px;color:rgba(181,212,244,0.6);margin-top:2px;">${LOGO.appSub} — For Future Savings</div>`;
       } else if (type === 'footer') {
-        logoHTML[type] = `<div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;background:${LOGO.markBg};border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;font-family:'Playfair Display',serif;">${LOGO.markText}</div><div style="font-size:14px;color:rgba(255,255,255,0.8);">${LOGO.appName} — ${LOGO.appSub}</div></div>`;
+        el.innerHTML = `${LOGO.appName} — ${LOGO.appSub}`;
       }
     }
   });
-
-  logos.forEach(el => {
-    const type = el.getAttribute('data-logo');
-    if (logoHTML[type]) el.innerHTML = logoHTML[type];
-  });
 }
-
-// ── INITIALIZE LOGOS ──
-document.addEventListener('DOMContentLoaded', () => {
-  renderLogos();
-});
 
 // ── LANGUAGE STRINGS ──────────────────────
 const LANG = {
@@ -362,17 +349,6 @@ const LANG = {
     admin_gift_credits:'Gift Credits', admin_all_users:'All Users',
     admin_active_users:'Active Users', admin_inactive_users:'Inactive (7+ days)',
     admin_total_txns:'Total Transactions',
-    admin_last_login:'Last Login', admin_ban_user:'Ban User', admin_unban_user:'Unban User',
-    admin_ban_lifetime:'Lifetime Ban', admin_ban_temp:'Temporary Ban',
-    admin_ban_days:'Days', admin_ban_reason:'Reason', admin_ban_confirm:'Confirm Ban',
-    admin_id_lifetime:'ID Stored for Lifetime',
-    err_banned_lifetime:'Your account has been permanently banned. Contact admin.',
-    err_banned_temp:'Your account is temporarily restricted until ',
-    err_deleted:'This account has been deleted. Contact admin.',
-    // App popup
-    app_working_title: 'Mobile App',
-    app_working_msg: 'We are currently working on our mobile application. It will be available soon on Play Store and App Store!',
-    app_working_btn: 'Got it!',
   },
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
@@ -458,7 +434,6 @@ const LANG = {
     // Reports
     rpt_page_title:'📊 রিপোর্ট ও বিশ্লেষণ', rpt_download_btn:'⬇ ডাউনলোড (৫ পয়েন্ট)',
     rpt_all_cats: 'সব ক্যাটাগরি',
-    rpt_spending_dist:'খরচের বিবরণ', rpt_budget_actual:'বাজেট বনাম প্রকৃত',
     // Budget AI
     bgt_accept_btn: '✅ AI পরামর্শ গ্রহণ করুন', bgt_ai_loading: '🤖 AI বিশ্লেষণ করছে...',
     bgt_ai_title: '🤖 AI বাজেট পরামর্শ', bgt_set_manual_btn: '✏️ নিজে নির্ধারণ করুন',
@@ -527,10 +502,6 @@ const LANG = {
     crd_watch_btn:'📺 বিজ্ঞাপন দেখুন (+৫ পয়েন্ট)', crd_history_label:'ক্রেডিট ইতিহাস',
     crd_signup_label:'সাইনআপ বোনাস', crd_signup_when:'অ্যাকাউন্ট তৈরির সময়',
     crd_ad_watched:'বিজ্ঞাপন দেখা হয়েছে', crd_ad_when:'আজকে',
-    // App popup
-    app_working_title: 'মোবাইল অ্যাপ',
-    app_working_msg: 'আমরা বর্তমানে আমাদের মোবাইল অ্যাপ্লিকেশনের কাজ করছি। এটি খুব শীঘ্রই প্লে স্টোর এবং অ্যাপ স্টোরে পাওয়া যাবে!',
-    app_working_btn: 'ঠিক আছে',
     // Income/Expense section headings
     inc_sources_title:'আয়ের উৎস', exp_cats_title:'খরচের ক্যাটাগরি',
     // Settings backup buttons
@@ -615,13 +586,6 @@ const LANG = {
     admin_gift_credits:'ক্রেডিট উপহার', admin_all_users:'সব ব্যবহারকারী',
     admin_active_users:'সক্রিয় ব্যবহারকারী', admin_inactive_users:'নিষ্ক্রিয় (৭+ দিন)',
     admin_total_txns:'মোট লেনদেন',
-    admin_last_login:'সর্বশেষ লগইন', admin_ban_user:'ব্যান করুন', admin_unban_user:'ব্যান তুলে নিন',
-    admin_ban_lifetime:'আজীবন ব্যান', admin_ban_temp:'সাময়িক ব্যান',
-    admin_ban_days:'দিন', admin_ban_reason:'কারণ', admin_ban_confirm:'ব্যান নিশ্চিত করুন',
-    admin_id_lifetime:'আইডি আজীবনের জন্য সংরক্ষিত',
-    err_banned_lifetime:'আপনার অ্যাকাউন্টটি স্থায়ীভাবে ব্যান করা হয়েছে। অ্যাডমিনের সাথে যোগাযোগ করুন।',
-    err_banned_temp:'আপনার অ্যাকাউন্টটি সাময়িকভাবে স্থগিত করা হয়েছে। এটি শেষ হবে: ',
-    err_deleted:'এই অ্যাকাউন্টটি মুছে ফেলা হয়েছে। অ্যাডমিনের সাথে যোগাযোগ করুন।',
   }
 };
 
@@ -636,23 +600,23 @@ function _userKey(base) {
 const State = {
   lang: localStorage.getItem('hisab_lang') || 'en',
   theme: localStorage.getItem('hisab_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
-  user: null,
-  credits: 150,
-  transactions: [],
-  wallets: [
+  user: JSON.parse(localStorage.getItem('hisab_user') || 'null'),
+  credits: parseInt(localStorage.getItem(_userKey('hisab_credits')) || '150'),
+  transactions: JSON.parse(localStorage.getItem(_userKey('hisab_txns')) || '[]'),
+  wallets: JSON.parse(localStorage.getItem(_userKey('hisab_wallets')) || JSON.stringify([
     { id: 'cash',  name_en: 'Cash',         name_bn: 'নগদ',                  icon: '💵', balance: 0 },
     { id: 'bank',  name_en: 'Bank Account', name_bn: 'ব্যাংক অ্যাকাউন্ট',  icon: '🏦', balance: 0 },
     { id: 'debit', name_en: 'Debit Card',   name_bn: 'ডেবিট কার্ড',         icon: '💳', balance: 0 },
-  ],
-  income_cats: [
+  ])),
+  income_cats: JSON.parse(localStorage.getItem(_userKey('hisab_income_cats')) || JSON.stringify([
     { id: 'salary', en: 'Salary', bn: 'বেতন' },
     { id: 'business', en: 'Business', bn: 'ব্যবসা' },
     { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
     { id: 'gift', en: 'Gift', bn: 'উপহার' },
     { id: 'savings', en: 'Savings', bn: 'সঞ্চয়' },
     { id: 'others', en: 'Others', bn: 'অন্যান্য' },
-  ],
-  expense_cats: [
+  ])),
+  expense_cats: JSON.parse(localStorage.getItem(_userKey('hisab_expense_cats')) || JSON.stringify([
     { id: 'rent', en: 'House Rent', bn: 'বাড়িভাড়া' },
     { id: 'conv', en: 'Conveyance', bn: 'যাতায়াত' },
     { id: 'food', en: 'Fooding', bn: 'খাবার' },
@@ -660,73 +624,17 @@ const State = {
     { id: 'medicine', en: 'Medicine', bn: 'ওষুধ' },
     { id: 'entertainment', en: 'Entertainment', bn: 'বিনোদন' },
     { id: 'others', en: 'Others', bn: 'অন্যান্য' },
-  ],
-  wallet_types: [
-    { id: 'cash', en: 'Cash', bn: 'নগদ' },
-    { id: 'bank', en: 'Bank Account', bn: 'ব্যাংক অ্যাকাউন্ট' },
-    { id: 'debit', en: 'Debit Card', bn: 'ডেবিট কার্ড' },
-    { id: 'credit', en: 'Credit Card', bn: 'ক্রেডিট কার্ড' },
-    { id: 'loan_to', en: 'Loan to Others', bn: 'অন্যকে ঋণ' },
-    { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
-    { id: 'others', en: 'Others', bn: 'অন্যান্য' },
-  ],
-  budgets: {},
-  notifications: [],
+  ])),
+  budgets: JSON.parse(localStorage.getItem(_userKey('hisab_budgets')) || '{}'),
+  notifications: JSON.parse(localStorage.getItem(_userKey('hisab_notifications')) || '[]'),
 };
-
-// ── STATE REFRESH ─────────────────────────
-// Loads user-specific data into the global State object
-function refreshState() {
-  State.user = JSON.parse(localStorage.getItem('hisab_user') || 'null');
-  if (!State.user) return;
-
-  const u = State.user.username;
-  State.credits = parseInt(localStorage.getItem(`hisab_credits_${u}`) || '150');
-  State.transactions = JSON.parse(localStorage.getItem(`hisab_txns_${u}`) || '[]');
-  State.wallets = JSON.parse(localStorage.getItem(`hisab_wallets_${u}`) || JSON.stringify([
-    { id: 'cash',  name_en: 'Cash',         name_bn: 'নগদ',                  icon: '💵', balance: 0 },
-    { id: 'bank',  name_en: 'Bank Account', name_bn: 'ব্যাংক অ্যাকাউন্ট',  icon: '🏦', balance: 0 },
-    { id: 'debit', name_en: 'Debit Card',   name_bn: 'ডেবিট কার্ড',         icon: '💳', balance: 0 },
-  ]));
-  State.income_cats = JSON.parse(localStorage.getItem(`hisab_income_cats_${u}`) || JSON.stringify([
-    { id: 'salary', en: 'Salary', bn: 'বেতন' },
-    { id: 'business', en: 'Business', bn: 'ব্যবসা' },
-    { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
-    { id: 'gift', en: 'Gift', bn: 'উপহার' },
-    { id: 'savings', en: 'Savings', bn: 'সঞ্চয়' },
-    { id: 'others', en: 'Others', bn: 'অন্যান্য' },
-  ]));
-  State.expense_cats = JSON.parse(localStorage.getItem(`hisab_expense_cats_${u}`) || JSON.stringify([
-    { id: 'rent', en: 'House Rent', bn: 'বাড়িভাড়া' },
-    { id: 'conv', en: 'Conveyance', bn: 'যাতায়াত' },
-    { id: 'food', en: 'Fooding', bn: 'খাবার' },
-    { id: 'travel', en: 'Travelling', bn: 'ভ্রমণ' },
-    { id: 'medicine', en: 'Medicine', bn: 'ওষুধ' },
-    { id: 'entertainment', en: 'Entertainment', bn: 'বিনোদন' },
-    { id: 'others', en: 'Others', bn: 'অন্যান্য' },
-  ]));
-  State.wallet_types = JSON.parse(localStorage.getItem(`hisab_wallet_types_${u}`) || JSON.stringify([
-    { id: 'cash', en: 'Cash', bn: 'নগদ' },
-    { id: 'bank', en: 'Bank Account', bn: 'ব্যাংক অ্যাকাউন্ট' },
-    { id: 'debit', en: 'Debit Card', bn: 'ডেবিট কার্ড' },
-    { id: 'credit', en: 'Credit Card', bn: 'ক্রেডিট কার্ড' },
-    { id: 'loan_to', en: 'Loan to Others', bn: 'অন্যকে ঋণ' },
-    { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
-    { id: 'others', en: 'Others', bn: 'অন্যান্য' },
-  ]));
-  State.budgets = JSON.parse(localStorage.getItem(`hisab_budgets_${u}`) || '{}');
-  State.notifications = JSON.parse(localStorage.getItem(`hisab_notifications_${u}`) || '[]');
-}
-
-// Initial load
-refreshState();
 
 // ── HELPERS ───────────────────────────────
 const t = (key) => LANG[State.lang][key] || LANG['en'][key] || key;
 const fmt = (n) => '৳ ' + Number(n).toLocaleString('en-BD');
 const today = () => new Date().toISOString().split('T')[0];
 // User-specific saveState for txns, wallets, credits — other keys remain global
-const _userSpecificKeys = ['txns', 'wallets', 'credits', 'budgets', 'income_cats', 'expense_cats', 'wallet_types', 'notifications'];
+const _userSpecificKeys = ['txns', 'wallets', 'credits', 'budgets', 'income_cats', 'expense_cats', 'notifications'];
 const saveState = (key, val) => {
   const storageKey = _userSpecificKeys.includes(key)
     ? _userKey('hisab_' + key)
@@ -944,61 +852,35 @@ function applyTheme(theme) {
 }
 
 function toggleTheme() {
-  const newTheme = State.theme === 'dark' ? 'light' : 'dark';
-  applyTheme(newTheme);
-  
-  // Smooth icon transition
+  applyTheme(State.theme === 'dark' ? 'light' : 'dark');
   document.querySelectorAll('.theme-toggle-icon').forEach(el => {
-    el.style.transform = 'rotate(360deg) scale(0)';
-    el.style.opacity = '0';
-    setTimeout(() => {
-      el.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-      el.style.transform = 'rotate(0deg) scale(1)';
-      el.style.opacity = '1';
-    }, 200);
+    el.textContent = State.theme === 'dark' ? '☀️' : '🌙';
   });
 }
 
 // ── LANGUAGE ──────────────────────────────
 function setLanguage(lang) {
-  // Always update global State and localStorage
   State.lang = lang;
   localStorage.setItem('hisab_lang', lang);
 
-  // Set html lang attribute
+  // 0. Set html lang attribute
   document.documentElement.setAttribute('lang', lang === 'bn' ? 'bn' : 'en');
-
-  // Add a temporary class to body for smooth transition if needed
-  document.body.classList.add('lang-changing');
 
   // 1. Update data-t elements
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
-    const translation = (LANG[lang] && LANG[lang][key]) || (LANG['en'] && LANG['en'][key]);
-    if (translation) {
-      el.textContent = translation;
-    }
+    if (LANG[lang] && LANG[lang][key]) el.textContent = LANG[lang][key];
+    else if (LANG['en'] && LANG['en'][key]) el.textContent = LANG['en'][key];
   });
 
   // 2. Update data-t-ph placeholder elements
   document.querySelectorAll('[data-t-ph]').forEach(el => {
     const key = el.getAttribute('data-t-ph');
-    const translation = (LANG[lang] && LANG[lang][key]) || (LANG['en'] && LANG['en'][key]);
-    if (translation) {
-      el.placeholder = translation;
-    }
+    if (LANG[lang] && LANG[lang][key]) el.placeholder = LANG[lang][key];
+    else if (LANG['en'] && LANG['en'][key]) el.placeholder = LANG['en'][key];
   });
 
-  // 3. Update data-t-title title elements
-  document.querySelectorAll('[data-t-title]').forEach(el => {
-    const key = el.getAttribute('data-t-title');
-    const translation = (LANG[lang] && LANG[lang][key]) || (LANG['en'] && LANG['en'][key]);
-    if (translation) {
-      el.title = translation;
-    }
-  });
-
-  // 4. Active button highlight
+  // 3. Active button highlight
   document.querySelectorAll('.lang-btn-switch').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
@@ -1007,14 +889,13 @@ function setLanguage(lang) {
   if (!isPrivilegedUser()) {
     document.querySelectorAll('.sidebar-credits-sub').forEach(el => {
       if (!el.hasAttribute('data-t')) {
-        const subText = lang === 'bn' ? 'বিজ্ঞাপন দেখে আরও অর্জন করুন' : 'Watch ads to earn more';
-        el.textContent = subText;
+        el.textContent = lang === 'bn' ? 'বিজ্ঞাপন দেখে আরও অর্জন করুন' : 'Watch ads to earn more';
       }
     });
   }
 
   // 4. Re-render all dynamic components that use State.lang
-  const renderFunctions = [
+  [
     'renderWallets','renderTxnTable','renderStats','renderCatCards',
     'renderIncomeBars','renderIncomeTrend','renderIncomeTable',
     'renderExpStats','renderExpCatCards','renderExpBars','renderExpTrend','renderExpenseTable',
@@ -1023,21 +904,10 @@ function setLanguage(lang) {
     'renderAll','renderYearlySummary',
     'renderCreditHistory','renderAllTxns','renderUsersTable',
     'renderSalesHistory','renderAdminCategories',
-  ];
+  ].forEach(fn => { if (typeof window[fn] === 'function') window[fn](); });
 
-  // Optimization: Debounce multiple re-renders
-  if (window._langTimer) clearTimeout(window._langTimer);
-  window._langTimer = setTimeout(() => {
-    renderFunctions.forEach(fn => { 
-      if (typeof window[fn] === 'function') {
-        try { window[fn](); } catch(e) { console.warn(`Failed to re-render ${fn}:`, e); }
-      } 
-    });
-    // 5. Call page-specific applyLang
-    if (typeof window.applyLang === 'function') window.applyLang(lang);
-    
-    document.body.classList.remove('lang-changing');
-  }, 50);
+  // 5. Call page-specific applyLang
+  if (typeof window.applyLang === 'function') window.applyLang(lang);
 }
 
 // ── USERNAME GENERATOR ────────────────────
@@ -1402,55 +1272,38 @@ function loginUser(username, password) {
   const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const user = users.find(u => (u.username === username || u.email === username));
   if (!user) return { error: 'User not found' };
-  if (user.deleted === true) return { error: t('err_deleted') };
-  
-  // ── BAN CHECK ──
-  if (user.banned === true) {
-    if (user.banType === 'lifetime') {
-      return { error: t('err_banned_lifetime') };
-    } else if (user.banType === 'temporary' && user.banExpiry) {
-      const expiry = new Date(user.banExpiry);
-      if (new Date() < expiry) {
-        return { error: t('err_banned_temp') + expiry.toLocaleString() };
-      } else {
-        user.banned = false;
-        user.banType = null;
-        user.banExpiry = null;
-        localStorage.setItem('hisab_users', JSON.stringify(users));
-      }
-    } else {
-      return { error: t('err_banned_lifetime') };
-    }
-  }
-
+  if (user.deleted === true) return { error: 'This account has been deleted. Contact admin.' };
+  if (user.banned  === true) return { error: 'Your account has been banned. Contact admin.' };
   if (user.password !== btoa(password)) return { error: 'Wrong password' };
-
-  // ── SUCCESS LOGIN ──
-  localStorage.setItem('hisab_user', JSON.stringify(user));
-  refreshState(); // Re-load user data into State
-
-  const now = Date.now();
-  const nowISO = new Date().toISOString();
-  localStorage.setItem('hisab_last_login', now);
-  localStorage.setItem('hisab_last_login_' + user.username, now);
-  
+  State.user = user;
+  saveState('user', user);
+  localStorage.setItem('hisab_last_login', Date.now());
+  localStorage.setItem('hisab_last_login_' + user.username, Date.now());
+  // ── Merge global categories from Firestore on login ──
   _mergeGlobalCatsFromFirestore(user.username);
-  
+  // Update lastSeen on user record
   const allUsers = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const uIdx = allUsers.findIndex(u => u.username === user.username);
-  if (uIdx >= 0) { 
-    allUsers[uIdx].lastSeen = nowISO; 
-    allUsers[uIdx].lastLogin = nowISO;
-    localStorage.setItem('hisab_users', JSON.stringify(allUsers)); 
-  }
+  if (uIdx >= 0) { allUsers[uIdx].lastSeen = new Date().toISOString(); localStorage.setItem('hisab_users', JSON.stringify(allUsers)); }
   logActivity(user.username, 'login', 'Logged in');
 
+  // ── Background: Firestore এ lastSeen update করো ──
   (async () => {
     try {
-      const { db, doc, updateDoc } = await getFirebase();
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const firebaseConfig = {
+        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+        authDomain: "hisab-4-u.firebaseapp.com",
+        projectId: "hisab-4-u",
+        storageBucket: "hisab-4-u.firebasestorage.app",
+        messagingSenderId: "957694095044",
+        appId: "1:957694095044:web:1649995ac9734d4d062391"
+      };
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
       await updateDoc(doc(db, 'users', String(user.username)), {
-        lastSeen: nowISO,
-        lastLogin: nowISO
+        lastSeen: new Date().toISOString()
       });
     } catch(e) { /* silent */ }
   })();
@@ -1462,7 +1315,18 @@ function loginUser(username, password) {
 // localStorage হারিয়ে গেলে Firestore থেকে user restore করো
 async function restoreUserFromFirestore(username, password) {
   try {
-    const { db, collection, query, where, getDocs } = await getFirebase();
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const firebaseConfig = {
+      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+      authDomain: "hisab-4-u.firebaseapp.com",
+      projectId: "hisab-4-u",
+      storageBucket: "hisab-4-u.firebasestorage.app",
+      messagingSenderId: "957694095044",
+      appId: "1:957694095044:web:1649995ac9734d4d062391"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     // username বা email দিয়ে খোঁজো
     const usersRef = collection(db, 'users');
@@ -1481,22 +1345,8 @@ async function restoreUserFromFirestore(username, password) {
     if (!foundUser) return { error: 'User not found' };
 
     // Ban / delete check
-    if (foundUser.deleted === true) return { error: t('err_deleted') };
-    
-    // ── BAN CHECK ──
-    if (foundUser.banned === true) {
-      if (foundUser.banType === 'lifetime') {
-        return { error: t('err_banned_lifetime') };
-      } else if (foundUser.banType === 'temporary' && foundUser.banExpiry) {
-        const expiry = new Date(foundUser.banExpiry);
-        if (new Date() < expiry) {
-          return { error: t('err_banned_temp') + expiry.toLocaleString() };
-        }
-      } else {
-        return { error: t('err_banned_lifetime') };
-      }
-    }
-
+    if (foundUser.deleted === true) return { error: 'This account has been deleted. Contact admin.' };
+    if (foundUser.banned  === true) return { error: 'Your account has been banned. Contact admin.' };
     // Password verify করো
     if (foundUser.password !== btoa(password)) return { error: 'Wrong password' };
 
@@ -1504,22 +1354,20 @@ async function restoreUserFromFirestore(username, password) {
     const existingUsers = JSON.parse(localStorage.getItem('hisab_users') || '[]');
     const alreadyExists = existingUsers.findIndex(u => u.username === foundUser.username);
     if (alreadyExists >= 0) {
-      existingUsers[alreadyExists] = foundUser;
+      existingUsers[alreadyExists] = foundUser; // update
     } else {
-      existingUsers.push(foundUser);
+      existingUsers.push(foundUser); // নতুন করে add
     }
     localStorage.setItem('hisab_users', JSON.stringify(existingUsers));
 
     // Login করো
-    localStorage.setItem('hisab_user', JSON.stringify(foundUser));
-    refreshState();
-    
+    State.user = foundUser;
+    saveState('user', foundUser);
     localStorage.setItem('hisab_last_login', Date.now());
     logActivity(foundUser.username, 'login', 'Logged in (restored from cloud)');
     return { success: true, user: foundUser, restored: true };
   } catch(e) {
-    console.error('Restore failed:', e);
-    return { error: 'Network error or Firebase blocked. Please try again.' };
+    return { error: 'Network error. Please try again.' };
   }
 }
 
@@ -1538,27 +1386,35 @@ function registerUser(data) {
     role: 'user',
     credits: 100,
     active: true,
-    banned: false,
-    deleted: false,
-    lastLogin: null,
   };
   users.push(user);
   localStorage.setItem('hisab_users', JSON.stringify(users));
-  
-  // Login as the new user
-  localStorage.setItem('hisab_user', JSON.stringify(user));
-  refreshState();
-  
+  State.user = user;
+  saveState('user', user);
+  State.credits = 100;
+  saveState('credits', 100); // saves to user-specific key via saveState
   logActivity(user.username, 'register', 'Account created — 100 credits granted');
-  
+  // Credit log — sign-up bonus
   const _regKey = 'hisab_credit_log_' + user.username;
   localStorage.setItem(_regKey, JSON.stringify([{ id: Date.now(), timestamp: new Date().toISOString(), type:'signup', amount:100, label:'Sign-up Bonus', note:'Welcome gift — 100 free credits' }]));
 
   // ── Firestore এ save করো ──
   (async () => {
     try {
-      const { db, doc, setDoc } = await getFirebase();
-      await setDoc(doc(db, 'users', String(user.username)), { ...user });
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const firebaseConfig = {
+        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+        authDomain: "hisab-4-u.firebaseapp.com",
+        projectId: "hisab-4-u",
+        storageBucket: "hisab-4-u.firebasestorage.app",
+        messagingSenderId: "957694095044",
+        appId: "1:957694095044:web:1649995ac9734d4d062391"
+      };
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const firestoreUser = { ...user };
+      await setDoc(doc(db, 'users', String(user.username)), firestoreUser);
     } catch(e) { console.warn('Firestore save failed:', e); }
   })();
 
@@ -1569,41 +1425,7 @@ function logoutUser() {
   if (State.user) logActivity(State.user.username, 'logout', 'Logged out');
   State.user = null;
   localStorage.removeItem('hisab_user');
-  window.location.href = '/';
-}
-
-// ── APP WORKING POPUP ─────────────────────
-function showAppWorkingPopup() {
-  const modalId = 'app-working-modal';
-  if (document.getElementById(modalId)) {
-    openModal(modalId);
-    return;
-  }
-
-  const modal = document.createElement('div');
-  modal.id = modalId;
-  modal.className = 'modal-backdrop';
-  modal.innerHTML = `
-    <div class="modal" style="text-align:center;max-width:400px;padding:40px 30px;">
-      <div style="font-size:60px;margin-bottom:20px;animation:appBounce 2s ease-in-out infinite;">📱</div>
-      <h2 style="margin-bottom:12px;color:var(--text-primary);" data-t="app_working_title">${t('app_working_title')}</h2>
-      <p style="color:var(--text-muted);line-height:1.6;margin-bottom:24px;" data-t="app_working_msg">${t('app_working_msg')}</p>
-      <button class="btn btn-primary btn-full" onclick="closeModal('${modalId}')" data-t="app_working_btn">${t('app_working_btn')}</button>
-    </div>
-  `;
-  document.body.appendChild(modal);
-  
-  // Inject animation if not exists
-  if (!document.getElementById('app-anim-style')) {
-    const style = document.createElement('style');
-    style.id = 'app-anim-style';
-    style.textContent = `
-      @keyframes appBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
-    `;
-    document.head.appendChild(style);
-  }
-
-  openModal(modalId);
+  window.location.href = 'index.html';
 }
 
 function isLoggedIn() {
@@ -1612,22 +1434,14 @@ function isLoggedIn() {
 
 function requireLogin() {
   if (!isLoggedIn()) {
-    window.location.href = '/login';
+    window.location.href = 'login.html';
     return false;
   }
   // Check session expiry — 30 days if "keep me logged in", else 7 days
   const lastLogin  = parseInt(localStorage.getItem('hisab_last_login') || '0');
   const keepLogin  = localStorage.getItem('hisab_keep_login') === '1';
-  
-  // ── UPDATED SESSION LOGIC ──
-  // If keepLogin is true: 30 days (30 * 24 * 60 * 60 * 1000)
-  // If keepLogin is false: 7 days (7 * 24 * 60 * 60 * 1000)
-  const expiry = keepLogin ? 2592000000 : 6048000000 / 10; // wait, 7 days = 604800000
-  const sevenDays = 7 * 24 * 60 * 60 * 1000;
-  const thirtyDays = 30 * 24 * 60 * 60 * 1000;
-  const sessionDuration = keepLogin ? thirtyDays : sevenDays;
-
-  if (lastLogin > 0 && Date.now() - lastLogin > sessionDuration) {
+  const expiry     = keepLogin ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000;
+  if (lastLogin > 0 && Date.now() - lastLogin > expiry) {
     localStorage.removeItem('hisab_keep_login');
     logoutUser();
     return false;
@@ -1681,53 +1495,38 @@ function updateOnlineStatus() {
 window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 
-// ── FIREBASE HELPERS ──────────────────────
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
-  authDomain: "hisab-4-u.firebaseapp.com",
-  projectId: "hisab-4-u",
-  storageBucket: "hisab-4-u.firebasestorage.app",
-  messagingSenderId: "957694095044",
-  appId: "1:957694095044:web:1649995ac9734d4d062391"
-};
-
-let _fbPromise = null;
-async function getFirebase() {
-  if (_fbPromise) return _fbPromise;
-  _fbPromise = (async () => {
-    try {
-      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-      const { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      const app = getApps().length ? getApps()[0] : initializeApp(FIREBASE_CONFIG);
-      const db = getFirestore(app);
-      return { db, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, writeBatch };
-    } catch (e) {
-      console.error('Firebase failed to load:', e);
-      _fbPromise = null;
-      throw e;
-    }
-  })();
-  return _fbPromise;
-}
-
 // ── INIT ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   // ── Auto Daily Migration: localStorage → Firestore ──
   (async () => {
     try {
       const lastMigration = localStorage.getItem('hisab_last_migration');
-      const today_str = today();
-      if (lastMigration === today_str) return;
+      const today = new Date().toDateString();
+      if (lastMigration === today) return; // আজকে already migrate হয়েছে
 
-      const { db, doc, writeBatch } = await getFirebase();
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, setDoc, collection, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
 
-      // Users migrate
+      const firebaseConfig = {
+        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+        authDomain: "hisab-4-u.firebaseapp.com",
+        projectId: "hisab-4-u",
+        storageBucket: "hisab-4-u.firebasestorage.app",
+        messagingSenderId: "957694095044",
+        appId: "1:957694095044:web:1649995ac9734d4d062391"
+      };
+
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // Users migrate করো
       const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
       if (users.length > 0) {
         const batch = writeBatch(db);
         users.forEach(u => {
-          if (u.username) {
-            batch.set(doc(db, 'users', String(u.username)), {
+          if (u.email || u.username) {
+            const id = (u.email || u.username).replace(/[^a-zA-Z0-9]/g, '_');
+            batch.set(doc(db, 'users', id), {
               ...u,
               migratedAt: new Date().toISOString(),
               source: 'localStorage'
@@ -1737,7 +1536,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await batch.commit();
       }
 
-      // Transactions migrate
+      // Transactions migrate করো
       const transactions = JSON.parse(localStorage.getItem('hisab_transactions') || '[]');
       if (transactions.length > 0) {
         const batch2 = writeBatch(db);
@@ -1752,15 +1551,30 @@ document.addEventListener('DOMContentLoaded', () => {
         await batch2.commit();
       }
 
-      localStorage.setItem('hisab_last_migration', today_str);
-      console.log('✅ Auto migration complete:', today_str);
-    } catch(e) { console.log('Migration skipped:', e.message); }
+      // Migration date সেভ করো
+      localStorage.setItem('hisab_last_migration', today);
+      console.log('✅ Auto migration complete:', today);
+
+    } catch(e) {
+      console.log('Migration skipped:', e.message);
+    }
   })();
 
-  // ── Cache Version Check ──
+  // ── Cache Version Check (Force Refresh) ──
   (async () => {
     try {
-      const { db, doc, getDoc } = await getFirebase();
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const firebaseConfig = {
+        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+        authDomain: "hisab-4-u.firebaseapp.com",
+        projectId: "hisab-4-u",
+        storageBucket: "hisab-4-u.firebasestorage.app",
+        messagingSenderId: "957694095044",
+        appId: "1:957694095044:web:1649995ac9734d4d062391"
+      };
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
       const snap = await getDoc(doc(db, 'app_config', 'cache'));
       if (snap.exists()) {
         const serverVersion = snap.data().version;
@@ -1779,7 +1593,14 @@ document.addEventListener('DOMContentLoaded', () => {
   applyTheme(State.theme);
   setLanguage(State.lang);
 
+  // Re-apply language after DOM is fully ready (for pages that build components in DOMContentLoaded)
+  document.addEventListener('DOMContentLoaded', () => {
+    setLanguage(State.lang);
+  });
+
   // ── Remove no-transition after theme is applied ──
+  // Small delay ensures the browser has painted with correct theme
+  // before enabling transitions — prevents hover/theme flash on load
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       document.documentElement.classList.remove('no-transition');
@@ -1788,7 +1609,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateOnlineStatus();
   checkDailyReminder();
   updateCreditDisplay();
-  
+  // Update sidebar credits sub-label for admin/editor
   if (isPrivilegedUser()) {
     document.querySelectorAll('.sidebar-credits-sub').forEach(el => {
       el.textContent = '∞ Unlimited — Admin privilege';
@@ -1796,7 +1617,7 @@ document.addEventListener('DOMContentLoaded', () => {
       el.style.fontWeight = '600';
     });
   }
-  renderLogos();
+  renderLogos();  // ← renders logo on every page from LOGO config above
 
   // Theme toggle buttons
   document.querySelectorAll('.theme-toggle-icon').forEach(el => {
@@ -1859,15 +1680,8 @@ function closeMobileMenu() {
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   document.querySelectorAll('.sidebar-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      if (window.innerWidth <= 768) {
-        // For mobile, we want to close the menu first, then navigate.
-        // The small delay gives the menu time to animate out.
-        e.preventDefault();
-        closeMobileMenu();
-        setTimeout(() => { window.location.href = link.href; }, 200);
-      }
-      // On desktop, the link will just work normally.
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 768) closeMobileMenu();
     });
   });
 });
@@ -1878,7 +1692,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'dashboard', 'budget', 'expense', 'income',
     'reports', 'settings', 'wallets', 'credits', 'admin'
   ];
-  const path = window.location.pathname.replace(/\/$/, '').split('/').pop().replace('.html', '');
+  const path = window.location.pathname.split('/').pop().replace('.html', '');
   if (protectedPages.includes(path)) {
     // DOM ready হওয়ার পরে check করো
     if (document.readyState === 'loading') {
@@ -1891,69 +1705,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Merge global categories/wallets from Firestore ──
 // Called after every login to ensure user has admin-added items
-/**
- * ── SYNC GLOBAL OPTIONS FROM FIRESTORE ──
- * This ensures that admin-added categories/wallets appear for all users.
- * It also updates metadata (names/icons) if the admin edited them.
- */
 async function _mergeGlobalCatsFromFirestore(username) {
   try {
-    const { db, doc, getDoc } = await getFirebase();
-    
-    // 1. Fetch Global Categories
-    const catSnap = await getDoc(doc(db, 'global_config', 'categories'));
-    if (catSnap.exists()) {
-      const global = catSnap.data();
-      ['income', 'expense'].forEach(type => {
-        const localKey = `hisab_${type}_cats_${username}`;
-        const localCats = JSON.parse(localStorage.getItem(localKey) || '[]');
-        const globalCats = global[`${type}_cats`] || [];
-        
-        globalCats.forEach(gCat => {
-          const lIdx = localCats.findIndex(c => c.id === gCat.id);
-          if (lIdx >= 0) {
-            // Update metadata but keep user custom fields if any
-            localCats[lIdx] = { ...localCats[lIdx], ...gCat };
-          } else {
-            // Add new global category
-            localCats.push(gCat);
-          }
-        });
-        localStorage.setItem(localKey, JSON.stringify(localCats));
-        if (State.user?.username === username) {
-          if (type === 'income') State.income_cats = localCats;
-          else State.expense_cats = localCats;
-        }
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app = getApps().length ? getApps()[0] : initializeApp({
+      apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4", authDomain:"hisab-4-u.firebaseapp.com",
+      projectId:"hisab-4-u", storageBucket:"hisab-4-u.firebasestorage.app",
+      messagingSenderId:"957694095044", appId:"1:957694095044:web:1649995ac9734d4d062391"
+    });
+    const db = getFirestore(app);
+    const snap = await getDoc(doc(db, 'global_config', 'categories'));
+    if (!snap.exists()) return;
+    const global = snap.data();
+
+    // Merge income_cats
+    if (global.income_cats?.length) {
+      const key = 'hisab_income_cats_' + username;
+      const local = JSON.parse(localStorage.getItem(key) || '[]');
+      global.income_cats.forEach(gc => {
+        if (!local.find(lc => lc.id === gc.id)) local.push(gc);
       });
+      localStorage.setItem(key, JSON.stringify(local));
+      if (State.user?.username === username) State.income_cats = local;
     }
 
-    // 2. Fetch Global Wallets
-    const walletSnap = await getDoc(doc(db, 'global_config', 'wallets'));
-    if (walletSnap.exists()) {
-      const global = walletSnap.data();
-      const localKey = `hisab_wallets_${username}`;
-      const localWallets = JSON.parse(localStorage.getItem(localKey) || '[]');
-      const globalWallets = global.default_wallets || [];
-
-      globalWallets.forEach(gW => {
-        const lIdx = localWallets.findIndex(w => w.id === gW.id);
-        if (lIdx >= 0) {
-          // Update metadata (name, icon) but KEEP balance and user settings
-          const { balance, ...metadata } = gW; 
-          localWallets[lIdx] = { ...localWallets[lIdx], ...metadata };
-        } else {
-          // Add new global wallet with 0 balance
-          localWallets.push({ ...gW, balance: 0 });
-        }
+    // Merge expense_cats
+    if (global.expense_cats?.length) {
+      const key = 'hisab_expense_cats_' + username;
+      const local = JSON.parse(localStorage.getItem(key) || '[]');
+      global.expense_cats.forEach(gc => {
+        if (!local.find(lc => lc.id === gc.id)) local.push(gc);
       });
-      localStorage.setItem(localKey, JSON.stringify(localWallets));
-      if (State.user?.username === username) State.wallets = localWallets;
+      localStorage.setItem(key, JSON.stringify(local));
+      if (State.user?.username === username) State.expense_cats = local;
     }
-    console.log('✅ Global options synced for:', username);
-  } catch(e) { console.warn('Global sync failed:', e); }
+
+    console.log('✅ Global categories merged for:', username);
+  } catch(e) { console.warn('Global cat merge failed:', e); }
 }
-
-// ── INITIALIZE ──
-// Apply theme & language immediately (scripts are at bottom of body)
-applyTheme(State.theme);
-setLanguage(State.lang);
