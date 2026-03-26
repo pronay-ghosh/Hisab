@@ -32,6 +32,10 @@ const LOGO = {
   markBg: 'linear-gradient(135deg,#1E88E5,#00897B)',
 };
 
+// NOTE: The embedded base64 PNG logo may include a dark background.
+// Use the default text/icon mark to avoid "black box" artifacts.
+LOGO.imageUrl = null;
+
 // ── LOGO RENDERER ─────────────────────────
 // Injects the logo into every element that has [data-logo] attribute.
 // data-logo="nav"      → small horizontal nav mark + text
