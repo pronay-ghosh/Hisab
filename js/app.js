@@ -310,6 +310,41 @@ const LANG = {
     contact_opt_bug:'Bug Report', contact_opt_feature:'Feature Request',
     contact_opt_account:'Account Issue', contact_opt_other:'Other',
     contact_send_btn:'Send Message',
+    // Topbar page titles
+    topbar_dashboard:'Dashboard', topbar_wallets:'Wallets', topbar_income:'Income',
+    topbar_expense:'Expenses', topbar_reports:'Reports', topbar_budget:'Budget',
+    topbar_credits:'Credits', topbar_settings:'Settings', topbar_admin:'Admin Panel',
+    // Expense/Income double-entry notes
+    exp_double_entry_note:'Every expense entry records money paid out from a wallet to an expense category.',
+    inc_double_entry_note:'Every income entry records money received into a wallet from a source.',
+    exp_edit_title:'✏️ Edit Expense',
+    inc_edit_title:'✏️ Edit Income',
+    // Wallet modal
+    wlt_add_wallet_title:'Add New Wallet',
+    wlt_type_label:'Wallet Type',
+    // Auth page feature panels - Login
+    login_f1_title:'Double-Entry Accounting', login_f1_text:'Every transaction balanced — proper accounting, not just notes.',
+    login_f2_title:'AI Budget Suggestions',   login_f2_text:'Smart monthly budget based on your spending history.',
+    login_f3_title:'Rich Reports & Charts',   login_f3_text:'Daily, weekly, monthly and yearly visual reports.',
+    login_f4_title:'Offline Sync',            login_f4_text:'Works offline. Auto-syncs & backs up to Google Drive.',
+    // Register
+    reg_f1_title:'100 Free Credits on Sign-up', reg_f1_text:'Start with 100 credits — no payment, no card required.',
+    reg_f2_title:'Bengali & English',           reg_f2_text:'Full bilingual support — switch language anytime.',
+    reg_f3_title:'Works on All Devices',        reg_f3_text:'Desktop, mobile, offline — access your data anywhere.',
+    reg_f4_title:'Google Drive Backup',         reg_f4_text:'Auto-backup daily to your own Google Drive — free.',
+    // Forgot password
+    fp_f1_title:'Secure Password Recovery', fp_f1_text:'Industry-standard OTP verification to protect your account.',
+    fp_f2_title:'OTP via Email',            fp_f2_text:'Verification code sent to your registered email address.',
+    fp_f3_title:'OTP via SMS',              fp_f3_text:'Or verify using your registered mobile number.',
+    fp_f4_title:'Your Data is Safe',        fp_f4_text:'All your transactions and wallets remain secure during recovery.',
+    // Dashboard budget buttons
+    bgt_set_manual_btn:'Set Custom',
+    // Admin
+    admin_title:'Admin Panel', admin_users:'Users', admin_sales:'Sales',
+    admin_categories:'Categories', admin_announcements:'Announcements',
+    admin_gift_credits:'Gift Credits', admin_all_users:'All Users',
+    admin_active_users:'Active Users', admin_inactive_users:'Inactive (7+ days)',
+    admin_total_txns:'Total Transactions',
   },
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
@@ -512,6 +547,41 @@ const LANG = {
     contact_opt_bug:'বাগ রিপোর্ট', contact_opt_feature:'নতুন ফিচারের অনুরোধ',
     contact_opt_account:'অ্যাকাউন্ট সমস্যা', contact_opt_other:'অন্যান্য',
     contact_send_btn:'বার্তা পাঠান',
+    // Topbar page titles
+    topbar_dashboard:'ড্যাশবোর্ড', topbar_wallets:'ওয়ালেট', topbar_income:'আয়',
+    topbar_expense:'খরচ', topbar_reports:'রিপোর্ট', topbar_budget:'বাজেট',
+    topbar_credits:'ক্রেডিট', topbar_settings:'সেটিংস', topbar_admin:'অ্যাডমিন প্যানেল',
+    // Expense/Income double-entry notes
+    exp_double_entry_note:'প্রতিটি খরচের এন্ট্রি ওয়ালেট থেকে খরচের ক্যাটাগরিতে টাকা বের হওয়া রেকর্ড করে।',
+    inc_double_entry_note:'প্রতিটি আয়ের এন্ট্রি কোনো উৎস থেকে ওয়ালেটে টাকা আসা রেকর্ড করে।',
+    exp_edit_title:'✏️ খরচ সম্পাদনা করুন',
+    inc_edit_title:'✏️ আয় সম্পাদনা করুন',
+    // Wallet modal
+    wlt_add_wallet_title:'নতুন ওয়ালেট যোগ করুন',
+    wlt_type_label:'ওয়ালেটের ধরন',
+    // Auth page feature panels - Login
+    login_f1_title:'ডাবল-এন্ট্রি অ্যাকাউন্টিং', login_f1_text:'প্রতিটি লেনদেন ব্যালেন্সড — শুধু নোট নয়, সঠিক অ্যাকাউন্টিং।',
+    login_f2_title:'AI বাজেট পরামর্শ',           login_f2_text:'আপনার ব্যয়ের ইতিহাসের উপর ভিত্তি করে স্মার্ট মাসিক বাজেট।',
+    login_f3_title:'বিস্তারিত রিপোর্ট ও চার্ট',  login_f3_text:'দৈনিক, সাপ্তাহিক, মাসিক ও বার্ষিক ভিজ্যুয়াল রিপোর্ট।',
+    login_f4_title:'অফলাইন সিঙ্ক',               login_f4_text:'অফলাইনে কাজ করে। অটো-সিঙ্ক ও Google Drive ব্যাকআপ।',
+    // Register
+    reg_f1_title:'সাইন-আপে ১০০ বিনামূল্যে ক্রেডিট', reg_f1_text:'১০০ ক্রেডিট দিয়ে শুরু — কোনো পেমেন্ট বা কার্ড লাগবে না।',
+    reg_f2_title:'বাংলা ও ইংরেজি',                   reg_f2_text:'সম্পূর্ণ দ্বিভাষিক সমর্থন — যেকোনো সময় ভাষা পরিবর্তন করুন।',
+    reg_f3_title:'সব ডিভাইসে কাজ করে',               reg_f3_text:'ডেস্কটপ, মোবাইল, অফলাইন — যেকোনো জায়গা থেকে আপনার ডেটা।',
+    reg_f4_title:'Google Drive ব্যাকআপ',              reg_f4_text:'প্রতিদিন আপনার Google Drive-এ অটো-ব্যাকআপ — বিনামূল্যে।',
+    // Forgot password
+    fp_f1_title:'নিরাপদ পাসওয়ার্ড পুনরুদ্ধার', fp_f1_text:'অ্যাকাউন্ট সুরক্ষায় ইন্ডাস্ট্রি-স্ট্যান্ডার্ড OTP যাচাইকরণ।',
+    fp_f2_title:'ইমেইলে OTP',                   fp_f2_text:'আপনার নিবন্ধিত ইমেইলে ভেরিফিকেশন কোড পাঠানো হবে।',
+    fp_f3_title:'SMS-এ OTP',                    fp_f3_text:'অথবা আপনার নিবন্ধিত মোবাইল নম্বর দিয়ে যাচাই করুন।',
+    fp_f4_title:'আপনার ডেটা নিরাপদ',           fp_f4_text:'পুনরুদ্ধারের সময় আপনার সব লেনদেন ও ওয়ালেট সুরক্ষিত থাকবে।',
+    // Dashboard budget buttons
+    bgt_set_manual_btn:'নিজে নির্ধারণ করুন',
+    // Admin
+    admin_title:'অ্যাডমিন প্যানেল', admin_users:'ব্যবহারকারী', admin_sales:'বিক্রয়',
+    admin_categories:'ক্যাটাগরি', admin_announcements:'বিজ্ঞপ্তি',
+    admin_gift_credits:'ক্রেডিট উপহার', admin_all_users:'সব ব্যবহারকারী',
+    admin_active_users:'সক্রিয় ব্যবহারকারী', admin_inactive_users:'নিষ্ক্রিয় (৭+ দিন)',
+    admin_total_txns:'মোট লেনদেন',
   }
 };
 
