@@ -529,11 +529,11 @@
     </div>
   </a>
   <div class="lnav-links">
-    <a href="#features">Features</a>
-    <a href="#how-it-works">How It Works</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#contact">Contact</a>
-    <a href="#" onclick="event.preventDefault();document.getElementById('apps-modal').classList.add('open');" style="color:#00E5CC;font-weight:700;">📱 Apps</a>
+    <a href="#features" data-t="nav_features">Features</a>
+    <a href="#how-it-works" data-t="nav_how">How It Works</a>
+    <a href="#pricing" data-t="nav_pricing">Pricing</a>
+    <a href="#contact" data-t="nav_contact">Contact</a>
+    <a href="#" onclick="event.preventDefault();document.getElementById('apps-modal').classList.add('open');" style="color:#00E5CC;font-weight:700;" data-t="nav_apps">📱 Apps</a>
   </div>
   <div class="lnav-right">
     <div class="lpill">
@@ -541,8 +541,8 @@
       <button class="lang-btn-switch" onclick="setLanguage('bn')" data-lang="bn">বাং</button>
     </div>
     <button class="ltheme-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
-    <a href="login.html" class="lbtn-login">Log In</a>
-    <a href="register.html" class="lbtn-cta">Get Started →</a>
+    <a href="login.html" class="lbtn-login" data-t="nav_login">Log In</a>
+    <a href="register.html" class="lbtn-cta" data-t="nav_get_started">Get Started →</a>
   </div>
 </nav>
 
@@ -559,7 +559,7 @@
       </div>
       <!-- Eyebrow badge centred below logo -->
       <div style="display:flex;justify-content:center;margin-bottom:20px;">
-        <div class="leyebrow"><span class="ldot"></span> Professional Double-Entry Accounting <span class="ldot"></span></div>
+        <div class="leyebrow"><span class="ldot"></span> <span data-t="hero_eyebrow">Professional Double-Entry Accounting</span> <span class="ldot"></span></div>
       </div>
       <h1 class="lh1"><span class="acc">Hisab</span> <span style="color:rgba(255,255,255,0.3);font-weight:300;font-size:0.55em;vertical-align:middle;">—</span> <span class="acc-bn">হিসাব</span></h1>
       <p class="ltag" style="text-align:center;max-width:none;width:fit-content;">
@@ -570,22 +570,22 @@
       <div class="ldesc">
         <div class="ldesc-line">
           <span class="ldesc-icon">📒</span>
-          <span class="ldesc-text">Track every taka with professional accounting principles.</span>
+          <span class="ldesc-text" data-t="hero_desc1">Track every taka with professional accounting principles.</span>
         </div>
         <div class="ldesc-line">
           <span class="ldesc-icon">🤖</span>
-          <span class="ldesc-text">Get AI-powered budget insights.</span>
+          <span class="ldesc-text" data-t="hero_desc2">Get AI-powered budget insights.</span>
         </div>
       </div>
             <div class="lctas">
-        <a href="register.html" class="lbtn-p"><span>🚀 Start Free Today</span></a>
-        <a href="#how-it-works" class="lbtn-s"><span>▶ See How It Works</span></a>
+        <a href="register.html" class="lbtn-p"><span data-t="hero_cta1">🚀 Start Free Today</span></a>
+        <a href="#how-it-works" class="lbtn-s"><span data-t="hero_cta2">▶ See How It Works</span></a>
       </div>
       <div class="ltrust">
-        <div class="ltrust-item">✅ Free to start</div>
-        <div class="ltrust-item">💳 No card required</div>
-        <div class="ltrust-item">🌐 Bengali & English</div>
-        <div class="ltrust-item">📲 Works offline</div>
+        <div class="ltrust-item" data-t="trust1">✅ Free to start</div>
+        <div class="ltrust-item" data-t="trust2">💳 No card required</div>
+        <div class="ltrust-item" data-t="trust3">🌐 Bengali & English</div>
+        <div class="ltrust-item" data-t="trust4">📲 Works offline</div>
       </div>
     </div>
     <div class="lhero-right fup" style="transition-delay:.2s;">
@@ -708,10 +708,10 @@
 <!-- STATS -->
 <div class="lstats">
   <div class="lstats-inner">
-    <div class="lstat-box fup"><div class="lstat-num">100<span class="lstat-unit">%</span></div><div class="lstat-lbl">Free to Start</div></div>
-    <div class="lstat-box fup" style="transition-delay:.1s"><div class="lstat-num">7<span class="lstat-unit">+</span></div><div class="lstat-lbl">Wallet Types</div></div>
-    <div class="lstat-box fup" style="transition-delay:.2s"><div class="lstat-num">2<span class="lstat-unit"> lang</span></div><div class="lstat-lbl">Bengali & English</div></div>
-    <div class="lstat-box fup" style="transition-delay:.3s"><div class="lstat-num">24/7</div><div class="lstat-lbl">Offline Access</div></div>
+    <div class="lstat-box fup"><div class="lstat-num">100<span class="lstat-unit">%</span></div><div class="lstat-lbl" data-t="stat1">Free to Start</div></div>
+    <div class="lstat-box fup" style="transition-delay:.1s"><div class="lstat-num">7<span class="lstat-unit">+</span></div><div class="lstat-lbl" data-t="stat2">Wallet Types</div></div>
+    <div class="lstat-box fup" style="transition-delay:.2s"><div class="lstat-num">2<span class="lstat-unit"> lang</span></div><div class="lstat-lbl" data-t="stat3">Bengali & English</div></div>
+    <div class="lstat-box fup" style="transition-delay:.3s"><div class="lstat-num">24/7</div><div class="lstat-lbl" data-t="stat4">Offline Access</div></div>
   </div>
 </div>
 
@@ -722,20 +722,20 @@
 <section class="lsec lfeat-bg" id="features">
   <div class="lsec-inner">
     <div class="lfeat-head fup">
-      <div class="lchip">✦ Features</div>
-      <h2 class="lsec-h">Everything you need to manage money</h2>
-      <p class="lsec-p">Built on proper double-entry accounting. Designed for the everyday Bangladeshi who wants to save more and stress less.</p>
+      <div class="lchip">✦ <span data-t="feat_chip">Features</span></div>
+      <h2 class="lsec-h" data-t="feat_h">Everything you need to manage money</h2>
+      <p class="lsec-p" data-t="feat_p">Built on proper double-entry accounting. Designed for the everyday Bangladeshi who wants to save more and stress less.</p>
     </div>
     <div class="lfeat-grid">
-      <div class="lfeat-card fup"><div class="lfeat-ico" style="background:#EBF4FD;">📊</div><h3>Double-Entry Accounting</h3><p>Every transaction records both where money comes from and where it goes — proper accounting, not just a note-keeping app.</p></div>
-      <div class="lfeat-card fup" style="transition-delay:.05s"><div class="lfeat-tag">AI</div><div class="lfeat-ico" style="background:#E1F5EE;">🤖</div><h3>Smart Budget AI</h3><p>AI analyses your last 3 months and suggests an optimal budget at the start of each month. Accept in one tap or customise it.</p></div>
-      <div class="lfeat-card fup" style="transition-delay:.1s"><div class="lfeat-ico" style="background:#FFF3E0;">👛</div><h3>Multi-Wallet Management</h3><p>Cash, bank, debit card, credit card, loans to/from others — all in one place with live balance tracking and overdraft protection.</p></div>
-      <div class="lfeat-card fup" style="transition-delay:.15s"><div class="lfeat-ico" style="background:#F3E5F5;">📈</div><h3>Rich Reports & Charts</h3><p>Daily, weekly, monthly and yearly reports. Bar charts, doughnut charts, trend lines and head-wise filtering with PDF export.</p></div>
-      <div class="lfeat-card fup" style="transition-delay:.2s"><div class="lfeat-ico" style="background:#E8F5E9;">🌐</div><h3>Bengali & English</h3><p>Full bilingual support. Switch any time. Bengali is the default. Every label, button and message translates instantly.</p></div>
-      <div class="lfeat-card fup" style="transition-delay:.25s"><div class="lfeat-ico" style="background:#FCE4EC;">🔄</div><h3>Offline Sync</h3><p>Works fully offline. Auto-syncs across all devices when online. Daily auto-backup to your own Google Drive — free.</p></div>
-      <div class="lfeat-card fup" style="transition-delay:.3s"><div class="lfeat-ico" style="background:#E3F2FD;">🎯</div><h3>Budget vs Actual</h3><p>Colour-coded progress bars show exactly how close each category is to its budget limit — with AI-generated suggestions.</p></div>
-      <div class="lfeat-card fup" style="transition-delay:.35s"><div class="lfeat-ico" style="background:#F1F8E9;">🏆</div><h3>Savings Milestones</h3><p>Monthly savings celebrated with a congratulations popup. Yearly summary shows every month's savings at a glance.</p></div>
-      <div class="lfeat-card fup" style="transition-delay:.4s"><div class="lfeat-ico" style="background:#FFF8E1;">🔒</div><h3>Asset Protection</h3><p>Wallets can never go negative. Overdraft and same-wallet transfer are blocked automatically — proper accounting enforced.</p></div>
+      <div class="lfeat-card fup"><div class="lfeat-ico" style="background:#EBF4FD;">📊</div><h3 data-t="f1_h">Double-Entry Accounting</h3><p data-t="f1_p">Every transaction records both where money comes from and where it goes — proper accounting, not just a note-keeping app.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.05s"><div class="lfeat-tag">AI</div><div class="lfeat-ico" style="background:#E1F5EE;">🤖</div><h3 data-t="f2_h">Smart Budget AI</h3><p data-t="f2_p">AI analyses your last 3 months and suggests an optimal budget at the start of each month. Accept in one tap or customise it.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.1s"><div class="lfeat-ico" style="background:#FFF3E0;">👛</div><h3 data-t="f3_h">Multi-Wallet Management</h3><p data-t="f3_p">Cash, bank, debit card, credit card, loans to/from others — all in one place with live balance tracking and overdraft protection.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.15s"><div class="lfeat-ico" style="background:#F3E5F5;">📈</div><h3 data-t="f4_h">Rich Reports & Charts</h3><p data-t="f4_p">Daily, weekly, monthly and yearly reports. Bar charts, doughnut charts, trend lines and head-wise filtering with PDF export.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.2s"><div class="lfeat-ico" style="background:#E8F5E9;">🌐</div><h3 data-t="f5_h">Bengali & English</h3><p data-t="f5_p">Full bilingual support. Switch any time. Bengali is the default. Every label, button and message translates instantly.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.25s"><div class="lfeat-ico" style="background:#FCE4EC;">🔄</div><h3 data-t="f6_h">Offline Sync</h3><p data-t="f6_p">Works fully offline. Auto-syncs across all devices when online. Daily auto-backup to your own Google Drive — free.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.3s"><div class="lfeat-ico" style="background:#E3F2FD;">🎯</div><h3 data-t="f7_h">Budget vs Actual</h3><p data-t="f7_p">Colour-coded progress bars show exactly how close each category is to its budget limit — with AI-generated suggestions.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.35s"><div class="lfeat-ico" style="background:#F1F8E9;">🏆</div><h3 data-t="f8_h">Savings Milestones</h3><p data-t="f8_p">Monthly savings celebrated with a congratulations popup. Yearly summary shows every month's savings at a glance.</p></div>
+      <div class="lfeat-card fup" style="transition-delay:.4s"><div class="lfeat-ico" style="background:#FFF8E1;">🔒</div><h3 data-t="f9_h">Asset Protection</h3><p data-t="f9_p">Wallets can never go negative. Overdraft and same-wallet transfer are blocked automatically — proper accounting enforced.</p></div>
     </div>
   </div>
 </section>
@@ -744,15 +744,15 @@
 <section class="lsec lhiw-bg" id="how-it-works">
   <div class="lsec-inner">
     <div style="text-align:center;" class="fup">
-      <div class="lchip lchip-inv">✦ How It Works</div>
-      <h2 class="lsec-h" style="color:#fff;">Simple. Powerful. Accurate.</h2>
-      <p class="lsec-p" style="margin:0 auto;color:rgba(255,255,255,0.52);">Get from zero to full financial clarity in four easy steps.</p>
+      <div class="lchip lchip-inv">✦ <span data-t="hiw_chip">How It Works</span></div>
+      <h2 class="lsec-h" style="color:#fff;" data-t="hiw_h">Simple. Powerful. Accurate.</h2>
+      <p class="lsec-p" style="margin:0 auto;color:rgba(255,255,255,0.52);" data-t="hiw_p">Get from zero to full financial clarity in four easy steps.</p>
     </div>
     <div class="lhiw-steps">
-      <div class="lhiw-step fup"><div class="lhiw-num lit">📝</div><h3>Register Free</h3><p>Create your account in seconds. Username is auto-generated. Get 100 free credits on sign-up immediately.</p></div>
-      <div class="lhiw-step fup" style="transition-delay:.1s"><div class="lhiw-num lit">💰</div><h3>Add Transactions</h3><p>Record income and expenses with double-entry accounting. Every entry updates your wallet balance instantly.</p></div>
-      <div class="lhiw-step fup" style="transition-delay:.2s"><div class="lhiw-num lit">📊</div><h3>Track & Analyse</h3><p>View detailed reports and charts. Compare budget vs actual. Get AI insights on where to focus and control spending.</p></div>
-      <div class="lhiw-step fup" style="transition-delay:.3s"><div class="lhiw-num lit">🏆</div><h3>Grow Savings</h3><p>Follow monthly AI budget suggestions. Celebrate milestones. Watch your net worth grow month by month.</p></div>
+      <div class="lhiw-step fup"><div class="lhiw-num lit">📝</div><h3 data-t="hiw1_h">Register Free</h3><p data-t="hiw1_p">Create your account in seconds. Username is auto-generated. Get 100 free credits on sign-up immediately.</p></div>
+      <div class="lhiw-step fup" style="transition-delay:.1s"><div class="lhiw-num lit">💰</div><h3 data-t="hiw2_h">Add Transactions</h3><p data-t="hiw2_p">Record income and expenses with double-entry accounting. Every entry updates your wallet balance instantly.</p></div>
+      <div class="lhiw-step fup" style="transition-delay:.2s"><div class="lhiw-num lit">📊</div><h3 data-t="hiw3_h">Track & Analyse</h3><p data-t="hiw3_p">View detailed reports and charts. Compare budget vs actual. Get AI insights on where to focus and control spending.</p></div>
+      <div class="lhiw-step fup" style="transition-delay:.3s"><div class="lhiw-num lit">🏆</div><h3 data-t="hiw4_h">Grow Savings</h3><p data-t="hiw4_p">Follow monthly AI budget suggestions. Celebrate milestones. Watch your net worth grow month by month.</p></div>
     </div>
   </div>
 </section>
@@ -852,16 +852,16 @@
         </div>
       </div>
       <div class="fup" style="transition-delay:.15s;">
-        <div class="lchip">✦ App Preview</div>
-        <h2 class="lsec-h">A complete financial picture, always</h2>
-        <p class="lsec-p">From transaction entry to savings celebration — Hisab keeps your finances organised, accurate and insightful.</p>
+        <div class="lchip">✦ <span data-t="show_chip">App Preview</span></div>
+        <h2 class="lsec-h" data-t="show_h">A complete financial picture, always</h2>
+        <p class="lsec-p" data-t="show_p">From transaction entry to savings celebration — Hisab keeps your finances organised, accurate and insightful.</p>
         <div class="lshow-feats">
-          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#E3F2FD;">📊</div><div><div class="lshow-feat-t">Live Balance Updates</div><div class="lshow-feat-d">Every transaction instantly updates your wallet. Assets can never go negative — enforced automatically.</div></div></div>
-          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#E8F5E9;">🎯</div><div><div class="lshow-feat-t">Budget vs Actual Tracking</div><div class="lshow-feat-d">Colour-coded progress bars show exactly how close each category is to its budget limit in real time.</div></div></div>
-          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#FFF3E0;">🤖</div><div><div class="lshow-feat-t">AI Monthly Suggestions</div><div class="lshow-feat-d">On the 1st of every month, AI reviews your history and proposes a smart budget — accept in one tap.</div></div></div>
-          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#FCE4EC;">🎉</div><div><div class="lshow-feat-t">Savings Celebration</div><div class="lshow-feat-d">Congratulations popup every month showing exactly how much you saved — with a full yearly summary.</div></div></div>
+          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#E3F2FD;">📊</div><div><div class="lshow-feat-t" data-t="sf1_h">Live Balance Updates</div><div class="lshow-feat-d" data-t="sf1_p">Every transaction instantly updates your wallet. Assets can never go negative — enforced automatically.</div></div></div>
+          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#E8F5E9;">🎯</div><div><div class="lshow-feat-t" data-t="sf2_h">Budget vs Actual Tracking</div><div class="lshow-feat-d" data-t="sf2_p">Colour-coded progress bars show exactly how close each category is to its budget limit in real time.</div></div></div>
+          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#FFF3E0;">🤖</div><div><div class="lshow-feat-t" data-t="sf3_h">AI Monthly Suggestions</div><div class="lshow-feat-d" data-t="sf3_p">On the 1st of every month, AI reviews your history and proposes a smart budget — accept in one tap.</div></div></div>
+          <div class="lshow-feat"><div class="lshow-feat-ico" style="background:#FCE4EC;">🎉</div><div><div class="lshow-feat-t" data-t="sf4_h">Savings Celebration</div><div class="lshow-feat-d" data-t="sf4_p">Congratulations popup every month showing exactly how much you saved — with a full yearly summary.</div></div></div>
         </div>
-        <a href="#" onclick="event.preventDefault();document.getElementById('apps-modal').classList.add('open');" class="lbtn-p" style="margin-top:26px;display:inline-flex;"><span>Start Tracking Free →</span></a>
+        <a href="#" onclick="event.preventDefault();document.getElementById('apps-modal').classList.add('open');" class="lbtn-p" style="margin-top:26px;display:inline-flex;"><span data-t="show_cta">Start Tracking Free →</span></a>
       </div>
     </div>
   </div>
@@ -871,9 +871,9 @@
 <section class="lsec lstory-bg">
   <div class="lsec-inner">
     <div style="text-align:center;" class="fup">
-      <div class="lchip lchip-inv">✦ Success Stories</div>
-      <h2 class="lsec-h" style="color:#fff;">People are saving more with Hisab</h2>
-      <p class="lsec-p" style="margin:0 auto;color:rgba(255,255,255,0.52);">Real results from real users who started tracking their money.</p>
+      <div class="lchip lchip-inv">✦ <span data-t="story_chip">Success Stories</span></div>
+      <h2 class="lsec-h" style="color:#fff;" data-t="story_h">People are saving more with Hisab</h2>
+      <p class="lsec-p" style="margin:0 auto;color:rgba(255,255,255,0.52);" data-t="story_p">Real results from real users who started tracking their money.</p>
     </div>
     <div class="lstory-carousel-wrap">
       <div class="lstory-track" id="story-track">
@@ -959,9 +959,9 @@
 <section class="lsec lprice-bg" id="pricing">
   <div class="lsec-inner">
     <div style="text-align:center;" class="fup">
-      <div class="lchip">✦ Pricing</div>
-      <h2 class="lsec-h">Free to use. Earn or buy credits.</h2>
-      <p class="lsec-p" style="margin:0 auto;">All core features are free forever. Credits unlock premium extras — earn them free by watching ads, or buy a pack.</p>
+      <div class="lchip">✦ <span data-t="price_chip">Pricing</span></div>
+      <h2 class="lsec-h" data-t="price_h">Free to use. Earn or buy credits.</h2>
+      <p class="lsec-p" style="margin:0 auto;" data-t="price_p">All core features are free forever. Credits unlock premium extras — earn them free by watching ads, or buy a pack.</p>
     </div>
     <div class="lprice-grid">
       <div class="lprice-card c1 fup">
@@ -1019,24 +1019,30 @@
   <div class="lsec-inner">
     <div class="lcont-inner">
       <div class="fup">
-        <div class="lchip">✦ Contact</div>
-        <h2 class="lsec-h">Get in touch with the developer</h2>
-        <p class="lsec-p" style="margin-bottom:34px;">Have a question, suggestion, or bug report? We'd love to hear from you — usually reply within 48 hours.</p>
-        <div class="lcont-info-item"><div class="lcont-info-ico">📧</div><div><div class="lcont-info-lbl">Email</div><div class="lcont-info-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a9c8cdc4c0c7e9c1c0dac8cb87c8d9d9">[email&#160;protected]</a></div></div></div>
-        <div class="lcont-info-item"><div class="lcont-info-ico">📱</div><div><div class="lcont-info-lbl">WhatsApp</div><div class="lcont-info-val">+880 1X-XXXX-XXXX</div></div></div>
-        <div class="lcont-info-item"><div class="lcont-info-ico">🕐</div><div><div class="lcont-info-lbl">Response Time</div><div class="lcont-info-val">Within 48 hours</div></div></div>
-        <div class="lcont-info-item"><div class="lcont-info-ico">🌐</div><div><div class="lcont-info-lbl">Support Languages</div><div class="lcont-info-val">Bengali & English</div></div></div>
+        <div class="lchip">✦ <span data-t="cont_chip">Contact</span></div>
+        <h2 class="lsec-h" data-t="cont_h">Get in touch with the developer</h2>
+        <p class="lsec-p" style="margin-bottom:34px;" data-t="cont_p">Have a question, suggestion, or bug report? We'd love to hear from you — usually reply within 48 hours.</p>
+        <div class="lcont-info-item"><div class="lcont-info-ico">📧</div><div><div class="lcont-info-lbl" data-t="cont_email_lbl">Email</div><div class="lcont-info-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a9c8cdc4c0c7e9c1c0dac8cb87c8d9d9">[email&#160;protected]</a></div></div></div>
+        <div class="lcont-info-item"><div class="lcont-info-ico">📱</div><div><div class="lcont-info-lbl" data-t="cont_wa_lbl">WhatsApp</div><div class="lcont-info-val">+880 1X-XXXX-XXXX</div></div></div>
+        <div class="lcont-info-item"><div class="lcont-info-ico">🕐</div><div><div class="lcont-info-lbl" data-t="cont_resp_lbl">Response Time</div><div class="lcont-info-val" data-t="cont_resp_val">Within 48 hours</div></div></div>
+        <div class="lcont-info-item"><div class="lcont-info-ico">🌐</div><div><div class="lcont-info-lbl" data-t="cont_lang_lbl">Support Languages</div><div class="lcont-info-val" data-t="cont_lang_val">Bengali & English</div></div></div>
       </div>
       <div class="lcont-form fup" style="transition-delay:.15s;">
-        <label class="lflabel">Your Name</label>
-        <input type="text" class="lfinput" placeholder="Enter your name" />
-        <label class="lflabel">Email Address</label>
-        <input type="email" class="lfinput" placeholder="your@email.com" />
-        <label class="lflabel">Subject</label>
-        <select class="lfinput"><option>General Question</option><option>Bug Report</option><option>Feature Request</option><option>Account Issue</option><option>Other</option></select>
-        <label class="lflabel">Message</label>
-        <textarea class="lfinput" rows="4" placeholder="Write your message..." style="resize:vertical;"></textarea>
-        <button class="lbtn-p" style="width:100%;justify-content:center;margin-top:4px;" onclick="showToast('✅','Message Sent!','We will get back to you within 48 hours.')"><span>Send Message →</span></button>
+        <label class="lflabel" data-t="form_name">Your Name</label>
+        <input type="text" class="lfinput" data-t-ph="form_name_ph" placeholder="Enter your name" />
+        <label class="lflabel" data-t="form_email">Email Address</label>
+        <input type="email" class="lfinput" data-t-ph="form_email_ph" placeholder="your@email.com" />
+        <label class="lflabel" data-t="form_subject">Subject</label>
+        <select class="lfinput">
+          <option data-t="form_opt1">General Question</option>
+          <option data-t="form_opt2">Bug Report</option>
+          <option data-t="form_opt3">Feature Request</option>
+          <option data-t="form_opt4">Account Issue</option>
+          <option data-t="form_opt5">Other</option>
+        </select>
+        <label class="lflabel" data-t="form_msg">Message</label>
+        <textarea class="lfinput" rows="4" data-t-ph="form_msg_ph" placeholder="Write your message..." style="resize:vertical;"></textarea>
+        <button class="lbtn-p" style="width:100%;justify-content:center;margin-top:4px;" onclick="showToast('✅','Message Sent!','We will get back to you within 48 hours.')"><span data-t="form_send">Send Message →</span></button>
       </div>
     </div>
   </div>
@@ -1078,23 +1084,23 @@
       </div>
     </div>
     <div>
-      <div class="lftr-col-t">Navigation</div>
-      <a class="lftr-lnk" href="#features">Features</a>
-      <a class="lftr-lnk" href="#how-it-works">How It Works</a>
-      <a class="lftr-lnk" href="#pricing">Pricing</a>
-      <a class="lftr-lnk" href="#contact">Contact</a>
+      <div class="lftr-col-t" data-t="ftr_nav">Navigation</div>
+      <a class="lftr-lnk" href="#features" data-t="nav_features">Features</a>
+      <a class="lftr-lnk" href="#how-it-works" data-t="nav_how">How It Works</a>
+      <a class="lftr-lnk" href="#pricing" data-t="nav_pricing">Pricing</a>
+      <a class="lftr-lnk" href="#contact" data-t="nav_contact">Contact</a>
     </div>
     <div>
-      <div class="lftr-col-t">Account</div>
-      <a class="lftr-lnk" href="login.html">Log In</a>
-      <a class="lftr-lnk" href="register.html">Register Free</a>
-      <a class="lftr-lnk" href="forgot-password.html">Forgot Password</a>
+      <div class="lftr-col-t" data-t="ftr_account">Account</div>
+      <a class="lftr-lnk" href="login.html" data-t="nav_login">Log In</a>
+      <a class="lftr-lnk" href="register.html" data-t="ftr_register">Register Free</a>
+      <a class="lftr-lnk" href="forgot-password.html" data-t="ftr_forgot">Forgot Password</a>
     </div>
     <div>
-      <div class="lftr-col-t">Legal</div>
-      <a class="lftr-lnk" href="#">Privacy Policy</a>
-      <a class="lftr-lnk" href="#">Terms of Service</a>
-      <a class="lftr-lnk" href="#">Cookie Policy</a>
+      <div class="lftr-col-t" data-t="ftr_legal">Legal</div>
+      <a class="lftr-lnk" href="#" data-t="ftr_privacy">Privacy Policy</a>
+      <a class="lftr-lnk" href="#" data-t="ftr_terms">Terms of Service</a>
+      <a class="lftr-lnk" href="#" data-t="ftr_cookie">Cookie Policy</a>
       <div style="margin-top:14px;">
         <div class="lpill">
           <button class="active lang-btn-switch" onclick="setLanguage('en')" data-lang="en">EN</button>
@@ -1160,6 +1166,267 @@
       if (storyOffset < 0) { storyOffset = (8-1) * 362; track.style.transition = 'none'; track.style.transform = 'translateX(-' + storyOffset + 'px)'; }
     }, 500);
   }
+
+  // ══════════════════════════════════════════
+  //  INDEX PAGE — FULL BILINGUAL TRANSLATIONS
+  // ══════════════════════════════════════════
+  const INDEX_LANG = {
+    en: {
+      // NAV
+      nav_features:     'Features',
+      nav_how:          'How It Works',
+      nav_pricing:      'Pricing',
+      nav_contact:      'Contact',
+      nav_apps:         '📱 Apps',
+      nav_login:        'Log In',
+      nav_get_started:  'Get Started →',
+
+      // HERO
+      hero_eyebrow: 'Professional Double-Entry Accounting',
+      hero_desc1:   'Track every taka with professional accounting principles.',
+      hero_desc2:   'Get AI-powered budget insights.',
+      hero_cta1:    '🚀 Start Free Today',
+      hero_cta2:    '▶ See How It Works',
+      trust1:       '✅ Free to start',
+      trust2:       '💳 No card required',
+      trust3:       '🌐 Bengali & English',
+      trust4:       '📲 Works offline',
+
+      // STATS
+      stat1: 'Free to Start',
+      stat2: 'Wallet Types',
+      stat3: 'Bengali & English',
+      stat4: 'Offline Access',
+
+      // FEATURES
+      feat_chip: 'Features',
+      feat_h:    'Everything you need to manage money',
+      feat_p:    'Built on proper double-entry accounting. Designed for the everyday Bangladeshi who wants to save more and stress less.',
+      f1_h: 'Double-Entry Accounting',     f1_p: 'Every transaction records both where money comes from and where it goes — proper accounting, not just a note-keeping app.',
+      f2_h: 'Smart Budget AI',             f2_p: 'AI analyses your last 3 months and suggests an optimal budget at the start of each month. Accept in one tap or customise it.',
+      f3_h: 'Multi-Wallet Management',     f3_p: 'Cash, bank, debit card, credit card, loans to/from others — all in one place with live balance tracking and overdraft protection.',
+      f4_h: 'Rich Reports & Charts',       f4_p: 'Daily, weekly, monthly and yearly reports. Bar charts, doughnut charts, trend lines and head-wise filtering with PDF export.',
+      f5_h: 'Bengali & English',           f5_p: 'Full bilingual support. Switch any time. Bengali is the default. Every label, button and message translates instantly.',
+      f6_h: 'Offline Sync',               f6_p: 'Works fully offline. Auto-syncs across all devices when online. Daily auto-backup to your own Google Drive — free.',
+      f7_h: 'Budget vs Actual',            f7_p: 'Colour-coded progress bars show exactly how close each category is to its budget limit — with AI-generated suggestions.',
+      f8_h: 'Savings Milestones',          f8_p: 'Monthly savings celebrated with a congratulations popup. Yearly summary shows every month\'s savings at a glance.',
+      f9_h: 'Asset Protection',            f9_p: 'Wallets can never go negative. Overdraft and same-wallet transfer are blocked automatically — proper accounting enforced.',
+
+      // HOW IT WORKS
+      hiw_chip: 'How It Works',
+      hiw_h:    'Simple. Powerful. Accurate.',
+      hiw_p:    'Get from zero to full financial clarity in four easy steps.',
+      hiw1_h: 'Register Free',       hiw1_p: 'Create your account in seconds. Username is auto-generated. Get 100 free credits on sign-up immediately.',
+      hiw2_h: 'Add Transactions',    hiw2_p: 'Record income and expenses with double-entry accounting. Every entry updates your wallet balance instantly.',
+      hiw3_h: 'Track & Analyse',     hiw3_p: 'View detailed reports and charts. Compare budget vs actual. Get AI insights on where to focus and control spending.',
+      hiw4_h: 'Grow Savings',        hiw4_p: 'Follow monthly AI budget suggestions. Celebrate milestones. Watch your net worth grow month by month.',
+
+      // SHOWCASE
+      show_chip: 'App Preview',
+      show_h:    'A complete financial picture, always',
+      show_p:    'From transaction entry to savings celebration — Hisab keeps your finances organised, accurate and insightful.',
+      sf1_h: 'Live Balance Updates',        sf1_p: 'Every transaction instantly updates your wallet. Assets can never go negative — enforced automatically.',
+      sf2_h: 'Budget vs Actual Tracking',   sf2_p: 'Colour-coded progress bars show exactly how close each category is to its budget limit in real time.',
+      sf3_h: 'AI Monthly Suggestions',      sf3_p: 'On the 1st of every month, AI reviews your history and proposes a smart budget — accept in one tap.',
+      sf4_h: 'Savings Celebration',         sf4_p: 'Congratulations popup every month showing exactly how much you saved — with a full yearly summary.',
+      show_cta: 'Start Tracking Free →',
+
+      // STORIES
+      story_chip: 'Success Stories',
+      story_h:    'People are saving more with Hisab',
+      story_p:    'Real results from real users who started tracking their money.',
+
+      // PRICING
+      price_chip: 'Pricing',
+      price_h:    'Free to use. Earn or buy credits.',
+      price_p:    'All core features are free forever. Credits unlock premium extras — earn them free by watching ads, or buy a pack.',
+
+      // CONTACT
+      cont_chip:      'Contact',
+      cont_h:         'Get in touch with the developer',
+      cont_p:         'Have a question, suggestion, or bug report? We\'d love to hear from you — usually reply within 48 hours.',
+      cont_email_lbl: 'Email',
+      cont_wa_lbl:    'WhatsApp',
+      cont_resp_lbl:  'Response Time',
+      cont_resp_val:  'Within 48 hours',
+      cont_lang_lbl:  'Support Languages',
+      cont_lang_val:  'Bengali & English',
+      form_name:      'Your Name',
+      form_name_ph:   'Enter your name',
+      form_email:     'Email Address',
+      form_email_ph:  'your@email.com',
+      form_subject:   'Subject',
+      form_opt1:      'General Question',
+      form_opt2:      'Bug Report',
+      form_opt3:      'Feature Request',
+      form_opt4:      'Account Issue',
+      form_opt5:      'Other',
+      form_msg:       'Message',
+      form_msg_ph:    'Write your message...',
+      form_send:      'Send Message →',
+
+      // FOOTER
+      ftr_nav:      'Navigation',
+      ftr_account:  'Account',
+      ftr_legal:    'Legal',
+      ftr_register: 'Register Free',
+      ftr_forgot:   'Forgot Password',
+      ftr_privacy:  'Privacy Policy',
+      ftr_terms:    'Terms of Service',
+      ftr_cookie:   'Cookie Policy',
+
+      // MODAL
+      modal_badge:    'Work in Progress',
+      modal_msg:      'We are working hard to bring the Hisab mobile app to Android & iOS. Please be patient — it will be worth the wait! 🙏',
+      modal_progress: 'Development progress — stay tuned!',
+      modal_coming:   'Coming soon on',
+      modal_coming2:  'Coming soon on',
+    },
+
+    bn: {
+      // NAV
+      nav_features:    'ফিচারসমূহ',
+      nav_how:         'কীভাবে কাজ করে',
+      nav_pricing:     'মূল্য পরিকল্পনা',
+      nav_contact:     'যোগাযোগ',
+      nav_apps:        '📱 অ্যাপ',
+      nav_login:       'লগ ইন',
+      nav_get_started: 'শুরু করুন →',
+
+      // HERO
+      hero_eyebrow: 'পেশাদার ডাবল-এন্ট্রি অ্যাকাউন্টিং',
+      hero_desc1:   'পেশাদার অ্যাকাউন্টিং পদ্ধতিতে প্রতিটি টাকার হিসাব রাখুন।',
+      hero_desc2:   'AI-চালিত বাজেট পরামর্শ পান।',
+      hero_cta1:    '🚀 আজই বিনামূল্যে শুরু করুন',
+      hero_cta2:    '▶ কীভাবে কাজ করে দেখুন',
+      trust1:       '✅ বিনামূল্যে শুরু করুন',
+      trust2:       '💳 কার্ডের প্রয়োজন নেই',
+      trust3:       '🌐 বাংলা ও ইংরেজি',
+      trust4:       '📲 অফলাইনেও কাজ করে',
+
+      // STATS
+      stat1: 'বিনামূল্যে শুরু',
+      stat2: 'ওয়ালেট ধরন',
+      stat3: 'বাংলা ও ইংরেজি',
+      stat4: 'অফলাইন অ্যাক্সেস',
+
+      // FEATURES
+      feat_chip: 'ফিচারসমূহ',
+      feat_h:    'অর্থ ব্যবস্থাপনায় যা দরকার সব কিছু',
+      feat_p:    'সঠিক ডাবল-এন্ট্রি অ্যাকাউন্টিং-এর উপর ভিত্তি করে তৈরি। বাংলাদেশের সাধারণ মানুষের জন্য ডিজাইন করা হয়েছে যারা বেশি সঞ্চয় করতে চান।',
+      f1_h: 'ডাবল-এন্ট্রি অ্যাকাউন্টিং',   f1_p: 'প্রতিটি লেনদেনে টাকা কোথা থেকে এলো এবং কোথায় গেল — উভয়ই রেকর্ড হয়। শুধু নোট নয়, আসল অ্যাকাউন্টিং।',
+      f2_h: 'স্মার্ট বাজেট AI',               f2_p: 'AI আপনার শেষ ৩ মাস বিশ্লেষণ করে প্রতি মাসের শুরুতে সেরা বাজেট সাজেস্ট করে। এক ট্যাপেই গ্রহণ করুন।',
+      f3_h: 'মাল্টি-ওয়ালেট ম্যানেজমেন্ট',   f3_p: 'নগদ, ব্যাংক, ডেবিট কার্ড, ক্রেডিট কার্ড, ঋণ — সব এক জায়গায়। লাইভ ব্যালেন্স ট্র্যাকিং ও ওভারড্রাফ্ট সুরক্ষা।',
+      f4_h: 'বিস্তারিত রিপোর্ট ও চার্ট',     f4_p: 'দৈনিক, সাপ্তাহিক, মাসিক ও বার্ষিক রিপোর্ট। বার চার্ট, ডোনাট চার্ট, ট্রেন্ড লাইন এবং PDF এক্সপোর্ট।',
+      f5_h: 'বাংলা ও ইংরেজি',                 f5_p: 'সম্পূর্ণ দ্বিভাষিক সমর্থন। যেকোনো সময় সুইচ করুন। প্রতিটি লেবেল, বোতাম ও বার্তা তাৎক্ষণিকভাবে অনুবাদ হয়।',
+      f6_h: 'অফলাইন সিঙ্ক',                   f6_p: 'সম্পূর্ণ অফলাইনে কাজ করে। অনলাইনে এলে সব ডিভাইসে অটো-সিঙ্ক হয়। প্রতিদিন Google Drive-এ বিনামূল্যে ব্যাকআপ।',
+      f7_h: 'বাজেট বনাম বাস্তব',               f7_p: 'রঙিন প্রগতি বার দিয়ে দেখুন প্রতিটি ক্যাটাগরি তার বাজেটের কতটা কাছে — AI-সাজেস্টেড বাজেট সহ।',
+      f8_h: 'সঞ্চয়ের মাইলফলক',                f8_p: 'প্রতি মাসের সঞ্চয় একটি অভিনন্দন পপআপ দিয়ে উদযাপন হয়। বার্ষিক সারসংক্ষেপে প্রতি মাসের সঞ্চয় একনজরে।',
+      f9_h: 'সম্পদ সুরক্ষা',                   f9_p: 'ওয়ালেট কখনও নেগেটিভ হবে না। ওভারড্রাফ্ট ও একই ওয়ালেট ট্রান্সফার স্বয়ংক্রিয়ভাবে বন্ধ — সঠিক অ্যাকাউন্টিং।',
+
+      // HOW IT WORKS
+      hiw_chip: 'কীভাবে কাজ করে',
+      hiw_h:    'সহজ। শক্তিশালী। নির্ভুল।',
+      hiw_p:    'মাত্র চারটি সহজ ধাপে শূন্য থেকে পূর্ণ আর্থিক স্বচ্ছতায় পৌঁছান।',
+      hiw1_h: 'বিনামূল্যে নিবন্ধন করুন',   hiw1_p: 'কয়েক সেকেন্ডে আপনার অ্যাকাউন্ট তৈরি করুন। ইউজারনেম স্বয়ংক্রিয়ভাবে তৈরি হবে। সাইন-আপেই ১০০ ক্রেডিট বিনামূল্যে।',
+      hiw2_h: 'লেনদেন যোগ করুন',           hiw2_p: 'ডাবল-এন্ট্রি অ্যাকাউন্টিংয়ে আয় ও খরচ রেকর্ড করুন। প্রতিটি এন্ট্রি সঙ্গে সঙ্গে ব্যালেন্স আপডেট করে।',
+      hiw3_h: 'ট্র্যাক করুন ও বিশ্লেষণ করুন', hiw3_p: 'বিস্তারিত রিপোর্ট ও চার্ট দেখুন। বাজেট বনাম বাস্তব তুলনা করুন। কোথায় মনোযোগ দিতে হবে AI বলে দেবে।',
+      hiw4_h: 'সঞ্চয় বাড়ান',               hiw4_p: 'মাসিক AI বাজেট পরামর্শ অনুসরণ করুন। মাইলফলক উদযাপন করুন। প্রতি মাসে আপনার নেট ওয়ার্থ বাড়তে দেখুন।',
+
+      // SHOWCASE
+      show_chip: 'অ্যাপ প্রিভিউ',
+      show_h:    'সম্পূর্ণ আর্থিক চিত্র, সবসময়',
+      show_p:    'লেনদেন এন্ট্রি থেকে সঞ্চয় উদযাপন পর্যন্ত — হিসাব আপনার অর্থকে সংগঠিত, নির্ভুল ও তথ্যপূর্ণ রাখে।',
+      sf1_h: 'লাইভ ব্যালেন্স আপডেট',         sf1_p: 'প্রতিটি লেনদেন সঙ্গে সঙ্গে ওয়ালেট আপডেট করে। সম্পদ কখনও নেগেটিভ হয় না — স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
+      sf2_h: 'বাজেট বনাম বাস্তব ট্র্যাকিং', sf2_p: 'রঙিন প্রগতি বার রিয়েল টাইমে দেখায় প্রতিটি ক্যাটাগরি বাজেটের কতটা কাছে।',
+      sf3_h: 'AI মাসিক পরামর্শ',              sf3_p: 'প্রতি মাসের ১ তারিখে AI ইতিহাস পর্যালোচনা করে স্মার্ট বাজেট প্রস্তাব করে — এক ট্যাপে গ্রহণ করুন।',
+      sf4_h: 'সঞ্চয় উদযাপন',                 sf4_p: 'প্রতি মাসে আপনি ঠিক কতটা সঞ্চয় করলেন তা দেখানো অভিনন্দন পপআপ — সম্পূর্ণ বার্ষিক সারসংক্ষেপ সহ।',
+      show_cta: 'বিনামূল্যে ট্র্যাক শুরু করুন →',
+
+      // STORIES
+      story_chip: 'সাফল্যের গল্প',
+      story_h:    'হিসাব ব্যবহার করে মানুষ বেশি সঞ্চয় করছে',
+      story_p:    'অর্থ ট্র্যাক শুরু করা প্রকৃত ব্যবহারকারীদের প্রকৃত ফলাফল।',
+
+      // PRICING
+      price_chip: 'মূল্য পরিকল্পনা',
+      price_h:    'বিনামূল্যে ব্যবহার করুন। ক্রেডিট উপার্জন বা ক্রয় করুন।',
+      price_p:    'সমস্ত মূল ফিচার চিরকালের জন্য বিনামূল্যে। ক্রেডিট প্রিমিয়াম এক্সট্রা আনলক করে — বিজ্ঞাপন দেখে বিনামূল্যে উপার্জন করুন, অথবা প্যাক কিনুন।',
+
+      // CONTACT
+      cont_chip:      'যোগাযোগ',
+      cont_h:         'ডেভেলপারের সাথে যোগাযোগ করুন',
+      cont_p:         'কোনো প্রশ্ন, পরামর্শ বা বাগ রিপোর্ট আছে? আমরা আপনার কথা শুনতে চাই — সাধারণত ৪৮ ঘণ্টার মধ্যে জবাব দেওয়া হয়।',
+      cont_email_lbl: 'ইমেইল',
+      cont_wa_lbl:    'হোয়াটসঅ্যাপ',
+      cont_resp_lbl:  'প্রতিক্রিয়ার সময়',
+      cont_resp_val:  '৪৮ ঘণ্টার মধ্যে',
+      cont_lang_lbl:  'সমর্থিত ভাষা',
+      cont_lang_val:  'বাংলা ও ইংরেজি',
+      form_name:      'আপনার নাম',
+      form_name_ph:   'নাম লিখুন',
+      form_email:     'ইমেইল ঠিকানা',
+      form_email_ph:  'your@email.com',
+      form_subject:   'বিষয়',
+      form_opt1:      'সাধারণ প্রশ্ন',
+      form_opt2:      'বাগ রিপোর্ট',
+      form_opt3:      'ফিচার অনুরোধ',
+      form_opt4:      'অ্যাকাউন্ট সমস্যা',
+      form_opt5:      'অন্যান্য',
+      form_msg:       'বার্তা',
+      form_msg_ph:    'আপনার বার্তা লিখুন...',
+      form_send:      'বার্তা পাঠান →',
+
+      // FOOTER
+      ftr_nav:      'নেভিগেশন',
+      ftr_account:  'অ্যাকাউন্ট',
+      ftr_legal:    'আইনি',
+      ftr_register: 'বিনামূল্যে নিবন্ধন',
+      ftr_forgot:   'পাসওয়ার্ড ভুলে গেছেন',
+      ftr_privacy:  'গোপনীয়তা নীতি',
+      ftr_terms:    'সেবার শর্তাবলী',
+      ftr_cookie:   'কুকি নীতি',
+
+      // MODAL
+      modal_badge:    'কাজ চলছে',
+      modal_msg:      'হিসাব মোবাইল অ্যাপ Android ও iOS-এ আনতে আমরা কঠোর পরিশ্রম করছি। অপেক্ষা করুন — এটা মূল্যবান হবে! 🙏',
+      modal_progress: 'ডেভেলপমেন্ট অগ্রগতি — আপডেটের জন্য থাকুন!',
+      modal_coming:   'শীঘ্রই আসছে',
+      modal_coming2:  'শীঘ্রই আসছে',
+    }
+  };
+
+  // Apply language to the entire index page
+  window.setLanguage = function(lang) {
+    const T = INDEX_LANG[lang] || INDEX_LANG['en'];
+
+    // Update all data-t elements
+    document.querySelectorAll('[data-t]').forEach(el => {
+      const key = el.getAttribute('data-t');
+      if (T[key] !== undefined) el.textContent = T[key];
+    });
+
+    // Update all data-t-ph (placeholder) elements
+    document.querySelectorAll('[data-t-ph]').forEach(el => {
+      const key = el.getAttribute('data-t-ph');
+      if (T[key] !== undefined) el.placeholder = T[key];
+    });
+
+    // Update lang pill active state
+    document.querySelectorAll('.lang-btn-switch').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+
+    // Store preference
+    try { localStorage.setItem('hisab_lang', lang); } catch(e) {}
+  };
+
+  // On load — restore saved language
+  (function() {
+    let saved = 'en';
+    try { saved = localStorage.getItem('hisab_lang') || 'en'; } catch(e) {}
+    if (saved === 'bn') setLanguage('bn');
+  })();
 </script>
 <!-- ══ APPS COMING SOON MODAL ══ -->
 <div id="apps-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:center;justify-content:center;"
@@ -1184,35 +1451,33 @@
     <!-- Working badge -->
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,229,204,0.12);border:1px solid rgba(0,229,204,0.3);border-radius:100px;padding:7px 18px;margin-bottom:24px;">
       <span style="width:8px;height:8px;background:#00E5CC;border-radius:50%;display:inline-block;animation:ldot 1.5s infinite;"></span>
-      <span style="font-size:13px;font-weight:700;color:#00E5CC;">Work in Progress</span>
+      <span style="font-size:13px;font-weight:700;color:#00E5CC;" data-t="modal_badge">Work in Progress</span>
     </div>
 
     <!-- Message -->
-    <p style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.75;margin-bottom:28px;">
-      We are working hard to bring the <strong style="color:#fff;">Hisab mobile app</strong> to<br>
-      <strong style="color:#fff;">Android</strong> &amp; <strong style="color:#fff;">iOS</strong>.<br><br>
-      Please be patient — it will be worth the wait! 🙏
+    <p style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.75;margin-bottom:28px;" data-t="modal_msg">
+      We are working hard to bring the <strong style="color:#fff;">Hisab mobile app</strong> to Android &amp; iOS. Please be patient — it will be worth the wait! 🙏
     </p>
 
     <!-- Progress bar -->
     <div style="background:rgba(255,255,255,0.08);border-radius:100px;height:8px;overflow:hidden;margin-bottom:10px;">
       <div style="height:100%;width:62%;background:linear-gradient(90deg,#1E88E5,#00E5CC);border-radius:100px;animation:appProgress 3s ease-in-out infinite alternate;"></div>
     </div>
-    <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:28px;">Development progress — stay tuned!</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:28px;" data-t="modal_progress">Development progress — stay tuned!</div>
 
     <!-- Platform badges -->
     <div style="display:flex;gap:12px;justify-content:center;">
       <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:10px 18px;">
         <span style="font-size:22px;">🤖</span>
         <div style="text-align:left;">
-          <div style="font-size:10px;color:rgba(255,255,255,0.45);">Coming soon on</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.45);" data-t="modal_coming">Coming soon on</div>
           <div style="font-size:13px;font-weight:700;color:#fff;">Android</div>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:10px 18px;">
         <span style="font-size:22px;">🍎</span>
         <div style="text-align:left;">
-          <div style="font-size:10px;color:rgba(255,255,255,0.45);">Coming soon on</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.45);" data-t="modal_coming2">Coming soon on</div>
           <div style="font-size:13px;font-weight:700;color:#fff;">iOS</div>
         </div>
       </div>
