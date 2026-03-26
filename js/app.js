@@ -531,8 +531,6 @@ const LANG = {
     app_working_title: 'মোবাইল অ্যাপ',
     app_working_msg: 'আমরা বর্তমানে আমাদের মোবাইল অ্যাপ্লিকেশনের কাজ করছি। এটি খুব শীঘ্রই প্লে স্টোর এবং অ্যাপ স্টোরে পাওয়া যাবে!',
     app_working_btn: 'ঠিক আছে',
-  }
-};
     // Income/Expense section headings
     inc_sources_title:'আয়ের উৎস', exp_cats_title:'খরচের ক্যাটাগরি',
     // Settings backup buttons
@@ -663,6 +661,15 @@ const State = {
     { id: 'entertainment', en: 'Entertainment', bn: 'বিনোদন' },
     { id: 'others', en: 'Others', bn: 'অন্যান্য' },
   ])),
+  wallet_types: JSON.parse(localStorage.getItem(_userKey('hisab_wallet_types')) || JSON.stringify([
+    { id: 'cash', en: 'Cash', bn: 'নগদ' },
+    { id: 'bank', en: 'Bank Account', bn: 'ব্যাংক অ্যাকাউন্ট' },
+    { id: 'debit', en: 'Debit Card', bn: 'ডেবিট কার্ড' },
+    { id: 'credit', en: 'Credit Card', bn: 'ক্রেডিট কার্ড' },
+    { id: 'loan_to', en: 'Loan to Others', bn: 'অন্যকে ঋণ' },
+    { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
+    { id: 'others', en: 'Others', bn: 'অন্যান্য' },
+  ])),
   budgets: JSON.parse(localStorage.getItem(_userKey('hisab_budgets')) || '{}'),
   notifications: JSON.parse(localStorage.getItem(_userKey('hisab_notifications')) || '[]'),
 };
@@ -672,7 +679,7 @@ const t = (key) => LANG[State.lang][key] || LANG['en'][key] || key;
 const fmt = (n) => '৳ ' + Number(n).toLocaleString('en-BD');
 const today = () => new Date().toISOString().split('T')[0];
 // User-specific saveState for txns, wallets, credits — other keys remain global
-const _userSpecificKeys = ['txns', 'wallets', 'credits', 'budgets', 'income_cats', 'expense_cats', 'notifications'];
+const _userSpecificKeys = ['txns', 'wallets', 'credits', 'budgets', 'income_cats', 'expense_cats', 'wallet_types', 'notifications'];
 const saveState = (key, val) => {
   const storageKey = _userSpecificKeys.includes(key)
     ? _userKey('hisab_' + key)
@@ -983,7 +990,7 @@ function setLanguage(lang) {
     if (typeof window.applyLang === 'function') window.applyLang(lang);
     
     document.body.classList.remove('lang-changing');
-  }, 10);
+  }, 50);
 }
 
 // ── USERNAME GENERATOR ────────────────────
@@ -1393,17 +1400,7 @@ function loginUser(username, password) {
   // ── Background: Firestore এ lastSeen & lastLogin update করো ──
   (async () => {
     try {
-      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-      const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      const app = getApps().length ? getApps()[0] : initializeApp({
-        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
-        authDomain: "hisab-4-u.firebaseapp.com",
-        projectId: "hisab-4-u",
-        storageBucket: "hisab-4-u.firebasestorage.app",
-        messagingSenderId: "957694095044",
-        appId: "1:957694095044:web:1649995ac9734d4d062391"
-      });
-      const db = getFirestore(app);
+      const { db, doc, updateDoc } = await getFirebase();
       await updateDoc(doc(db, 'users', String(user.username)), {
         lastSeen: nowISO,
         lastLogin: nowISO
@@ -1418,18 +1415,7 @@ function loginUser(username, password) {
 // localStorage হারিয়ে গেলে Firestore থেকে user restore করো
 async function restoreUserFromFirestore(username, password) {
   try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const firebaseConfig = {
-      apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
-      authDomain: "hisab-4-u.firebaseapp.com",
-      projectId: "hisab-4-u",
-      storageBucket: "hisab-4-u.firebasestorage.app",
-      messagingSenderId: "957694095044",
-      appId: "1:957694095044:web:1649995ac9734d4d062391"
-    };
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const { db, collection, query, where, getDocs } = await getFirebase();
 
     // username বা email দিয়ে খোঁজো
     const usersRef = collection(db, 'users');
@@ -1459,8 +1445,6 @@ async function restoreUserFromFirestore(username, password) {
         if (new Date() < expiry) {
           return { error: t('err_banned_temp') + expiry.toLocaleString() };
         }
-        // If expired, we don't auto-unban here since we are just restoring, 
-        // the actual unban will happen in loginUser if they proceed.
       } else {
         return { error: t('err_banned_lifetime') };
       }
@@ -1473,9 +1457,9 @@ async function restoreUserFromFirestore(username, password) {
     const existingUsers = JSON.parse(localStorage.getItem('hisab_users') || '[]');
     const alreadyExists = existingUsers.findIndex(u => u.username === foundUser.username);
     if (alreadyExists >= 0) {
-      existingUsers[alreadyExists] = foundUser; // update
+      existingUsers[alreadyExists] = foundUser;
     } else {
-      existingUsers.push(foundUser); // নতুন করে add
+      existingUsers.push(foundUser);
     }
     localStorage.setItem('hisab_users', JSON.stringify(existingUsers));
 
@@ -1486,7 +1470,8 @@ async function restoreUserFromFirestore(username, password) {
     logActivity(foundUser.username, 'login', 'Logged in (restored from cloud)');
     return { success: true, user: foundUser, restored: true };
   } catch(e) {
-    return { error: 'Network error. Please try again.' };
+    console.error('Restore failed:', e);
+    return { error: 'Network error or Firebase blocked. Please try again.' };
   }
 }
 
@@ -1514,29 +1499,17 @@ function registerUser(data) {
   State.user = user;
   saveState('user', user);
   State.credits = 100;
-  saveState('credits', 100); // saves to user-specific key via saveState
+  saveState('credits', 100);
   logActivity(user.username, 'register', 'Account created — 100 credits granted');
-  // Credit log — sign-up bonus
+  
   const _regKey = 'hisab_credit_log_' + user.username;
   localStorage.setItem(_regKey, JSON.stringify([{ id: Date.now(), timestamp: new Date().toISOString(), type:'signup', amount:100, label:'Sign-up Bonus', note:'Welcome gift — 100 free credits' }]));
 
   // ── Firestore এ save করো ──
   (async () => {
     try {
-      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-      const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      const firebaseConfig = {
-        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
-        authDomain: "hisab-4-u.firebaseapp.com",
-        projectId: "hisab-4-u",
-        storageBucket: "hisab-4-u.firebasestorage.app",
-        messagingSenderId: "957694095044",
-        appId: "1:957694095044:web:1649995ac9734d4d062391"
-      };
-      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-      const firestoreUser = { ...user };
-      await setDoc(doc(db, 'users', String(user.username)), firestoreUser);
+      const { db, doc, setDoc } = await getFirebase();
+      await setDoc(doc(db, 'users', String(user.username)), { ...user });
     } catch(e) { console.warn('Firestore save failed:', e); }
   })();
 
@@ -1659,38 +1632,53 @@ function updateOnlineStatus() {
 window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 
+// ── FIREBASE HELPERS ──────────────────────
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
+  authDomain: "hisab-4-u.firebaseapp.com",
+  projectId: "hisab-4-u",
+  storageBucket: "hisab-4-u.firebasestorage.app",
+  messagingSenderId: "957694095044",
+  appId: "1:957694095044:web:1649995ac9734d4d062391"
+};
+
+let _fbPromise = null;
+async function getFirebase() {
+  if (_fbPromise) return _fbPromise;
+  _fbPromise = (async () => {
+    try {
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const app = getApps().length ? getApps()[0] : initializeApp(FIREBASE_CONFIG);
+      const db = getFirestore(app);
+      return { db, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, writeBatch };
+    } catch (e) {
+      console.error('Firebase failed to load:', e);
+      _fbPromise = null;
+      throw e;
+    }
+  })();
+  return _fbPromise;
+}
+
 // ── INIT ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   // ── Auto Daily Migration: localStorage → Firestore ──
   (async () => {
     try {
       const lastMigration = localStorage.getItem('hisab_last_migration');
-      const today = new Date().toDateString();
-      if (lastMigration === today) return; // আজকে already migrate হয়েছে
+      const today_str = today();
+      if (lastMigration === today_str) return;
 
-      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-      const { getFirestore, doc, setDoc, collection, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const { db, doc, writeBatch } = await getFirebase();
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
-        authDomain: "hisab-4-u.firebaseapp.com",
-        projectId: "hisab-4-u",
-        storageBucket: "hisab-4-u.firebasestorage.app",
-        messagingSenderId: "957694095044",
-        appId: "1:957694095044:web:1649995ac9734d4d062391"
-      };
-
-      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-
-      // Users migrate করো
+      // Users migrate
       const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
       if (users.length > 0) {
         const batch = writeBatch(db);
         users.forEach(u => {
-          if (u.email || u.username) {
-            const id = (u.email || u.username).replace(/[^a-zA-Z0-9]/g, '_');
-            batch.set(doc(db, 'users', id), {
+          if (u.username) {
+            batch.set(doc(db, 'users', String(u.username)), {
               ...u,
               migratedAt: new Date().toISOString(),
               source: 'localStorage'
@@ -1700,7 +1688,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await batch.commit();
       }
 
-      // Transactions migrate করো
+      // Transactions migrate
       const transactions = JSON.parse(localStorage.getItem('hisab_transactions') || '[]');
       if (transactions.length > 0) {
         const batch2 = writeBatch(db);
@@ -1715,30 +1703,15 @@ document.addEventListener('DOMContentLoaded', () => {
         await batch2.commit();
       }
 
-      // Migration date সেভ করো
-      localStorage.setItem('hisab_last_migration', today);
-      console.log('✅ Auto migration complete:', today);
-
-    } catch(e) {
-      console.log('Migration skipped:', e.message);
-    }
+      localStorage.setItem('hisab_last_migration', today_str);
+      console.log('✅ Auto migration complete:', today_str);
+    } catch(e) { console.log('Migration skipped:', e.message); }
   })();
 
-  // ── Cache Version Check (Force Refresh) ──
+  // ── Cache Version Check ──
   (async () => {
     try {
-      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-      const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      const firebaseConfig = {
-        apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
-        authDomain: "hisab-4-u.firebaseapp.com",
-        projectId: "hisab-4-u",
-        storageBucket: "hisab-4-u.firebasestorage.app",
-        messagingSenderId: "957694095044",
-        appId: "1:957694095044:web:1649995ac9734d4d062391"
-      };
-      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-      const db = getFirestore(app);
+      const { db, doc, getDoc } = await getFirebase();
       const snap = await getDoc(doc(db, 'app_config', 'cache'));
       if (snap.exists()) {
         const serverVersion = snap.data().version;
@@ -1757,16 +1730,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applyTheme(State.theme);
   setLanguage(State.lang);
 
-  // Re-apply language after DOM is fully ready (for pages that build components in DOMContentLoaded)
-  document.addEventListener('DOMContentLoaded', () => {
-    // Force re-render on load to ensure dynamic parts are translated
-    State.lang = localStorage.getItem('hisab_lang') || 'en';
-    setLanguage(State.lang);
-  });
-
   // ── Remove no-transition after theme is applied ──
-  // Small delay ensures the browser has painted with correct theme
-  // before enabling transitions — prevents hover/theme flash on load
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       document.documentElement.classList.remove('no-transition');
@@ -1775,7 +1739,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateOnlineStatus();
   checkDailyReminder();
   updateCreditDisplay();
-  // Update sidebar credits sub-label for admin/editor
+  
   if (isPrivilegedUser()) {
     document.querySelectorAll('.sidebar-credits-sub').forEach(el => {
       el.textContent = '∞ Unlimited — Admin privilege';
@@ -1783,7 +1747,7 @@ document.addEventListener('DOMContentLoaded', () => {
       el.style.fontWeight = '600';
     });
   }
-  renderLogos();  // ← renders logo on every page from LOGO config above
+  renderLogos();
 
   // Theme toggle buttons
   document.querySelectorAll('.theme-toggle-icon').forEach(el => {
@@ -1885,14 +1849,7 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 async function _mergeGlobalCatsFromFirestore(username) {
   try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const app = getApps().length ? getApps()[0] : initializeApp({
-      apiKey:"AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4", authDomain:"hisab-4-u.firebaseapp.com",
-      projectId:"hisab-4-u", storageBucket:"hisab-4-u.firebasestorage.app",
-      messagingSenderId:"957694095044", appId:"1:957694095044:web:1649995ac9734d4d062391"
-    });
-    const db = getFirestore(app);
+    const { db, doc, getDoc } = await getFirebase();
     
     // 1. Fetch Global Categories
     const catSnap = await getDoc(doc(db, 'global_config', 'categories'));
@@ -1946,3 +1903,8 @@ async function _mergeGlobalCatsFromFirestore(username) {
     console.log('✅ Global options synced for:', username);
   } catch(e) { console.warn('Global sync failed:', e); }
 }
+
+// ── INITIALIZE ──
+// Apply theme & language immediately (scripts are at bottom of body)
+applyTheme(State.theme);
+setLanguage(State.lang);
