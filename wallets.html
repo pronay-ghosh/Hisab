@@ -5,33 +5,17 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wallets — Hisab হিসাব</title>
-  <meta name="description" content="Hisab is a professional double-entry expense tracker for Bangladesh. Track income, expenses, wallets, and savings across devices." />
-  <link rel="canonical" href="https://amarhisab.web.app/wallets" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/mobile.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="app-layout">
+  <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
-        <a href="index.html" class="sidebar-brand" style="padding:14px 16px 16px;display:block;text-decoration:none;cursor:pointer;" title="Go to Home">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-        <img src="data:image/png;base64,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" alt="Hisab Logo"
-          style="width:38px;height:38px;object-fit:contain;flex-shrink:0;mix-blend-mode:screen;filter:brightness(1.1);" />
-        <div style="line-height:1.2;">
-          <div style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:800;line-height:1.1;">
-            <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
-            <span style="color:rgba(255,255,255,0.25);font-weight:300;font-size:0.52em;vertical-align:middle;">—</span>
-            <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
-          </div>
-          <div style="font-size:8.5px;margin-top:2px;white-space:nowrap;">
-            <span style="font-style:italic;background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য</span>
-            <span style="color:rgba(255,255,255,0.2);margin:0 3px;">—</span>
-            <span style="font-style:italic;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;font-size:0.85em;background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">For Future Savings</span>
-          </div>
-        </div>
-      </div>
+    <a href="/" class="sidebar-brand" style="padding:14px 16px 16px;display:block;text-decoration:none;cursor:pointer;" title="Go to Home" data-logo="sidebar">
+      <!-- Logo will be injected by app.js -->
     </a>
     <div class="sidebar-user">
       <div class="sidebar-avatar" id="sidebar-avatar">U</div>
@@ -39,16 +23,16 @@
     </div>
     <nav class="sidebar-nav">
       <div class="sidebar-section-label" data-t="nav_main">Main</div>
-      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> <span data-t="nav_dashboard">Dashboard</span></a>
-      <a class="sidebar-link active" href="wallets.html"><span class="nav-icon">👛</span> <span data-t="nav_wallets">Wallets</span></a>
-      <a class="sidebar-link" href="income.html"><span class="nav-icon">💰</span> <span data-t="nav_income">Income</span></a>
-      <a class="sidebar-link" href="expense.html"><span class="nav-icon">💸</span> <span data-t="nav_expense">Expenses</span></a>
+      <a class="sidebar-link" href="/dashboard"><span class="nav-icon">🏠</span> <span data-t="nav_dashboard">Dashboard</span></a>
+      <a class="sidebar-link active" href="/wallets"><span class="nav-icon">👛</span> <span data-t="nav_wallets">Wallets</span></a>
+      <a class="sidebar-link" href="/income"><span class="nav-icon">💰</span> <span data-t="nav_income">Income</span></a>
+      <a class="sidebar-link" href="/expense"><span class="nav-icon">💸</span> <span data-t="nav_expense">Expenses</span></a>
       <div class="sidebar-section-label" data-t="nav_analytics">Analytics</div>
-      <a class="sidebar-link" href="reports.html"><span class="nav-icon">📊</span> <span data-t="nav_reports">Reports</span></a>
-      <a class="sidebar-link" href="budget.html"><span class="nav-icon">🎯</span> <span data-t="nav_budget">Budget</span></a>
+      <a class="sidebar-link" href="/reports"><span class="nav-icon">📊</span> <span data-t="nav_reports">Reports</span></a>
+      <a class="sidebar-link" href="/budget"><span class="nav-icon">🎯</span> <span data-t="nav_budget">Budget</span></a>
       <div class="sidebar-section-label" data-t="nav_account">Account</div>
-      <a class="sidebar-link" href="settings.html"><span class="nav-icon">⚙️</span> <span data-t="nav_settings">Settings</span></a>
-      <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> <span data-t="nav_credits_p">Credits</span></a>
+      <a class="sidebar-link" href="/settings"><span class="nav-icon">⚙️</span> <span data-t="nav_settings">Settings</span></a>
+      <a class="sidebar-link" href="/credits"><span class="nav-icon">💳</span> <span data-t="nav_credits_p">Credits</span></a>
       <a class="sidebar-link" onclick="showAppWorkingPopup()" style="cursor:pointer;"><span class="nav-icon">📱</span> <span data-t="app_working_title">Mobile App</span> <span class="badge-new">Soon</span></a>
       <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
@@ -118,727 +102,193 @@
 <div class="modal-backdrop" id="add-wallet-modal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" data-t="wlt_add_wallet_title">Add New Wallet</div>
+      <div class="modal-title" data-t="wlt_add_title">Create New Wallet</div>
       <button class="modal-close" onclick="closeModal('add-wallet-modal')">×</button>
     </div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Adding a custom wallet costs <strong>10 credits</strong>.</p>
+    <div class="form-group">
+      <label class="form-label" data-t="wlt_name_label">Wallet Name</label>
+      <input type="text" class="form-input" id="wlt-name" data-t-ph="wlt_name_ph" placeholder="e.g. My Savings Account" />
+    </div>
     <div class="form-group">
       <label class="form-label" data-t="wlt_type_label">Wallet Type</label>
-      <select class="form-input" id="new-wallet-type" onchange="onWalletTypeChange(this)">
-        <option value="cash">💵 Cash</option>
-        <option value="bank">🏦 Bank Account</option>
-        <option value="debit">💳 Debit Card</option>
-        <option value="credit_card">💳 Credit Card</option>
-        <option value="loan_to">🤝 Loan to Others</option>
-        <option value="loan_from">🤝 Loan from Others</option>
-        <option value="others">📦 Others</option>
-        <option value="__custom__" style="color:var(--blue-400);font-weight:600;">➕ Add New Type...</option>
-      </select>
-    </div>
-
-    <!-- Custom Type Input (hidden by default) -->
-    <div class="form-group" id="custom-type-group" style="display:none;background:rgba(30,136,229,0.06);border:1px solid rgba(30,136,229,0.2);border-radius:12px;padding:14px;">
-      <div style="font-size:13px;font-weight:600;color:var(--blue-400);margin-bottom:10px;">➕ নতুন Wallet Type তৈরি করুন</div>
-      <div style="display:flex;gap:10px;margin-bottom:10px;">
-        <div style="flex:0 0 70px;">
-          <label class="form-label" style="font-size:11px;">Icon</label>
-          <input type="text" class="form-input" id="custom-type-icon" placeholder="💰" maxlength="4" style="font-size:20px;text-align:center;" value="💰" />
-        </div>
-        <div style="flex:1;">
-          <label class="form-label" style="font-size:11px;">Name (English)</label>
-          <input type="text" class="form-input" id="custom-type-en" placeholder="e.g. Mobile Banking" />
-        </div>
-      </div>
-      <div style="margin-bottom:10px;">
-        <label class="form-label" style="font-size:11px;">Name (বাংলা)</label>
-        <input type="text" class="form-input" id="custom-type-bn" placeholder="যেমন: মোবাইল ব্যাংকিং" />
-      </div>
-      <button class="btn btn-primary btn-sm" onclick="saveCustomWalletType()">✅ Type যোগ করুন</button>
-      <button class="btn btn-outline btn-sm" onclick="cancelCustomType()" style="margin-left:8px;">বাদ দিন</button>
+      <select class="form-input" id="wlt-type"></select>
     </div>
     <div class="form-group">
-      <label class="form-label">Wallet Name (English)</label>
-      <input type="text" class="form-input" id="new-wallet-en" placeholder="e.g. Dutch-Bangla Bank" />
+      <label class="form-label" data-t="wlt_initial_bal">Initial Balance (৳)</label>
+      <input type="number" class="form-input" id="wlt-balance" placeholder="0.00" />
     </div>
-    <div class="form-group">
-      <label class="form-label">নামের বাংলা</label>
-      <input type="text" class="form-input" id="new-wallet-bn" placeholder="যেমন: ডাচ-বাংলা ব্যাংক" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Opening Balance (৳)</label>
-      <input type="number" class="form-input" id="new-wallet-balance" placeholder="0.00" min="0" />
-    </div>
-    <button class="btn btn-primary btn-full" onclick="addWallet()">Add Wallet (–10 pts)</button>
+    <button class="btn btn-primary btn-full" onclick="saveNewWallet()" data-t="wlt_create_btn">Create Wallet</button>
   </div>
 </div>
 
-<!-- FUND TRANSFER MODAL -->
+<!-- TRANSFER MODAL -->
 <div class="modal-backdrop" id="transfer-modal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" data-t="wlt_fund_transfer_title">⇄ Fund Transfer</div>
+      <div class="modal-title" data-t="wlt_fund_transfer">Fund Transfer</div>
       <button class="modal-close" onclick="closeModal('transfer-modal')">×</button>
     </div>
-    <div class="dual-warning show" style="background:var(--blue-50);border-color:var(--blue-200);color:var(--blue-700);">
-      <span>ℹ️</span>
-      <span data-t="wlt_double_entry_note">Double-entry: Money moves out of one wallet and into another.</span>
-    </div>
-
-    <!-- Inline error/warning panel -->
-    <div id="tr-error" style="display:none;border-radius:var(--radius-md);padding:12px 16px;margin-bottom:14px;font-size:13px;font-weight:600;display:none;align-items:flex-start;gap:10px;"></div>
-
     <div class="form-group">
-      <label class="form-label" data-t="wlt_tr_amount">Amount (৳)</label>
-      <input type="number" class="form-input" id="tr-amount" placeholder="0.00" min="0.01" step="0.01" oninput="onTransferInput()" />
+      <label class="form-label" data-t="txn_amount">Amount (৳)</label>
+      <input type="number" class="form-input" id="tf-amount" placeholder="0.00" />
     </div>
-
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label" data-t="wlt_tr_from">From</label>
-        <select class="form-input" id="tr-from" onchange="onTransferInput()"></select>
-        <div id="tr-from-balance" style="font-size:12px;margin-top:5px;color:var(--text-muted);"></div>
+        <label class="form-label" data-t="tbl_from">From</label>
+        <select class="form-input" id="tf-from"></select>
       </div>
       <div class="form-group">
-        <label class="form-label" data-t="wlt_tr_to">To</label>
-        <select class="form-input" id="tr-to" onchange="onTransferInput()"></select>
-        <div id="tr-to-balance" style="font-size:12px;margin-top:5px;color:var(--text-muted);"></div>
+        <label class="form-label" data-t="tbl_to">To</label>
+        <select class="form-input" id="tf-to"></select>
       </div>
     </div>
-
-    <!-- Live preview after transfer -->
-    <div id="tr-preview" style="display:none;background:var(--bg-secondary);border-radius:var(--radius-md);padding:12px 16px;margin-bottom:14px;font-size:13px;">
-      <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;" data-t="wlt_after_transfer">After Transfer:</div>
-      <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-        <div>From: <span id="preview-from-name" style="font-weight:600;"></span> → <span id="preview-from-after" style="font-weight:700;color:var(--red-400);"></span></div>
-        <div>To: <span id="preview-to-name" style="font-weight:600;"></span> → <span id="preview-to-after" style="font-weight:700;color:var(--teal-400);"></span></div>
-      </div>
+    <div class="form-group">
+      <label class="form-label" data-t="txn_date">Date</label>
+      <input type="date" class="form-input" id="tf-date" />
     </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Date</label>
-        <input type="date" class="form-input" id="tr-date" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Note</label>
-        <input type="text" class="form-input" id="tr-note" placeholder="Optional" />
-      </div>
-    </div>
-    <button class="btn btn-primary btn-full" id="tr-submit-btn" onclick="doTransfer()" data-t="wlt_tr_submit">Transfer Fund</button>
+    <button class="btn btn-primary btn-full" onclick="doTransfer()" data-t="wlt_tf_btn">Execute Transfer</button>
   </div>
 </div>
 
 <script src="js/app.js"></script>
 <script>
-// ── WALLET TYPES (Admin এডিট করতে পারবে) ──────────────────────
-const DEFAULT_WALLET_TYPES = [
-  { id: 'cash',        icon: '💵', name_en: 'Cash',              name_bn: 'নগদ' },
-  { id: 'bank',        icon: '🏦', name_en: 'Bank Account',      name_bn: 'ব্যাংক অ্যাকাউন্ট' },
-  { id: 'debit',       icon: '💳', name_en: 'Debit Card',        name_bn: 'ডেবিট কার্ড' },
-  { id: 'credit_card', icon: '💳', name_en: 'Credit Card',       name_bn: 'ক্রেডিট কার্ড' },
-  { id: 'loan_to',     icon: '🤝', name_en: 'Loan to Others',    name_bn: 'ধার দেওয়া' },
-  { id: 'loan_from',   icon: '🤝', name_en: 'Loan from Others',  name_bn: 'ধার নেওয়া' },
-  { id: 'others',      icon: '📦', name_en: 'Others',            name_bn: 'অন্যান্য' },
-];
-
-function getWalletTypes() {
-  const saved = localStorage.getItem('hisab_wallet_types');
-  return saved ? JSON.parse(saved) : DEFAULT_WALLET_TYPES;
-}
-
-function saveWalletTypes(types) {
-  localStorage.setItem('hisab_wallet_types', JSON.stringify(types));
-}
-
-function getWalletIcons() {
-  return Object.fromEntries(getWalletTypes().map(t => [t.id, t.icon]));
-}
-
-const WALLET_ICONS = new Proxy({}, { get(_, key) { return getWalletIcons()[key] || '💰'; } });
-const WALLET_COLORS = { cash:'#EBF4FD', bank:'#E1F5EE', debit:'#FAEEDA', credit_card:'#FCEBEB', loan_to:'#EAF3DE', loan_from:'#EBF4FD', others:'#F3F4F6' };
-
-// Wallet Type select populate করো
-function populateWalletTypeSelects() {
-  const types = getWalletTypes();
-  const selects = ['new-wallet-type', 'edit-wallet-type'];
-  selects.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const currentVal = el.value;
-    el.innerHTML = types.map(t =>
-      `<option value="${t.id}">${t.icon} ${t.name_en}</option>`
-    ).join('') + `<option value="__custom__" style="color:var(--blue-400);font-weight:600;">➕ Add New Type...</option>`;
-    if (currentVal && el.querySelector(`option[value="${currentVal}"]`)) el.value = currentVal;
-  });
-}
-
 function initWallets() {
   if (!requireLogin()) return;
-  const user = State.user;
-  document.getElementById('sidebar-avatar').textContent = user.name ? user.name[0].toUpperCase() : 'U';
-  document.getElementById('sidebar-name').textContent = user.name;
-  document.getElementById('sidebar-handle').textContent = '@' + user.username;
-  document.getElementById('tr-date').value = today();
-  populateWalletTypeSelects();
-  renderWallets();
-  renderWalletTxns();
-  populateWalletSelects();
-  // Admin হলে Wallet Type Manager দেখাও
-  if (isAdmin()) {
-    const placeholder = document.getElementById('wallet-type-manager-placeholder');
-    const managerEl = document.getElementById('wallet-type-manager');
-    if (placeholder && managerEl) {
-      placeholder.appendChild(managerEl);
-      managerEl.style.display = 'block';
-      renderWalletTypeList();
-    }
-  }
+  document.getElementById('sidebar-avatar').textContent = State.user.name ? State.user.name[0].toUpperCase() : 'U';
+  document.getElementById('sidebar-name').textContent = State.user.name || 'User';
+  document.getElementById('sidebar-handle').textContent = '@' + (State.user.username || 'user');
+  document.getElementById('tf-date').value = today();
+  renderWalletGrid();
+  renderWalletFilter();
+  renderTxnTable();
+  renderWalletTypes();
+  updateCreditDisplay();
 }
 
-function renderWallets() {
-  const grid = document.getElementById('wallet-grid');
-  const total = State.wallets.reduce((s, w) => s + (w.balance || 0), 0);
-  document.getElementById('total-balance-display').textContent = fmt(total);
+function renderWalletGrid() {
+  const el = document.getElementById('wallet-grid');
+  const totalBalance = State.wallets.reduce((s, w) => s + (w.balance || 0), 0);
+  document.getElementById('total-balance-display').textContent = fmt(totalBalance);
 
-  grid.innerHTML = State.wallets.map(w => {
-    const name = State.lang === 'bn' ? (w.name_bn || w.name_en) : w.name_en;
-    const icon = w.icon || WALLET_ICONS[w.id] || '💰';
-    const txns = State.transactions.filter(t => t.debit === w.id || t.credit === w.id);
-    const income = txns.filter(t => t.type === 'income' && t.debit === w.id).reduce((s, t) => s + parseFloat(t.amount), 0);
-    const expense = txns.filter(t => t.type === 'expense' && t.debit === w.id).reduce((s, t) => s + parseFloat(t.amount), 0);
-    const bal = w.balance || 0;
-    const adminButtons = isAdmin() ? `
-      <div style="display:flex;gap:6px;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
-        <button class="btn btn-outline btn-sm" style="flex:1;font-size:11px;color:var(--blue-400);border-color:var(--blue-400);" onclick="adminEditWallet('${w.id}')">✏️ Edit</button>
-        <button class="btn btn-outline btn-sm" style="flex:1;font-size:11px;color:var(--red-400);border-color:var(--red-400);" onclick="adminDeleteWallet('${w.id}')">🗑️ Delete</button>
-      </div>` : '';
-    return `
-    <div class="wallet-card" style="border-color:var(--border);">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
-        <div style="font-size:28px;">${icon}</div>
-        <button class="btn btn-outline btn-sm" onclick="openTransferFrom('${w.id}')">${State.lang==='bn'?'ট্রান্সফার':'Transfer'}</button>
+  el.innerHTML = State.wallets.map(w => `
+    <div class="wallet-card">
+      <div class="wallet-icon-bg">${w.icon || '💰'}</div>
+      <div class="wallet-info">
+        <div class="wallet-name">${State.lang === 'bn' ? (w.name_bn || w.name_en) : w.name_en}</div>
+        <div class="wallet-type-label">${getWalletTypeName(w.type)}</div>
       </div>
-      <div class="wallet-card-name">${name}</div>
-      <div class="wallet-card-amount" style="color:${bal >= 0 ? 'var(--text-primary)' : 'var(--red-400)'};">${fmt(bal)}</div>
-      <div class="wallet-card-meta">
-        <div class="wallet-meta-item">
-          <div class="wallet-meta-label">${State.lang==='bn'?'আয়':'In'}</div>
-          <div class="wallet-meta-val" style="color:var(--teal-400);">+${fmt(income)}</div>
-        </div>
-        <div class="wallet-meta-item">
-          <div class="wallet-meta-label">${State.lang==='bn'?'ব্যয়':'Out'}</div>
-          <div class="wallet-meta-val" style="color:var(--red-400);">-${fmt(expense)}</div>
-        </div>
-        <div class="wallet-meta-item">
-          <div class="wallet-meta-label">${State.lang==='bn'?'লেনদেন':'Txns'}</div>
-          <div class="wallet-meta-val">${txns.length}</div>
-        </div>
-      </div>
-      ${adminButtons}
-    </div>`;
-  }).join('') + `
-    <div class="wallet-card wallet-card-add" style="border:2px dashed var(--border);background:var(--bg-secondary);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px;" onclick="openModal('add-wallet-modal')">
-      <div class="wallet-add-icon" style="font-size:36px;margin-bottom:8px;color:var(--text-muted);">+</div>
-      <div style="font-size:14px;font-weight:600;color:var(--text-muted);">${State.lang==='bn'?'ওয়ালেট যোগ করুন':'Add Wallet'}</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${State.lang==='bn'?'–১০ ক্রেডিট':'–10 credits'}</div>
-    </div>`;
+      <div class="wallet-balance">${fmt(w.balance || 0)}</div>
+    </div>
+  `).join('');
 }
 
-// ── ADMIN WALLET EDIT/DELETE ──────────────────────────────────────
-function adminEditWallet(walletId) {
-  const w = State.wallets.find(w => w.id === walletId);
-  if (!w) return;
-  document.getElementById('edit-wallet-id').value = walletId;
-  document.getElementById('edit-wallet-en').value = w.name_en || '';
-  document.getElementById('edit-wallet-bn').value = w.name_bn || '';
-  document.getElementById('edit-wallet-balance').value = w.balance || 0;
-  document.getElementById('edit-wallet-type').value = w.id.split('_')[0] || 'cash';
-  openModal('edit-wallet-modal');
+function getWalletTypeName(typeId) {
+  const type = State.wallet_types.find(t => t.id === typeId);
+  if (!type) return typeId;
+  return State.lang === 'bn' ? type.bn : type.en;
 }
 
-function adminSaveWallet() {
-  const id = document.getElementById('edit-wallet-id').value;
-  const en = document.getElementById('edit-wallet-en').value.trim();
-  const bn = document.getElementById('edit-wallet-bn').value.trim();
-  const bal = parseFloat(document.getElementById('edit-wallet-balance').value) || 0;
-  const type = document.getElementById('edit-wallet-type').value;
-  if (!en) { showToast('⚠️', 'Missing Name', 'Please enter wallet name.'); return; }
-  const idx = State.wallets.findIndex(w => w.id === id);
-  if (idx < 0) return;
-  State.wallets[idx] = { ...State.wallets[idx], name_en: en, name_bn: bn || en, balance: bal, icon: WALLET_ICONS[type] || '💰' };
-  saveState('wallets', State.wallets);
-  closeModal('edit-wallet-modal');
-  renderWallets();
-  populateWalletSelects();
-  showToast('✅', 'Wallet Updated!', `"${en}" wallet updated successfully.`);
+function renderWalletFilter() {
+  const sel = document.getElementById('wallet-filter');
+  sel.innerHTML = `<option value="">${t('wlt_all_wallets')}</option>` + 
+    State.wallets.map(w => `<option value="${w.id}">${State.lang==='bn'?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
 }
 
-function adminDeleteWallet(walletId) {
-  const w = State.wallets.find(w => w.id === walletId);
-  if (!w) return;
-  const name = w.name_en || walletId;
-  const txnCount = State.transactions.filter(t => t.debit === walletId || t.credit === walletId).length;
-  if (!confirm(`"${name}" wallet delete করবেন?\n\nএই wallet এ ${txnCount}টি transaction আছে।\nDelete করলে এই wallet এর সব transaction ও মুছে যাবে!`)) return;
-  State.wallets = State.wallets.filter(w => w.id !== walletId);
-  State.transactions = State.transactions.filter(t => t.debit !== walletId && t.credit !== walletId);
-  saveState('wallets', State.wallets);
-  saveState('transactions', State.transactions);
-  renderWallets();
-  populateWalletSelects();
-  showToast('🗑️', 'Wallet Deleted!', `"${name}" wallet deleted.`);
-}
-
-// ── WALLET TYPE MANAGER FUNCTIONS ────────────────────────────────
-function renderWalletTypeList() {
-  const types = getWalletTypes();
-  const el = document.getElementById('wallet-type-list');
-  if (!el) return;
-  if (!types.length) { el.innerHTML = '<p style="color:var(--text-muted);padding:12px;">No wallet types.</p>'; return; }
-  el.innerHTML = types.map((t, i) => `
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:22px;">${t.icon}</span>
-        <div>
-          <div style="font-size:14px;font-weight:600;color:var(--text-primary);">${t.name_en}</div>
-          <div style="font-size:12px;color:var(--text-muted);">${t.name_bn}</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-outline btn-sm" style="color:var(--blue-400);border-color:var(--blue-400);" onclick="openEditWalletType('${t.id}')">✏️ Edit</button>
-        <button class="btn btn-outline btn-sm" style="color:var(--red-400);border-color:var(--red-400);" onclick="deleteWalletType('${t.id}')" ${DEFAULT_WALLET_TYPES.find(d=>d.id===t.id) ? 'title="Default type — delete with caution"' : ''}>🗑️</button>
-      </div>
-    </div>`).join('');
-}
-
-function addWalletType() {
-  const icon = document.getElementById('new-type-icon').value.trim() || '💰';
-  const en   = document.getElementById('new-type-en').value.trim();
-  const bn   = document.getElementById('new-type-bn').value.trim();
-  if (!en) { showToast('⚠️', 'Missing Name', 'Please enter wallet type name.'); return; }
-  const types = getWalletTypes();
-  const id = en.toLowerCase().replace(/\s+/g, '_') + '_' + Date.now();
-  types.push({ id, icon, name_en: en, name_bn: bn || en });
-  saveWalletTypes(types);
-  document.getElementById('new-type-icon').value = '';
-  document.getElementById('new-type-en').value = '';
-  document.getElementById('new-type-bn').value = '';
-  closeModal('add-wallet-type-modal');
-  renderWalletTypeList();
-  populateWalletTypeSelects();
-  showToast('✅', 'Type Added!', `"${en}" wallet type added.`);
-}
-
-function openEditWalletType(typeId) {
-  const types = getWalletTypes();
-  const t = types.find(t => t.id === typeId);
-  if (!t) return;
-  document.getElementById('edit-type-id').value  = typeId;
-  document.getElementById('edit-type-icon').value = t.icon;
-  document.getElementById('edit-type-en').value   = t.name_en;
-  document.getElementById('edit-type-bn').value   = t.name_bn;
-  openModal('edit-wallet-type-modal');
-}
-
-function saveWalletType() {
-  const id   = document.getElementById('edit-type-id').value;
-  const icon = document.getElementById('edit-type-icon').value.trim() || '💰';
-  const en   = document.getElementById('edit-type-en').value.trim();
-  const bn   = document.getElementById('edit-type-bn').value.trim();
-  if (!en) { showToast('⚠️', 'Missing Name', 'Please enter wallet type name.'); return; }
-  const types = getWalletTypes();
-  const idx = types.findIndex(t => t.id === id);
-  if (idx < 0) return;
-  types[idx] = { ...types[idx], icon, name_en: en, name_bn: bn || en };
-  saveWalletTypes(types);
-  closeModal('edit-wallet-type-modal');
-  renderWalletTypeList();
-  populateWalletTypeSelects();
-  renderWallets();
-  showToast('✅', 'Type Updated!', `"${en}" wallet type updated.`);
-}
-
-function deleteWalletType(typeId) {
-  const types = getWalletTypes();
-  const t = types.find(t => t.id === typeId);
-  if (!t) return;
-  const inUse = State.wallets.some(w => w.id.startsWith(typeId));
-  if (inUse) { showToast('⚠️', 'In Use!', `"${t.name_en}" type এর wallet আছে। আগে সেই wallet delete করুন।`); return; }
-  if (!confirm(`"${t.name_en}" wallet type delete করবেন?`)) return;
-  const newTypes = types.filter(t => t.id !== typeId);
-  saveWalletTypes(newTypes);
-  renderWalletTypeList();
-  populateWalletTypeSelects();
-  showToast('🗑️', 'Type Deleted!', `"${t.name_en}" wallet type deleted.`);
-}
-
-function renderWalletTxns(filter = '') {
+function renderTxnTable() {
   const tbody = document.getElementById('wallet-txn-tbody');
-  const noEl = document.getElementById('no-wallet-txns');
-  const table = document.getElementById('wallet-txn-table');
-  let txns = State.transactions;
-  if (filter) txns = txns.filter(t => t.debit === filter || t.credit === filter);
-  if (!txns.length) { table.style.display = 'none'; noEl.style.display = 'block'; return; }
-  table.style.display = 'table'; noEl.style.display = 'none';
-  tbody.innerHTML = txns.slice(0, 50).map(t => {
-    const typeClass = t.type === 'income' ? 'badge-income' : t.type === 'expense' ? 'badge-expense' : 'badge-transfer';
-    const typeLabel = t.type === 'income' ? LANG[State.lang].txn_income : t.type === 'expense' ? LANG[State.lang].txn_expense : LANG[State.lang].txn_transfer;
-    const debitName = getWalletName(t.debit); const creditName = getWalletName(t.credit);
+  const noTxns = document.getElementById('no-wallet-txns');
+  const filterVal = document.getElementById('wallet-filter').value;
+
+  let txns = State.transactions.filter(t => t.type === 'transfer' || State.wallets.some(w => w.id === t.debit || w.id === t.credit));
+  if (filterVal) txns = txns.filter(t => t.debit === filterVal || t.credit === filterVal);
+
+  if (!txns.length) {
+    tbody.innerHTML = '';
+    noTxns.style.display = 'block';
+    return;
+  }
+  noTxns.style.display = 'none';
+  tbody.innerHTML = txns.slice(0, 30).map(t => {
+    const fromName = getAccountName(t.debit);
+    const toName = getAccountName(t.credit);
+    const badge = t.type === 'income' ? 'badge-income' : t.type === 'expense' ? 'badge-expense' : 'badge-transfer';
     return `<tr>
-      <td style="color:var(--text-muted);">${t.date}</td>
-      <td style="color:var(--text-primary);font-weight:500;">${t.note || typeLabel}</td>
-      <td><span class="txn-type-badge ${typeClass}">${typeLabel}</span></td>
-      <td style="color:var(--text-muted);">${debitName}</td>
-      <td style="color:var(--text-muted);">${creditName}</td>
-      <td class="${t.type === 'income' ? 'txn-amount-pos' : 'txn-amount-neg'}">${fmt(t.amount)}</td>
+      <td>${t.date}</td>
+      <td style="font-weight:600;">${t.note || (t.type === 'transfer' ? 'Fund Transfer' : t.type)}</td>
+      <td><span class="txn-type-badge ${badge}">${t.type}</span></td>
+      <td>${fromName}</td>
+      <td>${toName}</td>
+      <td style="font-weight:700;">${fmt(t.amount)}</td>
     </tr>`;
   }).join('');
 }
 
-function getWalletName(id) {
-  const w = State.wallets.find(x => x.id === id);
-  if (w) return State.lang === 'bn' ? (w.name_bn || w.name_en) : w.name_en;
-  const c = [...State.income_cats, ...State.expense_cats].find(x => x.id === id);
-  return c ? (State.lang === 'bn' ? c.bn : c.en) : (id || '—');
+function getAccountName(id) {
+  const wallet = State.wallets.find(w => w.id === id);
+  if (wallet) return State.lang === 'bn' ? (wallet.name_bn || wallet.name_en) : wallet.name_en;
+  const inc = State.income_cats.find(c => c.id === id);
+  if (inc) return State.lang === 'bn' ? inc.bn : inc.en;
+  const exp = State.expense_cats.find(c => c.id === id);
+  if (exp) return State.lang === 'bn' ? exp.bn : exp.en;
+  return id;
 }
 
-function populateWalletSelects() {
-  const opts = State.wallets.map(w => `<option value="${w.id}">${w.icon || '💰'} ${State.lang === 'bn' ? (w.name_bn || w.name_en) : w.name_en}</option>`).join('');
-  document.getElementById('tr-from').innerHTML = opts;
-  document.getElementById('tr-to').innerHTML = opts;
-  const filterSel = document.getElementById('wallet-filter');
-  filterSel.innerHTML = `<option value="">${State.lang==='bn'?'সব ওয়ালেট':'All Wallets'}</option>` + opts;
+function renderWalletTypes() {
+  const sel = document.getElementById('wlt-type');
+  sel.innerHTML = State.wallet_types.map(t => `<option value="${t.id}">${State.lang==='bn'?t.bn:t.en}</option>`).join('');
 }
 
-function filterWalletTxns() {
-  renderWalletTxns(document.getElementById('wallet-filter').value);
-}
+function saveNewWallet() {
+  const name = document.getElementById('wlt-name').value;
+  const type = document.getElementById('wlt-type').value;
+  const balance = parseFloat(document.getElementById('wlt-balance').value || 0);
+  if (!name) return;
 
-function onWalletTypeChange(sel) {
-  const customGroup = document.getElementById('custom-type-group');
-  if (sel.value === '__custom__') {
-    customGroup.style.display = 'block';
-    sel.value = 'cash';
-  } else {
-    customGroup.style.display = 'none';
-  }
-}
+  const typeObj = State.wallet_types.find(t => t.id === type);
+  const newWallet = {
+    id: 'wlt_' + Date.now(),
+    name_en: name,
+    name_bn: name,
+    type: type,
+    icon: typeObj ? typeObj.icon : '💰',
+    balance: balance
+  };
 
-function saveCustomWalletType() {
-  const icon = document.getElementById('custom-type-icon').value.trim() || '💰';
-  const en   = document.getElementById('custom-type-en').value.trim();
-  const bn   = document.getElementById('custom-type-bn').value.trim();
-  if (!en) { showToast('⚠️', 'Missing Name', 'Type এর নাম দিন।'); return; }
-  const types = getWalletTypes();
-  const id = en.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + Date.now();
-  types.push({ id, icon, name_en: en, name_bn: bn || en });
-  saveWalletTypes(types);
-  populateWalletTypeSelects();
-  const sel = document.getElementById('new-wallet-type');
-  sel.value = id;
-  document.getElementById('custom-type-group').style.display = 'none';
-  document.getElementById('custom-type-icon').value = '💰';
-  document.getElementById('custom-type-en').value = '';
-  document.getElementById('custom-type-bn').value = '';
-  if (isAdmin()) renderWalletTypeList();
-  showToast('✅', 'Type যোগ হয়েছে!', `"${en}" wallet type যোগ করা হয়েছে।`);
-}
-
-function cancelCustomType() {
-  document.getElementById('custom-type-group').style.display = 'none';
-  document.getElementById('custom-type-icon').value = '💰';
-  document.getElementById('custom-type-en').value = '';
-  document.getElementById('custom-type-bn').value = '';
-  document.getElementById('new-wallet-type').value = 'cash';
-}
-
-function addWallet() {
-  const type = document.getElementById('new-wallet-type').value;
-  if (!type || type === '__custom__') { showToast('⚠️', 'Type বেছে নিন', 'একটি wallet type বেছে নিন।'); return; }
-  const en = document.getElementById('new-wallet-en').value.trim();
-  const bn = document.getElementById('new-wallet-bn').value.trim();
-  const bal = parseFloat(document.getElementById('new-wallet-balance').value) || 0;
-  if (!en) { showToast('⚠️','Missing Name','Please enter wallet name.'); return; }
-  if (!useCredits(10, 'Add new wallet')) return;
-  const types = getWalletTypes();
-  const typeObj = types.find(t => t.id === type);
-  const icon = typeObj ? typeObj.icon : '💰';
-  const newWallet = { id: type + '_' + Date.now(), name_en: en, name_bn: bn || en, icon, balance: bal };
   State.wallets.push(newWallet);
   saveState('wallets', State.wallets);
   closeModal('add-wallet-modal');
-  renderWallets(); populateWalletSelects();
-  showToast('✅','Wallet Added!',`"${en}" wallet created.`);
+  showToast('✅', 'Wallet Created!', `${name} has been added.`);
+  renderWalletGrid(); renderWalletFilter();
 }
 
 function openTransferModal() {
-  resetTransferForm();
+  const fromSel = document.getElementById('tf-from');
+  const toSel = document.getElementById('tf-to');
+  const opts = State.wallets.map(w => `<option value="${w.id}">${State.lang==='bn'?(w.name_bn||w.name_en):w.name_en}</option>`).join('');
+  fromSel.innerHTML = opts; toSel.innerHTML = opts;
   openModal('transfer-modal');
-}
-
-function openTransferFrom(walletId) {
-  resetTransferForm();
-  document.getElementById('tr-from').value = walletId;
-  onTransferInput();
-  openModal('transfer-modal');
-}
-
-function resetTransferForm() {
-  document.getElementById('tr-amount').value = '';
-  document.getElementById('tr-note').value = '';
-  document.getElementById('tr-error').style.display = 'none';
-  document.getElementById('tr-preview').style.display = 'none';
-  document.getElementById('tr-from-balance').textContent = '';
-  document.getElementById('tr-to-balance').textContent = '';
-  document.getElementById('tr-submit-btn').disabled = false;
-  document.getElementById('tr-submit-btn').textContent = State.lang==='bn'?'ফান্ড ট্রান্সফার করুন':'Transfer Fund';
-}
-
-function showTransferError(icon, msg, type) {
-  // type: 'error' | 'warn' | 'info'
-  const el = document.getElementById('tr-error');
-  const styles = {
-    error: 'background:var(--red-50);border:1.5px solid #F5A5A5;color:var(--red-600);',
-    warn:  'background:var(--amber-50);border:1.5px solid #FAC775;color:var(--amber-600);',
-    info:  'background:var(--blue-50);border:1.5px solid var(--blue-200);color:var(--blue-700);',
-  };
-  el.style.cssText = styles[type] + 'display:flex;border-radius:var(--radius-md);padding:12px 16px;margin-bottom:14px;font-size:13px;font-weight:600;align-items:flex-start;gap:10px;';
-  el.innerHTML = `<span style="font-size:18px;flex-shrink:0;">${icon}</span><span>${msg}</span>`;
-}
-
-function clearTransferError() {
-  document.getElementById('tr-error').style.display = 'none';
-}
-
-function onTransferInput() {
-  const fromId = document.getElementById('tr-from').value;
-  const toId   = document.getElementById('tr-to').value;
-  const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
-  const fromWallet = State.wallets.find(w => w.id === fromId);
-  const toWallet   = State.wallets.find(w => w.id === toId);
-  const fromBal = fromWallet ? (fromWallet.balance || 0) : 0;
-  const toBal   = toWallet   ? (toWallet.balance   || 0) : 0;
-  const fromName = fromWallet ? (State.lang === 'bn' ? (fromWallet.name_bn || fromWallet.name_en) : fromWallet.name_en) : '';
-  const toName   = toWallet   ? (State.lang === 'bn' ? (toWallet.name_bn   || toWallet.name_en)   : toWallet.name_en)   : '';
-  const submitBtn = document.getElementById('tr-submit-btn');
-
-  // Show current balance under each dropdown
-  document.getElementById('tr-from-balance').innerHTML = fromWallet
-    ? `Balance: <strong style="color:${fromBal > 0 ? 'var(--teal-400)' : 'var(--red-400)'};">${fmt(fromBal)}</strong>`
-    : '';
-  document.getElementById('tr-to-balance').innerHTML = toWallet
-    ? `Balance: <strong>${fmt(toBal)}</strong>`
-    : '';
-
-  // Hide preview by default
-  document.getElementById('tr-preview').style.display = 'none';
-  submitBtn.disabled = false;
-  submitBtn.textContent = State.lang==='bn'?'ফান্ড ট্রান্সফার করুন':'Transfer Fund';
-  clearTransferError();
-
-  if (!fromWallet || !toWallet) return;
-
-  // ── RULE 1: Same wallet ──────────────────────────────────────
-  if (fromId === toId) {
-    showTransferError('🚫',
-      `<strong>Cannot transfer to the same wallet.</strong><br/>
-       Please select a different destination wallet.`,
-      'error');
-    submitBtn.disabled = true;
-    submitBtn.textContent = '🚫 Same Wallet Selected';
-    return;
-  }
-
-  // ── RULE 2: Zero / no balance in source ─────────────────────
-  if (fromBal <= 0) {
-    const lang = State.lang;
-    showTransferError('💡',
-      `<strong>${fromName}</strong> has no available balance (${fmt(fromBal)}).<br/>
-       <a href="income.html" style="color:var(--blue-700);text-decoration:underline;font-weight:700;">
-         ➕ Add income to ${fromName} first
-       </a> before transferring.`,
-      'warn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = '💡 No Balance — Add Income First';
-    return;
-  }
-
-  // ── RULE 3: Overdraft check (live, as user types amount) ─────
-  if (amount > 0 && amount > fromBal) {
-    const shortfall = amount - fromBal;
-    showTransferError('⛔',
-      `<strong>Insufficient balance.</strong> <strong>${fromName}</strong> only has <strong>${fmt(fromBal)}</strong>.<br/>
-       You are trying to transfer <strong>${fmt(amount)}</strong> — short by <strong style="color:var(--red-600);">${fmt(shortfall)}</strong>.<br/>
-       <a href="income.html" style="color:var(--red-600);text-decoration:underline;font-weight:700;">
-         ➕ Add income to cover the shortfall
-       </a>`,
-      'error');
-    submitBtn.disabled = true;
-    submitBtn.textContent = `⛔ Exceeds Balance by ${fmt(shortfall)}`;
-    return;
-  }
-
-  // ── All good: show live preview ──────────────────────────────
-  if (amount > 0) {
-    document.getElementById('tr-preview').style.display = 'block';
-    document.getElementById('preview-from-name').textContent = fromName;
-    document.getElementById('preview-from-after').textContent = fmt(fromBal - amount);
-    document.getElementById('preview-from-after').style.color = (fromBal - amount) > 0 ? 'var(--text-primary)' : 'var(--red-400)';
-    document.getElementById('preview-to-name').textContent = toName;
-    document.getElementById('preview-to-after').textContent = fmt(toBal + amount);
-  }
 }
 
 function doTransfer() {
-  const amount = parseFloat(document.getElementById('tr-amount').value);
-  const from   = document.getElementById('tr-from').value;
-  const to     = document.getElementById('tr-to').value;
-  const date   = document.getElementById('tr-date').value;
-  const note   = document.getElementById('tr-note').value;
+  const amount = parseFloat(document.getElementById('tf-amount').value || 0);
+  const from = document.getElementById('tf-from').value;
+  const to = document.getElementById('tf-to').value;
+  const date = document.getElementById('tf-date').value;
+  if (!amount || from === to) return;
 
-  // Final guard checks (in case button state was bypassed)
-  if (!amount || amount <= 0) {
-    showTransferError('⚠️', 'Please enter a valid transfer amount greater than ৳ 0.', 'warn');
+  const result = saveTransaction({ type: 'transfer', amount, debit: from, credit: to, date, note: 'Internal Transfer' });
+  if (!result.ok) {
+    showToast('❌', 'Transfer Failed', `Insufficient funds in source wallet.`);
     return;
   }
-  if (from === to) {
-    showTransferError('🚫', 'Cannot transfer to the same wallet.', 'error');
-    return;
-  }
-  const fromWallet = State.wallets.find(w => w.id === from);
-  const fromBal = fromWallet ? (fromWallet.balance || 0) : 0;
-  if (fromBal <= 0) {
-    showTransferError('💡', 'Source wallet has no balance. Please add income first.', 'warn');
-    return;
-  }
-  if (amount > fromBal) {
-    showTransferError('⛔', `Insufficient balance. Available: ${fmt(fromBal)}, Requested: ${fmt(amount)}.`, 'error');
-    return;
-  }
-
-  saveTransaction({ type: 'transfer', amount, debit: from, credit: to, category: 'transfer', date, note });
   closeModal('transfer-modal');
-  resetTransferForm();
-  showToast('✅', 'Transfer Done!', `${fmt(amount)} transferred successfully.`);
-  renderWallets();
-  renderWalletTxns();
+  showToast('⇄', 'Transfer Complete', `${fmt(amount)} moved between wallets.`);
+  renderWalletGrid(); renderTxnTable();
 }
 
+function filterWalletTxns() { renderTxnTable(); }
+
 initWallets();
-
-function _st(sel,txt){const e=document.querySelector(sel);if(e)e.textContent=txt;}
-function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
-function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=txt;}
-function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent=txt);}
-
-window.applyLang = function(lang) {
-  // All data-t elements handled globally by setLanguage() in app.js
-  if(typeof renderWalletTypeList==='function') renderWalletTypeList();
-  if(typeof renderWalletTxns==='function') renderWalletTxns();
-};
-
 </script>
-<!-- ══ WALLET TYPE MANAGER (Admin Only) ══ -->
-<div id="wallet-type-manager" style="display:none;margin:24px 0;">
-  <div class="card">
-    <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
-      <div class="card-title">⚙️ Wallet Type Manager <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(Admin Only)</span></div>
-      <button class="btn btn-primary btn-sm" onclick="openModal('add-wallet-type-modal')">+ Add Type</button>
-    </div>
-    <div id="wallet-type-list"></div>
-  </div>
-</div>
-
-<!-- ══ ADD WALLET TYPE MODAL ══ -->
-<div class="modal-backdrop" id="add-wallet-type-modal">
-  <div class="modal" style="max-width:400px;">
-    <div class="modal-header">
-      <div class="modal-title">➕ Add Wallet Type</div>
-      <button class="modal-close" onclick="closeModal('add-wallet-type-modal')">×</button>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Icon (Emoji)</label>
-      <input type="text" class="form-input" id="new-type-icon" placeholder="💰" maxlength="4" style="font-size:20px;" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Name (English)</label>
-      <input type="text" class="form-input" id="new-type-en" placeholder="e.g. Mobile Banking" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Name (বাংলা)</label>
-      <input type="text" class="form-input" id="new-type-bn" placeholder="যেমন: মোবাইল ব্যাংকিং" />
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px;">
-      <button class="btn btn-primary" style="flex:1;" onclick="addWalletType()">✅ Add Type</button>
-      <button class="btn btn-outline" onclick="closeModal('add-wallet-type-modal')">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ EDIT WALLET TYPE MODAL ══ -->
-<div class="modal-backdrop" id="edit-wallet-type-modal">
-  <div class="modal" style="max-width:400px;">
-    <div class="modal-header">
-      <div class="modal-title">✏️ Edit Wallet Type</div>
-      <button class="modal-close" onclick="closeModal('edit-wallet-type-modal')">×</button>
-    </div>
-    <input type="hidden" id="edit-type-id" />
-    <div class="form-group">
-      <label class="form-label">Icon (Emoji)</label>
-      <input type="text" class="form-input" id="edit-type-icon" placeholder="💰" maxlength="4" style="font-size:20px;" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Name (English)</label>
-      <input type="text" class="form-input" id="edit-type-en" placeholder="e.g. Mobile Banking" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Name (বাংলা)</label>
-      <input type="text" class="form-input" id="edit-type-bn" placeholder="যেমন: মোবাইল ব্যাংকিং" />
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px;">
-      <button class="btn btn-primary" style="flex:1;" onclick="saveWalletType()">💾 Save Changes</button>
-      <button class="btn btn-outline" onclick="closeModal('edit-wallet-type-modal')">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ EDIT WALLET MODAL (Admin Only) ══ -->
-<div class="modal-backdrop" id="edit-wallet-modal">
-  <div class="modal" style="max-width:440px;">
-    <div class="modal-header">
-      <div class="modal-title">✏️ Edit Wallet</div>
-      <button class="modal-close" onclick="closeModal('edit-wallet-modal')">×</button>
-    </div>
-    <input type="hidden" id="edit-wallet-id" />
-    <div class="form-group">
-      <label class="form-label" data-t="wlt_type_label">Wallet Type</label>
-      <select class="form-input" id="edit-wallet-type">
-        <option value="cash">💵 Cash</option>
-        <option value="bank">🏦 Bank Account</option>
-        <option value="debit">💳 Debit Card</option>
-        <option value="credit_card">💳 Credit Card</option>
-        <option value="loan_to">🤝 Loan to Others</option>
-        <option value="loan_from">🤝 Loan from Others</option>
-        <option value="others">📦 Others</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Wallet Name (English)</label>
-      <input type="text" class="form-input" id="edit-wallet-en" placeholder="e.g. Dutch-Bangla Bank" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Wallet Name (বাংলা)</label>
-      <input type="text" class="form-input" id="edit-wallet-bn" placeholder="যেমন: ডাচ-বাংলা ব্যাংক" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Current Balance</label>
-      <input type="number" class="form-input" id="edit-wallet-balance" placeholder="0.00" />
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px;">
-      <button class="btn btn-primary" style="flex:1;" onclick="adminSaveWallet()">💾 Save Changes</button>
-      <button class="btn btn-outline" onclick="closeModal('edit-wallet-modal')">Cancel</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>

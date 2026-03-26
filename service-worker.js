@@ -1,17 +1,17 @@
 const CACHE_NAME = 'hisab-v1';
 const ASSETS = [
   '/',
-  '/index.html',
-  '/dashboard.html',
-  '/income.html',
-  '/expense.html',
-  '/wallets.html',
-  '/reports.html',
-  '/budget.html',
-  '/settings.html',
-  '/credits.html',
-  '/login.html',
-  '/register.html',
+  '/index',
+  '/dashboard',
+  '/income',
+  '/expense',
+  '/wallets',
+  '/reports',
+  '/budget',
+  '/settings',
+  '/credits',
+  '/login',
+  '/register',
   '/css/style.css',
   '/css/mobile.css',
   '/js/app.js',
@@ -39,8 +39,31 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // skip non-GET requests and firestore/firebase related calls
+  if (event.request.method !== 'GET' || event.request.url.includes('firestore') || event.request.url.includes('firebase')) {
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    caches.match(event.request).then(cachedResponse => {
+      if (cachedResponse) {
+        // Return cached response but fetch an update in the background (stale-while-revalidate)
+        fetch(event.request).then(networkResponse => {
+          if (networkResponse && networkResponse.status === 200) {
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, networkResponse));
+          }
+        }).catch(() => {});
+        return cachedResponse;
+      }
+
+      return fetch(event.request).then(networkResponse => {
+        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+          return networkResponse;
+        }
+        const responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseToCache));
+        return networkResponse;
+      });
+    })
   );
 });

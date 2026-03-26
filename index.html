@@ -560,20 +560,8 @@
 
 <!-- NAV -->
 <nav class="lnav" id="lnav">
-  <a href="index.html" style="text-decoration:none;" class="lnav-logo">
-    <img src="" id="nav-logo-img" alt="Hisab" style="height:38px;width:38px;object-fit:contain;border-radius:8px;mix-blend-mode:screen;" />
-    <div style="line-height:1.2;">
-      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:800;line-height:1.1;">
-        <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
-        <span style="color:rgba(255,255,255,0.28);font-weight:300;font-size:0.55em;vertical-align:middle;">—</span>
-        <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
-      </div>
-      <div style="font-size:10px;margin-top:1px;">
-        <span style="font-style:italic;background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য</span>
-        <span style="color:rgba(255,255,255,0.22);margin:0 3px;">—</span>
-        <span style="font-style:italic;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;font-size:0.85em;background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">For Future Savings</span>
-      </div>
-    </div>
+  <a href="/" style="text-decoration:none;" class="lnav-logo" data-logo="nav">
+    <!-- Logo will be injected by app.js -->
   </a>
   <div class="lnav-links">
     <a href="#features" data-t="nav_features">Features</a>
@@ -589,11 +577,11 @@
     </div>
     <button class="ltheme-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
     <div id="nav-auth-btns" style="display: flex; align-items: center; gap: 10px;">
-      <a href="login.html" class="lbtn-login" data-t="nav_login">Log In</a>
-      <a href="register.html" class="lbtn-cta" data-t="nav_get_started">Get Started →</a>
+      <a href="/login" class="lbtn-login" data-t="nav_login">Log In</a>
+      <a href="/register" class="lbtn-cta" data-t="nav_get_started">Get Started →</a>
     </div>
     <div id="nav-user-btns" style="display: none; align-items: center; gap: 10px;">
-      <a href="dashboard.html" class="lbtn-cta" style="background: linear-gradient(135deg,#7C3AED,#EC4899);" data-t="nav_dashboard">Go to Dashboard</a>
+      <a href="/dashboard" class="lbtn-cta" style="background: linear-gradient(135deg,#7C3AED,#EC4899);" data-t="nav_dashboard">Go to Dashboard</a>
     </div>
   </div>
 </nav>
@@ -630,11 +618,11 @@
         </div>
       </div>
             <div class="lctas" id="hero-auth-btns">
-        <a href="register.html" class="lbtn-p"><span data-t="hero_cta1">🚀 Start Free Today</span></a>
+        <a href="/register" class="lbtn-p"><span data-t="hero_cta1">🚀 Start Free Today</span></a>
         <a href="#how-it-works" class="lbtn-s" data-t-title="hero_cta2_title"><span data-t="hero_cta2">▶ See How It Works</span></a>
       </div>
       <div class="lctas" id="hero-user-btns" style="display: none;">
-        <a href="dashboard.html" class="lbtn-p" style="background: linear-gradient(135deg,#7C3AED,#EC4899);"><span data-t="nav_dashboard">Go to Dashboard</span></a>
+        <a href="/dashboard" class="lbtn-p" style="background: linear-gradient(135deg,#7C3AED,#EC4899);"><span data-t="nav_dashboard">Go to Dashboard</span></a>
         <a href="#how-it-works" class="lbtn-s" data-t-title="hero_cta2_title"><span data-t="hero_cta2">▶ See How It Works</span></a>
       </div>
       <div class="ltrust">
@@ -1027,7 +1015,7 @@
         <div class="lprice-name">Sign-up Bonus</div>
         <div class="lprice-desc">Every new user gets 100 free credits just for registering.</div>
         <div class="lprice-price">FREE</div>
-        <a href="register.html" class="lprice-btn">Create Account</a>
+        <a href="/register" class="lprice-btn">Create Account</a>
       </div>
       <div class="lprice-card c2 fup" style="transition-delay:.1s">
         <div class="lprice-ico">📺</div>
@@ -1036,7 +1024,7 @@
         <div class="lprice-name">Watch &amp; Earn</div>
         <div class="lprice-desc">Watch a 30-second video ad anytime to earn 5 credits instantly.</div>
         <div class="lprice-price">FREE</div>
-        <a href="register.html" class="lprice-btn">Start Earning</a>
+        <a href="/register" class="lprice-btn">Start Earning</a>
       </div>
       <div class="lprice-card c3 fup" style="transition-delay:.2s">
         <div class="lprice-badge">⭐ Best Value</div>
@@ -1046,7 +1034,7 @@
         <div class="lprice-name">Credit Pack</div>
         <div class="lprice-desc">Best value. Never worry about running out of credits.</div>
         <div class="lprice-price">৳ 99</div>
-        <a href="register.html" class="lprice-btn">Buy Now</a>
+        <a href="/register" class="lprice-btn">Buy Now</a>
       </div>
       <div class="lprice-card c4 fup" style="transition-delay:.3s">
         <div class="lprice-ico">🎊</div>
@@ -1055,7 +1043,7 @@
         <div class="lprice-name">Occasion Gifts</div>
         <div class="lprice-desc">Free credit gifts on Eid, Puja, New Year and special occasions.</div>
         <div class="lprice-price">SURPRISE</div>
-        <a href="register.html" class="lprice-btn">Register Now</a>
+        <a href="/register" class="lprice-btn">Register Now</a>
       </div>
     </div>
     <div class="lcredits-tbl fup">
@@ -1148,9 +1136,9 @@
     </div>
     <div>
       <div class="lftr-col-t" data-t="ftr_account">Account</div>
-      <a class="lftr-lnk" href="login.html" data-t="nav_login">Log In</a>
-      <a class="lftr-lnk" href="register.html" data-t="ftr_register">Register Free</a>
-      <a class="lftr-lnk" href="forgot-password.html" data-t="ftr_forgot">Forgot Password</a>
+      <a class="lftr-lnk" href="/login" data-t="nav_login">Log In</a>
+      <a class="lftr-lnk" href="/register" data-t="ftr_register">Register Free</a>
+      <a class="lftr-lnk" href="/forgot-password" data-t="ftr_forgot">Forgot Password</a>
     </div>
     <div>
       <div class="lftr-col-t" data-t="ftr_legal">Legal</div>
@@ -1192,10 +1180,7 @@
   // Language pill sync
   document.querySelectorAll('.lpill button').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.lpill button[data-lang="' + btn.dataset.lang + '"]')
-        .forEach(b => b.classList.add('active'));
-      document.querySelectorAll('.lpill button:not([data-lang="' + btn.dataset.lang + '"])')
-        .forEach(b => b.classList.remove('active'));
+      // Logic handled by setLanguage() in app.js
     });
   });
 
