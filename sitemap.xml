@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://amarhisab.web.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://amarhisab.web.app/admin</loc><changefreq>monthly</changefreq><priority>0.2</priority></url>
   <url><loc>https://amarhisab.web.app/login</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://amarhisab.web.app/register</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://amarhisab.web.app/dashboard</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -9,5 +10,7 @@
   <url><loc>https://amarhisab.web.app/wallets</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://amarhisab.web.app/reports</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://amarhisab.web.app/budget</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://amarhisab.web.app/settings</loc><changefreq>weekly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://amarhisab.web.app/credits</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>
   <url><loc>https://amarhisab.web.app/forgot-password</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
 </urlset>
