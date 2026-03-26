@@ -97,6 +97,16 @@ const LANG = {
     // Nav
     nav_home: 'Home', nav_features: 'Features', nav_pricing: 'Pricing', nav_contact: 'Contact',
     nav_login: 'Log In', nav_register: 'Get Started',
+    // Sidebar nav labels
+    nav_main: 'Main', nav_analytics: 'Analytics', nav_account: 'Account',
+    nav_dashboard: 'Dashboard', nav_wallets: 'Wallets', nav_income: 'Income',
+    nav_expense: 'Expenses', nav_reports: 'Reports', nav_budget: 'Budget',
+    nav_settings: 'Settings', nav_credits_p: 'Credits', nav_admin: 'Admin Panel',
+    nav_logout: 'Log Out',
+    nav_login_back: 'Back to Login',
+    // Sidebar credits section
+    sidebar_credits_label: 'Credit Points', sidebar_credits_pts: 'pts',
+    sidebar_credits_sub: 'Watch ads to earn more',
     // Hero
     hero_badge: 'Double-Entry Accounting System',
     hero_title: 'Hisab', hero_title_bn: 'হিসাব — আগামীর সঞ্চয়ের জন্য',
@@ -178,6 +188,12 @@ const LANG = {
     bgt_vs_chart:'Budget vs Actual Chart', bgt_set_monthly:'✏️ Set Monthly Budget',
     // Reports
     rpt_page_title:'📊 Reports & Analytics', rpt_download_btn:'⬇ Download (5 pts)',
+    rpt_all_cats: 'All Categories',
+    // Budget AI
+    bgt_accept_btn: '✅ Accept AI Suggestion', bgt_ai_loading: '🤖 AI is analysing...',
+    bgt_ai_title: '🤖 AI Budget Suggestion', bgt_set_manual_btn: '✏️ Set Manually',
+    // Settings extra
+    set_cred_pts: 'Credit Points',
     rpt_spending_dist:'Spending Distribution', rpt_budget_actual:'Budget vs Actual',
     // Credits
     crd_earn_title:'💚 Earn Credits', crd_use_title:'❤️ Use Credits',
@@ -298,6 +314,16 @@ const LANG = {
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
     nav_login: 'লগ ইন', nav_register: 'শুরু করুন',
+    // Sidebar nav labels
+    nav_main: 'মূল মেনু', nav_analytics: 'বিশ্লেষণ', nav_account: 'অ্যাকাউন্ট',
+    nav_dashboard: 'ড্যাশবোর্ড', nav_wallets: 'ওয়ালেট', nav_income: 'আয়',
+    nav_expense: 'খরচ', nav_reports: 'রিপোর্ট', nav_budget: 'বাজেট',
+    nav_settings: 'সেটিংস', nav_credits_p: 'ক্রেডিট', nav_admin: 'অ্যাডমিন প্যানেল',
+    nav_logout: 'লগ আউট',
+    nav_login_back: 'লগইনে ফিরুন',
+    // Sidebar credits section
+    sidebar_credits_label: 'ক্রেডিট পয়েন্ট', sidebar_credits_pts: 'পয়েন্ট',
+    sidebar_credits_sub: 'বিজ্ঞাপন দেখে আরও অর্জন করুন',
     hero_badge: 'দ্বৈত প্রবিষ্টি হিসাব ব্যবস্থা',
     hero_title: 'হিসাব', hero_title_bn: 'Hisab — For Future Savings',
     hero_desc: 'প্রতিটি টাকার হিসাব রাখুন। স্মার্টভাবে সঞ্চয় করুন। আগামীর জন্য গড়ুন। বাংলাদেশের জন্য তৈরি পেশাদার হিসাব ব্যবস্থা।',
@@ -368,6 +394,12 @@ const LANG = {
     bgt_vs_chart:'বাজেট বনাম প্রকৃত চার্ট', bgt_set_monthly:'✏️ মাসিক বাজেট নির্ধারণ করুন',
     // Reports
     rpt_page_title:'📊 রিপোর্ট ও বিশ্লেষণ', rpt_download_btn:'⬇ ডাউনলোড (৫ পয়েন্ট)',
+    rpt_all_cats: 'সব ক্যাটাগরি',
+    // Budget AI
+    bgt_accept_btn: '✅ AI পরামর্শ গ্রহণ করুন', bgt_ai_loading: '🤖 AI বিশ্লেষণ করছে...',
+    bgt_ai_title: '🤖 AI বাজেট পরামর্শ', bgt_set_manual_btn: '✏️ নিজে নির্ধারণ করুন',
+    // Settings extra
+    set_cred_pts: 'ক্রেডিট পয়েন্ট',
     rpt_spending_dist:'খরচের বিবরণ', rpt_budget_actual:'বাজেট বনাম প্রকৃত',
     // Credits
     crd_earn_title:'💚 ক্রেডিট অর্জন করুন', crd_use_title:'❤️ ক্রেডিট ব্যবহার করুন',
@@ -757,22 +789,36 @@ function setLanguage(lang) {
   State.lang = lang;
   localStorage.setItem('hisab_lang', lang);
 
+  // 0. Set html lang attribute
+  document.documentElement.setAttribute('lang', lang === 'bn' ? 'bn' : 'en');
+
   // 1. Update data-t elements
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
     if (LANG[lang] && LANG[lang][key]) el.textContent = LANG[lang][key];
+    else if (LANG['en'] && LANG['en'][key]) el.textContent = LANG['en'][key];
   });
 
   // 2. Update data-t-ph placeholder elements
   document.querySelectorAll('[data-t-ph]').forEach(el => {
     const key = el.getAttribute('data-t-ph');
     if (LANG[lang] && LANG[lang][key]) el.placeholder = LANG[lang][key];
+    else if (LANG['en'] && LANG['en'][key]) el.placeholder = LANG['en'][key];
   });
 
   // 3. Active button highlight
   document.querySelectorAll('.lang-btn-switch').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
+
+  // 3b. Update sidebar credits sub-label if not privileged
+  if (!isPrivilegedUser()) {
+    document.querySelectorAll('.sidebar-credits-sub').forEach(el => {
+      if (!el.hasAttribute('data-t')) {
+        el.textContent = lang === 'bn' ? 'বিজ্ঞাপন দেখে আরও অর্জন করুন' : 'Watch ads to earn more';
+      }
+    });
+  }
 
   // 4. Re-render all dynamic components that use State.lang
   [
