@@ -49,6 +49,7 @@
       <div class="sidebar-section-label" data-t="nav_account">Account</div>
       <a class="sidebar-link active" href="settings.html"><span class="nav-icon">⚙️</span> <span data-t="nav_settings">Settings</span></a>
       <a class="sidebar-link" href="credits.html"><span class="nav-icon">💳</span> <span data-t="nav_credits_p">Credits</span></a>
+      <a class="sidebar-link" onclick="showAppWorkingPopup()" style="cursor:pointer;"><span class="nav-icon">📱</span> <span data-t="app_working_title">Mobile App</span> <span class="badge-new">Soon</span></a>
       <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
     <div class="sidebar-credits">
@@ -920,18 +921,19 @@ function runBackup() {
   const bar   = document.getElementById('backup-progress-bar');
   const label = document.getElementById('backup-progress-label');
   const pct   = document.getElementById('backup-progress-pct');
+  const bn    = (typeof State !== 'undefined' && State.lang === 'bn');
   wrap.style.display = 'block';
 
-  const prefs = JSON.parse(localStorage.getItem('hisab_backup_prefs') || '{}');
-  const format = prefs.format || 'excel'; // Default to excel
+  const prefs = JSON.parse(localStorage.getItem('hisab_backup_prefs') || '{"format":"excel"}');
+  const format = prefs.format || 'excel';
 
   const steps = [
-    { p: 15, msg: 'Collecting transactions...' },
-    { p: 35, msg: 'Packing wallet data...' },
-    { p: 55, msg: `Generating ${format.toUpperCase()} file...` },
-    { p: 75, msg: 'Uploading to Google Drive...' },
-    { p: 90, msg: 'Verifying backup...' },
-    { p: 100, msg: 'Backup complete!' },
+    { p: 15, msg: bn ? 'লেনদেন সংগ্রহ করা হচ্ছে...' : 'Collecting transactions...' },
+    { p: 35, msg: bn ? 'ওয়ালেট ডাটা প্যাক করা হচ্ছে...' : 'Packing wallet data...' },
+    { p: 55, msg: bn ? `${format.toUpperCase()} ফাইল তৈরি করা হচ্ছে...` : `Generating ${format.toUpperCase()} file...` },
+    { p: 75, msg: bn ? 'Google Drive-এ আপলোড করা হচ্ছে...' : 'Uploading to Google Drive...' },
+    { p: 90, msg: bn ? 'ব্যাকআপ যাচাই করা হচ্ছে...' : 'Verifying backup...' },
+    { p: 100, msg: bn ? 'ব্যাকআপ সম্পন্ন!' : 'Backup complete!' },
   ];
 
   let i = 0;
@@ -943,7 +945,7 @@ function runBackup() {
       const backupRecord = {
         date: new Date().toLocaleString(),
         timestamp: Date.now(),
-        size: (Math.random() * 50 + 10).toFixed(1) + ' KB', // Simulated size
+        size: (Math.random() * 2 + 0.5).toFixed(2) + ' MB',
         status: 'success',
         fileName: `Hisab_Backup_${new Date().toISOString().split('T')[0]}${ext}`,
       };
@@ -954,55 +956,68 @@ function runBackup() {
       setTimeout(() => { wrap.style.display = 'none'; bar.style.width = '0%'; }, 1500);
       updateLastBackupDisplay();
       renderBackupHistory();
-      showToast('✅', 'Backup Complete!', `Saved to Google Drive as ${backupRecord.fileName}`);
+      showToast('✅', bn ? 'ব্যাকআপ সম্পন্ন!' : 'Backup Complete!', 
+        bn ? `Google Drive-এ ${backupRecord.fileName} হিসেবে সংরক্ষিত হয়েছে।` : `Saved to Google Drive as ${backupRecord.fileName}`);
       return;
     }
     bar.style.width   = steps[i].p + '%';
     pct.textContent   = steps[i].p + '%';
     label.textContent = steps[i].msg;
     i++;
-  }, 500);
+  }, 600);
 }
 
 function restoreFromDrive() {
   const state = getGDriveState();
   if (!state || !state.connected) {
-    showToast('⚠️', 'Not Connected', 'Please connect Google Drive first.'); return;
+    const bn = (typeof State !== 'undefined' && State.lang === 'bn');
+    showToast('⚠️', bn ? 'সংযুক্ত নয়' : 'Not Connected', bn ? 'অনুগ্রহ করে প্রথমে Google Drive সংযুক্ত করুন।' : 'Please connect Google Drive first.'); return;
   }
   const history = JSON.parse(localStorage.getItem('hisab_backup_history') || '[]');
   if (!history.length) {
-    showToast('ℹ️', 'No Backups Found', 'No backup files found. Run a backup first.'); return;
+    const bn = (typeof State !== 'undefined' && State.lang === 'bn');
+    showToast('ℹ️', bn ? 'কোনো ব্যাকআপ পাওয়া যায়নি' : 'No Backups Found', bn ? 'কোনো ব্যাকআপ ফাইল নেই। প্রথমে একটি ব্যাকআপ নিন।' : 'No backup files found. Run a backup first.'); return;
   }
 
   // Show restore picker modal
+  const bn = (typeof State !== 'undefined' && State.lang === 'bn');
   const modal = document.createElement('div');
   modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
   modal.innerHTML = `
     <div style="background:var(--bg-primary);border-radius:16px;padding:28px;width:420px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
-        <div style="font-size:17px;font-weight:700;color:var(--text-primary);">⬇️ Restore from Drive</div>
+        <div style="font-size:17px;font-weight:700;color:var(--text-primary);">${bn ? '⬇️ ড্রাইভ থেকে রিস্টোর' : '⬇️ Restore from Drive'}</div>
         <button onclick="this.closest('div[style*=position]').remove()" style="background:none;border:none;font-size:22px;color:var(--text-muted);cursor:pointer;">×</button>
       </div>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Choose a backup to restore. This will overwrite your current data.</p>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">${bn ? 'রিস্টোর করার জন্য একটি ব্যাকআপ বেছে নিন। এটি আপনার বর্তমান ডাটা মুছে ফেলবে।' : 'Choose a backup to restore. This will overwrite your current data.'}</p>
       ${history.map((b, idx) => `
         <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;">
           <div>
             <div style="font-size:13px;font-weight:600;color:var(--text-primary);">${b.fileName}</div>
             <div style="font-size:12px;color:var(--text-muted);">${b.date} · ${b.size}</div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="doRestore(${idx}, this)">Restore</button>
+          <button class="btn btn-primary btn-sm" onclick="doRestore(${idx}, this)">${bn ? 'রিস্টোর' : 'Restore'}</button>
         </div>`).join('')}
     </div>`;
   document.body.appendChild(modal);
 }
 
 function doRestore(idx, btn) {
-  if (!confirm('Restore this backup? Your current data will be replaced.')) return;
-  btn.textContent = 'Restoring...'; btn.disabled = true;
+  const bn = (typeof State !== 'undefined' && State.lang === 'bn');
+  const msg = bn ? 'এই ব্যাকআপটি কি রিস্টোর করতে চান? আপনার বর্তমান ডাটা মুছে যাবে।' : 'Restore this backup? Your current data will be replaced.';
+  if (!confirm(msg)) return;
+  
+  btn.textContent = bn ? 'রিস্টোর হচ্ছে...' : 'Restoring...'; 
+  btn.disabled = true;
+  
   setTimeout(() => {
     btn.closest('div[style*="position:fixed"]').remove();
-    showToast('✅', 'Restore Complete!', 'Your data has been restored from the backup.');
-  }, 1500);
+    showToast('✅', bn ? 'রিস্টোর সফল!' : 'Restore Complete!', 
+      bn ? 'আপনার ডাটা সফলভাবে রিস্টোর করা হয়েছে।' : 'Your data has been restored from the backup.');
+    
+    // In a real app, we would update localStorage and reload
+    setTimeout(() => window.location.reload(), 1500);
+  }, 2000);
 }
 
 function toggleAutoBackup(btn) {
