@@ -197,7 +197,31 @@ body { -webkit-text-size-adjust: 100%; }
 
   /* Reports charts */
   .chart-wrap { overflow-x: auto; }
+}
 
+/* ══════════════════════════════════════════
+   SMALL MOBILE (320px - 375px)
+══════════════════════════════════════════ */
+@media (max-width: 375px) {
+  .stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .stat-value { font-size: 24px !important; }
+  .topbar-title { font-size: 14px !important; }
+  .btn { padding: 10px 16px !important; font-size: 13px !important; }
+}
+
+/* ══════════════════════════════════════════
+   LAPTOP & DESKTOP (1025px+)
+══════════════════════════════════════════ */
+@media (min-width: 1440px) {
+  .page-body {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .sidebar { width: 280px !important; }
+  .main-content { margin-left: 280px !important; }
+}
   /* Lang switch */
   .lang-switch { gap: 4px; }
   .lang-btn-switch { padding: 4px 10px !important; font-size: 12px !important; }
