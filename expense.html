@@ -56,7 +56,7 @@
 
   <div class="main-content">
     <div class="topbar">
-      <div class="topbar-title">💸 Expenses</div>
+      <div class="topbar-title">💸 <span data-t="nav_expense">Expenses</span></div>
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
@@ -138,7 +138,7 @@
       <button class="modal-close" onclick="closeModal('add-expense-modal')">×</button>
     </div>
     <div class="dual-warning show">
-      <span>⚠️</span><span>Every expense entry records money paid out from a wallet to an expense category.</span>
+      <span>⚠️</span><span data-t="exp_double_entry_note">Every expense entry records money paid out from a wallet to an expense category.</span>
     </div>
     <div class="form-group">
       <label class="form-label" data-t="txn_amount">Amount (৳)</label>
@@ -146,11 +146,11 @@
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">Wallet (paid from)</label>
+        <label class="form-label" data-t="txn_wallet_from">Wallet (paid from)</label>
         <select class="form-input" id="exp-wallet"></select>
       </div>
       <div class="form-group">
-        <label class="form-label">Expense Category</label>
+        <label class="form-label" data-t="txn_category">Expense Category</label>
         <select class="form-input" id="exp-category"></select>
       </div>
     </div>
@@ -172,11 +172,11 @@
 <div class="modal-backdrop" id="edit-expense-modal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">✏️ Edit Expense</div>
+      <div class="modal-title"><span data-t="exp_edit_title">✏️ Edit Expense</span></div>
       <button class="modal-close" onclick="closeModal('edit-expense-modal')">×</button>
     </div>
     <div class="dual-warning show">
-      <span>⚠️</span><span>Every expense entry records money paid out from a wallet to an expense category.</span>
+      <span>⚠️</span><span data-t="exp_double_entry_note">Every expense entry records money paid out from a wallet to an expense category.</span>
     </div>
     <div class="form-group">
       <label class="form-label">Amount (৳)</label>
@@ -188,7 +188,7 @@
         <select class="form-input" id="edit-exp-wallet"></select>
       </div>
       <div class="form-group">
-        <label class="form-label">Expense Category</label>
+        <label class="form-label" data-t="txn_category">Expense Category</label>
         <select class="form-input" id="edit-exp-category"></select>
       </div>
     </div>

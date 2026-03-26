@@ -56,7 +56,7 @@
 
   <div class="main-content">
     <div class="topbar">
-      <div class="topbar-title">💰 Income</div>
+      <div class="topbar-title">💰 <span data-t="nav_income">Income</span></div>
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
@@ -143,7 +143,7 @@
       <button class="modal-close" onclick="closeModal('add-income-modal')">×</button>
     </div>
     <div class="dual-warning show" style="background:var(--green-50);border-color:#A8D77F;color:var(--green-600);">
-      <span>ℹ️</span><span>Every income entry records money received into a wallet from a source.</span>
+      <span>ℹ️</span><span data-t="inc_double_entry_note">Every income entry records money received into a wallet from a source.</span>
     </div>
     <div class="form-group">
       <label class="form-label" data-t="txn_amount">Amount (৳)</label>
@@ -177,11 +177,11 @@
 <div class="modal-backdrop" id="edit-income-modal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">✏️ Edit Income</div>
+      <div class="modal-title"><span data-t="inc_edit_title">✏️ Edit Income</span></div>
       <button class="modal-close" onclick="closeModal('edit-income-modal')">×</button>
     </div>
     <div class="dual-warning show" style="background:var(--green-50);border-color:#A8D77F;color:var(--green-600);">
-      <span>ℹ️</span><span>Every income entry records money received into a wallet from a source.</span>
+      <span>ℹ️</span><span data-t="inc_double_entry_note">Every income entry records money received into a wallet from a source.</span>
     </div>
     <div class="form-group">
       <label class="form-label" data-t="txn_amount">Amount (৳)</label>

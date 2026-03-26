@@ -100,8 +100,8 @@
             </div>
           </div>
           <div style="display:flex;gap:10px;">
-            <button class="btn btn-primary btn-sm" onclick="acceptBudget()">Accept Suggestion</button>
-            <button class="btn btn-outline btn-sm" onclick="openModal('custom-budget-modal')">Set Custom</button>
+            <button class="btn btn-primary btn-sm" onclick="acceptBudget()" data-t="bgt_accept_btn">Accept Suggestion</button>
+            <button class="btn btn-outline btn-sm" onclick="openModal('custom-budget-modal')" data-t="bgt_set_manual_btn">Set Custom</button>
             <button class="btn btn-sm" style="color:var(--text-muted);background:none;border:none;" onclick="this.closest('#budget-banner').style.display='none'">Dismiss</button>
           </div>
         </div>

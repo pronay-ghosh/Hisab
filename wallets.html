@@ -56,7 +56,7 @@
 
   <div class="main-content">
     <div class="topbar">
-      <div class="topbar-title">👛 Wallets</div>
+      <div class="topbar-title">👛 <span data-t="nav_wallets">Wallets</span></div>
       <div class="topbar-actions">
         <span id="online-indicator">🟢</span>
         <div class="lang-switch">
@@ -114,12 +114,12 @@
 <div class="modal-backdrop" id="add-wallet-modal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">Add New Wallet</div>
+      <div class="modal-title" data-t="wlt_add_wallet_title">Add New Wallet</div>
       <button class="modal-close" onclick="closeModal('add-wallet-modal')">×</button>
     </div>
     <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Adding a custom wallet costs <strong>10 credits</strong>.</p>
     <div class="form-group">
-      <label class="form-label">Wallet Type</label>
+      <label class="form-label" data-t="wlt_type_label">Wallet Type</label>
       <select class="form-input" id="new-wallet-type" onchange="onWalletTypeChange(this)">
         <option value="cash">💵 Cash</option>
         <option value="bank">🏦 Bank Account</option>
@@ -806,7 +806,7 @@ window.applyLang = function(lang) {
     </div>
     <input type="hidden" id="edit-wallet-id" />
     <div class="form-group">
-      <label class="form-label">Wallet Type</label>
+      <label class="form-label" data-t="wlt_type_label">Wallet Type</label>
       <select class="form-input" id="edit-wallet-type">
         <option value="cash">💵 Cash</option>
         <option value="bank">🏦 Bank Account</option>

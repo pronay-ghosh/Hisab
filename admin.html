@@ -54,20 +54,20 @@
       <div><div class="sidebar-username">Administrator</div><div class="sidebar-handle">@admin</div></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="sidebar-section-label">Admin</div>
+      <div class="sidebar-section-label" data-t="admin_title">Admin</div>
       <a class="sidebar-link active" href="admin.html"><span class="nav-icon">🛡️</span> Dashboard</a>
-      <a class="sidebar-link" href="#" onclick="showAdminPanel('users')"><span class="nav-icon">👥</span> Users</a>
-      <a class="sidebar-link" href="#" onclick="showAdminPanel('transactions')"><span class="nav-icon">📋</span> All Transactions</a>
-      <a class="sidebar-link" href="#" onclick="showAdminPanel('notices')"><span class="nav-icon">📢</span> Send Notice</a>
-      <a class="sidebar-link" href="#" onclick="showAdminPanel('rewards')"><span class="nav-icon">🎁</span> Gift Credits</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('users')"><span class="nav-icon">👥</span> <span data-t="admin_users">Users</span></a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('transactions')"><span class="nav-icon">📋</span> <span data-t="tbl_type">All Transactions</span></a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('notices')"><span class="nav-icon">📢</span> <span data-t="admin_announcements">Send Notice</span></a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('rewards')"><span class="nav-icon">🎁</span> <span data-t="admin_gift_credits">Gift Credits</span></a>
       <a class="sidebar-link" href="#" onclick="showAdminPanel('sellcredits')"><span class="nav-icon">💰</span> Sell Credits</a>
       <a class="sidebar-link" href="#" onclick="showAdminPanel('editors')"><span class="nav-icon">✏️</span> Editors</a>
       <a class="sidebar-link" href="#" onclick="showAdminPanel('activity')"><span class="nav-icon">📜</span> User Activity</a>
-      <a class="sidebar-link" href="#" onclick="showAdminPanel('categories')"><span class="nav-icon">📂</span> Categories</a>
+      <a class="sidebar-link" href="#" onclick="showAdminPanel('categories')"><span class="nav-icon">📂</span> <span data-t="admin_categories">Categories</span></a>
       <a class="sidebar-link" href="#" onclick="showAdminPanel('backup')"><span class="nav-icon">💾</span> Backup</a>
       <div class="sidebar-section-label">Navigate</div>
-      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> User Dashboard</a>
-      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> Log Out</a>
+      <a class="sidebar-link" href="dashboard.html"><span class="nav-icon">🏠</span> <span data-t="nav_dashboard">User Dashboard</span></a>
+      <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
   </aside>
 
@@ -78,6 +78,10 @@
         <div class="topbar-title" id="admin-panel-title">Admin Dashboard</div>
       </div>
       <div class="topbar-actions">
+        <div class="lang-switch">
+          <button class="lang-btn-switch active" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn-switch" data-lang="bn" onclick="setLanguage('bn')">বাং</button>
+        </div>
         <button class="topbar-icon-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
       </div>
     </div>
@@ -89,22 +93,22 @@
         <div class="stat-grid" style="margin-bottom:24px;">
           <div class="stat-card">
             <div class="stat-icon" style="background:var(--blue-50);">👥</div>
-            <div class="stat-label">Total Users</div>
+            <div class="stat-label" data-t="admin_all_users">Total Users</div>
             <div class="stat-value" id="total-users">0</div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="background:var(--green-50);">✅</div>
-            <div class="stat-label">Active Users</div>
+            <div class="stat-label" data-t="admin_active_users">Active Users</div>
             <div class="stat-value" id="active-users">0</div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="background:var(--amber-50);">😴</div>
-            <div class="stat-label">Inactive (7+ days)</div>
+            <div class="stat-label" data-t="admin_inactive_users">Inactive (7+ days)</div>
             <div class="stat-value" id="inactive-users">0</div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="background:var(--teal-50);">📊</div>
-            <div class="stat-label">Total Transactions</div>
+            <div class="stat-label" data-t="admin_total_txns">Total Transactions</div>
             <div class="stat-value" id="total-txns">0</div>
           </div>
         </div>
@@ -1571,7 +1575,7 @@ function filterActivityLog() {
     </div>
     <div class="stat-card">
       <div class="stat-icon" style="background:var(--green-50);">👥</div>
-      <div class="stat-label">Active Users</div>
+      <div class="stat-label" data-t="admin_active_users">Active Users</div>
       <div class="stat-value">${uniqueUsers}</div>
     </div>
     <div class="stat-card">
@@ -2021,5 +2025,12 @@ async function adminRemoveGlobalWallet(walletId) {
 
 </script>
 
+<script>
+// Admin page language init
+document.addEventListener('DOMContentLoaded', function() {
+  const saved = localStorage.getItem('hisab_lang') || 'en';
+  if (saved === 'bn') setLanguage('bn');
+});
+</script>
 </body>
 </html>
