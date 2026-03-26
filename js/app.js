@@ -52,13 +52,15 @@ function renderLogos() {
   if (logos.length === 0) return;
 
   const logoHTML = {};
-  const types = ['nav', 'auth', 'sidebar', 'footer'];
+  const types = ['nav', 'auth', 'sidebar', 'footer', 'hero'];
 
   types.forEach(type => {
     if (LOGO.imageUrl) {
       // Image logo HTML
       if (type === 'nav') {
         logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:36px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;" />`;
+      } else if (type === 'hero') {
+        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 6px 24px rgba(30,136,229,0.45)) brightness(1.1);mix-blend-mode:screen;" />`;
       } else if (type === 'auth') {
         logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:72px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin:0 auto 16px;" />`;
       } else if (type === 'sidebar') {
@@ -69,13 +71,28 @@ function renderLogos() {
     } else {
       // Text/Icon logo HTML
       if (type === 'nav') {
-        logoHTML[type] = `<div style="width:40px;height:40px;background:${LOGO.markBg};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:white;font-family:'Playfair Display',serif;box-shadow:0 4px 12px rgba(30,136,229,0.4);">${LOGO.markText}</div><div><strong style="font-size:19px;font-weight:700;color:#fff;display:block;line-height:1.2;">${LOGO.appName}</strong><span style="font-size:11px;color:rgba(255,255,255,0.45);">${LOGO.appSub}</span></div>`;
+        logoHTML[type] = `
+          <div style="width:38px;height:38px;background:${LOGO.markBg};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:white;font-family:'Playfair Display',serif;box-shadow:0 4px 12px rgba(30,136,229,0.4);flex-shrink:0;">${LOGO.markText}</div>
+          <div style="line-height:1.2;">
+            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:800;line-height:1.1;">
+              <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
+              <span style="color:rgba(255,255,255,0.28);font-weight:300;font-size:0.55em;vertical-align:middle;">—</span>
+              <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
+            </div>
+            <div style="font-size:10px;margin-top:1px;white-space:nowrap;">
+              <span style="font-style:italic;background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য</span>
+              <span style="color:rgba(255,255,255,0.22);margin:0 3px;">—</span>
+              <span style="font-style:italic;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;font-size:0.85em;background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">For Future Savings</span>
+            </div>
+          </div>`;
+      } else if (type === 'hero') {
+        logoHTML[type] = `<div style="width:110px;height:110px;background:linear-gradient(135deg,#1E88E5,#00E5CC);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:60px;font-weight:700;color:white;font-family:'Playfair Display',serif;box-shadow:0 12px 36px rgba(30,136,229,0.5);">${LOGO.markText}</div>`;
       } else if (type === 'auth') {
         logoHTML[type] = `<div style="width:72px;height:72px;background:rgba(255,255,255,0.15);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:white;font-family:'Playfair Display',serif;margin:0 auto 16px;border:1px solid rgba(255,255,255,0.2);">${LOGO.markText}</div>`;
       } else if (type === 'sidebar') {
-        logoHTML[type] = `<div style="font-size:22px;font-weight:700;color:white;">${LOGO.appName}</div><div style="font-size:11px;color:rgba(181,212,244,0.6);margin-top:2px;">${LOGO.appSub} — For Future Savings</div>`;
+        logoHTML[type] = `<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;background:${LOGO.markBg};border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white;font-family:'Playfair Display',serif;">${LOGO.markText}</div><div><div style="font-size:18px;font-weight:700;color:white;">${LOGO.appName}</div><div style="font-size:10px;color:rgba(181,212,244,0.6);margin-top:1px;">${LOGO.appSub}</div></div></div>`;
       } else if (type === 'footer') {
-        logoHTML[type] = `${LOGO.appName} — ${LOGO.appSub}`;
+        logoHTML[type] = `<div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;background:${LOGO.markBg};border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;font-family:'Playfair Display',serif;">${LOGO.markText}</div><div style="font-size:14px;color:rgba(255,255,255,0.8);">${LOGO.appName} — ${LOGO.appSub}</div></div>`;
       }
     }
   });
@@ -85,6 +102,11 @@ function renderLogos() {
     if (logoHTML[type]) el.innerHTML = logoHTML[type];
   });
 }
+
+// ── INITIALIZE LOGOS ──
+document.addEventListener('DOMContentLoaded', () => {
+  renderLogos();
+});
 
 // ── LANGUAGE STRINGS ──────────────────────
 const LANG = {
@@ -868,39 +890,59 @@ function applyTheme(theme) {
 }
 
 function toggleTheme() {
-  applyTheme(State.theme === 'dark' ? 'light' : 'dark');
+  const newTheme = State.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(newTheme);
+  
+  // Smooth icon transition
   document.querySelectorAll('.theme-toggle-icon').forEach(el => {
-    el.textContent = State.theme === 'dark' ? '☀️' : '🌙';
+    el.style.transform = 'rotate(360deg) scale(0)';
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      el.style.transform = 'rotate(0deg) scale(1)';
+      el.style.opacity = '1';
+    }, 200);
   });
 }
 
 // ── LANGUAGE ──────────────────────────────
 function setLanguage(lang) {
+  if (State.lang === lang && document.documentElement.getAttribute('lang') === lang) return;
+
   State.lang = lang;
   localStorage.setItem('hisab_lang', lang);
 
   // 0. Set html lang attribute
   document.documentElement.setAttribute('lang', lang === 'bn' ? 'bn' : 'en');
 
+  // Add a temporary class to body for smooth transition if needed
+  document.body.classList.add('lang-changing');
+
   // 1. Update data-t elements
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
-    if (LANG[lang] && LANG[lang][key]) el.textContent = LANG[lang][key];
-    else if (LANG['en'] && LANG['en'][key]) el.textContent = LANG['en'][key];
+    const translation = (LANG[lang] && LANG[lang][key]) || (LANG['en'] && LANG['en'][key]);
+    if (translation && el.textContent !== translation) {
+      el.textContent = translation;
+    }
   });
 
   // 2. Update data-t-ph placeholder elements
   document.querySelectorAll('[data-t-ph]').forEach(el => {
     const key = el.getAttribute('data-t-ph');
-    if (LANG[lang] && LANG[lang][key]) el.placeholder = LANG[lang][key];
-    else if (LANG['en'] && LANG['en'][key]) el.placeholder = LANG['en'][key];
+    const translation = (LANG[lang] && LANG[lang][key]) || (LANG['en'] && LANG['en'][key]);
+    if (translation && el.placeholder !== translation) {
+      el.placeholder = translation;
+    }
   });
 
   // 3. Update data-t-title title elements
   document.querySelectorAll('[data-t-title]').forEach(el => {
     const key = el.getAttribute('data-t-title');
-    if (LANG[lang] && LANG[lang][key]) el.title = LANG[lang][key];
-    else if (LANG['en'] && LANG['en'][key]) el.title = LANG['en'][key];
+    const translation = (LANG[lang] && LANG[lang][key]) || (LANG['en'] && LANG['en'][key]);
+    if (translation && el.title !== translation) {
+      el.title = translation;
+    }
   });
 
   // 4. Active button highlight
@@ -912,13 +954,15 @@ function setLanguage(lang) {
   if (!isPrivilegedUser()) {
     document.querySelectorAll('.sidebar-credits-sub').forEach(el => {
       if (!el.hasAttribute('data-t')) {
-        el.textContent = lang === 'bn' ? 'বিজ্ঞাপন দেখে আরও অর্জন করুন' : 'Watch ads to earn more';
+        const subText = lang === 'bn' ? 'বিজ্ঞাপন দেখে আরও অর্জন করুন' : 'Watch ads to earn more';
+        if (el.textContent !== subText) el.textContent = subText;
       }
     });
   }
 
   // 4. Re-render all dynamic components that use State.lang
-  [
+  // Only call if the function exists to avoid errors
+  const renderFunctions = [
     'renderWallets','renderTxnTable','renderStats','renderCatCards',
     'renderIncomeBars','renderIncomeTrend','renderIncomeTable',
     'renderExpStats','renderExpCatCards','renderExpBars','renderExpTrend','renderExpenseTable',
@@ -927,10 +971,21 @@ function setLanguage(lang) {
     'renderAll','renderYearlySummary',
     'renderCreditHistory','renderAllTxns','renderUsersTable',
     'renderSalesHistory','renderAdminCategories',
-  ].forEach(fn => { if (typeof window[fn] === 'function') window[fn](); });
+  ];
 
-  // 5. Call page-specific applyLang
-  if (typeof window.applyLang === 'function') window.applyLang(lang);
+  // Performance optimization: Debounce multiple re-renders
+  if (window._langTimer) clearTimeout(window._langTimer);
+  window._langTimer = setTimeout(() => {
+    renderFunctions.forEach(fn => { 
+      if (typeof window[fn] === 'function') {
+        try { window[fn](); } catch(e) { console.warn(`Failed to re-render ${fn}:`, e); }
+      } 
+    });
+    // 5. Call page-specific applyLang
+    if (typeof window.applyLang === 'function') window.applyLang(lang);
+    
+    document.body.classList.remove('lang-changing');
+  }, 100);
 }
 
 // ── USERNAME GENERATOR ────────────────────
@@ -1494,7 +1549,7 @@ function logoutUser() {
   if (State.user) logActivity(State.user.username, 'logout', 'Logged out');
   State.user = null;
   localStorage.removeItem('hisab_user');
-  window.location.href = 'index.html';
+  window.location.href = '/';
 }
 
 // ── APP WORKING POPUP ─────────────────────
@@ -1537,7 +1592,7 @@ function isLoggedIn() {
 
 function requireLogin() {
   if (!isLoggedIn()) {
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return false;
   }
   // Check session expiry — 30 days if "keep me logged in", else 7 days
@@ -1810,7 +1865,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'dashboard', 'budget', 'expense', 'income',
     'reports', 'settings', 'wallets', 'credits', 'admin'
   ];
-  const path = window.location.pathname.split('/').pop().replace('.html', '');
+  const path = window.location.pathname.replace(/\/$/, '').split('/').pop().replace('.html', '');
   if (protectedPages.includes(path)) {
     // DOM ready হওয়ার পরে check করো
     if (document.readyState === 'loading') {
