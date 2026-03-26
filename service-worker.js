@@ -39,6 +39,12 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // Always fetch fresh content for HTML pages to avoid auth/state issues
+  if (event.request.mode === 'navigate') {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // skip non-GET requests and firestore/firebase related calls
   if (event.request.method !== 'GET' || event.request.url.includes('firestore') || event.request.url.includes('firebase')) {
     return;
@@ -47,12 +53,6 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
       if (cachedResponse) {
-        // Return cached response but fetch an update in the background (stale-while-revalidate)
-        fetch(event.request).then(networkResponse => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, networkResponse));
-          }
-        }).catch(() => {});
         return cachedResponse;
       }
 
