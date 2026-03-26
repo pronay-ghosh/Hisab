@@ -907,12 +907,11 @@ function toggleTheme() {
 
 // ── LANGUAGE ──────────────────────────────
 function setLanguage(lang) {
-  if (State.lang === lang && document.documentElement.getAttribute('lang') === lang) return;
-
+  // Always update global State and localStorage
   State.lang = lang;
   localStorage.setItem('hisab_lang', lang);
 
-  // 0. Set html lang attribute
+  // Set html lang attribute
   document.documentElement.setAttribute('lang', lang === 'bn' ? 'bn' : 'en');
 
   // Add a temporary class to body for smooth transition if needed
@@ -922,7 +921,7 @@ function setLanguage(lang) {
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
     const translation = (LANG[lang] && LANG[lang][key]) || (LANG['en'] && LANG['en'][key]);
-    if (translation && el.textContent !== translation) {
+    if (translation) {
       el.textContent = translation;
     }
   });
@@ -931,7 +930,7 @@ function setLanguage(lang) {
   document.querySelectorAll('[data-t-ph]').forEach(el => {
     const key = el.getAttribute('data-t-ph');
     const translation = (LANG[lang] && LANG[lang][key]) || (LANG['en'] && LANG['en'][key]);
-    if (translation && el.placeholder !== translation) {
+    if (translation) {
       el.placeholder = translation;
     }
   });
@@ -940,7 +939,7 @@ function setLanguage(lang) {
   document.querySelectorAll('[data-t-title]').forEach(el => {
     const key = el.getAttribute('data-t-title');
     const translation = (LANG[lang] && LANG[lang][key]) || (LANG['en'] && LANG['en'][key]);
-    if (translation && el.title !== translation) {
+    if (translation) {
       el.title = translation;
     }
   });
@@ -955,13 +954,12 @@ function setLanguage(lang) {
     document.querySelectorAll('.sidebar-credits-sub').forEach(el => {
       if (!el.hasAttribute('data-t')) {
         const subText = lang === 'bn' ? 'বিজ্ঞাপন দেখে আরও অর্জন করুন' : 'Watch ads to earn more';
-        if (el.textContent !== subText) el.textContent = subText;
+        el.textContent = subText;
       }
     });
   }
 
   // 4. Re-render all dynamic components that use State.lang
-  // Only call if the function exists to avoid errors
   const renderFunctions = [
     'renderWallets','renderTxnTable','renderStats','renderCatCards',
     'renderIncomeBars','renderIncomeTrend','renderIncomeTable',
@@ -973,7 +971,7 @@ function setLanguage(lang) {
     'renderSalesHistory','renderAdminCategories',
   ];
 
-  // Performance optimization: Debounce multiple re-renders
+  // Optimization: Debounce multiple re-renders
   if (window._langTimer) clearTimeout(window._langTimer);
   window._langTimer = setTimeout(() => {
     renderFunctions.forEach(fn => { 
@@ -985,7 +983,7 @@ function setLanguage(lang) {
     if (typeof window.applyLang === 'function') window.applyLang(lang);
     
     document.body.classList.remove('lang-changing');
-  }, 100);
+  }, 10);
 }
 
 // ── USERNAME GENERATOR ────────────────────
@@ -1761,6 +1759,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Re-apply language after DOM is fully ready (for pages that build components in DOMContentLoaded)
   document.addEventListener('DOMContentLoaded', () => {
+    // Force re-render on load to ensure dynamic parts are translated
+    State.lang = localStorage.getItem('hisab_lang') || 'en';
     setLanguage(State.lang);
   });
 
