@@ -63,16 +63,25 @@
 
     <div class="page-body">
       <!-- AI Suggestion Banner -->
-      <div class="card" style="margin-bottom:24px;background:var(--blue-50);border-color:var(--blue-200);">
-        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;">
-          <span style="font-size:36px;">🤖</span>
-          <div style="flex:1;">
-            <div style="font-size:16px;font-weight:700;color:var(--blue-800);margin-bottom:6px;" data-t="bgt_ai_title">AI Budget Suggestion for This Month</div>
-            <div style="font-size:14px;color:var(--blue-600);line-height:1.7;" id="ai-suggestion-text" data-t="bgt_ai_loading">Based on your last 3 months, here is a suggested budget...</div>
-            <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
-              <button class="btn btn-primary btn-sm" onclick="applyAISuggestion()" data-t="bgt_accept_btn">✅ Accept Suggestion</button>
-              <button class="btn btn-outline btn-sm" onclick="document.getElementById('manual-budget-section').scrollIntoView({behavior:'smooth'})" data-t="bgt_set_manual_btn">✏️ Set Manually</button>
-            </div>
+      <div style="margin-bottom:24px;background:linear-gradient(135deg,#e8f4ff,#ddeeff);border:1.5px solid #b3d4f5;border-radius:18px;padding:22px 26px;display:flex;align-items:flex-start;gap:18px;box-shadow:0 2px 12px rgba(30,136,229,0.08);">
+        <img src="https://em-content.zobj.net/source/google/414/robot_1f916.png"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+          style="width:54px;height:54px;flex-shrink:0;margin-top:2px;" alt="AI" />
+        <span style="font-size:46px;flex-shrink:0;margin-top:-4px;display:none;">🤖</span>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:17px;font-weight:800;color:#1a3a5c;margin-bottom:8px;letter-spacing:-0.2px;" data-t="bgt_ai_title">AI Budget Suggestion for This Month</div>
+          <div style="font-size:13.5px;color:#2a6496;line-height:1.9;word-break:break-word;" id="ai-suggestion-text" data-t="bgt_ai_loading">Based on your last 3 months, here is a suggested budget...</div>
+          <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap;align-items:center;">
+            <button onclick="applyAISuggestion()" data-t="bgt_accept_btn"
+              style="display:inline-flex;align-items:center;gap:7px;background:#1E3A5F;color:#fff;border:none;border-radius:10px;padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;box-shadow:0 2px 8px rgba(30,58,95,0.18);"
+              onmouseover="this.style.background='#16304f'" onmouseout="this.style.background='#1E3A5F'">
+              <span style="font-size:16px;">✅</span> <span data-t="bgt_accept_btn_lbl">Accept Suggestion</span>
+            </button>
+            <button onclick="document.getElementById('manual-budget-section').scrollIntoView({behavior:'smooth'})" data-t="bgt_set_manual_btn"
+              style="display:inline-flex;align-items:center;gap:7px;background:transparent;color:#1a6fbd;border:2px solid #1a6fbd;border-radius:10px;padding:9px 20px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;"
+              onmouseover="this.style.background='rgba(26,111,189,0.07)'" onmouseout="this.style.background='transparent'">
+              <span style="font-size:15px;">✏️</span> <span data-t="bgt_set_manual_btn_lbl">Set Manually</span>
+            </button>
           </div>
         </div>
       </div>
@@ -140,10 +149,20 @@ function buildAISuggestion() {
   const s = generateBudgetSuggestion();
   const perCat = Math.round(s.expense / State.expense_cats.length);
   const bn = State.lang==='bn';
+  const L = LANG[State.lang]||LANG['en'];
+
+  // Line 1: Summary
+  const summaryStyle = 'font-weight:600;color:#1a5a96;';
   let text = bn
-    ? `প্রত্যাশিত আয়: <strong>${fmt(s.income)}</strong> | মোট খরচের বাজেট: <strong>${fmt(s.expense)}</strong> | সঞ্চয়ের লক্ষ্য: <strong>${fmt(s.savings)}</strong><br/>`
-    : `Expected Income: <strong>${fmt(s.income)}</strong> | Total Expense Budget: <strong>${fmt(s.expense)}</strong> | Savings Target: <strong>${fmt(s.savings)}</strong><br/>`;
-  text += State.expense_cats.map(c => `${CAT_ICONS[c.id]||'📦'} ${bn?c.bn:c.en}: <strong>${fmt(perCat)}</strong>`).join(' &nbsp;|&nbsp; ');
+    ? `<div style="margin-bottom:6px;">প্রত্যাশিত আয়: <strong style="${summaryStyle}">${fmt(s.income)}</strong> &nbsp;|&nbsp; মোট খরচের বাজেট: <strong style="${summaryStyle}">${fmt(s.expense)}</strong> &nbsp;|&nbsp; সঞ্চয়ের লক্ষ্য: <strong style="${summaryStyle}">${fmt(s.savings)}</strong></div>`
+    : `<div style="margin-bottom:6px;">Expected Income: <strong style="${summaryStyle}">${fmt(s.income)}</strong> &nbsp;|&nbsp; Total Expense Budget: <strong style="${summaryStyle}">${fmt(s.expense)}</strong> &nbsp;|&nbsp; Savings Target: <strong style="${summaryStyle}">${fmt(s.savings)}</strong></div>`;
+
+  // Line 2: Category breakdown — icon + name + amount, pipe separated
+  const cats = State.expense_cats.map(cat =>
+    `<span style="white-space:nowrap;">${CAT_ICONS[cat.id]||'📦'} ${bn?cat.bn:cat.en}: <strong style="${summaryStyle}">${fmt(perCat)}</strong></span>`
+  ).join(' &nbsp;<span style="color:#aac4e0;">|</span>&nbsp; ');
+  text += `<div style="line-height:2;">${cats}</div>`;
+
   document.getElementById('ai-suggestion-text').innerHTML = text;
 }
 
