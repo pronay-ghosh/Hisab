@@ -20,6 +20,17 @@
   --fs-3xl:  clamp(32px, 8vw, 52px);
 }
 
+:root {
+  --fs-xs:   clamp(10px, 2vw, 12px);
+  --fs-sm:   clamp(12px, 2.5vw, 13px);
+  --fs-base: clamp(13px, 3vw, 15px);
+  --fs-md:   clamp(15px, 3.5vw, 18px);
+  --fs-lg:   clamp(18px, 4vw, 22px);
+  --fs-xl:   clamp(22px, 5vw, 28px);
+  --fs-2xl:  clamp(26px, 6vw, 36px);
+  --fs-3xl:  clamp(32px, 8vw, 52px);
+}
+
 /* ── BASE TOUCH FRIENDLY ──────────────── */
 * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
 body { -webkit-text-size-adjust: 100%; }
