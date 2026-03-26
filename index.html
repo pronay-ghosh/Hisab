@@ -5,56 +5,12 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="manifest" href="manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#042C53" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Hisab — হিসাব | For Future Savings</title>
-  <meta name="description" content="Hisab is a professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings with AI-powered insights." />
-  <meta name="keywords" content="Hisab, Expense Tracker, Bangladesh, Accounting, Double-entry, Savings, Budgeting, Finance App" />
-  <meta name="author" content="Hisab Team" />
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://amarhisab.web.app/" />
-  <meta property="og:title" content="Hisab — হিসাব | For Future Savings" />
-  <meta property="og:description" content="Professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings." />
-  <meta property="og:image" content="https://amarhisab.web.app/logo.png" />
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://amarhisab.web.app/" />
-  <meta property="twitter:title" content="Hisab — হিসাব | For Future Savings" />
-  <meta property="twitter:description" content="Professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings." />
-  <meta property="twitter:image" content="https://amarhisab.web.app/logo.png" />
-
+  <meta name="description" content="Hisab is a professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings." />
   <meta name="google-site-verification" content="_1nUBShCO5CyFebI1z-n20o3Gr_KC5qSP4uO44nuP48" />
   <link rel="canonical" href="https://amarhisab.web.app/" />
   <link rel="stylesheet" href="css/style.css" />
-
-  <!-- Structured Data for SEO -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Hisab",
-    "operatingSystem": "Web",
-    "applicationCategory": "FinanceApplication",
-    "description": "Professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings with AI-powered insights.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "BDT"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "1200"
-    }
-  }
-  </script>
-
   <link rel="stylesheet" href="css/mobile.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
@@ -560,8 +516,20 @@
 
 <!-- NAV -->
 <nav class="lnav" id="lnav">
-  <a href="/" style="text-decoration:none;" class="lnav-logo" data-logo="nav">
-    <!-- Logo will be injected by app.js -->
+  <a href="index.html" style="text-decoration:none;" class="lnav-logo">
+    <img src="" id="nav-logo-img" alt="Hisab" style="height:38px;width:38px;object-fit:contain;border-radius:8px;mix-blend-mode:screen;" />
+    <div style="line-height:1.2;">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:800;line-height:1.1;">
+        <span style="background:linear-gradient(135deg,#1E88E5,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hisab</span>
+        <span style="color:rgba(255,255,255,0.28);font-weight:300;font-size:0.55em;vertical-align:middle;">—</span>
+        <span style="background:linear-gradient(135deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">হিসাব</span>
+      </div>
+      <div style="font-size:10px;margin-top:1px;">
+        <span style="font-style:italic;background:linear-gradient(90deg,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">আগামীর সঞ্চয়ের জন্য</span>
+        <span style="color:rgba(255,255,255,0.22);margin:0 3px;">—</span>
+        <span style="font-style:italic;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;font-size:0.85em;background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">For Future Savings</span>
+      </div>
+    </div>
   </a>
   <div class="lnav-links">
     <a href="#features" data-t="nav_features">Features</a>
@@ -576,13 +544,8 @@
       <button class="lang-btn-switch" onclick="setLanguage('bn')" data-lang="bn">বাং</button>
     </div>
     <button class="ltheme-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
-    <div id="nav-auth-btns" style="display: flex; align-items: center; gap: 10px;">
-      <a href="/login" class="lbtn-login" data-t="nav_login">Log In</a>
-      <a href="/register" class="lbtn-cta" data-t="nav_get_started">Get Started →</a>
-    </div>
-    <div id="nav-user-btns" style="display: none; align-items: center; gap: 10px;">
-      <a href="/dashboard" class="lbtn-cta" style="background: linear-gradient(135deg,#7C3AED,#EC4899);" data-t="nav_dashboard">Go to Dashboard</a>
-    </div>
+    <a href="login.html" class="lbtn-login" data-t="nav_login">Log In</a>
+    <a href="register.html" class="lbtn-cta" data-t="nav_get_started">Get Started →</a>
   </div>
 </nav>
 
@@ -617,13 +580,9 @@
           <span class="ldesc-text" data-t="hero_desc2">Get AI-powered budget insights.</span>
         </div>
       </div>
-            <div class="lctas" id="hero-auth-btns">
-        <a href="/register" class="lbtn-p"><span data-t="hero_cta1">🚀 Start Free Today</span></a>
-        <a href="#how-it-works" class="lbtn-s" data-t-title="hero_cta2_title"><span data-t="hero_cta2">▶ See How It Works</span></a>
-      </div>
-      <div class="lctas" id="hero-user-btns" style="display: none;">
-        <a href="/dashboard" class="lbtn-p" style="background: linear-gradient(135deg,#7C3AED,#EC4899);"><span data-t="nav_dashboard">Go to Dashboard</span></a>
-        <a href="#how-it-works" class="lbtn-s" data-t-title="hero_cta2_title"><span data-t="hero_cta2">▶ See How It Works</span></a>
+            <div class="lctas">
+        <a href="register.html" class="lbtn-p"><span data-t="hero_cta1">🚀 Start Free Today</span></a>
+        <a href="#how-it-works" class="lbtn-s"><span data-t="hero_cta2">▶ See How It Works</span></a>
       </div>
       <div class="ltrust">
         <div class="ltrust-item" data-t="trust1">✅ Free to start</div>
@@ -641,20 +600,20 @@
         <!-- TOP: Balance + mini stats -->
         <div class="ldash-top">
           <div class="ldash-top-row">
-            <div class="ldash-top-title" data-t="mock_overview">March 2026 Overview</div>
-            <div class="ldash-top-badge">● <span data-t="mock_live">Live</span></div>
+            <div class="ldash-top-title">March 2026 Overview</div>
+            <div class="ldash-top-badge">● Live</div>
           </div>
           <div class="ldash-bal">৳ 47,350</div>
           <div class="ldash-mini-stats">
             <div class="ldash-mini">
-              <div class="ldash-mini-lbl" data-t="dash_income">Total Income</div>
+              <div class="ldash-mini-lbl">Total Income</div>
               <div class="ldash-mini-val" style="color:#6EE7C0;">৳ 65,000</div>
-              <div class="ldash-mini-chg" style="color:#6EE7C0;" data-t="mock_inc_chg">↑ Salary + Business</div>
+              <div class="ldash-mini-chg" style="color:#6EE7C0;">↑ Salary + Business</div>
             </div>
             <div class="ldash-mini">
-              <div class="ldash-mini-lbl" data-t="dash_expense">Total Expense</div>
+              <div class="ldash-mini-lbl">Total Expense</div>
               <div class="ldash-mini-val" style="color:#FCA5A5;">৳ 17,650</div>
-              <div class="ldash-mini-chg" style="color:#FCA5A5;" data-t="mock_exp_chg">↓ 8% vs Feb</div>
+              <div class="ldash-mini-chg" style="color:#FCA5A5;">↓ 8% vs Feb</div>
             </div>
           </div>
         </div>
@@ -677,68 +636,68 @@
               </linearGradient>
             </defs>
             <text x="36" y="33" text-anchor="middle" font-size="13" font-weight="800" fill="#00897B" font-family="Hind Siliguri,sans-serif">73%</text>
-            <text x="36" y="46" text-anchor="middle" font-size="8" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif" data-t="mock_saved_pct">saved</text>
+            <text x="36" y="46" text-anchor="middle" font-size="8" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">saved</text>
           </svg>
           <div>
-            <div class="ldash-ring-info-lbl" data-t="mock_net_savings">Net Savings — March</div>
+            <div class="ldash-ring-info-lbl">Net Savings — March</div>
             <div class="ldash-ring-info-val">৳ 47,350</div>
-            <div class="ldash-ring-info-sub"><span data-t="mock_savings_rate">73% of income saved</span> · <span data-t="mock_goal">Goal: ৳ 45,000 ✓</span></div>
+            <div class="ldash-ring-info-sub">73% of income saved · Goal: ৳ 45,000 ✓</div>
           </div>
         </div>
 
         <!-- MINI BAR CHART: last 4 months savings -->
         <div class="ldash-chart">
-          <div class="ldash-chart-title" data-t="mock_trend_title">Monthly Savings Trend</div>
+          <div class="ldash-chart-title">Monthly Savings Trend</div>
           <div class="ldash-bars">
             <div class="ldash-bar-wrap">
               <div class="ldash-bar" style="height:28px;background:linear-gradient(180deg,#93C5FD,#3B82F6);"></div>
-              <div class="ldash-bar-lbl" data-t="mshort_dec">Dec</div>
+              <div class="ldash-bar-lbl">Dec</div>
             </div>
             <div class="ldash-bar-wrap">
               <div class="ldash-bar" style="height:36px;background:linear-gradient(180deg,#93C5FD,#3B82F6);"></div>
-              <div class="ldash-bar-lbl" data-t="mshort_jan">Jan</div>
+              <div class="ldash-bar-lbl">Jan</div>
             </div>
             <div class="ldash-bar-wrap">
               <div class="ldash-bar" style="height:32px;background:linear-gradient(180deg,#93C5FD,#3B82F6);"></div>
-              <div class="ldash-bar-lbl" data-t="mshort_feb">Feb</div>
+              <div class="ldash-bar-lbl">Feb</div>
             </div>
             <div class="ldash-bar-wrap">
               <div class="ldash-bar" style="height:48px;background:linear-gradient(180deg,#00E5CC,#00897B);"></div>
-              <div class="ldash-bar-lbl"><span data-t="mshort_mar">Mar</span> ★</div>
+              <div class="ldash-bar-lbl">Mar ★</div>
             </div>
           </div>
         </div>
 
         <!-- EXPENSE BREAKDOWN -->
         <div class="ldash-breakdown">
-          <div class="ldash-breakdown-title" data-t="mock_breakdown">Expense Breakdown</div>
+          <div class="ldash-breakdown-title">Expense Breakdown</div>
           <div class="ldash-brow">
             <div class="ldash-brow-ico">🏠</div>
-            <div class="ldash-brow-name" data-t="e_rent">House Rent</div>
+            <div class="ldash-brow-name">House Rent</div>
             <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:100%;background:#3B82F6;"></div></div>
             <div class="ldash-brow-val">৳8,000</div>
           </div>
           <div class="ldash-brow">
             <div class="ldash-brow-ico">🍽️</div>
-            <div class="ldash-brow-name" data-t="e_food">Fooding</div>
+            <div class="ldash-brow-name">Fooding</div>
             <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:62%;background:#8B5CF6;"></div></div>
             <div class="ldash-brow-val">৳4,950</div>
           </div>
           <div class="ldash-brow">
             <div class="ldash-brow-ico">🚌</div>
-            <div class="ldash-brow-name" data-t="e_conv">Conveyance</div>
+            <div class="ldash-brow-name">Conveyance</div>
             <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:38%;background:#F59E0B;"></div></div>
             <div class="ldash-brow-val">৳2,400</div>
           </div>
           <div class="ldash-brow">
             <div class="ldash-brow-ico">💊</div>
-            <div class="ldash-brow-name" data-t="e_medicine">Medicine</div>
+            <div class="ldash-brow-name">Medicine</div>
             <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:22%;background:#10B981;"></div></div>
             <div class="ldash-brow-val">৳1,500</div>
           </div>
           <div class="ldash-brow">
             <div class="ldash-brow-ico">🎬</div>
-            <div class="ldash-brow-name" data-t="e_entertainment">Entertain.</div>
+            <div class="ldash-brow-name">Entertain.</div>
             <div class="ldash-brow-bar"><div class="ldash-brow-fill" style="width:10%;background:#EF4444;"></div></div>
             <div class="ldash-brow-val">৳800</div>
           </div>
@@ -807,35 +766,35 @@
     <div class="lshow-inner">
       <div class="lscreens fup">
         <div class="lscreen lscreen-main">
-          <div class="lscreen-hd"><div class="lscreen-hd-t" data-t="topbar_dashboard">Dashboard</div><div class="lscreen-hd-s"><span data-t="mshort_mar">Mar</span> 2026</div></div>
+          <div class="lscreen-hd"><div class="lscreen-hd-t">Dashboard</div><div class="lscreen-hd-s">March 2026</div></div>
           <div class="lscreen-bd">
             <div class="lscreen-srow">
-              <div class="lscreen-s"><div class="lscreen-sv" style="color:#2E7D32;">৳65k</div><div class="lscreen-sl" data-t="dash_income">Income</div></div>
-              <div class="lscreen-s"><div class="lscreen-sv" style="color:#C62828;">৳17.6k</div><div class="lscreen-sl" data-t="dash_expense">Expense</div></div>
-              <div class="lscreen-s"><div class="lscreen-sv" style="color:#1565C0;">৳47k</div><div class="lscreen-sl" data-t="dash_savings">Saved</div></div>
+              <div class="lscreen-s"><div class="lscreen-sv" style="color:#2E7D32;">৳65k</div><div class="lscreen-sl">Income</div></div>
+              <div class="lscreen-s"><div class="lscreen-sv" style="color:#C62828;">৳17.6k</div><div class="lscreen-sl">Expense</div></div>
+              <div class="lscreen-s"><div class="lscreen-sv" style="color:#1565C0;">৳47k</div><div class="lscreen-sl">Saved</div></div>
             </div>
-            <div class="lscreen-row"><div class="lscreen-d" style="background:#E8F5E9;">💼</div><div><div class="lscreen-rn" data-t="i_salary">Salary</div><div class="lscreen-rd">21 <span data-t="mshort_mar">Mar</span></div></div><div class="lscreen-ra" style="color:#2E7D32;">+৳65,000</div></div>
-            <div class="lscreen-row"><div class="lscreen-d" style="background:#FFEBEE;">🏠</div><div><div class="lscreen-rn" data-t="e_rent">House Rent</div><div class="lscreen-rd">20 <span data-t="mshort_mar">Mar</span></div></div><div class="lscreen-ra" style="color:#C62828;">-৳8,000</div></div>
-            <div class="lscreen-row"><div class="lscreen-d" style="background:#FFF3E0;">🍽️</div><div><div class="lscreen-rn" data-t="e_food">Fooding</div><div class="lscreen-rd">19 <span data-t="mshort_mar">Mar</span></div></div><div class="lscreen-ra" style="color:#C62828;">-৳1,850</div></div>
-            <div class="lscreen-row"><div class="lscreen-d" style="background:#E3F2FD;">🚌</div><div><div class="lscreen-rn" data-t="e_conv">Conveyance</div><div class="lscreen-rd">18 <span data-t="mshort_mar">Mar</span></div></div><div class="lscreen-ra" style="color:#C62828;">-৳2,400</div></div>
+            <div class="lscreen-row"><div class="lscreen-d" style="background:#E8F5E9;">💼</div><div><div class="lscreen-rn">Salary</div><div class="lscreen-rd">21 Mar</div></div><div class="lscreen-ra" style="color:#2E7D32;">+৳65,000</div></div>
+            <div class="lscreen-row"><div class="lscreen-d" style="background:#FFEBEE;">🏠</div><div><div class="lscreen-rn">House Rent</div><div class="lscreen-rd">20 Mar</div></div><div class="lscreen-ra" style="color:#C62828;">-৳8,000</div></div>
+            <div class="lscreen-row"><div class="lscreen-d" style="background:#FFF3E0;">🍽️</div><div><div class="lscreen-rn">Fooding</div><div class="lscreen-rd">19 Mar</div></div><div class="lscreen-ra" style="color:#C62828;">-৳1,850</div></div>
+            <div class="lscreen-row"><div class="lscreen-d" style="background:#E3F2FD;">🚌</div><div><div class="lscreen-rn">Conveyance</div><div class="lscreen-rd">18 Mar</div></div><div class="lscreen-ra" style="color:#C62828;">-৳2,400</div></div>
           </div>
         </div>
         <div class="lscreen lscreen-side">
-          <div class="lscreen-hd" style="background:linear-gradient(135deg,#00695C,#00897B);"><div class="lscreen-hd-t" data-t="bgt_vs_actual">Budget Progress</div><div class="lscreen-hd-s"><span data-t="mshort_mar">Mar</span> 2026</div></div>
+          <div class="lscreen-hd" style="background:linear-gradient(135deg,#00695C,#00897B);"><div class="lscreen-hd-t">Budget Progress</div><div class="lscreen-hd-s">March 2026</div></div>
           <div class="lscreen-bd">
-            <div class="lpbar-lbl"><span data-t="e_rent">House Rent</span><span style="color:#C62828;">100%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:100%;background:#E53935;"></div></div>
-            <div class="lpbar-lbl"><span data-t="e_food">Fooding</span><span style="color:#E65100;">74%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:74%;background:#FB8C00;"></div></div>
-            <div class="lpbar-lbl"><span data-t="e_conv">Conveyance</span><span style="color:#2E7D32;">48%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:48%;background:#43A047;"></div></div>
-            <div class="lpbar-lbl"><span data-t="e_medicine">Medicine</span><span style="color:#2E7D32;">22%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:22%;background:#43A047;"></div></div>
-            <div class="lpbar-lbl"><span data-t="e_entertainment">Entertainment</span><span style="color:#2E7D32;">15%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:15%;background:#43A047;"></div></div>
+            <div class="lpbar-lbl"><span>House Rent</span><span style="color:#C62828;">100%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:100%;background:#E53935;"></div></div>
+            <div class="lpbar-lbl"><span>Fooding</span><span style="color:#E65100;">74%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:74%;background:#FB8C00;"></div></div>
+            <div class="lpbar-lbl"><span>Conveyance</span><span style="color:#2E7D32;">48%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:48%;background:#43A047;"></div></div>
+            <div class="lpbar-lbl"><span>Medicine</span><span style="color:#2E7D32;">22%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:22%;background:#43A047;"></div></div>
+            <div class="lpbar-lbl"><span>Entertainment</span><span style="color:#2E7D32;">15%</span></div><div class="lpbar"><div class="lpbar-fill" style="width:15%;background:#43A047;"></div></div>
           </div>
         </div>
 
         <!-- SCREEN 3: Yearly Savings Summary with SVG line chart -->
         <div class="lscreen lscreen-third">
           <div class="lscreen-hd" style="background:linear-gradient(135deg,#4A148C,#7B1FA2);">
-            <div class="lscreen-hd-t">📈 <span data-t="savings_yearly">Yearly Savings</span></div>
-            <div class="lscreen-hd-s"><span data-t="mshort_jan">Jan</span> – <span data-t="mshort_mar">Mar</span> 2026</div>
+            <div class="lscreen-hd-t">📈 Yearly Savings</div>
+            <div class="lscreen-hd-s">Jan – Mar 2026</div>
           </div>
           <div class="lscreen-bd" style="padding:12px 14px;">
             <!-- SVG line chart -->
@@ -864,12 +823,12 @@
               <circle cx="150" cy="20" r="3" fill="#7C3AED"/>
               <circle cx="200" cy="12" r="4.5" fill="#7C3AED" stroke="#fff" stroke-width="2"/>
               <!-- Month labels -->
-              <text x="8"   y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif" data-t="mshort_oct">Oct</text>
-              <text x="43"  y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif" data-t="mshort_nov">Nov</text>
-              <text x="78"  y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif" data-t="mshort_dec">Dec</text>
-              <text x="110" y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif" data-t="mshort_jan">Jan</text>
-              <text x="146" y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif" data-t="mshort_feb">Feb</text>
-              <text x="191" y="78" font-size="7" fill="#7C3AED" font-weight="700" font-family="Hind Siliguri,sans-serif"><span data-t="mshort_mar">Mar</span></text>
+              <text x="8"   y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Oct</text>
+              <text x="43"  y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Nov</text>
+              <text x="78"  y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Dec</text>
+              <text x="110" y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Jan</text>
+              <text x="146" y="78" font-size="7" fill="#9CA3AF" font-family="Hind Siliguri,sans-serif">Feb</text>
+              <text x="191" y="78" font-size="7" fill="#7C3AED" font-weight="700" font-family="Hind Siliguri,sans-serif">Mar</text>
               <!-- Current value tooltip -->
               <rect x="162" y="2" width="46" height="14" rx="4" fill="#7C3AED"/>
               <text x="185" y="12" text-anchor="middle" font-size="7.5" font-weight="700" fill="#fff" font-family="Hind Siliguri,sans-serif">৳47,350</text>
@@ -877,17 +836,17 @@
             <!-- Month summary rows -->
             <div style="display:flex;flex-direction:column;gap:5px;">
               <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
-                <span style="color:#607080;"><span data-t="mshort_jan">Jan</span> 2026</span>
+                <span style="color:#607080;">Jan 2026</span>
                 <div style="flex:1;height:4px;background:#EDE9FE;border-radius:2px;margin:0 8px;overflow:hidden;"><div style="width:58%;height:100%;background:#8B5CF6;border-radius:2px;"></div></div>
                 <span style="font-weight:700;color:#7C3AED;">৳ 37,800</span>
               </div>
               <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
-                <span style="color:#607080;"><span data-t="mshort_feb">Feb</span> 2026</span>
+                <span style="color:#607080;">Feb 2026</span>
                 <div style="flex:1;height:4px;background:#EDE9FE;border-radius:2px;margin:0 8px;overflow:hidden;"><div style="width:68%;height:100%;background:#8B5CF6;border-radius:2px;"></div></div>
                 <span style="font-weight:700;color:#7C3AED;">৳ 42,100</span>
               </div>
               <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
-                <span style="color:#607080;font-weight:700;"><span data-t="mshort_mar">Mar</span> 2026 ★</span>
+                <span style="color:#607080;font-weight:700;">Mar 2026 ★</span>
                 <div style="flex:1;height:4px;background:#EDE9FE;border-radius:2px;margin:0 8px;overflow:hidden;"><div style="width:100%;height:100%;background:linear-gradient(90deg,#7C3AED,#00E5CC);border-radius:2px;"></div></div>
                 <span style="font-weight:700;color:#00897B;">৳ 47,350</span>
               </div>
@@ -1015,7 +974,7 @@
         <div class="lprice-name">Sign-up Bonus</div>
         <div class="lprice-desc">Every new user gets 100 free credits just for registering.</div>
         <div class="lprice-price">FREE</div>
-        <a href="/register" class="lprice-btn">Create Account</a>
+        <a href="register.html" class="lprice-btn">Create Account</a>
       </div>
       <div class="lprice-card c2 fup" style="transition-delay:.1s">
         <div class="lprice-ico">📺</div>
@@ -1024,7 +983,7 @@
         <div class="lprice-name">Watch &amp; Earn</div>
         <div class="lprice-desc">Watch a 30-second video ad anytime to earn 5 credits instantly.</div>
         <div class="lprice-price">FREE</div>
-        <a href="/register" class="lprice-btn">Start Earning</a>
+        <a href="register.html" class="lprice-btn">Start Earning</a>
       </div>
       <div class="lprice-card c3 fup" style="transition-delay:.2s">
         <div class="lprice-badge">⭐ Best Value</div>
@@ -1034,7 +993,7 @@
         <div class="lprice-name">Credit Pack</div>
         <div class="lprice-desc">Best value. Never worry about running out of credits.</div>
         <div class="lprice-price">৳ 99</div>
-        <a href="/register" class="lprice-btn">Buy Now</a>
+        <a href="register.html" class="lprice-btn">Buy Now</a>
       </div>
       <div class="lprice-card c4 fup" style="transition-delay:.3s">
         <div class="lprice-ico">🎊</div>
@@ -1043,7 +1002,7 @@
         <div class="lprice-name">Occasion Gifts</div>
         <div class="lprice-desc">Free credit gifts on Eid, Puja, New Year and special occasions.</div>
         <div class="lprice-price">SURPRISE</div>
-        <a href="/register" class="lprice-btn">Register Now</a>
+        <a href="register.html" class="lprice-btn">Register Now</a>
       </div>
     </div>
     <div class="lcredits-tbl fup">
@@ -1136,9 +1095,9 @@
     </div>
     <div>
       <div class="lftr-col-t" data-t="ftr_account">Account</div>
-      <a class="lftr-lnk" href="/login" data-t="nav_login">Log In</a>
-      <a class="lftr-lnk" href="/register" data-t="ftr_register">Register Free</a>
-      <a class="lftr-lnk" href="/forgot-password" data-t="ftr_forgot">Forgot Password</a>
+      <a class="lftr-lnk" href="login.html" data-t="nav_login">Log In</a>
+      <a class="lftr-lnk" href="register.html" data-t="ftr_register">Register Free</a>
+      <a class="lftr-lnk" href="forgot-password.html" data-t="ftr_forgot">Forgot Password</a>
     </div>
     <div>
       <div class="lftr-col-t" data-t="ftr_legal">Legal</div>
@@ -1180,7 +1139,10 @@
   // Language pill sync
   document.querySelectorAll('.lpill button').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Logic handled by setLanguage() in app.js
+      document.querySelectorAll('.lpill button[data-lang="' + btn.dataset.lang + '"]')
+        .forEach(b => b.classList.add('active'));
+      document.querySelectorAll('.lpill button:not([data-lang="' + btn.dataset.lang + '"])')
+        .forEach(b => b.classList.remove('active'));
     });
   });
 
@@ -1526,53 +1488,4 @@
   </div>
 </div>
 
-<script src="js/app.js"></script>
-<script>
-  // Check auth and toggle nav/hero buttons
-  document.addEventListener('DOMContentLoaded', () => {
-    const authBtns = document.getElementById('nav-auth-btns');
-    const userBtns = document.getElementById('nav-user-btns');
-    const heroAuth = document.getElementById('hero-auth-btns');
-    const heroUser = document.getElementById('hero-user-btns');
-    
-    if (isLoggedIn()) {
-      if (authBtns) authBtns.style.display = 'none';
-      if (userBtns) userBtns.style.display = 'flex';
-      if (heroAuth) heroAuth.style.display = 'none';
-      if (heroUser) heroUser.style.display = 'flex';
-    } else {
-      if (authBtns) authBtns.style.display = 'flex';
-      if (userBtns) userBtns.style.display = 'none';
-      if (heroAuth) heroAuth.style.display = 'flex';
-      if (heroUser) heroUser.style.display = 'none';
-    }
-  });
-
-  // Hero mockup data animation
-  document.addEventListener('DOMContentLoaded', () => {
-    // Stat counters
-    const stats = {
-      bal: 84250,
-      inc: 125000,
-      exp: 40750,
-      sav: 84250
-    };
-    
-    // Animate stats periodically
-    setInterval(() => {
-      const isPriv = isLoggedIn() && (State.user.role === 'admin' || State.user.role === 'editor');
-      const prefix = isPriv ? '∞' : '৳ ';
-      
-      const elBal = document.querySelector('.ldash-bal');
-      if (elBal) elBal.textContent = prefix + (isPriv ? '' : stats.bal.toLocaleString());
-      
-      const elInc = document.querySelectorAll('.ldash-mini-val')[0];
-      if (elInc) elInc.textContent = prefix + (isPriv ? '' : stats.inc.toLocaleString());
-      
-      const elExp = document.querySelectorAll('.ldash-mini-val')[1];
-      if (elExp) elExp.textContent = prefix + (isPriv ? '' : stats.exp.toLocaleString());
-    }, 2000);
-  });
-</script>
-</body>
-</html>
+<s
