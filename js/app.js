@@ -347,6 +347,10 @@ const LANG = {
     err_banned_lifetime:'Your account has been permanently banned. Contact admin.',
     err_banned_temp:'Your account is temporarily restricted until ',
     err_deleted:'This account has been deleted. Contact admin.',
+    // App popup
+    app_working_title: 'Mobile App',
+    app_working_msg: 'We are currently working on our mobile application. It will be available soon on Play Store and App Store!',
+    app_working_btn: 'Got it!',
   },
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
@@ -501,6 +505,12 @@ const LANG = {
     crd_watch_btn:'📺 বিজ্ঞাপন দেখুন (+৫ পয়েন্ট)', crd_history_label:'ক্রেডিট ইতিহাস',
     crd_signup_label:'সাইনআপ বোনাস', crd_signup_when:'অ্যাকাউন্ট তৈরির সময়',
     crd_ad_watched:'বিজ্ঞাপন দেখা হয়েছে', crd_ad_when:'আজকে',
+    // App popup
+    app_working_title: 'মোবাইল অ্যাপ',
+    app_working_msg: 'আমরা বর্তমানে আমাদের মোবাইল অ্যাপ্লিকেশনের কাজ করছি। এটি খুব শীঘ্রই প্লে স্টোর এবং অ্যাপ স্টোরে পাওয়া যাবে!',
+    app_working_btn: 'ঠিক আছে',
+  }
+};
     // Income/Expense section headings
     inc_sources_title:'আয়ের উৎস', exp_cats_title:'খরচের ক্যাটাগরি',
     // Settings backup buttons
@@ -1487,6 +1497,40 @@ function logoutUser() {
   window.location.href = 'index.html';
 }
 
+// ── APP WORKING POPUP ─────────────────────
+function showAppWorkingPopup() {
+  const modalId = 'app-working-modal';
+  if (document.getElementById(modalId)) {
+    openModal(modalId);
+    return;
+  }
+
+  const modal = document.createElement('div');
+  modal.id = modalId;
+  modal.className = 'modal-backdrop';
+  modal.innerHTML = `
+    <div class="modal" style="text-align:center;max-width:400px;padding:40px 30px;">
+      <div style="font-size:60px;margin-bottom:20px;animation:appBounce 2s ease-in-out infinite;">📱</div>
+      <h2 style="margin-bottom:12px;color:var(--text-primary);" data-t="app_working_title">${t('app_working_title')}</h2>
+      <p style="color:var(--text-muted);line-height:1.6;margin-bottom:24px;" data-t="app_working_msg">${t('app_working_msg')}</p>
+      <button class="btn btn-primary btn-full" onclick="closeModal('${modalId}')" data-t="app_working_btn">${t('app_working_btn')}</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  
+  // Inject animation if not exists
+  if (!document.getElementById('app-anim-style')) {
+    const style = document.createElement('style');
+    style.id = 'app-anim-style';
+    style.textContent = `
+      @keyframes appBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+    `;
+    document.head.appendChild(style);
+  }
+
+  openModal(modalId);
+}
+
 function isLoggedIn() {
   return State.user !== null;
 }
@@ -1747,8 +1791,15 @@ function closeMobileMenu() {
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   document.querySelectorAll('.sidebar-link').forEach(link => {
-    link.addEventListener('click', () => {
-      if (window.innerWidth <= 768) closeMobileMenu();
+    link.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        // For mobile, we want to close the menu first, then navigate.
+        // The small delay gives the menu time to animate out.
+        e.preventDefault();
+        closeMobileMenu();
+        setTimeout(() => { window.location.href = link.href; }, 200);
+      }
+      // On desktop, the link will just work normally.
     });
   });
 });
