@@ -4,6 +4,15 @@
 
 'use strict';
 
+// ── SERVICE WORKER REGISTRATION ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker registered:', reg.scope))
+      .catch(err => console.log('Service Worker registration failed:', err));
+  });
+}
+
 // ── FLASH PREVENTION — add class instantly before any render ──
 document.documentElement.classList.add('no-transition');
 
@@ -38,60 +47,42 @@ LOGO.imageUrl = null;
 
 // ── LOGO RENDERER ─────────────────────────
 // Injects the logo into every element that has [data-logo] attribute.
-// data-logo="nav"      → small horizontal nav mark + text
-// data-logo="auth"     → large centred auth panel icon
-// data-logo="sidebar"  → sidebar brand block
-// data-logo="footer"   → footer brand name text
 function renderLogos() {
-  document.querySelectorAll('[data-logo]').forEach(el => {
-    const type = el.getAttribute('data-logo');
+  const logos = document.querySelectorAll('[data-logo]');
+  if (logos.length === 0) return;
 
+  const logoHTML = {};
+  const types = ['nav', 'auth', 'sidebar', 'footer'];
+
+  types.forEach(type => {
     if (LOGO.imageUrl) {
-      // ── IMAGE LOGO ──────────────────────────
+      // Image logo HTML
       if (type === 'nav') {
-        el.innerHTML = `
-          <img src="${LOGO.imageUrl}" alt="${LOGO.altText}"
-            style="height:36px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;" />`;
+        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:36px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;" />`;
       } else if (type === 'auth') {
-        el.innerHTML = `
-          <img src="${LOGO.imageUrl}" alt="${LOGO.altText}"
-            style="height:72px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin:0 auto 16px;" />`;
+        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:72px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin:0 auto 16px;" />`;
       } else if (type === 'sidebar') {
-        el.innerHTML = `
-          <img src="${LOGO.imageUrl}" alt="${LOGO.altText}"
-            style="height:40px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin-bottom:4px;" />
-          <div style="font-size:11px;color:rgba(181,212,244,0.6);">${LOGO.appSub}</div>`;
+        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:40px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin-bottom:4px;" /><div style="font-size:11px;color:rgba(181,212,244,0.6);">${LOGO.appSub}</div>`;
       } else if (type === 'footer') {
-        el.innerHTML = `
-          <img src="${LOGO.imageUrl}" alt="${LOGO.altText}"
-            style="height:44px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin-bottom:8px;" />`;
+        logoHTML[type] = `<img src="${LOGO.imageUrl}" alt="${LOGO.altText}" style="height:44px;width:auto;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.1);display:block;margin-bottom:8px;" />`;
       }
     } else {
-      // ── TEXT / ICON MARK (default) ──────────
+      // Text/Icon logo HTML
       if (type === 'nav') {
-        el.innerHTML = `
-          <div style="width:40px;height:40px;background:${LOGO.markBg};border-radius:10px;
-            display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;
-            color:white;font-family:'Playfair Display',serif;
-            box-shadow:0 4px 12px rgba(30,136,229,0.4);">${LOGO.markText}</div>
-          <div>
-            <strong style="font-size:19px;font-weight:700;color:#fff;display:block;line-height:1.2;">${LOGO.appName}</strong>
-            <span style="font-size:11px;color:rgba(255,255,255,0.45);">${LOGO.appSub}</span>
-          </div>`;
+        logoHTML[type] = `<div style="width:40px;height:40px;background:${LOGO.markBg};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:white;font-family:'Playfair Display',serif;box-shadow:0 4px 12px rgba(30,136,229,0.4);">${LOGO.markText}</div><div><strong style="font-size:19px;font-weight:700;color:#fff;display:block;line-height:1.2;">${LOGO.appName}</strong><span style="font-size:11px;color:rgba(255,255,255,0.45);">${LOGO.appSub}</span></div>`;
       } else if (type === 'auth') {
-        el.innerHTML = `
-          <div style="width:72px;height:72px;background:rgba(255,255,255,0.15);border-radius:20px;
-            display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;
-            color:white;font-family:'Playfair Display',serif;margin:0 auto 16px;
-            border:1px solid rgba(255,255,255,0.2);">${LOGO.markText}</div>`;
+        logoHTML[type] = `<div style="width:72px;height:72px;background:rgba(255,255,255,0.15);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:white;font-family:'Playfair Display',serif;margin:0 auto 16px;border:1px solid rgba(255,255,255,0.2);">${LOGO.markText}</div>`;
       } else if (type === 'sidebar') {
-        el.innerHTML = `
-          <div style="font-size:22px;font-weight:700;color:white;">${LOGO.appName}</div>
-          <div style="font-size:11px;color:rgba(181,212,244,0.6);margin-top:2px;">${LOGO.appSub} — For Future Savings</div>`;
+        logoHTML[type] = `<div style="font-size:22px;font-weight:700;color:white;">${LOGO.appName}</div><div style="font-size:11px;color:rgba(181,212,244,0.6);margin-top:2px;">${LOGO.appSub} — For Future Savings</div>`;
       } else if (type === 'footer') {
-        el.innerHTML = `${LOGO.appName} — ${LOGO.appSub}`;
+        logoHTML[type] = `${LOGO.appName} — ${LOGO.appSub}`;
       }
     }
+  });
+
+  logos.forEach(el => {
+    const type = el.getAttribute('data-logo');
+    if (logoHTML[type]) el.innerHTML = logoHTML[type];
   });
 }
 
@@ -349,6 +340,13 @@ const LANG = {
     admin_gift_credits:'Gift Credits', admin_all_users:'All Users',
     admin_active_users:'Active Users', admin_inactive_users:'Inactive (7+ days)',
     admin_total_txns:'Total Transactions',
+    admin_last_login:'Last Login', admin_ban_user:'Ban User', admin_unban_user:'Unban User',
+    admin_ban_lifetime:'Lifetime Ban', admin_ban_temp:'Temporary Ban',
+    admin_ban_days:'Days', admin_ban_reason:'Reason', admin_ban_confirm:'Confirm Ban',
+    admin_id_lifetime:'ID Stored for Lifetime',
+    err_banned_lifetime:'Your account has been permanently banned. Contact admin.',
+    err_banned_temp:'Your account is temporarily restricted until ',
+    err_deleted:'This account has been deleted. Contact admin.',
   },
   bn: {
     nav_home: 'হোম', nav_features: 'বৈশিষ্ট্য', nav_pricing: 'মূল্য', nav_contact: 'যোগাযোগ',
@@ -434,6 +432,7 @@ const LANG = {
     // Reports
     rpt_page_title:'📊 রিপোর্ট ও বিশ্লেষণ', rpt_download_btn:'⬇ ডাউনলোড (৫ পয়েন্ট)',
     rpt_all_cats: 'সব ক্যাটাগরি',
+    rpt_spending_dist:'খরচের বিবরণ', rpt_budget_actual:'বাজেট বনাম প্রকৃত',
     // Budget AI
     bgt_accept_btn: '✅ AI পরামর্শ গ্রহণ করুন', bgt_ai_loading: '🤖 AI বিশ্লেষণ করছে...',
     bgt_ai_title: '🤖 AI বাজেট পরামর্শ', bgt_set_manual_btn: '✏️ নিজে নির্ধারণ করুন',
@@ -586,6 +585,13 @@ const LANG = {
     admin_gift_credits:'ক্রেডিট উপহার', admin_all_users:'সব ব্যবহারকারী',
     admin_active_users:'সক্রিয় ব্যবহারকারী', admin_inactive_users:'নিষ্ক্রিয় (৭+ দিন)',
     admin_total_txns:'মোট লেনদেন',
+    admin_last_login:'সর্বশেষ লগইন', admin_ban_user:'ব্যান করুন', admin_unban_user:'ব্যান তুলে নিন',
+    admin_ban_lifetime:'আজীবন ব্যান', admin_ban_temp:'সাময়িক ব্যান',
+    admin_ban_days:'দিন', admin_ban_reason:'কারণ', admin_ban_confirm:'ব্যান নিশ্চিত করুন',
+    admin_id_lifetime:'আইডি আজীবনের জন্য সংরক্ষিত',
+    err_banned_lifetime:'আপনার অ্যাকাউন্টটি স্থায়ীভাবে ব্যান করা হয়েছে। অ্যাডমিনের সাথে যোগাযোগ করুন।',
+    err_banned_temp:'আপনার অ্যাকাউন্টটি সাময়িকভাবে স্থগিত করা হয়েছে। এটি শেষ হবে: ',
+    err_deleted:'এই অ্যাকাউন্টটি মুছে ফেলা হয়েছে। অ্যাডমিনের সাথে যোগাযোগ করুন।',
   }
 };
 
@@ -880,7 +886,14 @@ function setLanguage(lang) {
     else if (LANG['en'] && LANG['en'][key]) el.placeholder = LANG['en'][key];
   });
 
-  // 3. Active button highlight
+  // 3. Update data-t-title title elements
+  document.querySelectorAll('[data-t-title]').forEach(el => {
+    const key = el.getAttribute('data-t-title');
+    if (LANG[lang] && LANG[lang][key]) el.title = LANG[lang][key];
+    else if (LANG['en'] && LANG['en'][key]) el.title = LANG['en'][key];
+  });
+
+  // 4. Active button highlight
   document.querySelectorAll('.lang-btn-switch').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
@@ -1272,38 +1285,65 @@ function loginUser(username, password) {
   const users = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const user = users.find(u => (u.username === username || u.email === username));
   if (!user) return { error: 'User not found' };
-  if (user.deleted === true) return { error: 'This account has been deleted. Contact admin.' };
-  if (user.banned  === true) return { error: 'Your account has been banned. Contact admin.' };
+  if (user.deleted === true) return { error: t('err_deleted') };
+  
+  // ── BAN CHECK ──
+  if (user.banned === true) {
+    if (user.banType === 'lifetime') {
+      return { error: t('err_banned_lifetime') };
+    } else if (user.banType === 'temporary' && user.banExpiry) {
+      const expiry = new Date(user.banExpiry);
+      if (new Date() < expiry) {
+        return { error: t('err_banned_temp') + expiry.toLocaleString() };
+      } else {
+        // Temporary ban expired — auto unban
+        user.banned = false;
+        user.banType = null;
+        user.banExpiry = null;
+        localStorage.setItem('hisab_users', JSON.stringify(users));
+      }
+    } else {
+      // Legacy ban (no type specified) — treat as lifetime
+      return { error: t('err_banned_lifetime') };
+    }
+  }
+
   if (user.password !== btoa(password)) return { error: 'Wrong password' };
   State.user = user;
   saveState('user', user);
-  localStorage.setItem('hisab_last_login', Date.now());
-  localStorage.setItem('hisab_last_login_' + user.username, Date.now());
+  const now = Date.now();
+  const nowISO = new Date().toISOString();
+  localStorage.setItem('hisab_last_login', now);
+  localStorage.setItem('hisab_last_login_' + user.username, now);
   // ── Merge global categories from Firestore on login ──
   _mergeGlobalCatsFromFirestore(user.username);
-  // Update lastSeen on user record
+  // Update lastSeen and lastLogin on user record
   const allUsers = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const uIdx = allUsers.findIndex(u => u.username === user.username);
-  if (uIdx >= 0) { allUsers[uIdx].lastSeen = new Date().toISOString(); localStorage.setItem('hisab_users', JSON.stringify(allUsers)); }
+  if (uIdx >= 0) { 
+    allUsers[uIdx].lastSeen = nowISO; 
+    allUsers[uIdx].lastLogin = nowISO;
+    localStorage.setItem('hisab_users', JSON.stringify(allUsers)); 
+  }
   logActivity(user.username, 'login', 'Logged in');
 
-  // ── Background: Firestore এ lastSeen update করো ──
+  // ── Background: Firestore এ lastSeen & lastLogin update করো ──
   (async () => {
     try {
       const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
       const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      const firebaseConfig = {
+      const app = getApps().length ? getApps()[0] : initializeApp({
         apiKey: "AIzaSyDerOMIIPh660Wej7OYy8i7oUXbKC44wW4",
         authDomain: "hisab-4-u.firebaseapp.com",
         projectId: "hisab-4-u",
         storageBucket: "hisab-4-u.firebasestorage.app",
         messagingSenderId: "957694095044",
         appId: "1:957694095044:web:1649995ac9734d4d062391"
-      };
-      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      });
       const db = getFirestore(app);
       await updateDoc(doc(db, 'users', String(user.username)), {
-        lastSeen: new Date().toISOString()
+        lastSeen: nowISO,
+        lastLogin: nowISO
       });
     } catch(e) { /* silent */ }
   })();
@@ -1345,8 +1385,24 @@ async function restoreUserFromFirestore(username, password) {
     if (!foundUser) return { error: 'User not found' };
 
     // Ban / delete check
-    if (foundUser.deleted === true) return { error: 'This account has been deleted. Contact admin.' };
-    if (foundUser.banned  === true) return { error: 'Your account has been banned. Contact admin.' };
+    if (foundUser.deleted === true) return { error: t('err_deleted') };
+    
+    // ── BAN CHECK ──
+    if (foundUser.banned === true) {
+      if (foundUser.banType === 'lifetime') {
+        return { error: t('err_banned_lifetime') };
+      } else if (foundUser.banType === 'temporary' && foundUser.banExpiry) {
+        const expiry = new Date(foundUser.banExpiry);
+        if (new Date() < expiry) {
+          return { error: t('err_banned_temp') + expiry.toLocaleString() };
+        }
+        // If expired, we don't auto-unban here since we are just restoring, 
+        // the actual unban will happen in loginUser if they proceed.
+      } else {
+        return { error: t('err_banned_lifetime') };
+      }
+    }
+
     // Password verify করো
     if (foundUser.password !== btoa(password)) return { error: 'Wrong password' };
 
@@ -1386,6 +1442,9 @@ function registerUser(data) {
     role: 'user',
     credits: 100,
     active: true,
+    banned: false,
+    deleted: false,
+    lastLogin: null,
   };
   users.push(user);
   localStorage.setItem('hisab_users', JSON.stringify(users));
@@ -1440,8 +1499,16 @@ function requireLogin() {
   // Check session expiry — 30 days if "keep me logged in", else 7 days
   const lastLogin  = parseInt(localStorage.getItem('hisab_last_login') || '0');
   const keepLogin  = localStorage.getItem('hisab_keep_login') === '1';
-  const expiry     = keepLogin ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000;
-  if (lastLogin > 0 && Date.now() - lastLogin > expiry) {
+  
+  // ── UPDATED SESSION LOGIC ──
+  // If keepLogin is true: 30 days (30 * 24 * 60 * 60 * 1000)
+  // If keepLogin is false: 7 days (7 * 24 * 60 * 60 * 1000)
+  const expiry = keepLogin ? 2592000000 : 6048000000 / 10; // wait, 7 days = 604800000
+  const sevenDays = 7 * 24 * 60 * 60 * 1000;
+  const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+  const sessionDuration = keepLogin ? thirtyDays : sevenDays;
+
+  if (lastLogin > 0 && Date.now() - lastLogin > sessionDuration) {
     localStorage.removeItem('hisab_keep_login');
     logoutUser();
     return false;
@@ -1705,6 +1772,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Merge global categories/wallets from Firestore ──
 // Called after every login to ensure user has admin-added items
+/**
+ * ── SYNC GLOBAL OPTIONS FROM FIRESTORE ──
+ * This ensures that admin-added categories/wallets appear for all users.
+ * It also updates metadata (names/icons) if the admin edited them.
+ */
 async function _mergeGlobalCatsFromFirestore(username) {
   try {
     const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
@@ -1715,32 +1787,56 @@ async function _mergeGlobalCatsFromFirestore(username) {
       messagingSenderId:"957694095044", appId:"1:957694095044:web:1649995ac9734d4d062391"
     });
     const db = getFirestore(app);
-    const snap = await getDoc(doc(db, 'global_config', 'categories'));
-    if (!snap.exists()) return;
-    const global = snap.data();
-
-    // Merge income_cats
-    if (global.income_cats?.length) {
-      const key = 'hisab_income_cats_' + username;
-      const local = JSON.parse(localStorage.getItem(key) || '[]');
-      global.income_cats.forEach(gc => {
-        if (!local.find(lc => lc.id === gc.id)) local.push(gc);
+    
+    // 1. Fetch Global Categories
+    const catSnap = await getDoc(doc(db, 'global_config', 'categories'));
+    if (catSnap.exists()) {
+      const global = catSnap.data();
+      ['income', 'expense'].forEach(type => {
+        const localKey = `hisab_${type}_cats_${username}`;
+        const localCats = JSON.parse(localStorage.getItem(localKey) || '[]');
+        const globalCats = global[`${type}_cats`] || [];
+        
+        globalCats.forEach(gCat => {
+          const lIdx = localCats.findIndex(c => c.id === gCat.id);
+          if (lIdx >= 0) {
+            // Update metadata but keep user custom fields if any
+            localCats[lIdx] = { ...localCats[lIdx], ...gCat };
+          } else {
+            // Add new global category
+            localCats.push(gCat);
+          }
+        });
+        localStorage.setItem(localKey, JSON.stringify(localCats));
+        if (State.user?.username === username) {
+          if (type === 'income') State.income_cats = localCats;
+          else State.expense_cats = localCats;
+        }
       });
-      localStorage.setItem(key, JSON.stringify(local));
-      if (State.user?.username === username) State.income_cats = local;
     }
 
-    // Merge expense_cats
-    if (global.expense_cats?.length) {
-      const key = 'hisab_expense_cats_' + username;
-      const local = JSON.parse(localStorage.getItem(key) || '[]');
-      global.expense_cats.forEach(gc => {
-        if (!local.find(lc => lc.id === gc.id)) local.push(gc);
-      });
-      localStorage.setItem(key, JSON.stringify(local));
-      if (State.user?.username === username) State.expense_cats = local;
-    }
+    // 2. Fetch Global Wallets
+    const walletSnap = await getDoc(doc(db, 'global_config', 'wallets'));
+    if (walletSnap.exists()) {
+      const global = walletSnap.data();
+      const localKey = `hisab_wallets_${username}`;
+      const localWallets = JSON.parse(localStorage.getItem(localKey) || '[]');
+      const globalWallets = global.default_wallets || [];
 
-    console.log('✅ Global categories merged for:', username);
-  } catch(e) { console.warn('Global cat merge failed:', e); }
+      globalWallets.forEach(gW => {
+        const lIdx = localWallets.findIndex(w => w.id === gW.id);
+        if (lIdx >= 0) {
+          // Update metadata (name, icon) but KEEP balance and user settings
+          const { balance, ...metadata } = gW; 
+          localWallets[lIdx] = { ...localWallets[lIdx], ...metadata };
+        } else {
+          // Add new global wallet with 0 balance
+          localWallets.push({ ...gW, balance: 0 });
+        }
+      });
+      localStorage.setItem(localKey, JSON.stringify(localWallets));
+      if (State.user?.username === username) State.wallets = localWallets;
+    }
+    console.log('✅ Global options synced for:', username);
+  } catch(e) { console.warn('Global sync failed:', e); }
 }
