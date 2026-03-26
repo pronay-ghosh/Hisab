@@ -148,18 +148,32 @@ function initBudget() {
 function buildAISuggestion() {
   const s = generateBudgetSuggestion();
   const perCat = Math.round(s.expense / State.expense_cats.length);
-  const bn = State.lang==='bn';
-  const L = LANG[State.lang]||LANG['en'];
+  const bn = State.lang === 'bn';
 
-  // Line 1: Summary
-  const summaryStyle = 'font-weight:600;color:#1a5a96;';
-  let text = bn
-    ? `<div style="margin-bottom:6px;">প্রত্যাশিত আয়: <strong style="${summaryStyle}">${fmt(s.income)}</strong> &nbsp;|&nbsp; মোট খরচের বাজেট: <strong style="${summaryStyle}">${fmt(s.expense)}</strong> &nbsp;|&nbsp; সঞ্চয়ের লক্ষ্য: <strong style="${summaryStyle}">${fmt(s.savings)}</strong></div>`
-    : `<div style="margin-bottom:6px;">Expected Income: <strong style="${summaryStyle}">${fmt(s.income)}</strong> &nbsp;|&nbsp; Total Expense Budget: <strong style="${summaryStyle}">${fmt(s.expense)}</strong> &nbsp;|&nbsp; Savings Target: <strong style="${summaryStyle}">${fmt(s.savings)}</strong></div>`;
+  // This month actual data
+  const now = new Date();
+  const actual = getMonthTotals(now.getFullYear(), now.getMonth());
 
-  // Line 2: Category breakdown — icon + name + amount, pipe separated
+  const blue = 'font-weight:700;color:#1a5a96;';
+  const green = 'font-weight:700;color:#1d9e75;';
+  const red   = 'font-weight:700;color:#c0392b;';
+  const muted = 'font-size:12px;color:#5a85a8;';
+
+  const incomeLabel  = bn ? 'প্রত্যাশিত আয়'        : 'Expected Income';
+  const expenseLabel = bn ? 'মোট খরচের বাজেট'      : 'Total Expense Budget';
+  const savingsLabel = bn ? 'সঞ্চয়ের লক্ষ্য'       : 'Savings Target';
+  const actualWord   = bn ? 'বাস্তব'                : 'Actual';
+
+  let text = `<div style="margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;line-height:1.8;">
+    <span style="white-space:nowrap;">${incomeLabel}: <strong style="${blue}">${fmt(s.income)}</strong> <span style="${muted}">(${actualWord}: <strong style="${green}">${fmt(actual.income)}</strong>)</span></span>
+    <span style="color:#aac4e0;">|</span>
+    <span style="white-space:nowrap;">${expenseLabel}: <strong style="${blue}">${fmt(s.expense)}</strong> <span style="${muted}">(${actualWord}: <strong style="${red}">${fmt(actual.expense)}</strong>)</span></span>
+    <span style="color:#aac4e0;">|</span>
+    <span style="white-space:nowrap;">${savingsLabel}: <strong style="${blue}">${fmt(s.savings)}</strong></span>
+  </div>`;
+
   const cats = State.expense_cats.map(cat =>
-    `<span style="white-space:nowrap;">${CAT_ICONS[cat.id]||'📦'} ${bn?cat.bn:cat.en}: <strong style="${summaryStyle}">${fmt(perCat)}</strong></span>`
+    `<span style="white-space:nowrap;">${CAT_ICONS[cat.id]||'📦'} ${bn?cat.bn:cat.en}: <strong style="${blue}">${fmt(perCat)}</strong></span>`
   ).join(' &nbsp;<span style="color:#aac4e0;">|</span>&nbsp; ');
   text += `<div style="line-height:2;">${cats}</div>`;
 
