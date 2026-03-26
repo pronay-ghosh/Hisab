@@ -56,9 +56,9 @@
       <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
     <div class="sidebar-credits">
-      <div class="sidebar-credits-label">Credit Points</div>
-      <div class="sidebar-credits-val"><span class="credit-display">150</span> pts</div>
-      <div class="sidebar-credits-sub">Watch ads to earn more</div>
+      <div class="sidebar-credits-label" data-t="sidebar_credits_label">Credit Points</div>
+      <div class="sidebar-credits-val"><span class="credit-display">150</span> <span data-t="sidebar_credits_pts">pts</span></div>
+      <div class="sidebar-credits-sub" data-t="sidebar_credits_sub">Watch ads to earn more</div>
     </div>
   </aside>
 
@@ -673,31 +673,8 @@ function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent
 function _opts(id,opts){const e=document.getElementById(id);if(!e)return;Array.from(e.options).forEach((o,i)=>{if(opts[i]!==undefined)o.text=opts[i];});}
 
 window.applyLang = function(lang) {
-  const bn = lang==='bn';
-  _st('[data-t="dash_balance"]',  bn?'মোট ব্যালেন্স':'Total Balance');
-  _st('[data-t="dash_income"]',   bn?'মাসিক আয়':'Monthly Income');
-  _st('[data-t="dash_expense"]',  bn?'মাসিক খরচ':'Monthly Expense');
-  _st('[data-t="dash_savings"]',  bn?'নিট সঞ্চয়':'Net Savings');
-  _st('[data-t="dash_wallets"]',  bn?'ওয়ালেট':'Wallets');
-  _st('[data-t="dash_recent"]',   bn?'সাম্প্রতিক লেনদেন':'Recent Transactions');
-  _st('[data-t="dash_budget_tip"]',bn?'বাজেট পরামর্শ':'Budget Suggestion');
-  _st('[data-t="dash_add_income"]',bn?'আয় যোগ করুন':'Add Income');
-  _st('[data-t="dash_add_expense"]',bn?'খরচ যোগ করুন':'Add Expense');
-  _st('[data-t="dash_transfer"]', bn?'ফান্ড ট্রান্সফার':'Fund Transfer');
-  _st('[data-t="dash_all_wallets"]',   bn?'সব ওয়ালেট মিলিয়ে':'All wallets combined');
-  _st('[data-t="dash_this_month"]',    bn?'এই মাসে':'This month');
-  _st('[data-t="dash_this_month_exp"]',bn?'এই মাসে':'This month');
-  _st('[data-t="dash_inc_minus_exp"]', bn?'আয় – খরচ':'Income – Expense');
-  document.querySelectorAll('[data-t="dash_view_all"]').forEach(el=>{ el.textContent=bn?'সব দেখুন':'View All'; });
-  _st('[data-t="dash_no_txns"]', bn?'এখনো কোনো লেনদেন নেই। প্রথম আয় বা খরচ যোগ করুন!':'No transactions yet. Add your first income or expense!');
-  document.querySelectorAll('.btn').forEach(el=>{
-    const m={'Accept Suggestion':'পরামর্শ গ্রহণ','Dismiss':'বাতিল','Save Budget':'বাজেট সংরক্ষণ'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t];
-    else if(!bn&&r[t])el.textContent=r[t];
-  });
-  if(typeof renderOverviewChart==='function')renderOverviewChart();
+  // All data-t elements handled globally by setLanguage() in app.js
+  if(typeof renderOverviewChart==='function') renderOverviewChart();
 };
 
 </script>

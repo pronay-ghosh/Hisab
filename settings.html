@@ -50,7 +50,7 @@
     </nav>
     <div class="sidebar-credits">
       <div class="sidebar-credits-label" data-t="set_credit_pts">Credit Points</div>
-      <div class="sidebar-credits-val"><span class="credit-display">150</span> pts</div>
+      <div class="sidebar-credits-val"><span class="credit-display">150</span> <span data-t="sidebar_credits_pts">pts</span></div>
     </div>
   </aside>
 
@@ -1183,92 +1183,8 @@ function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=tx
 function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=txt;}
 
 window.applyLang = function(lang) {
-  const bn = lang==='bn';
-  // Nav items
-  const navMap = {
-    '👤 Profile':'👤 প্রোফাইল','🌐 Language & Theme':'🌐 ভাষা ও থিম',
-    '🔔 Notifications':'🔔 নোটিফিকেশন','📂 Categories':'📂 ক্যাটাগরি',
-    '💳 Credits':'💳 ক্রেডিট','☁️ Backup':'☁️ ব্যাকআপ',
-    '🔒 Security':'🔒 নিরাপত্তা','📩 Contact Developer':'📩 ডেভেলপারের সাথে যোগাযোগ',
-    '✉️ Contact Developer':'✉️ ডেভেলপারের সাথে যোগাযোগ',
-  };
-  const navRmap=Object.fromEntries(Object.entries(navMap).map(([k,v])=>[v,k]));
-  document.querySelectorAll('.settings-nav-item').forEach(el=>{
-    const t=el.textContent.trim();
-    if(bn&&navMap[t])el.textContent=navMap[t]; else if(!bn&&navRmap[t])el.textContent=navRmap[t];
-  });
-  // Section titles
-  const secMap={'Profile Information':'প্রোফাইল তথ্য','Language & Display':'ভাষা ও প্রদর্শনী','Notification Settings':'নোটিফিকেশন সেটিংস','Category Management':'ক্যাটাগরি ব্যবস্থাপনা','Security Settings':'নিরাপত্তা সেটিংস','Contact Developer':'ডেভেলপারের সাথে যোগাযোগ'};
-  const secRmap=Object.fromEntries(Object.entries(secMap).map(([k,v])=>[v,k]));
-  document.querySelectorAll('.settings-section-title').forEach(el=>{
-    const t=el.textContent.trim();
-    if(bn&&secMap[t])el.textContent=secMap[t]; else if(!bn&&secRmap[t])el.textContent=secRmap[t];
-  });
-  // Form labels
-  const lblMap={'Full Name':'পুরো নাম','Username':'ইউজারনেম','Email Address':'ইমেইল ঠিকানা','Mobile Number':'মোবাইল নম্বর','Current Password':'বর্তমান পাসওয়ার্ড','New Password':'নতুন পাসওয়ার্ড','Confirm New Password':'নতুন পাসওয়ার্ড নিশ্চিত করুন','Language':'ভাষা','Theme':'থিম','Subject':'বিষয়','Message':'বার্তা'};
-  const lblRmap=Object.fromEntries(Object.entries(lblMap).map(([k,v])=>[v,k]));
-  document.querySelectorAll('.form-label').forEach(el=>{
-    const t=el.textContent.trim();
-    if(bn&&lblMap[t])el.textContent=lblMap[t]; else if(!bn&&lblRmap[t])el.textContent=lblRmap[t];
-  });
-  // Buttons
-  const btnMap={'Save Changes':'পরিবর্তন সংরক্ষণ করুন','Change Password':'পাসওয়ার্ড পরিবর্তন করুন','Send Message':'বার্তা পাঠান','Connect Google Drive':'গুগল ড্রাইভ সংযুক্ত করুন','Manual Backup Now':'এখনই ব্যাকআপ নিন','Restore from Drive':'ড্রাইভ থেকে পুনরুদ্ধার করুন','📧 Send to Email':'📧 ইমেইলে পাঠান','📱 Send to Phone':'📱 ফোনে পাঠান'};
-  const btnRmap=Object.fromEntries(Object.entries(btnMap).map(([k,v])=>[v,k]));
-  document.querySelectorAll('.btn').forEach(el=>{
-    const t=el.textContent.trim();
-    if(bn&&btnMap[t])el.textContent=btnMap[t]; else if(!bn&&btnRmap[t])el.textContent=btnRmap[t];
-  });
-  _st('[data-t="profile_change_photo"]', bn?'📷 ছবি পরিবর্তন করুন':'📷 Change Photo');
-  _st('[data-t="profile_photo_hint"]',   bn?'JPG, PNG বা GIF · সর্বোচ্চ 2MB':'JPG, PNG or GIF · Max 2MB');
-  // data-t driven translations (handled by app.js applyTranslations)
-  // Extra: Password strength hints
-  _st('[data-t="pass_chk_len"]',     bn?'✗ কমপক্ষে ৮ অক্ষর':'✗ Min 8 characters');
-  _st('[data-t="pass_chk_upper"]',   bn?'✗ বড় হাতের অক্ষর (A-Z)':'✗ Uppercase letter (A-Z)');
-  _st('[data-t="pass_chk_lower"]',   bn?'✗ ছোট হাতের অক্ষর (a-z)':'✗ Lowercase letter (a-z)');
-  _st('[data-t="pass_chk_num"]',     bn?'✗ সংখ্যা (0-9)':'✗ Number (0-9)');
-  _st('[data-t="pass_chk_special"]', bn?'✗ বিশেষ চিহ্ন (!@#$%^&*)':'✗ Special character (!@#$%^&*)');
-  // Privacy & Security bullets
-  _st('[data-t="backup_privacy_title"]', bn?'🔒 গোপনীয়তা ও নিরাপত্তা':'🔒 Privacy & Security');
-  const privacyEl = document.getElementById('backup-privacy-bullets');
-  if (privacyEl) privacyEl.innerHTML = bn
-    ? `● আপনার তথ্য <strong>আপনার নিজের Google Drive</strong>-এ ব্যাকআপ হয় — আমাদের সার্ভারে নয়<br/>
-       ● ফাইলের নাম: <strong>Hisab_Backup_[তারিখ].json</strong> একটি <strong>Hisab</strong> ফোল্ডারের মধ্যে<br/>
-       ● শুধুমাত্র আপনি এই ফাইলটি দেখতে পারবেন — হিসাবের কোনো অ্যাক্সেস নেই<br/>
-       ● আপনি যেকোনো সময় Drive থেকে ব্যাকআপ পুনরুদ্ধার বা মুছতে পারবেন`
-    : `● Your data is backed up to <strong>your own Google Drive</strong> — not our servers<br/>
-       ● File name: <strong>Hisab_Backup_[date].json</strong> inside a <strong>Hisab</strong> folder<br/>
-       ● Only you can access this file — Hisab has no visibility into it<br/>
-       ● You can restore or delete the backup anytime from your Drive`;
-  // Contact form
-  _st('[data-t="contact_desc"]',        bn?'কোনো প্রশ্ন, বাগ রিপোর্ট বা পরামর্শ আছে? আমাদের জানান।':'Have a question, bug report, or suggestion? Reach out to us.');
-  _st('[data-t="contact_subject_lbl"]', bn?'বিষয়':'Subject');
-  _st('[data-t="contact_msg_lbl"]',     bn?'বার্তা':'Message');
-  _st('[data-t="contact_send_btn"]',    bn?'বার্তা পাঠান':'Send Message');
-  const subjectSel = document.getElementById('contact-subject-select');
-  if (subjectSel) {
-    const opts = bn
-      ? ['বাগ রিপোর্ট','নতুন ফিচারের অনুরোধ','অ্যাকাউন্ট সমস্যা','অন্যান্য']
-      : ['Bug Report','Feature Request','Account Issue','Other'];
-    [...subjectSel.options].forEach((o,i)=>{ if(opts[i]) o.text=opts[i]; });
-  }
-  const msgArea = document.getElementById('contact-message-input');
-  if (msgArea) msgArea.placeholder = bn?'আপনার সমস্যা বা পরামর্শ লিখুন...':'Describe your issue or suggestion...';
-  // Password placeholders
-  const newPassEl = document.getElementById('new-pass');
-  if (newPassEl) newPassEl.placeholder = bn?'কমপক্ষে ৮ অক্ষর':'Min 8 characters';
-  const confirmPassEl = document.getElementById('confirm-pass');
-  if (confirmPassEl) confirmPassEl.placeholder = bn?'নতুন পাসওয়ার্ড আবার লিখুন':'Repeat new password';
-  const secNewPassEl = document.getElementById('sec-new-pass');
-  if (secNewPassEl) secNewPassEl.placeholder = bn?'কমপক্ষে ৮ অক্ষর':'Min 8 characters';
-  // Phone hint
-  const phoneHint = document.getElementById('set-phone-picker-hint');
-  if (phoneHint && bn) {
-    const digits = document.getElementById('set-phone-picker-code')?.dataset?.digits || '10';
-    phoneHint.textContent = `বাংলাদেশের জন্য ${digits}-সংখ্যার মোবাইল নম্বর দিন`;
-  } else if (phoneHint) {
-    const digits = document.getElementById('set-phone-picker-code')?.dataset?.digits || '10';
-    phoneHint.textContent = `Enter ${digits}-digit mobile number for Bangladesh`;
-  }
+  // All data-t elements handled globally by setLanguage() in app.js
+  // settings re-renders handled by data-t
 };
 
 </script>

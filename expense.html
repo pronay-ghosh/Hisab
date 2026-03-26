@@ -49,8 +49,8 @@
       <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
     <div class="sidebar-credits">
-      <div class="sidebar-credits-label">Credit Points</div>
-      <div class="sidebar-credits-val"><span class="credit-display">150</span> pts</div>
+      <div class="sidebar-credits-label" data-t="sidebar_credits_label">Credit Points</div>
+      <div class="sidebar-credits-val"><span class="credit-display">150</span> <span data-t="sidebar_credits_pts">pts</span></div>
     </div>
   </aside>
 
@@ -441,40 +441,10 @@ function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent
 function _opts(id,opts){const e=document.getElementById(id);if(!e)return;Array.from(e.options).forEach((o,i)=>{if(opts[i]!==undefined)o.text=opts[i];});}
 
 window.applyLang = function(lang) {
-  const bn = lang==='bn';
-  _st('[data-t="txn_amount"]', bn?'পরিমাণ (৳)':'Amount (৳)');
-  _st('[data-t="txn_date"]',   bn?'তারিখ':'Date');
-  _st('[data-t="txn_note"]',   bn?'বিবরণ / নোট':'Description / Note');
-  _st('[data-t="txn_category"]',bn?'ক্যাটাগরি':'Category');
-  _st('[data-t="txn_save"]',   bn?'সংরক্ষণ করুন':'Save Transaction');
-  _st('[data-t="txn_cancel"]', bn?'বাতিল':'Cancel');
-  _st('[data-t="dash_add_expense"]',bn?'খরচ যোগ করুন':'Add Expense');
-  document.querySelectorAll('.card-title,.stat-label').forEach(el=>{
-    const m={'This Month':'এই মাসে','This Year':'এই বছরে','Top Category':'শীর্ষ ক্যাটাগরি','Expense by Category':'ক্যাটাগরি অনুযায়ী খরচ','Monthly Trend':'মাসিক ধারা','Expense Categories':'খরচের ক্যাটাগরি'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  document.querySelectorAll('th').forEach(el=>{
-    const m={'Date':'তারিখ','Category':'ক্যাটাগরি','Wallet':'ওয়ালেট','Note':'নোট','Amount':'পরিমাণ','Action':'কার্যক্রম'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  document.querySelectorAll('.form-label').forEach(el=>{
-    const m={'Expense Category':'খরচের ক্যাটাগরি','Amount (৳)':'পরিমাণ (৳)','Date':'তারিখ','Description / Note':'বিবরণ / নোট','Wallet':'ওয়ালেট'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  const fc=document.getElementById('exp-filter-cat');
-  if(fc&&fc.options[0])fc.options[0].text=bn?'সব ক্যাটাগরি':'All Categories';
-  const noExp=document.getElementById('no-expense');
-  if(noExp) noExp.textContent=bn?'এখনো কোনো খরচ লেখা হয়নি।':'No expenses recorded yet.';
-  if(typeof renderExpStats==='function')renderExpStats();
-  if(typeof renderExpCatCards==='function')renderExpCatCards();
-  if(typeof renderExpBars==='function')renderExpBars();
-  if(typeof renderExpenseTable==='function')renderExpenseTable();
+  // All data-t elements handled globally by setLanguage() in app.js
+  if(typeof renderExpBars==='function') renderExpBars();
+  if(typeof renderExpTrend==='function') renderExpTrend();
+  if(typeof renderExpenseTable==='function') renderExpenseTable();
 };
 
 </script>

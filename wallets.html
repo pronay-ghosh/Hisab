@@ -49,8 +49,8 @@
       <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
     <div class="sidebar-credits">
-      <div class="sidebar-credits-label">Credit Points</div>
-      <div class="sidebar-credits-val"><span class="credit-display">150</span> pts</div>
+      <div class="sidebar-credits-label" data-t="sidebar_credits_label">Credit Points</div>
+      <div class="sidebar-credits-val"><span class="credit-display">150</span> <span data-t="sidebar_credits_pts">pts</span></div>
     </div>
   </aside>
 
@@ -727,50 +727,9 @@ function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=tx
 function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent=txt);}
 
 window.applyLang = function(lang) {
-  const bn = lang==='bn';
-  _st('[data-t="dash_balance"]', bn?'মোট ব্যালেন্স':'Total Balance');
-  _st('[data-t="wlt_fund_transfer"]',       bn?'⇄ ফান্ড ট্রান্সফার':'⇄ Fund Transfer');
-  _st('[data-t="wlt_fund_transfer_title"]', bn?'⇄ ফান্ড ট্রান্সফার':'⇄ Fund Transfer');
-  _st('[data-t="wlt_double_entry_note"]',   bn?'দ্বৈত প্রবিষ্টি: এক ওয়ালেট থেকে টাকা বের হয়ে অন্যটিতে যাবে।':'Double-entry: Money moves out of one wallet and into another.');
-  _st('[data-t="wlt_tr_amount"]',           bn?'পরিমাণ (৳)':'Amount (৳)');
-  _st('[data-t="wlt_tr_from"]',             bn?'যেখান থেকে':'From');
-  _st('[data-t="wlt_tr_to"]',               bn?'যেখানে':'To');
-  _st('[data-t="wlt_after_transfer"]',      bn?'ট্রান্সফারের পর:':'After Transfer:');
-  _st('[data-t="wlt_tr_submit"]',           bn?'ফান্ড ট্রান্সফার করুন':'Transfer Fund');
-  _st('[data-t="wlt_across_all"]', bn?'সব ওয়ালেট মিলিয়ে':'Across all wallets');
-  _st('[data-t="wlt_all_movements"]', bn?'সব ওয়ালেটের লেনদেন':'All movements across wallets');
-  _st('[data-t="wlt_no_txns"]', bn?'এখনো কোনো লেনদেন নেই।':'No transactions yet.');
-  _st('[data-t="wlt_add_btn"]', bn?'+ ওয়ালেট যোগ করুন':'+ Add Wallet');
-  const filterSel = document.getElementById('wallet-filter');
-  if(filterSel && filterSel.options[0]) filterSel.options[0].text = bn?'সব ওয়ালেট':'All Wallets';
-  document.querySelectorAll('.card-title').forEach(el=>{
-    const m={'Wallets & Accounts':'ওয়ালেট ও অ্যাকাউন্ট','Add Wallet':'ওয়ালেট যোগ করুন','Wallet Transactions':'ওয়ালেট লেনদেন','Add New Wallet':'নতুন ওয়ালেট যোগ করুন'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  document.querySelectorAll('.form-label').forEach(el=>{
-    const m={'Wallet Name':'ওয়ালেটের নাম','Initial Balance':'প্রাথমিক ব্যালেন্স','Icon':'আইকন','Type':'ধরন','Balance':'ব্যালেন্স'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  document.querySelectorAll('th').forEach(el=>{
-    const m={'Date':'তারিখ','Type':'ধরন','Amount':'পরিমাণ','Note':'নোট','Balance':'ব্যালেন্স'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  document.querySelectorAll('.btn').forEach(el=>{
-    const m={'+ Add Wallet':'+ ওয়ালেট যোগ করুন','Save':'সংরক্ষণ করুন','Cancel':'বাতিল','All Wallets':'সব ওয়ালেট'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  const fw=document.getElementById('txn-filter-wallet');
-  if(fw&&fw.options[0])fw.options[0].text=bn?'সব ওয়ালেট':'All Wallets';
-  if(typeof renderWallets==='function')renderWallets();
-  if(typeof renderWalletTxns==='function')renderWalletTxns();
+  // All data-t elements handled globally by setLanguage() in app.js
+  if(typeof renderWalletTypeList==='function') renderWalletTypeList();
+  if(typeof renderWalletTxns==='function') renderWalletTxns();
 };
 
 </script>

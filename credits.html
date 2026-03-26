@@ -433,60 +433,8 @@ function _stId(id,txt){const e=document.getElementById(id);if(e)e.textContent=tx
 function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=txt;}
 
 window.applyLang = function(lang) {
-  const bn = lang==='bn';
-  document.querySelectorAll('.card-title').forEach(el=>{
-    const m={'Credit Points':'ক্রেডিট পয়েন্ট','📋 Credit Transaction History':'📋 ক্রেডিট লেনদেনের ইতিহাস','Credit Transaction History':'ক্রেডিট লেনদেনের ইতিহাস','Earn Credits':'ক্রেডিট অর্জন করুন','Buy Credits':'ক্রেডিট কিনুন'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  // Stats
-  document.querySelectorAll('[id="hist-total-earned"],[id="hist-total-used"],[id="hist-balance"]').forEach(e=>{});
-  document.querySelectorAll('div').forEach(el=>{
-    const m={'Total Earned':'মোট অর্জিত','Total Used':'মোট ব্যবহৃত','Balance':'ব্যালেন্স'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(el.style&&(el.children.length===0)&&bn&&m[t])el.textContent=m[t];
-    else if(el.style&&(el.children.length===0)&&!bn&&r[t])el.textContent=r[t];
-  });
-  // Filter dropdown
-  const f=document.getElementById('history-filter');
-  if(f){f.options[0].text=bn?'সব':'All';f.options[1].text=bn?'+ শুধু ক্রেডিট':'+ Credits Only';f.options[2].text=bn?'- শুধু ডেবিট':'- Credits Only';}
-  // Buttons
-  document.querySelectorAll('.btn').forEach(el=>{
-    const m={'Watch Ad to Earn +5':'বিজ্ঞাপন দেখুন (+5)','Buy':'কিনুন'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  _st('[data-t="crd_total_earned"]',   bn?'মোট অর্জিত':'Total Earned');
-  _st('[data-t="crd_total_used"]',     bn?'মোট ব্যবহৃত':'Total Used');
-  _st('[data-t="crd_balance_lbl"]',    bn?'ব্যালেন্স':'Balance');
-  _st('[data-t="crd_loading_history"]',bn?'ইতিহাস লোড হচ্ছে...':'Loading history...');
-  // Balance card & topbar
-  _st('[data-t="crd_your_balance_title"]', bn?'আপনার ক্রেডিট ব্যালেন্স':'Your Credit Balance');
-  _st('[data-t="crd_page_title"]',         bn?'💳 ক্রেডিট পয়েন্ট':'💳 Credit Points');
-  _st('[data-t="crd_watch_btn_sm"]',       bn?'দেখুন':'Watch');
-  _st('[data-t="crd_ad_modal_title"]',     bn?'বিজ্ঞাপন দেখে ৫ ক্রেডিট অর্জন করুন':'Watch Ad to Earn 5 Credits');
-  _st('[data-t="crd_pts_unit"]',           bn?'পয়েন্ট':'pts');
-  document.querySelectorAll('.sidebar-credits-val').forEach(el=>{
-    // "pts" suffix after the credit display number
-    const span = el.querySelector('.credit-display');
-    const unitSpan = el.querySelector('[data-t="crd_pts_unit"]');
-    if (unitSpan) unitSpan.textContent = bn?'পয়েন্ট':'pts';
-  });
-  // Pack cards
-  _st('[data-t="pack_pts_100"]',  bn?'১০০ পয়েন্ট':'100 pts');
-  _st('[data-t="pack_pts_500"]',  bn?'৫০০ পয়েন্ট':'500 pts');
-  _st('[data-t="pack_pts_1000"]', bn?'১০০০ পয়েন্ট':'1000 pts');
-  _st('[data-t="pack_pts_5000"]', bn?'৫০০০ পয়েন্ট':'5000 pts');
-  _st('[data-t="pack_best_value"]', bn?'৳ ৯৯ — সেরা মূল্য':'৳ 99 — Best Value');
-  document.querySelectorAll('[data-t="pack_buy_btn"]').forEach(el=>{ el.textContent=bn?'কিনুন':'Buy'; });
-  // Pack prices text
-  document.querySelectorAll('.pack-price').forEach(el=>{
-    // Price stays same, only label changes if any
-  });
-  if(typeof renderCreditHistory==='function')renderCreditHistory();
+  // All data-t elements handled globally by setLanguage() in app.js
+  if(typeof renderCreditHistory==='function') renderCreditHistory();
 };
 
 </script>

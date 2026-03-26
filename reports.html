@@ -50,8 +50,8 @@
       <a class="sidebar-link" onclick="logoutUser()" style="cursor:pointer;"><span class="nav-icon">🚪</span> <span data-t="nav_logout">Log Out</span></a>
     </nav>
     <div class="sidebar-credits">
-      <div class="sidebar-credits-label">Credit Points</div>
-      <div class="sidebar-credits-val"><span class="credit-display">150</span> pts</div>
+      <div class="sidebar-credits-label" data-t="sidebar_credits_label">Credit Points</div>
+      <div class="sidebar-credits-val"><span class="credit-display">150</span> <span data-t="sidebar_credits_pts">pts</span></div>
     </div>
   </aside>
 
@@ -480,47 +480,9 @@ function _stPh(id,txt){const e=document.getElementById(id);if(e)e.placeholder=tx
 function _stAll(sel,txt){document.querySelectorAll(sel).forEach(e=>e.textContent=txt);}
 
 window.applyLang = function(lang) {
-  const bn = lang==='bn';
-  // Topbar
-  _st('[data-t="rpt_page_title"]',   bn?'📊 রিপোর্ট ও বিশ্লেষণ':'📊 Reports & Analytics');
-  _st('[data-t="rpt_download_btn"]', bn?'⬇ ডাউনলোড (৫ পয়েন্ট)':'⬇ Download (5 pts)');
-  // Period tabs
-  _st('[data-t="rpt_daily"]',   bn?'দৈনিক':'Daily');
-  _st('[data-t="rpt_weekly"]',  bn?'সাপ্তাহিক':'Weekly');
-  _st('[data-t="rpt_monthly"]', bn?'মাসিক':'Monthly');
-  _st('[data-t="rpt_yearly"]',  bn?'বার্ষিক':'Yearly');
-  // Summary stats
-  _st('[data-t="rpt_income"]',  bn?'মোট আয়':'Total Income');
-  _st('[data-t="rpt_expense"]', bn?'মোট খরচ':'Total Expense');
-  _st('[data-t="rpt_savings"]', bn?'নিট সঞ্চয়':'Net Savings');
-  _st('[data-t="rpt_budget"]',  bn?'বাজেট অবশিষ্ট':'Budget Left');
-  _st('[data-t="rpt_bycat"]',   bn?'খরচ হেড অনুযায়ী':'Expense by Category');
-  _st('[data-t="rpt_compare"]', bn?'শেষ ৩ মাসের তুলনা':'Last 3 Months Comparison');
-  _st('[data-t="rpt_ai"]',      bn?'AI পরামর্শ':'AI Insight');
-  // Card titles
-  document.querySelectorAll('.card-title').forEach(el=>{
-    const m={'Financial Reports':'আর্থিক রিপোর্ট','Summary':'সারসংক্ষেপ','Expense by Category':'ক্যাটাগরি অনুযায়ী খরচ','AI Insight':'AI পরামর্শ','Last 3 Months Comparison':'শেষ ৩ মাসের তুলনা','Yearly Summary':'বার্ষিক সারসংক্ষেপ'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  document.querySelectorAll('.btn').forEach(el=>{
-    const m={'Get AI Insight':'AI পরামর্শ নিন','Download Report':'রিপোর্ট ডাউনলোড করুন'};
-    const r=Object.fromEntries(Object.entries(m).map(([k,v])=>[v,k]));
-    const t=el.textContent.trim();
-    if(bn&&m[t])el.textContent=m[t]; else if(!bn&&r[t])el.textContent=r[t];
-  });
-  const fc=document.getElementById('cat-filter');
-  if(fc&&fc.options[0]&&fc.options[0].value==='') fc.options[0].text=bn?'সব ক্যাটাগরি':'All Categories';
-  // Update dynamic category options
-  if(fc && State && State.expense_cats) {
-    State.expense_cats.forEach((c,i) => {
-      const opt = fc.options[i+1];
-      if(opt) opt.textContent = bn ? c.bn : c.en;
-    });
-  }
-  if(typeof renderAll==='function')renderAll();
-  if(typeof renderYearlySummary==='function')renderYearlySummary();
+  // All data-t elements handled globally by setLanguage() in app.js
+  if(typeof renderAll==='function') renderAll();
+  if(typeof renderYearlySummary==='function') renderYearlySummary();
 };
 
 </script>
