@@ -636,23 +636,23 @@ function _userKey(base) {
 const State = {
   lang: localStorage.getItem('hisab_lang') || 'en',
   theme: localStorage.getItem('hisab_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
-  user: JSON.parse(localStorage.getItem('hisab_user') || 'null'),
-  credits: parseInt(localStorage.getItem(_userKey('hisab_credits')) || '150'),
-  transactions: JSON.parse(localStorage.getItem(_userKey('hisab_txns')) || '[]'),
-  wallets: JSON.parse(localStorage.getItem(_userKey('hisab_wallets')) || JSON.stringify([
+  user: null,
+  credits: 150,
+  transactions: [],
+  wallets: [
     { id: 'cash',  name_en: 'Cash',         name_bn: 'নগদ',                  icon: '💵', balance: 0 },
     { id: 'bank',  name_en: 'Bank Account', name_bn: 'ব্যাংক অ্যাকাউন্ট',  icon: '🏦', balance: 0 },
     { id: 'debit', name_en: 'Debit Card',   name_bn: 'ডেবিট কার্ড',         icon: '💳', balance: 0 },
-  ])),
-  income_cats: JSON.parse(localStorage.getItem(_userKey('hisab_income_cats')) || JSON.stringify([
+  ],
+  income_cats: [
     { id: 'salary', en: 'Salary', bn: 'বেতন' },
     { id: 'business', en: 'Business', bn: 'ব্যবসা' },
     { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
     { id: 'gift', en: 'Gift', bn: 'উপহার' },
     { id: 'savings', en: 'Savings', bn: 'সঞ্চয়' },
     { id: 'others', en: 'Others', bn: 'অন্যান্য' },
-  ])),
-  expense_cats: JSON.parse(localStorage.getItem(_userKey('hisab_expense_cats')) || JSON.stringify([
+  ],
+  expense_cats: [
     { id: 'rent', en: 'House Rent', bn: 'বাড়িভাড়া' },
     { id: 'conv', en: 'Conveyance', bn: 'যাতায়াত' },
     { id: 'food', en: 'Fooding', bn: 'খাবার' },
@@ -660,8 +660,8 @@ const State = {
     { id: 'medicine', en: 'Medicine', bn: 'ওষুধ' },
     { id: 'entertainment', en: 'Entertainment', bn: 'বিনোদন' },
     { id: 'others', en: 'Others', bn: 'অন্যান্য' },
-  ])),
-  wallet_types: JSON.parse(localStorage.getItem(_userKey('hisab_wallet_types')) || JSON.stringify([
+  ],
+  wallet_types: [
     { id: 'cash', en: 'Cash', bn: 'নগদ' },
     { id: 'bank', en: 'Bank Account', bn: 'ব্যাংক অ্যাকাউন্ট' },
     { id: 'debit', en: 'Debit Card', bn: 'ডেবিট কার্ড' },
@@ -669,10 +669,57 @@ const State = {
     { id: 'loan_to', en: 'Loan to Others', bn: 'অন্যকে ঋণ' },
     { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
     { id: 'others', en: 'Others', bn: 'অন্যান্য' },
-  ])),
-  budgets: JSON.parse(localStorage.getItem(_userKey('hisab_budgets')) || '{}'),
-  notifications: JSON.parse(localStorage.getItem(_userKey('hisab_notifications')) || '[]'),
+  ],
+  budgets: {},
+  notifications: [],
 };
+
+// ── STATE REFRESH ─────────────────────────
+// Loads user-specific data into the global State object
+function refreshState() {
+  State.user = JSON.parse(localStorage.getItem('hisab_user') || 'null');
+  if (!State.user) return;
+
+  const u = State.user.username;
+  State.credits = parseInt(localStorage.getItem(`hisab_credits_${u}`) || '150');
+  State.transactions = JSON.parse(localStorage.getItem(`hisab_txns_${u}`) || '[]');
+  State.wallets = JSON.parse(localStorage.getItem(`hisab_wallets_${u}`) || JSON.stringify([
+    { id: 'cash',  name_en: 'Cash',         name_bn: 'নগদ',                  icon: '💵', balance: 0 },
+    { id: 'bank',  name_en: 'Bank Account', name_bn: 'ব্যাংক অ্যাকাউন্ট',  icon: '🏦', balance: 0 },
+    { id: 'debit', name_en: 'Debit Card',   name_bn: 'ডেবিট কার্ড',         icon: '💳', balance: 0 },
+  ]));
+  State.income_cats = JSON.parse(localStorage.getItem(`hisab_income_cats_${u}`) || JSON.stringify([
+    { id: 'salary', en: 'Salary', bn: 'বেতন' },
+    { id: 'business', en: 'Business', bn: 'ব্যবসা' },
+    { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
+    { id: 'gift', en: 'Gift', bn: 'উপহার' },
+    { id: 'savings', en: 'Savings', bn: 'সঞ্চয়' },
+    { id: 'others', en: 'Others', bn: 'অন্যান্য' },
+  ]));
+  State.expense_cats = JSON.parse(localStorage.getItem(`hisab_expense_cats_${u}`) || JSON.stringify([
+    { id: 'rent', en: 'House Rent', bn: 'বাড়িভাড়া' },
+    { id: 'conv', en: 'Conveyance', bn: 'যাতায়াত' },
+    { id: 'food', en: 'Fooding', bn: 'খাবার' },
+    { id: 'travel', en: 'Travelling', bn: 'ভ্রমণ' },
+    { id: 'medicine', en: 'Medicine', bn: 'ওষুধ' },
+    { id: 'entertainment', en: 'Entertainment', bn: 'বিনোদন' },
+    { id: 'others', en: 'Others', bn: 'অন্যান্য' },
+  ]));
+  State.wallet_types = JSON.parse(localStorage.getItem(`hisab_wallet_types_${u}`) || JSON.stringify([
+    { id: 'cash', en: 'Cash', bn: 'নগদ' },
+    { id: 'bank', en: 'Bank Account', bn: 'ব্যাংক অ্যাকাউন্ট' },
+    { id: 'debit', en: 'Debit Card', bn: 'ডেবিট কার্ড' },
+    { id: 'credit', en: 'Credit Card', bn: 'ক্রেডিট কার্ড' },
+    { id: 'loan_to', en: 'Loan to Others', bn: 'অন্যকে ঋণ' },
+    { id: 'loan_from', en: 'Loan from Others', bn: 'অন্যের কাছ থেকে ঋণ' },
+    { id: 'others', en: 'Others', bn: 'অন্যান্য' },
+  ]));
+  State.budgets = JSON.parse(localStorage.getItem(`hisab_budgets_${u}`) || '{}');
+  State.notifications = JSON.parse(localStorage.getItem(`hisab_notifications_${u}`) || '[]');
+}
+
+// Initial load
+refreshState();
 
 // ── HELPERS ───────────────────────────────
 const t = (key) => LANG[State.lang][key] || LANG['en'][key] || key;
@@ -1366,28 +1413,29 @@ function loginUser(username, password) {
       if (new Date() < expiry) {
         return { error: t('err_banned_temp') + expiry.toLocaleString() };
       } else {
-        // Temporary ban expired — auto unban
         user.banned = false;
         user.banType = null;
         user.banExpiry = null;
         localStorage.setItem('hisab_users', JSON.stringify(users));
       }
     } else {
-      // Legacy ban (no type specified) — treat as lifetime
       return { error: t('err_banned_lifetime') };
     }
   }
 
   if (user.password !== btoa(password)) return { error: 'Wrong password' };
-  State.user = user;
-  saveState('user', user);
+
+  // ── SUCCESS LOGIN ──
+  localStorage.setItem('hisab_user', JSON.stringify(user));
+  refreshState(); // Re-load user data into State
+
   const now = Date.now();
   const nowISO = new Date().toISOString();
   localStorage.setItem('hisab_last_login', now);
   localStorage.setItem('hisab_last_login_' + user.username, now);
-  // ── Merge global categories from Firestore on login ──
+  
   _mergeGlobalCatsFromFirestore(user.username);
-  // Update lastSeen and lastLogin on user record
+  
   const allUsers = JSON.parse(localStorage.getItem('hisab_users') || '[]');
   const uIdx = allUsers.findIndex(u => u.username === user.username);
   if (uIdx >= 0) { 
@@ -1397,7 +1445,6 @@ function loginUser(username, password) {
   }
   logActivity(user.username, 'login', 'Logged in');
 
-  // ── Background: Firestore এ lastSeen & lastLogin update করো ──
   (async () => {
     try {
       const { db, doc, updateDoc } = await getFirebase();
@@ -1464,8 +1511,9 @@ async function restoreUserFromFirestore(username, password) {
     localStorage.setItem('hisab_users', JSON.stringify(existingUsers));
 
     // Login করো
-    State.user = foundUser;
-    saveState('user', foundUser);
+    localStorage.setItem('hisab_user', JSON.stringify(foundUser));
+    refreshState();
+    
     localStorage.setItem('hisab_last_login', Date.now());
     logActivity(foundUser.username, 'login', 'Logged in (restored from cloud)');
     return { success: true, user: foundUser, restored: true };
@@ -1496,10 +1544,11 @@ function registerUser(data) {
   };
   users.push(user);
   localStorage.setItem('hisab_users', JSON.stringify(users));
-  State.user = user;
-  saveState('user', user);
-  State.credits = 100;
-  saveState('credits', 100);
+  
+  // Login as the new user
+  localStorage.setItem('hisab_user', JSON.stringify(user));
+  refreshState();
+  
   logActivity(user.username, 'register', 'Account created — 100 credits granted');
   
   const _regKey = 'hisab_credit_log_' + user.username;
