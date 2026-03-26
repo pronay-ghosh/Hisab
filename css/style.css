@@ -57,20 +57,6 @@
   --transition: 0.18s ease;
 }
 
-.badge-new {
-  display: inline-block;
-  padding: 2px 6px;
-  background: linear-gradient(135deg, #7C3AED, #EC4899);
-  color: #fff;
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  border-radius: 4px;
-  margin-left: 6px;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 4px rgba(124, 58, 237, 0.3);
-}
-
 [data-theme="light"] {
   --bg-primary: #ffffff;
   --bg-secondary: #F5F8FC;
@@ -121,15 +107,6 @@ body {
   transition: background var(--transition), color var(--transition);
   font-size: 15px;
   line-height: 1.6;
-}
-
-.lang-changing * {
-  transition: none !important;
-}
-
-.theme-toggle-icon {
-  display: inline-block;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
 }
 
 a { text-decoration: none; color: inherit; }
