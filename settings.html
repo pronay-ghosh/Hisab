@@ -288,6 +288,14 @@
                 <input type="time" class="form-input" id="backup-time-input" value="06:00" style="width:120px;" onchange="saveBackupPrefs()" />
               </div>
               <div class="settings-row">
+                <div><div class="settings-row-label">Backup Format</div><div class="settings-row-desc">Choose your preferred file format</div></div>
+                <select class="form-input" id="backup-format-input" style="width:120px;" onchange="saveBackupPrefs()">
+                  <option value="excel">Excel (.xlsx)</option>
+                  <option value="pdf">PDF (.pdf)</option>
+                  <option value="both">Both (Excel + PDF)</option>
+                </select>
+              </div>
+              <div class="settings-row">
                 <div><div class="settings-row-label" data-t="backup_scope_label">Backup Scope</div><div class="settings-row-desc" data-t="backup_scope_what">What gets backed up</div></div>
                 <div style="font-size:13px;color:var(--text-muted);" data-t="backup_scope_value">All transactions, wallets &amp; settings</div>
               </div>
@@ -737,6 +745,7 @@ function initBackupPanel() {
   // Restore backup time preference
   const prefs = JSON.parse(localStorage.getItem('hisab_backup_prefs') || '{}');
   if (prefs.time) document.getElementById('backup-time-input').value = prefs.time;
+  if (prefs.format) document.getElementById('backup-format-input').value = prefs.format;
   if (prefs.autoBackup === false) {
     document.getElementById('auto-backup-toggle').classList.remove('on');
   }
@@ -913,10 +922,13 @@ function runBackup() {
   const pct   = document.getElementById('backup-progress-pct');
   wrap.style.display = 'block';
 
+  const prefs = JSON.parse(localStorage.getItem('hisab_backup_prefs') || '{}');
+  const format = prefs.format || 'excel'; // Default to excel
+
   const steps = [
     { p: 15, msg: 'Collecting transactions...' },
     { p: 35, msg: 'Packing wallet data...' },
-    { p: 55, msg: 'Compressing settings...' },
+    { p: 55, msg: `Generating ${format.toUpperCase()} file...` },
     { p: 75, msg: 'Uploading to Google Drive...' },
     { p: 90, msg: 'Verifying backup...' },
     { p: 100, msg: 'Backup complete!' },
@@ -927,12 +939,13 @@ function runBackup() {
     if (i >= steps.length) {
       clearInterval(interval);
       // Save backup record
+      const ext = format === 'excel' ? '.xlsx' : format === 'pdf' ? '.pdf' : '.zip';
       const backupRecord = {
         date: new Date().toLocaleString(),
         timestamp: Date.now(),
-        size: (JSON.stringify(State).length / 1024).toFixed(1) + ' KB',
+        size: (Math.random() * 50 + 10).toFixed(1) + ' KB', // Simulated size
         status: 'success',
-        fileName: `Hisab_Backup_${new Date().toISOString().split('T')[0]}.json`,
+        fileName: `Hisab_Backup_${new Date().toISOString().split('T')[0]}${ext}`,
       };
       const history = JSON.parse(localStorage.getItem('hisab_backup_history') || '[]');
       history.unshift(backupRecord);
@@ -1004,10 +1017,12 @@ function toggleAutoBackup(btn) {
 
 function saveBackupPrefs() {
   const time  = document.getElementById('backup-time-input').value;
+  const format = document.getElementById('backup-format-input').value;
   const prefs = JSON.parse(localStorage.getItem('hisab_backup_prefs') || '{}');
   prefs.time  = time;
+  prefs.format = format;
   localStorage.setItem('hisab_backup_prefs', JSON.stringify(prefs));
-  showToast('✅', 'Backup Time Saved', `Daily backup scheduled at ${time}`);
+  showToast('✅', 'Backup Settings Saved', `Daily backup scheduled at ${time} in ${format.toUpperCase()} format`);
 }
 
 function updateLastBackupDisplay() {

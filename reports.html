@@ -345,7 +345,7 @@ function generateAIInsight(totals, catData) {
     insight += `✅ <strong>Savings Rate: ${savePct}%</strong> — ${savePct >= 20 ? 'Excellent! You are saving well above the recommended 20%.' : savePct >= 10 ? 'Good progress! Try to reach 20% savings.' : 'Your savings rate is below 10%. Try to reduce expenses.'}<br/><br/>`;
   } else {
     const _Lr2=LANG[State.lang]||LANG['en'];
-    insight += `❌ <strong>${_Lr2.rpt_no_savings||'No savings this month.'}</strong> ${_Lr2.rpt_no_sav_desc||'Your expenses exceeded income by'} ${fmt(Math.abs(savings))}. Review your spending.\`;
+    insight += `❌ <strong>${_Lr2.rpt_no_savings||'No savings this month.'}</strong> ${_Lr2.rpt_no_sav_desc||'Your expenses exceeded income by'} ${fmt(Math.abs(savings))}. Review your spending.`;
   }
   if (topCatName) {
     insight += `📌 <strong>Highest Expense: ${topCatName}</strong> — ${topCatPct}% of total expenses (${fmt(topCat[1])}). ${topCatPct > 50 ? 'This single category dominates your budget. Consider ways to reduce it.' : 'This is manageable. Keep monitoring.'}<br/><br/>`;

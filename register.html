@@ -188,7 +188,7 @@
       <!-- Username -->
       <div class="form-group">
         <label class="form-label" data-t="reg_username">Username</label>
-        <input type="text" class="form-input" id="reg-username" placeholder="username" oninput="onUsernameInput(this.value)" />
+        <input type="text" class="form-input" id="reg-username" data-t-ph="reg_username_ph" placeholder="username" oninput="onUsernameInput(this.value)" />
         <div class="username-suggest" id="username-suggest" onclick="acceptSuggestion()"></div>
         <div class="form-hint">Only letters, numbers, and underscores. Leave blank to auto-generate.</div>
         <div class="form-error" id="username-error">Username already taken. Try another.</div>

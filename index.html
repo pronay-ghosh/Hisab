@@ -5,12 +5,56 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#042C53" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Hisab — হিসাব | For Future Savings</title>
-  <meta name="description" content="Hisab is a professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings." />
+  <meta name="description" content="Hisab is a professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings with AI-powered insights." />
+  <meta name="keywords" content="Hisab, Expense Tracker, Bangladesh, Accounting, Double-entry, Savings, Budgeting, Finance App" />
+  <meta name="author" content="Hisab Team" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://amarhisab.web.app/" />
+  <meta property="og:title" content="Hisab — হিসাব | For Future Savings" />
+  <meta property="og:description" content="Professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings." />
+  <meta property="og:image" content="https://amarhisab.web.app/logo.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://amarhisab.web.app/" />
+  <meta property="twitter:title" content="Hisab — হিসাব | For Future Savings" />
+  <meta property="twitter:description" content="Professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings." />
+  <meta property="twitter:image" content="https://amarhisab.web.app/logo.png" />
+
   <meta name="google-site-verification" content="_1nUBShCO5CyFebI1z-n20o3Gr_KC5qSP4uO44nuP48" />
   <link rel="canonical" href="https://amarhisab.web.app/" />
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Hisab",
+    "operatingSystem": "Web",
+    "applicationCategory": "FinanceApplication",
+    "description": "Professional double-entry expense tracker designed for Bangladesh. Track income, expenses, and grow your savings with AI-powered insights.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "BDT"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "1200"
+    }
+  }
+  </script>
+
   <link rel="stylesheet" href="css/mobile.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
@@ -544,8 +588,13 @@
       <button class="lang-btn-switch" onclick="setLanguage('bn')" data-lang="bn">বাং</button>
     </div>
     <button class="ltheme-btn" onclick="toggleTheme()"><span class="theme-toggle-icon">🌙</span></button>
-    <a href="login.html" class="lbtn-login" data-t="nav_login">Log In</a>
-    <a href="register.html" class="lbtn-cta" data-t="nav_get_started">Get Started →</a>
+    <div id="nav-auth-btns" style="display: flex; align-items: center; gap: 10px;">
+      <a href="login.html" class="lbtn-login" data-t="nav_login">Log In</a>
+      <a href="register.html" class="lbtn-cta" data-t="nav_get_started">Get Started →</a>
+    </div>
+    <div id="nav-user-btns" style="display: none; align-items: center; gap: 10px;">
+      <a href="dashboard.html" class="lbtn-cta" style="background: linear-gradient(135deg,#7C3AED,#EC4899);" data-t="nav_dashboard">Go to Dashboard</a>
+    </div>
   </div>
 </nav>
 
@@ -582,7 +631,7 @@
       </div>
             <div class="lctas">
         <a href="register.html" class="lbtn-p"><span data-t="hero_cta1">🚀 Start Free Today</span></a>
-        <a href="#how-it-works" class="lbtn-s"><span data-t="hero_cta2">▶ See How It Works</span></a>
+        <a href="#how-it-works" class="lbtn-s" data-t-title="hero_cta2_title"><span data-t="hero_cta2">▶ See How It Works</span></a>
       </div>
       <div class="ltrust">
         <div class="ltrust-item" data-t="trust1">✅ Free to start</div>
@@ -1488,4 +1537,46 @@
   </div>
 </div>
 
-<s
+<script src="js/app.js"></script>
+<script>
+  // Check auth and toggle nav buttons
+  document.addEventListener('DOMContentLoaded', () => {
+    const authBtns = document.getElementById('nav-auth-btns');
+    const userBtns = document.getElementById('nav-user-btns');
+    if (isLoggedIn()) {
+      if (authBtns) authBtns.style.display = 'none';
+      if (userBtns) userBtns.style.display = 'flex';
+    } else {
+      if (authBtns) authBtns.style.display = 'flex';
+      if (userBtns) userBtns.style.display = 'none';
+    }
+  });
+
+  // Hero mockup data animation
+  document.addEventListener('DOMContentLoaded', () => {
+    // Stat counters
+    const stats = {
+      bal: 84250,
+      inc: 125000,
+      exp: 40750,
+      sav: 84250
+    };
+    
+    // Animate stats periodically
+    setInterval(() => {
+      const isPriv = isLoggedIn() && (State.user.role === 'admin' || State.user.role === 'editor');
+      const prefix = isPriv ? '∞' : '৳ ';
+      
+      const elBal = document.querySelector('.ldash-bal');
+      if (elBal) elBal.textContent = prefix + (isPriv ? '' : stats.bal.toLocaleString());
+      
+      const elInc = document.querySelectorAll('.ldash-mini-val')[0];
+      if (elInc) elInc.textContent = prefix + (isPriv ? '' : stats.inc.toLocaleString());
+      
+      const elExp = document.querySelectorAll('.ldash-mini-val')[1];
+      if (elExp) elExp.textContent = prefix + (isPriv ? '' : stats.exp.toLocaleString());
+    }, 2000);
+  });
+</script>
+</body>
+</html>

@@ -151,6 +151,7 @@
                   <th>Credits</th>
                   <th>Role</th>
                   <th>Status</th>
+                  <th>Last Login</th>
                   <th>Joined</th>
                   <th>Actions</th>
                 </tr>
@@ -478,6 +479,15 @@
             <div id="admin-expense-cats"></div>
           </div>
 
+          <!-- Wallet Types -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👛 Wallet Types</div>
+              <button class="btn btn-primary btn-sm" onclick="adminAddGlobalWalletPrompt()">+ Add</button>
+            </div>
+            <div id="admin-wallet-types"></div>
+          </div>
+
         </div>
 
         <!-- Add Category Form -->
@@ -630,6 +640,35 @@
   </div>
 </div>
 
+<!-- BAN USER MODAL -->
+<div class="modal-backdrop" id="ban-user-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" data-t="admin_ban_user">Ban User</div>
+      <button class="modal-close" onclick="closeModal('ban-user-modal')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-t="admin_ban_days">Ban Type</label>
+      <select class="form-input" id="ban-type" onchange="document.getElementById('temp-ban-group').style.display = this.value==='temporary'?'block':'none'">
+        <option value="lifetime" data-t="admin_ban_lifetime">Lifetime Ban</option>
+        <option value="temporary" data-t="admin_ban_temp">Temporary Ban</option>
+      </select>
+    </div>
+    <div id="temp-ban-group" style="display:none;">
+      <div class="form-group">
+        <label class="form-label" data-t="admin_ban_days">Days</label>
+        <input type="number" class="form-input" id="ban-days" placeholder="e.g. 7" min="1" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-t="admin_ban_reason">Reason</label>
+      <input type="text" class="form-input" id="ban-reason" placeholder="Violation of terms..." />
+    </div>
+    <input type="hidden" id="ban-user-id" />
+    <button class="btn btn-primary btn-full" style="background:var(--red-600);" onclick="confirmBan()" data-t="admin_ban_confirm">Confirm Ban</button>
+  </div>
+</div>
+
 <script src="js/app.js"></script>
 <script>
 // ── USER PICKER AUTOCOMPLETE ─────────────
@@ -746,7 +785,9 @@ function renderUsersTable() {
     const statusBadge = isDeleted
       ? '<span class="txn-type-badge badge-expense">Deleted</span>'
       : isBanned
-        ? '<span class="txn-type-badge" style="background:rgba(249,115,22,0.15);color:#f97316;">Banned</span>'
+        ? (u.banType === 'temporary' 
+          ? `<span class="txn-type-badge" style="background:rgba(249,115,22,0.15);color:#f97316;" title="Expires: ${new Date(u.banExpiry).toLocaleString()}">Temp Ban</span>`
+          : '<span class="txn-type-badge" style="background:rgba(249,115,22,0.15);color:#f97316;">Banned</span>')
         : '<span class="txn-type-badge badge-income">Active</span>';
     const rowStyle = isDeleted ? 'opacity:0.45;' : isBanned ? 'opacity:0.7;' : '';
     return `<tr style="${rowStyle}">
@@ -757,10 +798,11 @@ function renderUsersTable() {
       <td>${u.credits || 100}</td>
       <td><span class="txn-type-badge ${u.role === 'admin' ? 'badge-expense' : u.role === 'editor' ? 'badge-transfer' : 'badge-income'}">${u.role || 'user'}</span></td>
       <td>${statusBadge}</td>
+      <td style="font-size:11px;color:var(--text-muted);">${u.lastLogin ? new Date(u.lastLogin).toLocaleString() : 'Never'}</td>
       <td style="color:var(--text-muted);">${u.created || '—'}</td>
       <td style="display:flex;gap:5px;flex-wrap:wrap;min-width:200px;">
         ${!isDeleted ? `<button class="btn btn-outline btn-sm" onclick="editUser(${u.id})" title="Edit">✏️ Edit</button>` : ''}
-        ${!isDeleted && !isBanned ? `<button class="btn btn-sm" style="background:rgba(249,115,22,0.15);color:#f97316;border:1px solid #f97316;" onclick="banUser(${u.id})" title="Ban">🚫 Ban</button>` : ''}
+        ${!isDeleted && !isBanned ? `<button class="btn btn-sm" style="background:rgba(249,115,22,0.15);color:#f97316;border:1px solid #f97316;" onclick="openBanModal(${u.id})" title="Ban">🚫 Ban</button>` : ''}
         ${!isDeleted && isBanned  ? `<button class="btn btn-sm" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid #10b981;" onclick="unbanUser(${u.id})" title="Unban">✅ Unban</button>` : ''}
         ${!isDeleted ? `<button class="btn btn-sm" style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid #ef4444;" onclick="deleteUser(${u.id})" title="Delete">🗑️ Delete</button>` : ''}
         ${isDeleted  ? `<button class="btn btn-sm" style="background:rgba(99,102,241,0.15);color:#6366f1;border:1px solid #6366f1;" onclick="restoreUser(${u.id})" title="Restore">♻️ Restore</button>` : ''}
@@ -853,18 +895,51 @@ async function saveUserEdit() {
   renderUsersTable();
 }
 
-// ── BAN USER ──────────────────────────────
-async function banUser(id) {
-  if (!confirm('এই user কে ban করবেন? Ban করলে login করতে পারবে না।')) return;
-  await _updateUserStatus(id, { banned: true, bannedAt: new Date().toISOString(), bannedBy: 'admin' });
-  showToast('🚫', 'User Banned!', 'User আর login করতে পারবে না।');
+// ── BAN MODAL HELPERS ──────────────────────
+function openBanModal(id) {
+  document.getElementById('ban-user-id').value = id;
+  document.getElementById('ban-type').value = 'lifetime';
+  document.getElementById('temp-ban-group').style.display = 'none';
+  document.getElementById('ban-days').value = '';
+  document.getElementById('ban-reason').value = '';
+  openModal('ban-user-modal');
+}
+
+async function confirmBan() {
+  const id = parseInt(document.getElementById('ban-user-id').value);
+  const type = document.getElementById('ban-type').value;
+  const days = parseInt(document.getElementById('ban-days').value);
+  const reason = document.getElementById('ban-reason').value;
+
+  if (type === 'temporary' && (!days || days < 1)) {
+    showToast('⚠️', 'Missing Days', 'Please specify number of days.');
+    return;
+  }
+
+  const patch = {
+    banned: true,
+    banType: type,
+    banReason: reason || 'Violation of terms',
+    bannedAt: new Date().toISOString(),
+    bannedBy: 'admin'
+  };
+
+  if (type === 'temporary') {
+    const expiry = new Date();
+    expiry.setDate(expiry.getDate() + days);
+    patch.banExpiry = expiry.toISOString();
+  }
+
+  await _updateUserStatus(id, patch);
+  closeModal('ban-user-modal');
+  showToast('🚫', 'User Banned!', `User has been ${type} banned.`);
   renderUsersTable();
 }
 
 // ── UNBAN USER ────────────────────────────
 async function unbanUser(id) {
   if (!confirm('এই user এর ban তুলে নেবেন?')) return;
-  await _updateUserStatus(id, { banned: false, bannedAt: null, bannedBy: null });
+  await _updateUserStatus(id, { banned: false, banType: null, banExpiry: null, bannedAt: null, bannedBy: null });
   showToast('✅', 'User Unbanned!', 'User আবার login করতে পারবে।');
   renderUsersTable();
 }
@@ -1426,6 +1501,23 @@ function renderAdminCategories() {
   };
   renderList(State.income_cats,  'admin-income-cats',  'income');
   renderList(State.expense_cats, 'admin-expense-cats', 'expense');
+
+  // Render Global Wallets
+  const wEl = document.getElementById('admin-wallet-types');
+  if (wEl) {
+    if (!State.wallets.length) { wEl.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:12px 0;">No wallet types yet.</p>'; return; }
+    wEl.innerHTML = State.wallets.map((w, i) => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div>
+          <span style="font-size:14px;font-weight:600;color:var(--text-primary);">${w.icon || '👛'} ${w.name_en || w.name}</span>
+          <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">/ ${w.name_bn || w.name}</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline btn-sm" style="color:var(--blue-400);border-color:var(--blue-400);" onclick="openEditWallet(${i})">✏️ Edit</button>
+          <button class="btn btn-outline btn-sm" style="color:var(--red-400);border-color:var(--red-400);" onclick="adminRemoveGlobalWallet('${w.id}')">🗑️ Remove</button>
+        </div>
+      </div>`).join('');
+  }
 }
 
 async function adminSaveNewCat() {
@@ -1509,9 +1601,43 @@ function saveEditCat() {
   if (cats[idx].name_bn !== undefined) cats[idx].name_bn = bn || en;
   if (type === 'income') saveState('income_cats', State.income_cats);
   else                   saveState('expense_cats', State.expense_cats);
+  
+  // ── Sync to Firestore — propagate to all users ──
+  await _syncGlobalCatsToFirestore(type);
+  
   closeModal('admin-cat-edit-modal');
   renderAdminCategories();
   showToast('✅','Category Updated!',`"${en}" has been updated for all users.`);
+}
+
+function adminAddGlobalWalletPrompt() {
+  const en = prompt('Enter Wallet Type (English):');
+  if (!en) return;
+  const bn = prompt('Enter Wallet Type (Bengali):', en);
+  const icon = prompt('Enter Icon Emoji:', '👛');
+  const id = en.toLowerCase().replace(/\s+/g, '_') + '_' + Date.now();
+  
+  const newWallet = { id, name_en: en, name_bn: bn, icon: icon || '👛', balance: 0 };
+  State.wallets.push(newWallet);
+  saveState('wallets', State.wallets);
+  adminAddGlobalWallet(newWallet);
+  renderAdminCategories();
+}
+
+async function openEditWallet(idx) {
+  const w = State.wallets[idx];
+  const en = prompt('Edit Wallet Type (English):', w.name_en);
+  if (!en) return;
+  const bn = prompt('Edit Wallet Type (Bengali):', w.name_bn);
+  const icon = prompt('Edit Icon Emoji:', w.icon);
+  
+  State.wallets[idx].name_en = en;
+  State.wallets[idx].name_bn = bn || en;
+  State.wallets[idx].icon = icon || '👛';
+  saveState('wallets', State.wallets);
+  await _syncGlobalWalletsToFirestore();
+  renderAdminCategories();
+  showToast('✅', 'Wallet Updated!', 'Updated for all users.');
 }
 
 function adminAddCat(type) {
