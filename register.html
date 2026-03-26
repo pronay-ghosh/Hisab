@@ -390,7 +390,34 @@ function doRegister() {
   }
 
   // ── Success! Show congratulations popup ──
-  showCongratsModal(name);
+  const congratsModal = document.getElementById('congrats-modal');
+  if (congratsModal) {
+    showCongratsModal(name);
+  } else {
+    // If modal not found, redirect immediately
+    window.location.href = '/dashboard';
+  }
+}
+
+// ── Congrats Modal ────────────────────────
+function showCongratsModal(name) {
+  const nameEl = document.getElementById('congrats-name');
+  if (nameEl) nameEl.textContent = name;
+  
+  const modal = document.getElementById('congrats-modal');
+  if (modal) modal.style.display = 'flex';
+  
+  const bar = document.getElementById('congrats-bar');
+  if (bar) {
+    setTimeout(() => {
+      bar.style.width = '100%';
+    }, 100);
+  }
+  
+  // Redirect after 2s
+  setTimeout(() => {
+    window.location.href = '/dashboard';
+  }, 2000);
 }
 
 // ── Warning Modal (duplicate email/phone) ─
@@ -405,20 +432,6 @@ function showWarningModal(type, value) {
     msgEl.innerHTML = `An account with this mobile number <strong>${value}</strong> already exists.<br><br>Please log in or use a different number.`;
   }
   showModal('warn-modal');
-}
-
-// ── Congrats Modal ────────────────────────
-function showCongratsModal(name) {
-  document.getElementById('congrats-name').textContent = name;
-  showModal('congrats-modal');
-  // Progress bar animate
-  setTimeout(() => {
-    document.getElementById('congrats-bar').style.width = '100%';
-  }, 100);
-  // Redirect after 3s
-  setTimeout(() => {
-    window.location.href = '/login';
-  }, 1800);
 }
 
 function showModal(id) {

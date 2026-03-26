@@ -150,27 +150,32 @@ async function doLogin() {
 
   // ── Admin check ──
   if (user === 'admin' && pass === 'Hisab@Admin2026!') {
-    const adminUser = { id: 0, name: 'Administrator', username: 'admin', email: 'admin@hisab.app', role: 'admin' };
-    State.user = adminUser;
-    saveState('user', adminUser);
-    localStorage.setItem('hisab_last_login', Date.now());
+    const adminUser = { id: 0, name: 'Administrator', username: 'admin', email: 'admin@hisab.app', role: 'admin', credits: 999999 };
+    localStorage.setItem('hisab_user', JSON.stringify(adminUser));
+    if (typeof refreshState === 'function') refreshState();
+    
     if (keep) localStorage.setItem('hisab_keep_login', '1');
     else localStorage.removeItem('hisab_keep_login');
     window.location.href = '/admin';
     return;
   }
 
-  // ── Step 1: localStorage থেকে চেষ্টা ──
-  const result = loginUser(user, pass);
-  if (result.success) {
+  // ── Step 1: localStorage ──
+  const res = loginUser(user, pass);
+  if (res.success) {
     if (keep) localStorage.setItem('hisab_keep_login', '1');
     else localStorage.removeItem('hisab_keep_login');
     window.location.href = '/dashboard';
     return;
   }
 
-  // ── Step 2: Firestore থেকে restore করো (cloud backup) ──
-  if (btn) { btn.querySelector('span').textContent = '⏳ Checking cloud...'; btn.disabled = true; }
+  // ── Step 2: Firestore ──
+  if (btn) { 
+    btn.disabled = true;
+    const span = btn.querySelector('span');
+    if (span) span.textContent = '⏳ Checking cloud...';
+  }
+  
   const restored = await restoreUserFromFirestore(user, pass);
   if (restored.success) {
     if (keep) localStorage.setItem('hisab_keep_login', '1');
@@ -179,9 +184,13 @@ async function doLogin() {
     return;
   }
 
-  errEl.textContent = '⚠️ ' + restored.error;
+  errEl.textContent = '⚠️ ' + (restored.error || 'Login failed');
   errEl.classList.add('show');
-  if (btn) { btn.querySelector('span').textContent = (State.lang === 'bn' ? 'লগ ইন' : 'Log In'); btn.disabled = false; }
+  if (btn) { 
+    btn.disabled = false;
+    const span = btn.querySelector('span');
+    if (span) span.textContent = (State.lang === 'bn' ? 'লগ ইন' : 'Log In');
+  }
 }
 
 document.getElementById('login-pass').addEventListener('keydown', e => {
