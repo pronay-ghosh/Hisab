@@ -1,0 +1,97 @@
+{
+  "category": "users",
+  "date": "2026-03-29",
+  "time": "2026-03-29T18-24-08",
+  "count": 5,
+  "data": [
+    {
+      "id": 1774198711009,
+      "name": "Amit",
+      "username": "amit",
+      "email": "amrid.420@gmail.com",
+      "phone": "+8801521486789",
+      "password": "QWJjLjEyMzQ1",
+      "created": "2026-03-22",
+      "role": "user",
+      "active": true,
+      "updatedBy": "admin",
+      "passwordHistory": [
+        "QWJjLjEyMzQ1"
+      ],
+      "updatedAt": "2026-03-22T17:36:47.416Z",
+      "credits": 600,
+      "migratedAt": "2026-03-26T17:39:03.162Z",
+      "lastSeen": "2026-03-26T04:36:51.332Z",
+      "source": "localStorage"
+    },
+    {
+      "id": 1774198711009,
+      "role": "user",
+      "passwordHistory": [
+        "QWJjLjEyMzQ1"
+      ],
+      "active": true,
+      "source": "localStorage",
+      "password": "QWJjLjEyMzQ1",
+      "phone": "+8801521486789",
+      "email": "amrid.420@gmail.com",
+      "updatedBy": "admin",
+      "updatedAt": "2026-03-22T17:36:47.416Z",
+      "credits": 600,
+      "created": "2026-03-22",
+      "name": "Amit",
+      "username": "amit",
+      "migratedAt": "2026-03-26T18:19:37.208Z",
+      "lastSeen": "2026-03-22T18:27:38.647Z"
+    },
+    {
+      "id": 1774197659428,
+      "name": "Anik",
+      "username": "anik",
+      "email": "anik@mail.com",
+      "phone": "+8801234567890",
+      "password": "QWJjLjEyMzQ1",
+      "created": "2026-03-22",
+      "role": "user",
+      "active": true,
+      "credits": 1100,
+      "migratedAt": "2026-03-26T17:39:03.157Z",
+      "lastSeen": "2026-03-26T05:12:13.660Z",
+      "passwordHistory": [
+        "QWJjLjEyMzQ1"
+      ],
+      "source": "localStorage"
+    },
+    {
+      "id": 1774197659428,
+      "role": "user",
+      "credits": 1100,
+      "phone": "+8801234567890",
+      "created": "2026-03-22",
+      "passwordHistory": [
+        "QWJjLjEyMzQ1"
+      ],
+      "name": "Anik",
+      "active": true,
+      "email": "anik@mail.com",
+      "username": "anik",
+      "password": "QWJjLjEyMzQ1",
+      "source": "localStorage",
+      "migratedAt": "2026-03-26T17:56:52.256Z",
+      "lastSeen": "2026-03-26T05:12:13.660Z"
+    },
+    {
+      "id": 1774341481752,
+      "name": "Rashed",
+      "username": "rashed",
+      "email": "abc@rashed.com",
+      "phone": "+8801234567891",
+      "password": "QWIuMTIzNDU2Nw==",
+      "created": "2026-03-24",
+      "role": "user",
+      "credits": 100,
+      "active": true,
+      "lastSeen": "2026-03-24T08:38:24.121Z"
+    }
+  ]
+}
