@@ -1,0 +1,13 @@
+{
+  "date": "2026-04-04",
+  "time": "2026-04-04T18-24-21",
+  "categories": {
+    "users": 5,
+    "transactions": 0,
+    "wallets": 0,
+    "budgets": 0,
+    "income_cats": 0,
+    "expense_cats": 0
+  },
+  "totalItems": 5
+}
